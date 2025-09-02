@@ -188,6 +188,12 @@ impl MessageQueue {
     }
 }
 
+impl Default for MessageQueue {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// Read JSON lines from an async reader and send them to a handler.
 /// 
 /// This function reads lines from the input, skips empty lines and whitespace,

@@ -5,7 +5,7 @@ use anyhow::{anyhow, Result};
 use serde_json::{json, Value};
 use std::{collections::HashSet, sync::Arc, time::{SystemTime, UNIX_EPOCH}};
 use tokio::{io::{AsyncBufReadExt, AsyncWriteExt, BufReader}, sync::{Mutex, RwLock}, time::{sleep, Duration}};
-use tracing::{debug, error, info, warn};
+use tracing::{debug, info, warn};
 
 #[derive(Clone)]
 struct AppState {

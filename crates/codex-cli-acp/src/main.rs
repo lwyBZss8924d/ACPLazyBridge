@@ -72,7 +72,7 @@ impl AcpServer {
         let permission_mode = params
             .get("permissionMode")
             .and_then(|v| v.as_str())
-            .and_then(AcpPermissionMode::from_str)
+            .and_then(|s| s.parse::<AcpPermissionMode>().ok())
             .unwrap_or(AcpPermissionMode::Default);
 
         let session_id = format!("session_{}", uuid::Uuid::new_v4());
@@ -206,16 +206,27 @@ impl AcpServer {
                 let empty_params = json!({});
                 let params = msg.get("params").unwrap_or(&empty_params);
 
-                let response = match method {
-                    "initialize" => self.handle_initialize(id, params).await?,
-                    "session/new" => self.handle_session_new(id, params).await?,
-                    "session/prompt" => self.handle_session_prompt(id, params).await?,
-                    _ => {
-                        Response::error(id, Error::method_not_found(method))
-                    }
+                // Execute handler but do not propagate error; map to JSON-RPC error response
+                let result: Result<Response> = match method {
+                    "initialize" => self.handle_initialize(id.clone(), params).await,
+                    "session/new" => self.handle_session_new(id.clone(), params).await,
+                    "session/prompt" => self.handle_session_prompt(id.clone(), params).await,
+                    _ => Ok(Response::error(id.clone(), Error::method_not_found(method))),
                 };
 
-                Ok(serde_json::to_string(&response)?)
+                match result {
+                    Ok(response) => Ok(serde_json::to_string(&response)?),
+                    Err(e) => {
+                        let msg = e.to_string();
+                        let rpc_error = if msg.starts_with("Missing ") || msg.starts_with("Session not found") {
+                            Error::invalid_params(msg)
+                        } else {
+                            Error::internal_error(msg)
+                        };
+                        let error_response = Response::error(id, rpc_error);
+                        Ok(serde_json::to_string(&error_response)?)
+                    }
+                }
             } else {
                 // It's a notification
                 match method {
@@ -264,6 +275,7 @@ async fn main() -> Result<()> {
                 }
                 Err(e) => {
                     error!("Error processing message: {}", e);
+                    // Unknown parse or internal error prior to classification; no request ID
                     let error_response = Response::error(
                         RequestId::Null,
                         Error::internal_error(e.to_string()),
