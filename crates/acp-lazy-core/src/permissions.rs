@@ -120,13 +120,36 @@ pub fn map_acp_to_codex(mode: AcpPermissionMode) -> CodexTurnOverrides {
 /// Environment-based permission override.
 ///
 /// Allows overriding permissions via environment variables for testing.
+/// 
+/// # Environment Variables
+/// 
+/// The following environment variables are supported (using default prefix "ACPLB"):
+/// - `ACPLB_APPROVAL_POLICY`: Override approval policy (never|on-request|on-failure|untrusted)
+/// - `ACPLB_SANDBOX_MODE`: Override sandbox mode (read-only|workspace-write|danger-full-access)
+/// - `ACPLB_NETWORK_ACCESS`: Override network access (true|false)
+/// 
+/// # Example
+/// 
+/// ```bash
+/// export ACPLB_APPROVAL_POLICY=on-request
+/// export ACPLB_SANDBOX_MODE=workspace-write
+/// export ACPLB_NETWORK_ACCESS=true
+/// ```
 pub struct PermissionOverrides {
     env_prefix: String,
     cache: HashMap<String, String>,
 }
 
+impl Default for PermissionOverrides {
+    fn default() -> Self {
+        Self::new("ACPLB")
+    }
+}
+
 impl PermissionOverrides {
     /// Create with a given environment variable prefix.
+    /// 
+    /// If you want the default "ACPLB" prefix, use `PermissionOverrides::default()`.
     pub fn new(env_prefix: impl Into<String>) -> Self {
         Self {
             env_prefix: env_prefix.into(),
@@ -240,5 +263,23 @@ mod tests {
         std::env::remove_var("TEST_APPROVAL_POLICY");
         std::env::remove_var("TEST_SANDBOX_MODE");
         std::env::remove_var("TEST_NETWORK_ACCESS");
+    }
+
+    #[test]
+    fn test_default_env_prefix() {
+        // Test that the default prefix is "ACPLB"
+        std::env::set_var("ACPLB_APPROVAL_POLICY", "untrusted");
+        std::env::set_var("ACPLB_SANDBOX_MODE", "read-only");
+        
+        let mut overrides = PermissionOverrides::default();
+        let base = CodexTurnOverrides::default();
+        let modified = overrides.apply(base);
+        
+        assert_eq!(modified.approval_policy, "untrusted");
+        assert_eq!(modified.sandbox_mode, "read-only");
+        
+        // Clean up
+        std::env::remove_var("ACPLB_APPROVAL_POLICY");
+        std::env::remove_var("ACPLB_SANDBOX_MODE");
     }
 }
