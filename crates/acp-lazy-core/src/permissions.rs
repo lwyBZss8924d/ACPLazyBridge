@@ -3,6 +3,7 @@
 //! This module handles the translation of ACP permission modes to Codex CLI
 //! parameters to ensure non-interactive operation suitable for IDE integration.
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 
 /// ACP permission modes that control agent capabilities.
@@ -38,9 +39,9 @@ impl AcpPermissionMode {
 #[derive(Debug, Clone)]
 pub struct CodexTurnOverrides {
     /// Approval policy: "never" | "on-request" | "on-failure" | "untrusted"
-    pub approval_policy: &'static str,
+    pub approval_policy: Cow<'static, str>,
     /// Sandbox mode: "read-only" | "workspace-write" | "danger-full-access"
-    pub sandbox_mode: &'static str,
+    pub sandbox_mode: Cow<'static, str>,
     /// Whether network access is allowed
     pub network_access: bool,
     /// Additional CLI arguments to pass
@@ -50,8 +51,8 @@ pub struct CodexTurnOverrides {
 impl Default for CodexTurnOverrides {
     fn default() -> Self {
         Self {
-            approval_policy: "never",
-            sandbox_mode: "read-only",
+            approval_policy: Cow::Borrowed("never"),
+            sandbox_mode: Cow::Borrowed("read-only"),
             network_access: false,
             extra_args: Vec::new(),
         }
@@ -83,8 +84,8 @@ impl CodexTurnOverrides {
     /// Create overrides for YOLO/danger mode.
     pub fn danger() -> Self {
         Self {
-            approval_policy: "never",
-            sandbox_mode: "danger-full-access",
+            approval_policy: Cow::Borrowed("never"),
+            sandbox_mode: Cow::Borrowed("danger-full-access"),
             network_access: true,
             extra_args: vec!["--dangerously-bypass-approvals-and-sandbox".to_string()],
         }
@@ -101,14 +102,14 @@ pub fn map_acp_to_codex(mode: AcpPermissionMode) -> CodexTurnOverrides {
             CodexTurnOverrides::default()
         }
         AcpPermissionMode::AcceptEdits => CodexTurnOverrides {
-            approval_policy: "never",
-            sandbox_mode: "workspace-write",
+            approval_policy: Cow::Borrowed("never"),
+            sandbox_mode: Cow::Borrowed("workspace-write"),
             network_access: false,
             extra_args: Vec::new(),
         },
         AcpPermissionMode::BypassPermissions => CodexTurnOverrides {
-            approval_policy: "never",
-            sandbox_mode: "workspace-write",
+            approval_policy: Cow::Borrowed("never"),
+            sandbox_mode: Cow::Borrowed("workspace-write"),
             network_access: true,
             extra_args: Vec::new(),
         },
@@ -149,10 +150,10 @@ impl PermissionOverrides {
     /// Apply environment overrides to Codex parameters.
     pub fn apply(&mut self, mut overrides: CodexTurnOverrides) -> CodexTurnOverrides {
         if let Some(policy) = self.get("approval_policy") {
-            overrides.approval_policy = Box::leak(policy.to_string().into_boxed_str());
+            overrides.approval_policy = Cow::Owned(policy.to_string());
         }
         if let Some(sandbox) = self.get("sandbox_mode") {
-            overrides.sandbox_mode = Box::leak(sandbox.to_string().into_boxed_str());
+            overrides.sandbox_mode = Cow::Owned(sandbox.to_string());
         }
         if let Some(network) = self.get("network_access") {
             overrides.network_access = network.parse().unwrap_or(false);
@@ -201,8 +202,8 @@ mod tests {
     #[test]
     fn test_cli_args_generation() {
         let overrides = CodexTurnOverrides {
-            approval_policy: "never",
-            sandbox_mode: "workspace-write",
+            approval_policy: Cow::Borrowed("never"),
+            sandbox_mode: Cow::Borrowed("workspace-write"),
             network_access: true,
             extra_args: vec![],
         };
@@ -212,5 +213,32 @@ mod tests {
         assert!(args.contains(&"approval_policy=never".to_string()));
         assert!(args.contains(&"sandbox_mode=workspace-write".to_string()));
         assert!(args.contains(&"sandbox_workspace_write.network_access=true".to_string()));
+    }
+
+    #[test]
+    fn test_env_overrides_no_leak() {
+        // Test that environment overrides work without memory leaks
+        std::env::set_var("TEST_APPROVAL_POLICY", "on-request");
+        std::env::set_var("TEST_SANDBOX_MODE", "danger-full-access");
+        std::env::set_var("TEST_NETWORK_ACCESS", "true");
+
+        let mut overrides = PermissionOverrides::new("TEST");
+        let base = CodexTurnOverrides::default();
+        let modified = overrides.apply(base);
+
+        // Check that overrides were applied correctly with owned strings
+        assert_eq!(modified.approval_policy, "on-request");
+        assert_eq!(modified.sandbox_mode, "danger-full-access");
+        assert!(modified.network_access);
+
+        // Verify we can use the strings in CLI args
+        let args = modified.to_cli_args();
+        assert!(args.contains(&"approval_policy=on-request".to_string()));
+        assert!(args.contains(&"sandbox_mode=danger-full-access".to_string()));
+
+        // Clean up env vars
+        std::env::remove_var("TEST_APPROVAL_POLICY");
+        std::env::remove_var("TEST_SANDBOX_MODE");
+        std::env::remove_var("TEST_NETWORK_ACCESS");
     }
 }
