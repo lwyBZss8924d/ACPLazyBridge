@@ -216,6 +216,49 @@ where
     Ok(())
 }
 
+/// Read JSON values from an async reader and send parsed values to a handler.
+/// 
+/// This function is more efficient than `read_lines` when the handler needs
+/// parsed JSON values, as it avoids double-parsing. Lines that aren't valid
+/// JSON are logged and skipped.
+pub async fn read_values<R, F, Fut>(reader: R, mut handler: F) -> Result<()>
+where
+    R: AsyncRead + Unpin,
+    F: FnMut(Value) -> Fut,
+    Fut: std::future::Future<Output = Result<()>>,
+{
+    let mut lines = BufReader::new(reader).lines();
+    
+    while let Some(line) = lines.next_line().await
+        .context("Failed to read line from stream")? {
+        
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            trace!("Skipping empty line");
+            continue;
+        }
+
+        trace!("Read line: {}", trimmed);
+        
+        // Parse JSON once and pass the Value to the handler
+        match serde_json::from_str::<Value>(trimmed) {
+            Ok(value) => {
+                if let Err(e) = handler(value).await {
+                    error!("Handler error for parsed value: {}", e);
+                    // Continue processing other lines
+                }
+            }
+            Err(e) => {
+                error!("Invalid JSON line (skipping): {} - Error: {}", trimmed, e);
+                // Continue processing other lines
+            }
+        }
+    }
+    
+    debug!("Finished reading values from stream");
+    Ok(())
+}
+
 /// Write a JSON line to an async writer.
 /// 
 /// Appends a newline and flushes the writer to ensure the message is sent immediately.
@@ -249,6 +292,28 @@ where
             async move {
                 sender.unbounded_send(line)
                     .map_err(|e| anyhow::anyhow!("Failed to send message to queue: {}", e))
+            }
+        }).await
+    })
+}
+
+/// Start a task that reads JSON values from a reader and sends them to a channel.
+/// 
+/// This is more efficient than `spawn_reader_task` when values need to be parsed,
+/// as it avoids double-parsing.
+pub fn spawn_value_reader_task<R>(
+    reader: R,
+    sender: UnboundedSender<Value>,
+) -> JoinHandle<Result<()>>
+where
+    R: AsyncRead + Unpin + Send + 'static,
+{
+    tokio::spawn(async move {
+        read_values(reader, |value| {
+            let sender = sender.clone();
+            async move {
+                sender.unbounded_send(value)
+                    .map_err(|e| anyhow::anyhow!("Failed to send value to queue: {}", e))
             }
         }).await
     })
@@ -353,5 +418,55 @@ mod tests {
         
         // Note: In a real test we'd capture the logs, but for now
         // this ensures the code paths are exercised without panicking
+    }
+
+    #[tokio::test]
+    async fn test_read_values_parses_once() {
+        let input = r#"{"id": 1, "value": "first"}
+{"id": 2, "value": "second"}
+invalid json
+{"id": 3, "value": "third"}"#;
+        let cursor = std::io::Cursor::new(input);
+        
+        let received = Arc::new(Mutex::new(Vec::new()));
+        let received_clone = received.clone();
+        
+        read_values(cursor, move |value| {
+            let received = received_clone.clone();
+            async move {
+                // Verify we received a parsed Value, not a string
+                if let Some(id) = value.get("id").and_then(|v| v.as_i64()) {
+                    received.lock().unwrap().push(id);
+                }
+                Ok(())
+            }
+        }).await.unwrap();
+        
+        let results = received.lock().unwrap();
+        assert_eq!(results.len(), 3);
+        assert_eq!(results[0], 1);
+        assert_eq!(results[1], 2);
+        assert_eq!(results[2], 3);
+    }
+
+    #[tokio::test]
+    async fn test_spawn_value_reader_task() {
+        let input = r#"{"type": "message", "content": "hello"}
+{"type": "message", "content": "world"}"#;
+        let cursor = std::io::Cursor::new(input);
+        
+        let (tx, mut rx) = mpsc::unbounded::<Value>();
+        let task = spawn_value_reader_task(cursor, tx);
+        
+        task.await.unwrap().unwrap();
+        
+        // Verify we received parsed Values
+        let val1 = rx.next().await.unwrap();
+        assert_eq!(val1["type"], "message");
+        assert_eq!(val1["content"], "hello");
+        
+        let val2 = rx.next().await.unwrap();
+        assert_eq!(val2["type"], "message");
+        assert_eq!(val2["content"], "world");
     }
 }
