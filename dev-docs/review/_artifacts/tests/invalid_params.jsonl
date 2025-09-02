@@ -1,0 +1,2 @@
+{"jsonrpc":"2.0","id":100,"method":"session/prompt","params":{"sessionId":"MISSING","wrong":"param"}}
+

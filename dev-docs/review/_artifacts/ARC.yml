@@ -1,0 +1,28 @@
+version: 0.1
+items:
+  - id: ARC-LAZY-0001
+    title: transport 行级读写与队列
+    design: tokio BufReader::lines 入队解析，逐行 JSON 事件化；写行输出。
+    sources: [dev-docs/design/acp-lazybridge-architecture.md]
+    status: Pending
+  - id: ARC-LAZY-0002
+    title: 去重与结尾守卫
+    design: lastSentChunk 与 finalized 标记，避免重复最终块。
+    sources: [dev-docs/design/acp-lazybridge-architecture.md]
+    status: Pending
+  - id: ARC-LAZY-0003
+    title: 权限映射层
+    design: approval_policy/sandbox_mode/network_access 注入；YOLO 显式启用。
+    sources: [dev-docs/design/acp-lazybridge-architecture.md, WARP.md]
+    status: Pending
+  - id: ARC-LAZY-0004
+    title: 插件/子代理管线
+    design: inbound/outbound 顺序链；ACP 客户端调用子代理，聚合结果。
+    sources: [dev-docs/design/acp-lazybridge-architecture.md]
+    status: Pending
+  - id: ARC-LAZY-0005
+    title: notify sink 与日志
+    design: tracing+EnvFilter；可将事件 JSON 写入 FIFO/文件。
+    sources: [dev-docs/design/acp-lazybridge-architecture.md]
+    status: Pending
+

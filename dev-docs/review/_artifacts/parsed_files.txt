@@ -1,0 +1,6 @@
+/Users/arthur/dev-space/ACPLazyBridge/dev-docs/design/acp-lazybridge-architecture.md
+/Users/arthur/dev-space/ACPLazyBridge/dev-docs/plan/acp-lazybridge-project-plan.md
+/Users/arthur/dev-space/ACPLazyBridge/dev-docs/requirements/acp-lazybridge-requirements.md
+/Users/arthur/dev-space/ACPLazyBridge/dev-docs/review/_artifacts/ENV.txt
+/Users/arthur/dev-space/ACPLazyBridge/dev-docs/review/_artifacts/REVISION.txt
+/Users/arthur/dev-space/ACPLazyBridge/dev-docs/review/_artifacts/parsed_files.txt

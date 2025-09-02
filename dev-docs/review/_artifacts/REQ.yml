@@ -1,0 +1,33 @@
+version: 0.1
+items:
+  - id: REQ-LAZY-0001
+    title: ACP 基线方法实现（stdio JSONL）
+    requirement: initialize/new_session/prompt/cancel 端到端实现。
+    sources: [dev-docs/requirements/acp-lazybridge-requirements.md]
+    status: Pending
+  - id: REQ-LAZY-0002
+    title: 流式分片与实时转发
+    requirement: agent_message_delta → agent_message_chunk；避免末尾合并。
+    sources: [dev-docs/requirements/acp-lazybridge-requirements.md]
+    status: Pending
+  - id: REQ-LAZY-0003
+    title: 工具事件与本地 shell 预览
+    requirement: tool_call + tool_call_update；支持批量；本地 shell completed.content 附 2KB stdout 预览。
+    sources: [dev-docs/requirements/acp-lazybridge-requirements.md]
+    status: Pending
+  - id: REQ-LAZY-0004
+    title: 会话 turn 完成与兜底
+    requirement: notify("agent-turn-complete") 优先；idle fallback 兜底。
+    sources: [dev-docs/requirements/acp-lazybridge-requirements.md]
+    status: Pending
+  - id: REQ-LAZY-0005
+    title: 非交互权限映射
+    requirement: default/plan、acceptEdits、bypassPerms 三模式映射 Codex 参数，YOLO 显式选择。
+    sources: [dev-docs/requirements/acp-lazybridge-requirements.md, WARP.md]
+    status: Pending
+  - id: REQ-LAZY-0006
+    title: 初始化能力位
+    requirement: promptCapabilities(image=false)。
+    sources: [dev-docs/requirements/acp-lazybridge-requirements.md]
+    status: Pending
+
