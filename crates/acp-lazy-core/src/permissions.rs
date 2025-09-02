@@ -21,17 +21,20 @@ pub enum AcpPermissionMode {
     Yolo,
 }
 
-impl AcpPermissionMode {
+impl std::str::FromStr for AcpPermissionMode {
+    type Err = ();
+
     /// Parse from string (case-insensitive).
-    pub fn from_str(s: &str) -> Option<Self> {
-        match s.to_lowercase().as_str() {
-            "default" => Some(Self::Default),
-            "plan" => Some(Self::Plan),
-            "acceptedits" | "accept-edits" | "accept_edits" => Some(Self::AcceptEdits),
-            "bypasspermissions" | "bypass-permissions" | "bypass_permissions" => Some(Self::BypassPermissions),
-            "yolo" | "danger" | "danger-full-access" => Some(Self::Yolo),
-            _ => None,
-        }
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mode = match s.to_lowercase().as_str() {
+            "default" => Self::Default,
+            "plan" => Self::Plan,
+            "acceptedits" | "accept-edits" | "accept_edits" => Self::AcceptEdits,
+            "bypasspermissions" | "bypass-permissions" | "bypass_permissions" => Self::BypassPermissions,
+            "yolo" | "danger" | "danger-full-access" => Self::Yolo,
+            _ => return Err(()),
+        };
+        Ok(mode)
     }
 }
 
@@ -191,12 +194,12 @@ mod tests {
 
     #[test]
     fn test_permission_mode_parsing() {
-        assert_eq!(AcpPermissionMode::from_str("default"), Some(AcpPermissionMode::Default));
-        assert_eq!(AcpPermissionMode::from_str("Plan"), Some(AcpPermissionMode::Plan));
-        assert_eq!(AcpPermissionMode::from_str("accept-edits"), Some(AcpPermissionMode::AcceptEdits));
-        assert_eq!(AcpPermissionMode::from_str("bypass_permissions"), Some(AcpPermissionMode::BypassPermissions));
-        assert_eq!(AcpPermissionMode::from_str("yolo"), Some(AcpPermissionMode::Yolo));
-        assert_eq!(AcpPermissionMode::from_str("invalid"), None);
+        assert_eq!("default".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::Default));
+        assert_eq!("Plan".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::Plan));
+        assert_eq!("accept-edits".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::AcceptEdits));
+        assert_eq!("bypass_permissions".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::BypassPermissions));
+        assert_eq!("yolo".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::Yolo));
+        assert_eq!("invalid".parse::<AcpPermissionMode>().ok(), None);
     }
 
     #[test]
