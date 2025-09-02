@@ -601,6 +601,24 @@ loop {
 }
 ```
 
+### Environment Variable Overrides
+
+ACPLazyBridge supports environment variable overrides for permissions using the `ACPLB` prefix:
+
+```bash
+# Override approval policy (never|on-request|on-failure|untrusted)
+export ACPLB_APPROVAL_POLICY=on-request
+
+# Override sandbox mode (read-only|workspace-write|danger-full-access)
+export ACPLB_SANDBOX_MODE=workspace-write
+
+# Override network access (true|false)
+export ACPLB_NETWORK_ACCESS=true
+
+# Run with environment overrides
+cargo run -p codex-cli-acp
+```
+
 ### Testing ACP Compliance
 ```bash
 # Test initialize handshake
