@@ -1,0 +1,57 @@
+version: 0.1
+items:
+  - id: CODEX-CLI-0001
+    title: approval_policy 映射（非交互）
+    parameter: approval_policy=never
+    mapping: 默认采用 never，避免 IDE 卡 UI。
+    sources: [WARP.md, local_refs/codex, /Users/arthur/dev-space/codex/README.md]
+    status: Pending
+  - id: CODEX-CLI-0002
+    title: sandbox_mode 映射
+    parameter: sandbox_mode
+    mapping: default/plan→read-only；acceptEdits→workspace-write；bypassPerms→workspace-write + network_access=true
+    sources: [WARP.md, local_refs/codex, /Users/arthur/dev-space/codex/README.md]
+    status: Pending
+  - id: CODEX-CLI-0003
+    title: 网络开关
+    parameter: sandbox_workspace_write.network_access=true
+    mapping: 仅 bypassPerms 打开；其余保持关闭。
+    sources: [WARP.md, local_refs/codex, /Users/arthur/dev-space/codex/README.md]
+    status: Pending
+  - id: CODEX-CLI-0004
+    title: YOLO/危险模式
+    parameter: --dangerously-bypass-approvals-and-sandbox
+    mapping: 仅显式选择时启用，并强提示/审计。
+    sources: [WARP.md, local_refs/codex, /Users/arthur/dev-space/codex/codex-rs/tui/src/cli.rs]
+    status: Pending
+  - id: CODEX-CLI-0005
+    title: 便捷模式 --full-auto
+    parameter: --full-auto
+    mapping: 等价于 -a on-request 与 --sandbox workspace-write；作为交互式高自治默认方案。
+    sources: [/Users/arthur/dev-space/codex/codex-rs/tui/src/cli.rs, /Users/arthur/dev-space/codex/README.md]
+    status: Pending
+  - id: CODEX-CLI-0006
+    title: approval_policy 可选值
+    parameter: --ask-for-approval | -a
+    mapping: 可选 untrusted | on-request | on-failure | never；非交互场景建议 never。
+    sources: [/Users/arthur/dev-space/codex/codex-rs/tui/src/cli.rs, /Users/arthur/dev-space/codex/README.md]
+    status: Pending
+  - id: CODEX-CLI-0007
+    title: sandbox_mode 可选值
+    parameter: --sandbox | -s
+    mapping: read-only | workspace-write | danger-full-access；workspace-write 的默认可写根包含 cwd 与 /tmp（在 Unix）。
+    sources: [/Users/arthur/dev-space/codex/codex-rs/tui/src/cli.rs, /Users/arthur/dev-space/codex/codex-rs/protocol/src/protocol.rs, /Users/arthur/dev-space/codex/README.md]
+    status: Pending
+  - id: CODEX-CLI-0008
+    title: 平台沙箱实现与降级
+    parameter: 平台相关（macOS seatbelt / Linux seccomp/Landlock）
+    mapping: macOS 使用 sandbox-exec；Linux 使用 Landlock/seccomp；若不可用，无法强制沙箱时应降级为交互（AskUser）或拒绝（Never 模式下）。
+    sources: [/Users/arthur/dev-space/codex/README.md, /Users/arthur/dev-space/codex/codex-rs/core/src/safety.rs]
+    status: Pending
+  - id: CODEX-CLI-0009
+    title: YOLO 别名与冲突
+    parameter: --dangerously-bypass-approvals-and-sandbox (alias: --yolo)
+    mapping: 与 --approval_policy/--full-auto 冲突；仅在外部已隔离环境使用。
+    sources: [/Users/arthur/dev-space/codex/codex-rs/tui/src/cli.rs]
+    status: Pending
+

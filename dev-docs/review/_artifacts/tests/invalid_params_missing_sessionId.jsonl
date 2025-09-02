@@ -1,0 +1,2 @@
+{"jsonrpc":"2.0","id":101,"method":"session/prompt","params":{"prompt":"missing session id should trigger -32602"}}
+

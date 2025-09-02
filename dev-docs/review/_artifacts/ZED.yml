@@ -1,0 +1,33 @@
+version: 0.1
+items:
+  - id: ZED-REF-0001
+    title: agent_message_chunk 事件
+    behavior: 将 provider 的 agent_message_delta 规范化为 Zed 侧可消费的 agent_message_chunk。
+    sources: [local_refs/zed-acp-examples, /Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+  - id: ZED-REF-0002
+    title: tool_call 事件状态机
+    behavior: 按 pending → completed 两阶段转发，批量逐一转发。
+    sources: [local_refs/zed-acp-examples, /Users/arthur/dev-space/zed/crates/agent2/src/thread.rs, /Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+  - id: ZED-REF-0003
+    title: agent-turn-complete 通知
+    behavior: 优先 notify；若缺失，以 idle fallback 兜底，避免挂起。
+    sources: [local_refs/zed-acp-examples, /Users/arthur/dev-space/acp-claude-code/src/providers/codex/agent.ts]
+    status: Pending
+  - id: ZED-REF-0004
+    title: session/update 变体
+    behavior: Zed 侧处理的更新事件包括：UserMessageChunk、AgentMessageChunk、AgentThoughtChunk、ToolCall、ToolCallUpdate、Plan。
+    sources: [/Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+  - id: ZED-REF-0005
+    title: ToolCallUpdateFields 字段
+    behavior: 可更新字段：kind、status、title、content、locations、raw_input、raw_output。
+    sources: [/Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+  - id: ZED-REF-0006
+    title: ToolCallStatus 映射
+    behavior: acp::ToolCallStatus 映射到 UI 层：Pending/InProgress/Completed/Failed；UI 还包含 WaitingForConfirmation/Rejected/Canceled 等状态以表达用户审批流程。
+    sources: [/Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+

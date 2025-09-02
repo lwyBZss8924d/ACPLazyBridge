@@ -10,6 +10,8 @@
 
 ## 1. 里程碑总览
 
+> 执行指南：见 dev-docs/plan/m1-technical-implementation-plan.md（工程师实施用）
+
 - M0（已完成）Workspace 初始化
   - 建立 Rust workspace（acp-lazy-core / codex-cli-acp），cargo build 通过
   - 引入 Zed 官方参考到 local_refs（agent_servers/agent_ui）

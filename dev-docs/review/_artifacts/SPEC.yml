@@ -1,0 +1,51 @@
+version: 0.1
+items:
+  - id: SPEC-ACP-JSONRPC-0001
+    title: JSON-RPC 2.0 错误码与 data 字段
+    requirement: 必须支持 -32700/-32600/-32601/-32602/-32603，并允许 error.data 提供调试信息。
+    verification: 通过构造非法 JSON/无效方法/参数错误/内部错误触发，断言错误码与 data 字段。
+    sources: [local_refs/agent-client-protocol, WARP.md]
+    status: Pending
+  - id: SPEC-ACP-METHODS-0002
+    title: 基线方法与通知
+    requirement: initialize、session/new、session/prompt 必须；session/cancel 与 session/update 为通知。
+    verification: JSONL 回放握手与 prompt，检查请求/响应/通知格式。
+    sources: [local_refs/agent-client-protocol]
+    status: Pending
+  - id: SPEC-ACP-STREAM-0003
+    title: 流式与 turn 完成
+    requirement: agent_message_delta → agent_message_chunk；提供 notify("agent-turn-complete") 或等效 idle fallback。
+    verification: 长流提示与无显式完成的用例回放，检查最终完成信号与去重。
+    sources: [local_refs/agent-client-protocol, local_refs/zed-acp-examples, /Users/arthur/dev-space/acp-claude-code/src/providers/codex/agent.ts]
+    status: Pending
+  - id: SPEC-ACP-TOOLCALL-0004
+    title: 工具事件状态机
+    requirement: tool_call(pending) → tool_call(completed)；支持批量。
+    verification: 构造工具触发场景，断言两阶段事件与结果形态。
+    sources: [local_refs/agent-client-protocol, local_refs/zed-acp-examples, /Users/arthur/dev-space/zed/crates/agent2/src/thread.rs]
+    status: Pending
+  - id: SPEC-ACP-CONSTRAINTS-0005
+    title: 路径/行号/JSONL 约束
+    requirement: 绝对路径；1-based 行号；每行一条 JSON 消息（JSONL）。
+    verification: 用非法路径/行号与多行 JSON 触发并断言报错。
+    sources: [local_refs/agent-client-protocol]
+    status: Pending
+  - id: SPEC-ACP-SESSION-UPDATE-0006
+    title: session/update 事件变体
+    requirement: 必须支持并正确解析/转发：UserMessageChunk、AgentMessageChunk、AgentThoughtChunk、ToolCall、ToolCallUpdate、Plan。
+    verification: 构造包含上述各类更新的 JSONL 流，验证 UI 行为与内部状态更新。
+    sources: [local_refs/agent-client-protocol, /Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+  - id: SPEC-ACP-TOOLCALL-FIELDS-0007
+    title: ToolCallUpdateFields 字段
+    requirement: 支持字段：kind、status、title、content、locations、raw_input、raw_output。
+    verification: 通过 tool_call_update 逐项更新并断言 UI 状态变化与内容更新。
+    sources: [local_refs/agent-client-protocol, /Users/arthur/dev-space/zed/crates/acp_thread/src/acp_thread.rs]
+    status: Pending
+  - id: SPEC-ACP-CANCEL-0008
+    title: 取消（cancel）为通知
+    requirement: session/cancel 必须作为无 id 的通知；Native 需向子进程发送中断；Proxy 需向下游转发。
+    verification: 构造 cancel.jsonl，检查被测进程中断行为与 UI 停止事件。
+    sources: [local_refs/agent-client-protocol, dev-docs/design/acp-lazybridge-architecture.md]
+    status: Pending
+

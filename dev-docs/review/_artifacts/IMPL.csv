@@ -1,0 +1,22 @@
+Symbol,File,Line,Keywords,Snippet,MappedIDs
+ProcessTransport,crates/acp-lazy-core/src/transport.rs,17-23,"process;stdio;pipes","pub struct ProcessTransport",ARC-LAZY-0001
+ProcessTransport::spawn,crates/acp-lazy-core/src/transport.rs,26-75,"spawn;subprocess;stdio","pub async fn spawn",ARC-LAZY-0001
+ProcessTransport::monitor_stderr,crates/acp-lazy-core/src/transport.rs,77-102,"stderr;monitor;logging","pub fn monitor_stderr",ARC-LAZY-0001
+MessageQueue,crates/acp-lazy-core/src/transport.rs,138-157,"queue;mpsc;channels","pub struct MessageQueue",ARC-LAZY-0001
+read_lines,crates/acp-lazy-core/src/transport.rs,161-196,"read_lines;JSONL;validation","pub async fn read_lines",ARC-LAZY-0001|SPEC-ACP-CONSTRAINTS-0005
+write_line,crates/acp-lazy-core/src/transport.rs,201-221,"write_line;JSONL;newline;flush","pub async fn write_line",ARC-LAZY-0001|SPEC-ACP-CONSTRAINTS-0005
+spawn_reader_task,crates/acp-lazy-core/src/transport.rs,224-245,"spawn;reader;task","pub fn spawn_reader_task",ARC-LAZY-0001
+ErrorCode,crates/acp-lazy-core/src/protocol.rs,13-39,"error_codes;JSON-RPC","pub enum ErrorCode",SPEC-ACP-JSONRPC-0001
+Error,crates/acp-lazy-core/src/protocol.rs,42-102,"error;JSON-RPC","pub struct Error",SPEC-ACP-JSONRPC-0001
+Request,crates/acp-lazy-core/src/protocol.rs,105-123,"request;JSON-RPC","pub struct Request",REQ-LAZY-0001
+Notification,crates/acp-lazy-core/src/protocol.rs,126-141,"notification;JSON-RPC","pub struct Notification",REQ-LAZY-0001
+Response,crates/acp-lazy-core/src/protocol.rs,144-167,"response;JSON-RPC","pub struct Response",REQ-LAZY-0001
+RequestId,crates/acp-lazy-core/src/protocol.rs,170-197,"request_id;JSON-RPC","pub enum RequestId",REQ-LAZY-0001
+IncomingMessage,crates/acp-lazy-core/src/protocol.rs,200-287,"incoming;classify","pub struct IncomingMessage",REQ-LAZY-0001
+MessageType,crates/acp-lazy-core/src/protocol.rs,290-295,"message_type;classify","pub enum MessageType",REQ-LAZY-0001
+AcpPermissionMode,crates/acp-lazy-core/src/permissions.rs,8-35,"permissions;ACP;modes","pub enum AcpPermissionMode",REQ-LAZY-0005
+CodexTurnOverrides,crates/acp-lazy-core/src/permissions.rs,38-87,"codex;overrides;CLI","pub struct CodexTurnOverrides",REQ-LAZY-0005|CODEX-CLI-0001|CODEX-CLI-0002|CODEX-CLI-0003
+map_acp_to_codex,crates/acp-lazy-core/src/permissions.rs,89-108,"map;permissions;codex","pub fn map_acp_to_codex",REQ-LAZY-0005|CODEX-CLI-0001|CODEX-CLI-0002|CODEX-CLI-0003
+PermissionOverrides,crates/acp-lazy-core/src/permissions.rs,113-157,"env;overrides;permissions","pub struct PermissionOverrides",REQ-LAZY-0005
+logging_init,crates/acp-lazy-core/src/lib.rs,19-25,"logging;tracing;EnvFilter","pub fn init()",ARC-LAZY-0005
+main_skeleton,crates/codex-cli-acp/src/main.rs,9,"ACP server;stdio loop;TODO","// TODO: Implement ACP server stdio loop here",REQ-LAZY-0001

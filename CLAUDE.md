@@ -601,6 +601,24 @@ loop {
 }
 ```
 
+### Environment Variable Overrides
+
+ACPLazyBridge supports environment variable overrides for permissions using the `ACPLB` prefix:
+
+```bash
+# Override approval policy (never|on-request|on-failure|untrusted)
+export ACPLB_APPROVAL_POLICY=on-request
+
+# Override sandbox mode (read-only|workspace-write|danger-full-access)
+export ACPLB_SANDBOX_MODE=workspace-write
+
+# Override network access (true|false)
+export ACPLB_NETWORK_ACCESS=true
+
+# Run with environment overrides
+cargo run -p codex-cli-acp
+```
+
 ### Testing ACP Compliance
 ```bash
 # Test initialize handshake
@@ -673,3 +691,73 @@ async fn test_acp_protocol_compliance() {
 - **Protocol issues**: Enable `RUST_LOG=debug` and examine stdout/stderr
 - **Permission errors**: Check permission mapping configuration
 - **Streaming issues**: Verify line-based JSON format and de-duplication logic
+
+---
+
+## Engineering Workflow Policy (Worktree-first, Submission & Evidence)
+
+This section defines mandatory workflow rules for Claude Code (and any AI coding agent) when contributing to ACPLazyBridge. Follow these rules strictly to keep CI/CD deterministic and reviews traceable.
+
+### 1) Worktree-first Rule
+- Before any task:
+  - List worktrees: `git worktree list`
+  - Ensure current path is a valid worktree and the intended branch is checked out
+- Creating a worktree for a new task branch:
+  - Branch naming: `feature/<module>-<id>`, `fix/<module>-<id>`, `docs/<module>-<id>`, `chore/<module>-<id>`
+  - Create: `git worktree add ../<module>-<id> <branch>`
+- Multi-worktree runtime isolation (if running multiple apps/tools):
+  - Use unique ports or sockets per worktree (if applicable to your task)
+  - Store per-worktree env in `.env.worktree` if necessary
+
+### 2) Task Source of Truth
+- Use the M1 task list as the task index:
+  - `dev-docs/plan/issues/m1-issue-list.md`
+- For each ISSUE, use this template:
+  - `dev-docs/plan/issues/TEMPLATE.md`
+- Implementation plan and specs reference:
+  - `dev-docs/plan/m1-technical-implementation-plan.md`
+  - `dev-docs/requirements/acp-lazybridge-requirements.md`
+  - `dev-docs/design/acp-lazybridge-architecture.md`
+  - `local_refs/agent-client-protocol/`, `local_refs/codex/`, `local_refs/zed-acp-examples/`
+
+### 3) Submission Requirements
+- JSON-RPC / ACP compliance:
+  - Use proper error codes: -32700/-32600/-32601/-32602/-32603
+  - Enforce constraints: absolute paths, 1-based line numbers, JSONL one message per line
+- Non-interactive permissions mapping:
+  - Default to `approval_policy=never`; sandbox per mode; network access only when required by the mode
+  - YOLO/danger modes must be explicitly opted-in and produce conspicuous warnings
+- Streaming & turn completion:
+  - Forward agent_message_delta → agent_message_chunk
+  - Prefer notify("agent-turn-complete"); fallback to idle timer (default ~1200ms)
+  - De-duplicate final chunks
+
+### 4) Evidence & Logs (Mandatory)
+- Tests and logs directory:
+  - Tests: `dev-docs/review/_artifacts/tests/*.jsonl`
+  - Logs: `dev-docs/review/_artifacts/logs/`
+- Run with persistent logs:
+  - `... | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log`
+- Use jq filters for snapshotting:
+  - See `dev-docs/review/_artifacts/jq/filters.md`
+- Privacy & safety:
+  - Do not log secrets; redact sensitive values
+  - YOLO usage must be explicitly justified in PR description
+
+### 5) Traceability Updates (No Orphans)
+- Update mapping files before requesting review:
+  - `dev-docs/review/_artifacts/IMPL.csv` — symbol → file:line → mapped IDs
+  - `dev-docs/review/_artifacts/traceability.csv` — set each touched REQ/ARC → SPEC/CODEX/ZED to `Verified` or `Partial`
+- PR description must include:
+  - Issue ID, branch/worktree, test JSONL file names, log file name, jq snapshots
+  - SPEC/REQ/ARC/CODEX/ZED lines referenced
+
+### 6) Example Branch Flow
+- Create branch/worktree:
+  - `git worktree add ../codex-proto-1 feature/codex-proto-1`
+- Implement task per ISSUE and plan
+- Run JSONL tests and capture logs with `tee`
+- Update `traceability.csv` and `IMPL.csv`
+- Open PR with links to evidence files and relevant spec lines
+
+---
