@@ -76,6 +76,8 @@ impl ProcessTransport {
     /// Start monitoring stderr and logging output.
     /// 
     /// Note: This takes ownership of stderr, so it can only be called once.
+    /// Log level is determined by content: error patterns trigger warn/error,
+    /// normal output goes to debug to reduce noise.
     pub fn monitor_stderr(&mut self) -> Result<()> {
         // Take stderr from self (can only be done once)
         let stderr = self.stderr.take()
@@ -85,6 +87,10 @@ impl ProcessTransport {
             let mut reader = BufReader::new(stderr);
             let mut line = String::new();
             
+            // Patterns that indicate errors or important warnings
+            let error_patterns = ["error", "fatal", "panic", "fail", "exception"];
+            let warn_patterns = ["warn", "warning", "deprecated"];
+            
             while let Ok(bytes) = reader.read_line(&mut line).await {
                 if bytes == 0 {
                     // EOF reached, exit gracefully
@@ -93,7 +99,16 @@ impl ProcessTransport {
                 }
                 let trimmed = line.trim_end();
                 if !trimmed.is_empty() {
-                    warn!("Process stderr: {}", trimmed);
+                    let lower = trimmed.to_lowercase();
+                    
+                    // Determine severity based on content
+                    if error_patterns.iter().any(|p| lower.contains(p)) {
+                        error!("Process stderr: {}", trimmed);
+                    } else if warn_patterns.iter().any(|p| lower.contains(p)) {
+                        warn!("Process stderr: {}", trimmed);
+                    } else {
+                        debug!("Process stderr: {}", trimmed);
+                    }
                 }
                 line.clear();
             }
@@ -418,6 +433,35 @@ mod tests {
         
         // Note: In a real test we'd capture the logs, but for now
         // this ensures the code paths are exercised without panicking
+    }
+
+    #[tokio::test]
+    async fn test_stderr_logging_severity() {
+        // Test that error patterns trigger appropriate log levels
+        // This test verifies the code paths work without panicking
+        
+        // Simulate stderr with various severity patterns
+        let mut transport = ProcessTransport::spawn(
+            "sh",
+            &["-c".to_string(), 
+             "echo 'normal output' >&2; echo 'WARNING: deprecated' >&2; echo 'ERROR: failed' >&2".to_string()],
+            None,
+            None
+        ).await.unwrap();
+        
+        // Start monitoring - will use smart severity detection
+        transport.monitor_stderr().unwrap();
+        
+        // Wait for process to complete
+        let status = transport.wait().await.unwrap();
+        assert!(status.success());
+        
+        // Give a moment for logs to be processed
+        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+        
+        // In real usage, 'normal output' would be debug level,
+        // 'WARNING: deprecated' would be warn level,
+        // 'ERROR: failed' would be error level
     }
 
     #[tokio::test]
