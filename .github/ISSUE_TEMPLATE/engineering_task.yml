@@ -1,0 +1,46 @@
+name: Engineering task
+
+description: Implementation task based on dev-docs/plan/issues
+
+labels: [task]
+
+body:
+  - type: input
+    id: issue_ref
+    attributes:
+      label: Linked plan issue
+      description: Path in repo (e.g., dev-docs/plan/issues/m1-issue-list.md)
+      placeholder: dev-docs/plan/issues/...
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: Feature branch
+      placeholder: feature/<slug>
+    validations:
+      required: true
+
+  - type: input
+    id: worktree
+    attributes:
+      label: Worktree directory
+      placeholder: /Users/arthur/dev-space/<task-dir>
+    validations:
+      required: true
+
+  - type: textarea
+    id: plan
+    attributes:
+      label: Plan
+      description: Subtasks, acceptance criteria, and references (REQ/ARC/SPEC/CODEX/ZED)
+    validations:
+      required: true
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests & Evidence
+      description: JSONL scenarios to add/run, expected outputs, log paths
+

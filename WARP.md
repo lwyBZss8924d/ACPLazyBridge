@@ -1,319 +1,50 @@
-# WARP.md (AGENTS.md)
-
-This Development guide file offers instructions for any AI Developer coding agent. Such as *Claude Code (claude.ai/code)* working on this repository project High-Level Concept Overview & Software Development Team AI Developer Member Collaboration Global Standards. AI Developer coding agents team members include:
-
-- **CLAUDE** "Claude Code Agent" (anthropic Claude Code CLI client link - `CLAUDE.md` )
-- **WARP** "WARP Agent" (WARP.dev Terminal link - `WARP.md` )
-- **GEMINI** "GEMINI CLI Agent" (google gemini-cli link - `GEMINI.md` )
-- **CURSOR** "Cursor Agent" (Cursor IDE cursor-agent link - cursor rules file `.cursorrules` )
-- **CODEX** "CODEX Agent" (OpenAI codex-cli link - `AGENTS.md` )
-
-All AI Developers coding agent's client rules in this codebase ~/ root file are uniformly linked to /AGENTS.md
-
-## Overview
-
-ACPLazyBridge is an IDE-agnostic Agent Client Protocol (ACP) bridge that provides unified adapter implementations for various AI agents (Claude, Gemini, Codex). The project uses Rust and implements ACP over stdio with line-separated JSON (JSONL), featuring streaming support, tool calls, permission mapping, and a plugin system.
-
-⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
-
-## Prerequisites
-
-- Rust toolchain (stable) via rustup
-- cargo, rustfmt, clippy
-- Optional: Codex CLI, Claude Code ACP, or Gemini CLI for testing actual agent integrations
-
-## Common Development Commands
-
-### Build
-```bash
-# Build entire workspace
-cargo build --workspace
-
-# Build with all features
-cargo build --workspace --all-features
-
-# Build specific crate
-cargo build -p codex-cli-acp
-cargo build -p acp-lazy-core
-```
-
-### Test
-```bash
-# Run all tests in workspace
-cargo test --workspace --all-targets
-
-# Run tests with all features
-cargo test --workspace --all-targets --all-features
-
-# Run tests for specific crate
-cargo test -p acp-lazy-core
-```
-
-### Code Quality
-```bash
-# Format all code
-cargo fmt --all
-
-# Check formatting without changes
-cargo fmt --all -- --check
-
-# Run clippy linter
-cargo clippy --workspace --all-targets -- -D warnings
-
-# Quick check without building
-cargo check --workspace
-```
-
-### Documentation
-```bash
-# Build documentation
-cargo doc --workspace --no-deps
-
-# Build and open docs in browser
-cargo doc --workspace --no-deps --open
-```
-
-### Running the Codex Adapter
-```bash
-# Run with default settings (skeleton currently)
-cargo run -p codex-cli-acp
-
-# Run with verbose logging
-RUST_LOG=info cargo run -p codex-cli-acp
-
-# Debug mode with backtrace
-RUST_LOG=debug RUST_BACKTRACE=1 cargo run -p codex-cli-acp
-```
-
-### Testing ACP Protocol Compliance
-```bash
-# Test basic ACP handshake with Codex proto
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}' | codex proto
-
-# Test with JSONL file containing multiple messages
-cat test/acp_messages.jsonl | codex proto -c approval_policy="never"
-
-# Test with specific permission modes
-codex proto -c sandbox_mode="read-only" < test/readonly_session.jsonl
-codex proto -c sandbox_mode="workspace-write" < test/edit_session.jsonl
-
-# Debug protocol messages
-RUST_LOG=trace codex proto 2>&1 | tee proto_debug.log
-
-# Validate JSON-RPC responses
-codex proto < test/requests.jsonl | jq -c 'select(.jsonrpc == "2.0")'
-```
-
-### Spawning Codex for Integration Testing
-```bash
-# Spawn Codex proto for manual testing
-mkfifo request.pipe response.pipe
-codex proto < request.pipe > response.pipe &
-CODEX_PID=$!
-
-# Send test messages
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' > request.pipe
-cat response.pipe
-
-# Clean up
-kill $CODEX_PID
-rm request.pipe response.pipe
-```
-
-### Benchmarking and Performance Testing
-```bash
-# Measure initialization time
-time echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | codex proto
-
-# Test streaming performance
-cargo test --package codex-cli-acp --test streaming_benchmark --release
-
-# Profile memory usage
-valgrind --tool=massif cargo run -p codex-cli-acp
-```
-
-## ACP Protocol Specification
-
-### Protocol Overview
-The Agent Client Protocol (ACP) follows the JSON-RPC 2.0 specification with two message types:
-- **Methods**: Request-response pairs expecting a result or error
-- **Notifications**: One-way messages without expected responses
-
-### Message Flow Sequence
-1. **Initialization Phase**
-   - Client → Agent: `initialize` request with capabilities
-   - Agent → Client: `initialize` response with server capabilities
-   - Client → Agent: `authenticate` (if required by agent)
-
-2. **Session Setup**
-   - Client → Agent: `session/new` to create new session
-   - OR Client → Agent: `session/load` to resume existing session (optional)
-   - Agent → Client: Response with session_id
-
-3. **Prompt Turn**
-   - Client → Agent: `session/prompt` with user message
-   - Agent → Client: `session/update` notifications for progress
-   - Agent → Client: Tool call requests as needed
-   - Client → Agent: `session/cancel` to interrupt (optional)
-   - Agent → Client: `session/prompt` response with stop reason
-
-### Agent Methods (Server-side)
-
-#### Baseline Methods (Required)
-- `initialize`: Negotiate versions and exchange capabilities
-- `authenticate`: Authenticate with the agent (if required)
-- `session/new`: Create a new conversation session
-- `session/prompt`: Send user prompts to the agent
-
-#### Optional Methods
-- `session/load`: Load an existing session (requires `loadSession` capability)
-
-#### Notifications
-- `session/cancel`: Cancel ongoing operations (no response expected)
-
-### Client Methods (IDE-side)
-
-#### Baseline Methods (Required)
-- `session/request_permission`: Request user authorization for tool calls
-
-#### Optional Methods
-- `fs/read_text_file`: Read file contents (requires `fs.readTextFile` capability)
-- `fs/write_text_file`: Write file contents (requires `fs.writeTextFile` capability)
-
-#### Notifications
-- `session/update`: Send progress updates during prompt processing
-
-### Protocol Requirements
-- All file paths MUST be absolute
-- Line numbers are 1-based
-- Messages use JSON-RPC 2.0 format
-- Communication via stdio with line-separated JSON (JSONL)
-
-## Codex CLI Integration Parameters
-
-### Running Codex in Proto Mode
-The Codex CLI supports ACP-compatible communication via the `proto` command:
-
-```bash
-# Basic proto mode for stdio communication
-codex proto
-
-# With configuration overrides
-codex proto -c model="openai/gpt-5" -c sandbox_mode="workspace-write"
-
-# With full parameter control
-codex proto \
-  -c approval_policy="never" \
-  -c sandbox_mode="workspace-write" \
-  -c 'sandbox_permissions=["disk-full-read-access"]'
-```
-
-### Codex CLI Parameters for ACP Integration
-
-#### Sandbox Modes (`--sandbox` or `-s`)
-- `read-only`: Read-only access to files, no execution
-- `workspace-write`: Read/write in workspace, command execution allowed
-- `danger-full-access`: Unrestricted access (use with extreme caution)
-
-#### Approval Policies (`--ask-for-approval` or `-a`)
-- `untrusted`: Only run trusted commands without approval
-- `on-failure`: Run all commands, ask only on failure
-- `on-request`: Model decides when to ask for approval
-- `never`: Never ask for approval, return failures immediately
-
-#### Convenience Flags
-- `--full-auto`: Equivalent to `-a on-failure --sandbox workspace-write`
-- `--dangerously-bypass-approvals-and-sandbox` (alias: `--yolo`): No sandbox, no prompts
-
-#### Configuration Override (`-c`)
-Override config.toml values using dotted paths:
-```bash
-# Model selection
--c model="openai/gpt-5"
-
-# Sandbox permissions array
--c 'sandbox_permissions=["disk-full-read-access"]'
-
-# Nested configuration
--c shell_environment_policy.inherit=all
-
-# Network access in workspace-write mode
--c sandbox_workspace_write.network_access=true
-```
-
-### Platform-Specific Sandbox Implementation
-- **macOS 12+**: Uses Apple Seatbelt with `sandbox-exec`
-- **Linux**: Uses Landlock/seccomp APIs
-- **Docker/Containers**: May require `--dangerously-bypass-approvals-and-sandbox` if Landlock unavailable
-
-## Architecture
-
-### Workspace Layout
-
-- **`crates/acp-lazy-core/`**: Core library with shared utilities
-  - `permissions`: Maps ACP permission modes to non-interactive Codex overrides
-  - `transport`: Provides spawn/stdio utilities, line-based JSON reading, and writing
-  - `logging`: Tracing initialization and configuration
-
-- **`crates/codex-cli-acp/`**: Codex native adapter implementation (binary)
-  - Implements ACP server over stdio
-  - Handles initialize/new_session/prompt/cancel requests
-  - Streams agent responses and tool calls
-
-- **`local_refs/`**: Vendored references from Zed
-  - `zed-acp-examples/`: Reference implementations
-  - `codex/`: Codex documentation
-  - `agent-client-protocol/`: ACP specification
-
-- **`dev-docs/`**: Development documentation (Chinese)
-  - `requirements/`: Project requirements
-  - `design/`: Architecture and design decisions
-  - `plan/`: Implementation roadmap
-
-### Core Concepts
-
-#### ACP Protocol Flow
-1. **Initialize**: Client sends initialization request, server responds with capabilities
-2. **New Session**: Client requests new session with working directory and MCP servers
-3. **Prompt**: Client sends prompt, server streams responses via agent_message_chunk events
-4. **Tool Calls**: Server emits tool_call events (pending → completed) with results
-5. **Turn Completion**: Server sends notify("agent-turn-complete") or uses idle fallback
-
-#### Permission Mapping (Non-Interactive by Default)
-The system maps ACP permission modes to Codex CLI parameters to avoid UI approval prompts:
-
-##### ACP Mode → Codex Parameters Mapping
-| ACP Permission Mode | Codex Approval Policy | Codex Sandbox Mode | Network Access | Codex CLI Flags |
-|-------------------|---------------------|-------------------|---------------|-----------------|
-| `default` / `plan` | `never` | `read-only` | `false` | `codex proto -c approval_policy="never" -c sandbox_mode="read-only"` |
-| `acceptEdits` | `never` | `workspace-write` | `false` | `codex proto -c approval_policy="never" -c sandbox_mode="workspace-write"` |
-| `bypassPermissions` | `never` | `workspace-write` | `true` | `codex proto -c approval_policy="never" -c sandbox_mode="workspace-write" -c sandbox_workspace_write.network_access=true` |
-| `YOLO` / `danger-full-access` | `never` | `danger-full-access` | `true` | `codex proto --dangerously-bypass-approvals-and-sandbox` |
-
-##### Codex-Specific Permission Details
-- **Trusted Commands**: Commands like `ls`, `cat`, `sed` run without approval in `untrusted` mode
-- **Workspace Scope**: Includes current directory and `/tmp` by default
-- **Network Control**: Disabled by default in `workspace-write`, requires explicit config
-- **Escalation**: In `on-failure` mode, failures trigger approval requests for unsandboxed retry
-
-#### Streaming Implementation
-- Line-based JSON reading with queue processing
-- De-duplication guards prevent repeated final chunks
-- Idle fallback (1.2s) ensures turn completion even without explicit notification
-
-#### Tool Calls
-- Supports single and batched tool_calls
-- Maps tool kinds: read/edit/delete/move/search/execute/fetch/think/other
-- Local shell commands include stdout preview (2KB cap) in completed content
-
-### Native vs Proxy Approaches
-
-- **Native** (e.g., `codex-cli-acp`): Direct implementation of ACP protocol, spawning provider CLI as subprocess
-- **Proxy** (planned `acp-proxy`): Wraps existing ACP servers (claude-code-acp, gemini --experimental-acp) with unified policies
-
+# WARP.md
+
+WARP Agent is the terminal-side AI developer operating in this repository. This document defines WARP’s role, scope, and operating rules so that its work is predictable, auditable, and compatible with our team workflow.
+
+Role & Responsibilities
+- Task analysis and solution design: clarify scope, assumptions, constraints; propose architecture and acceptance criteria.
+- Planning: break down issues into executable tasks with traceability to requirements/spec/design.
+- Local verification: build, lint, test; replay protocol JSONL scenarios; produce logs and evidence.
+- Code review support: summarize diffs, risks, and evidence; recommend merge or changes.
+- Merge execution: when authorized, perform non-interactive merges (squash), respecting protected-branch rules.
+
+Operating Rules
+- Tools: Only use terminal commands in the repo; avoid interactive/paged commands; never expose secrets.
+- Worktree-first: never develop on main; create feature/* branches in dedicated worktrees.
+- Logging discipline: stderr for logs; stdout reserved for JSON-RPC/JSONL.
+- Evidence: save scenario outputs and jq validations under _artifacts/logs/<task>/ or CI artifacts.
+- Respect human edits: do not override user modifications unless explicitly asked; reconcile conflicts conservatively.
+
+Standard Procedure
+1) Context gathering
+   - Inspect repository state, read relevant files, and list existing workflows.
+2) Plan tasks
+   - Draft a concise checklist; create a feature worktree from origin/main.
+3) Implement & verify
+   - Code changes via patch; run cargo fmt/clippy/test; replay JSONL scenarios.
+4) Evidence
+   - Store outputs and logs; summarize pass/fail and link artifacts.
+5) PR & merge
+   - Open PR with summary and evidence; on approval, squash-merge and clean up worktrees.
+
+Quality Gates (must pass)
+- cargo fmt --all -- --check
+- cargo clippy --workspace --all-targets --all-features -- -D warnings
+- cargo test --workspace --all-features --locked
+- Protocol JSONL scenarios (if present) replay without errors; stdout is valid JSONL.
+
+Security & Compliance
+- Do not log secrets; never print secrets to CI logs; use env vars and GitHub secrets.
+- Avoid running untrusted code or scripts without review.
+
+Communication
+- Keep status short and actionable; when uncertain about intent, ask before proceeding.
+- Escalate risks with options and trade-offs.
+
+References
+- See CONTRIBUTING.md for team workflow and CI/CD rules.
+- See CLAUDE.md for Claude Code development policy.
 ### Plugin System (Planned)
 The architecture includes plans for an extensible plugin system:
 - Inbound/outbound processing chains

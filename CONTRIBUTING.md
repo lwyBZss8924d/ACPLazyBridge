@@ -1,0 +1,68 @@
+# CONTRIBUTING
+
+This repository follows a worktree-first, trunk-based development workflow with protected main and PR-based merges. Please read this guide before contributing.
+
+Summary
+- main is always stable and release-ready. No direct commits, PR-only.
+- Root repo directory is always checked out to main and is not used for development.
+- Each task uses its own Git worktree and feature branch from origin/main.
+- All changes go through PR with CI checks, code review, and evidence.
+- Squash merge strategy keeps a clean main history.
+
+Prerequisites
+- Rust stable via rustup
+- cargo, rustfmt, clippy
+- Optional: jq (for validating JSONL outputs), Codex CLI for integration testing
+
+Branching & Worktrees
+- Naming: feature|fix|perf|chore|docs/<kebab-slug>
+- Create from origin/main:
+  git -C <root> worktree add ~/dev-space/<task-dir> origin/main -b feature/<slug>
+- One worktree per feature branch. Do not checkout the same branch in multiple worktrees.
+- After PR merge, remove the worktree and delete the local branch if desired.
+
+Commits & PRs
+- Conventional Commits: feat, fix, perf, chore, docs, test, refactor, build, ci
+- Keep commits focused and small; split logically distinct changes into separate PRs.
+- PR description must include:
+  - Motivation and design summary
+  - Acceptance criteria and risk/rollback plan
+  - Links to dev-docs/plan/issues and references
+  - Evidence: test commands, JSONL inputs/outputs locations, logs, and jq filters
+- Default merge method: Squash and merge into main
+
+Code Quality Gates
+- Formatting: cargo fmt --all -- --check
+- Lint: cargo clippy --workspace --all-targets --all-features -- -D warnings
+- Tests: cargo test --workspace --all-features --locked
+- Protocol scenarios (JSONL) should run cleanly and log to stderr only; stdout must be valid JSONL.
+
+Security & Logging
+- Never log or print secrets. Use environment variables securely in CI.
+- Protocol processes must write logs to stderr; stdout is reserved for JSON-RPC/JSONL output.
+
+CI/CD
+- CI runs on PRs and on push to feature/*.
+- Required checks: fmt, clippy, test, protocol scenario replay (if scenarios present), optional security (deny/audit).
+- main is a protected branch requiring successful status checks and at least one review.
+
+Reviewers & Ownership
+- CODEOWNERS define default reviewers. Use them for subsystem expertise.
+- For large changes, propose design in dev-docs/plan/issues and seek early feedback.
+
+Evidence & Traceability
+- Keep JSONL tests under dev-docs/review/_artifacts/tests/ and outputs under _artifacts/logs/ when running locally.
+- Maintain traceability (e.g., dev-docs/review/_artifacts/traceability.csv) linking requirements/specs/implementation/tests.
+
+Local Quickstart (example)
+- New task:
+  git -C /Users/arthur/dev-space/ACPLazyBridge fetch origin
+  git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/<task-dir> origin/main -b feature/<slug>
+- Build & check:
+  cargo fmt --all -- --check && cargo clippy --workspace --all-targets --all-features -- -D warnings && cargo test --workspace --all-features --locked
+- Run protocol scenarios (if present):
+  for f in dev-docs/review/_artifacts/tests/*.jsonl; do cargo run -p codex-cli-acp < "$f" | jq -c . >/dev/null || exit 1; done
+
+Questions
+- Open a discussion or issue with context (link issues/specs). See ISSUE_TEMPLATE for guidance.
+

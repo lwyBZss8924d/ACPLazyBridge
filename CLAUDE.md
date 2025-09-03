@@ -1,5 +1,15 @@
 # CLAUDE.md (AGENTS.md)
 
+Team Development Workflow for Claude Code
+- Source of tasks: dev-docs/plan/issues/* (issue-list with design, references, acceptance criteria)
+- Start point: always from origin/main
+- Worktree-first: create a new worktree and feature branch per task
+  - git -C <root> worktree add ~/dev-space/<task-dir> origin/main -b feature/<slug>
+- Quality gates: cargo fmt --all -- --check; cargo clippy --workspace --all-targets --all-features -- -D warnings; cargo test --workspace --all-features --locked
+- Protocol discipline: logs to stderr only; stdout must be strict JSONL
+- Evidence: commit/run JSONL scenarios under dev-docs/review/_artifacts/tests and provide outputs/logs for review
+- PR: link to the issue, explain design, include evidence, and use squash merge after approval
+
 This Development guide file offers instructions for any AI Developer coding agent. Such as *Claude Code (claude.ai/code)* working on this repository project High-Level Concept Overview & Software Development Team AI Developer Member Collaboration Global Standards. AI Developer coding agents team members include:
 
 - **CLAUDE** "Claude Code Agent" (anthropic Claude Code CLI client link - `CLAUDE.md` )

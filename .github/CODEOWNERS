@@ -1,0 +1,7 @@
+# These owners will be requested for review on every pull request.
+* @lwyBZss8924d
+
+# Example path-based ownership (extend as needed)
+# /crates/acp-lazy-core/ @lwyBZss8924d
+# /crates/codex-cli-acp/ @lwyBZss8924d
+
