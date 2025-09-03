@@ -6,7 +6,6 @@
 set -e
 
 echo "Building codex-cli-acp..."
-cd /Users/arthur/dev-space/acplb-worktrees/codex-proto-1
 cargo build -p codex-cli-acp 2>/dev/null
 
 echo "Starting ACP server and sending test messages..."
