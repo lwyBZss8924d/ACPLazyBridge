@@ -10,6 +10,32 @@ use std::sync::Arc;
 use tokio::sync::{mpsc, RwLock};
 use tracing::{debug, error, info};
 
+/// Configuration for ACP server behavior
+#[derive(Clone)]
+struct ServerConfig {
+    /// Idle timeout in milliseconds before ending a turn (default: 1200ms)
+    idle_timeout_ms: u64,
+    /// Polling interval in milliseconds for timeout checks (default: 100ms)
+    polling_interval_ms: u64,
+}
+
+impl Default for ServerConfig {
+    fn default() -> Self {
+        Self {
+            // Default idle timeout of 1.2 seconds
+            idle_timeout_ms: std::env::var("ACPLB_IDLE_TIMEOUT_MS")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(1200),
+            // Default polling interval of 100ms
+            polling_interval_ms: std::env::var("ACPLB_POLLING_INTERVAL_MS")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(100),
+        }
+    }
+}
+
 mod codex_proto;
 mod validation;
 
@@ -25,13 +51,20 @@ struct SessionState {
 struct AcpServer {
     sessions: Arc<RwLock<HashMap<String, SessionState>>>,
     protocol_version: u16,
+    config: ServerConfig,
 }
 
 impl AcpServer {
     fn new() -> Self {
+        let config = ServerConfig::default();
+        debug!(
+            "Initializing ACP server with idle_timeout={}ms, polling_interval={}ms",
+            config.idle_timeout_ms, config.polling_interval_ms
+        );
         Self {
             sessions: Arc::new(RwLock::new(HashMap::new())),
             protocol_version: 1,  // ACP protocol version 1
+            config,
         }
     }
 
@@ -142,10 +175,10 @@ impl AcpServer {
 
         info!("Processing prompt for session {}", session_id);
 
-        // Setup streaming channel if not already done
+        // Setup streaming channel 
         let (tx, mut rx) = mpsc::unbounded_channel::<codex_proto::SessionUpdate>();
         
-        // Get or spawn Codex process and set up streaming
+        // Create a fresh Codex process for each prompt to avoid stdout ownership issues
         let stdout = {
             let mut sessions = self.sessions.write().await;
             let session = sessions
@@ -155,33 +188,38 @@ impl AcpServer {
             // Store the sender for potential future use
             session.stream_tx = Some(tx.clone());
             
+            // Clean up any existing process first
             let mut process_guard = session.codex_process.write().await;
-            if process_guard.is_none() {
-                let codex_overrides = map_acp_to_codex(session.permission_mode);
-                let mut args = vec!["proto".to_string()];
-                args.extend(codex_overrides.to_cli_args());
+            if let Some(mut existing_process) = process_guard.take() {
+                debug!("Cleaning up existing Codex process");
+                let _ = existing_process.kill().await; // Best effort cleanup
+            }
+            
+            // Always create a fresh process for each prompt
+            let codex_overrides = map_acp_to_codex(session.permission_mode);
+            let mut args = vec!["proto".to_string()];
+            args.extend(codex_overrides.to_cli_args());
 
-                debug!("Spawning Codex with args: {:?}", args);
+            debug!("Spawning fresh Codex process with args: {:?}", args);
 
-                // Support CODEX_CMD environment variable for custom Codex path
-                let codex_cmd = std::env::var("CODEX_CMD")
-                    .unwrap_or_else(|_| "codex".to_string());
-                
-                debug!("Using Codex command: {}", codex_cmd);
+            // Support CODEX_CMD environment variable for custom Codex path
+            let codex_cmd = std::env::var("CODEX_CMD")
+                .unwrap_or_else(|_| "codex".to_string());
+            
+            debug!("Using Codex command: {}", codex_cmd);
 
-                let mut process = ProcessTransport::spawn(
-                    &codex_cmd, 
-                    &args, 
-                    None, 
-                    Some(&session.working_dir)
-                )
-                .await
-                .context("Failed to spawn Codex process. Set CODEX_CMD env var if codex is not in PATH")?;
+            let mut process = ProcessTransport::spawn(
+                &codex_cmd, 
+                &args, 
+                None, 
+                Some(&session.working_dir)
+            )
+            .await
+            .context("Failed to spawn Codex process. Set CODEX_CMD env var if codex is not in PATH")?;
 
-                // Monitor stderr for debugging
-                process.monitor_stderr()?;
-
-                *process_guard = Some(process);
+            // Monitor stderr for debugging
+            if let Err(e) = process.monitor_stderr() {
+                error!("Failed to monitor stderr: {}", e);
             }
 
             // Send prompt to Codex
@@ -194,33 +232,54 @@ impl AcpServer {
                 }
             });
 
-            write_line(
-                process_guard.as_mut().unwrap().stdin(),
+            if let Err(e) = write_line(
+                process.stdin(),
                 &codex_request.to_string(),
-            )
-            .await?;
+            ).await {
+                error!("Failed to write prompt to Codex: {}", e);
+                return Err(anyhow!("Failed to send prompt to Codex: {}", e));
+            }
             
-            // Take stdout for streaming (can only be done once per process)
-            process_guard.as_mut().unwrap().take_stdout()
-                .ok_or_else(|| anyhow!("Failed to take stdout from Codex process"))?
+            // Take stdout for streaming
+            let stdout = process.take_stdout()
+                .ok_or_else(|| anyhow!("Failed to take stdout from Codex process"))?;
+            
+            // Store the process back
+            *process_guard = Some(process);
+            
+            stdout
         };
 
-        // Start streaming task
+        // Start streaming task with better error handling
         let session_id_clone = session_id.to_string();
+        let session_id_for_error = session_id.to_string();
         let stream_task = tokio::spawn(async move {
-            if let Err(e) = codex_proto::stream_codex_output(
+            match codex_proto::stream_codex_output(
                 stdout,
                 session_id_clone,
                 tx
             ).await {
-                error!("Streaming error: {}", e);
+                Ok(_) => {
+                    debug!("Streaming completed successfully");
+                }
+                Err(e) => {
+                    error!("Streaming error in session {}: {}", session_id_for_error, e);
+                    // TODO: Consider sending an error update to the client
+                    // For now, we log the error and let the timeout mechanism handle completion
+                }
             }
         });
 
-        // Forward stream updates to stdout
+        // Forward stream updates to stdout with configurable timeout
         let mut stdout = tokio::io::stdout();
         let mut _last_update = None;
         let mut timeout_counter = 0;
+        let max_timeout_count = self.config.idle_timeout_ms / self.config.polling_interval_ms;
+        
+        debug!(
+            "Starting stream forwarding with timeout={}ms ({}x{}ms polls)", 
+            self.config.idle_timeout_ms, max_timeout_count, self.config.polling_interval_ms
+        );
         
         loop {
             tokio::select! {
@@ -230,19 +289,20 @@ impl AcpServer {
                             let json = codex_proto::serialize_update(&update)?;
                             write_line(&mut stdout, &json).await?;
                             _last_update = Some(update);
-                            timeout_counter = 0;
+                            timeout_counter = 0; // Reset timeout on activity
                         }
                         None => {
                             // Channel closed, streaming done
+                            debug!("Stream channel closed, ending turn");
                             break;
                         }
                     }
                 }
-                _ = tokio::time::sleep(tokio::time::Duration::from_millis(100)) => {
+                _ = tokio::time::sleep(tokio::time::Duration::from_millis(self.config.polling_interval_ms)) => {
                     timeout_counter += 1;
-                    // After 1.2 seconds of no activity, assume completion
-                    if timeout_counter > 12 {
-                        debug!("Idle timeout reached, ending turn");
+                    // After configured idle time with no activity, assume completion
+                    if timeout_counter >= max_timeout_count {
+                        debug!("Idle timeout reached after {}ms, ending turn", self.config.idle_timeout_ms);
                         break;
                     }
                 }

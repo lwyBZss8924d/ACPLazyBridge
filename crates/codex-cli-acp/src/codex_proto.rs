@@ -387,7 +387,8 @@ where
         }
 
         if let Err(e) = manager.process_line(&line).await {
-            warn!("Error processing Codex output line: {}", e);
+            error!("Error processing Codex output line '{}': {}", line.trim(), e);
+            // Continue processing other lines despite individual errors
         }
 
         if manager.is_finalized() {

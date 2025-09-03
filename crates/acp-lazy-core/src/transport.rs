@@ -133,13 +133,19 @@ impl ProcessTransport {
     }
 
     /// Get mutable reference to stdout for reading.
-    pub fn stdout(&mut self) -> &mut ChildStdout {
-        self.stdout.as_mut().expect("stdout already taken")
+    pub fn stdout(&mut self) -> Option<&mut ChildStdout> {
+        self.stdout.as_mut()
     }
     
     /// Take ownership of stdout (can only be called once).
+    /// Returns None if already taken or not available.
     pub fn take_stdout(&mut self) -> Option<ChildStdout> {
         self.stdout.take()
+    }
+    
+    /// Check if stdout is still available
+    pub fn has_stdout(&self) -> bool {
+        self.stdout.is_some()
     }
 
     /// Check if the process is still running.
