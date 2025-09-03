@@ -74,9 +74,7 @@ pub struct SessionUpdateParams {
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ContentBlock {
-    Text {
-        text: String,
-    },
+    Text { text: String },
 }
 
 // ToolCallContent removed - using ContentBlock directly per ACP spec
