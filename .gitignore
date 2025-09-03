@@ -71,4 +71,4 @@ coverage/
 .coverage
 
 # Debug
-*.dSYM/
+*.dSYM//.worktrees
