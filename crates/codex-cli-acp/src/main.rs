@@ -124,10 +124,14 @@ impl AcpServer {
         validation::validate_absolute_path(cwd)
             .map_err(|e| anyhow::anyhow!(e))?;
 
-        // mcpServers is required by spec, but we can ignore content for now
-        let _mcp_servers = params
+        // mcpServers is required by spec and must be an array
+        let mcp_servers = params
             .get("mcpServers")
             .ok_or_else(|| validation::RpcError::invalid_params("Missing mcpServers parameter"))?;
+        
+        if !mcp_servers.is_array() {
+            return Err(validation::RpcError::invalid_params("mcpServers must be an array").into());
+        }
 
         let permission_mode = params
             .get("permissionMode")
@@ -532,5 +536,42 @@ mod tests {
         });
         let resp = rpc(&server, req).await;
         assert_eq!(resp["error"]["code"], -32601);
+    }
+
+    #[tokio::test]
+    async fn session_new_validates_mcp_servers_is_array() {
+        let server = AcpServer::new();
+        
+        // mcpServers must be an array - test with object
+        let req_obj = json!({
+            "jsonrpc": "2.0",
+            "id": 7,
+            "method": "session/new",
+            "params": {"cwd": "/abs/path", "mcpServers": {"not": "array"}}
+        });
+        let resp_obj = rpc(&server, req_obj).await;
+        assert_eq!(resp_obj["error"]["code"], -32602);
+        assert!(resp_obj["error"]["message"].as_str().unwrap().contains("mcpServers must be an array"));
+
+        // mcpServers must be an array - test with string
+        let req_str = json!({
+            "jsonrpc": "2.0",
+            "id": 8,
+            "method": "session/new",
+            "params": {"cwd": "/abs/path", "mcpServers": "not an array"}
+        });
+        let resp_str = rpc(&server, req_str).await;
+        assert_eq!(resp_str["error"]["code"], -32602);
+        assert!(resp_str["error"]["message"].as_str().unwrap().contains("mcpServers must be an array"));
+
+        // Valid case with empty array should work
+        let req_valid = json!({
+            "jsonrpc": "2.0",
+            "id": 9,
+            "method": "session/new",
+            "params": {"cwd": "/abs/path", "mcpServers": []}
+        });
+        let resp_valid = rpc(&server, req_valid).await;
+        assert!(resp_valid["result"]["sessionId"].is_string());
     }
 }
