@@ -1,5 +1,5 @@
 //! Transport layer for ACP communication, based on Zed's RPC patterns.
-//! 
+//!
 //! This module provides line-based JSONL communication with proper async handling,
 //! following patterns from local_refs/agent-client-protocol/rust/rpc.rs
 
@@ -23,7 +23,7 @@ pub struct ProcessTransport {
 
 impl ProcessTransport {
     /// Spawn a new process with piped stdio.
-    /// 
+    ///
     /// # Arguments
     /// * `path` - Path to the executable
     /// * `args` - Command line arguments
@@ -52,14 +52,21 @@ impl ProcessTransport {
             cmd.current_dir(dir);
         }
 
-        let mut child = cmd.spawn()
+        let mut child = cmd
+            .spawn()
             .with_context(|| format!("Failed to spawn process: {}", path))?;
 
-        let stdin = child.stdin.take()
+        let stdin = child
+            .stdin
+            .take()
             .context("Failed to take stdin from child process")?;
-        let stdout = child.stdout.take()
+        let stdout = child
+            .stdout
+            .take()
             .context("Failed to take stdout from child process")?;
-        let stderr = child.stderr.take()
+        let stderr = child
+            .stderr
+            .take()
             .context("Failed to take stderr from child process")?;
 
         trace!("Spawned process with PID: {:?}", child.id());
@@ -74,23 +81,25 @@ impl ProcessTransport {
     }
 
     /// Start monitoring stderr and logging output.
-    /// 
+    ///
     /// Note: This takes ownership of stderr, so it can only be called once.
     /// Log level is determined by content: error patterns trigger warn/error,
     /// normal output goes to debug to reduce noise.
     pub fn monitor_stderr(&mut self) -> Result<()> {
         // Take stderr from self (can only be done once)
-        let stderr = self.stderr.take()
+        let stderr = self
+            .stderr
+            .take()
             .context("stderr already taken or not available")?;
-        
+
         let task = tokio::spawn(async move {
             let mut reader = BufReader::new(stderr);
             let mut line = String::new();
-            
+
             // Patterns that indicate errors or important warnings
             let error_patterns = ["error", "fatal", "panic", "fail", "exception"];
             let warn_patterns = ["warn", "warning", "deprecated"];
-            
+
             while let Ok(bytes) = reader.read_line(&mut line).await {
                 if bytes == 0 {
                     // EOF reached, exit gracefully
@@ -100,7 +109,7 @@ impl ProcessTransport {
                 let trimmed = line.trim_end();
                 if !trimmed.is_empty() {
                     let lower = trimmed.to_lowercase();
-                    
+
                     // Determine severity based on content
                     if error_patterns.iter().any(|p| lower.contains(p)) {
                         error!("Process stderr: {}", trimmed);
@@ -130,33 +139,36 @@ impl ProcessTransport {
 
     /// Check if the process is still running.
     pub fn is_running(&mut self) -> bool {
-        self.child.try_wait()
+        self.child
+            .try_wait()
             .map(|status| status.is_none())
             .unwrap_or(false)
     }
 
     /// Kill the child process.
     pub async fn kill(&mut self) -> Result<()> {
-        self.child.kill().await
+        self.child
+            .kill()
+            .await
             .context("Failed to kill child process")?;
         Ok(())
     }
 
     /// Wait for the process to exit and return its status.
     pub async fn wait(&mut self) -> Result<std::process::ExitStatus> {
-        let status = self.child.wait().await
+        let status = self
+            .child
+            .wait()
+            .await
             .context("Failed to wait for child process")?;
-        
+
         // Join the stderr task to ensure it completes gracefully
         if let Some(task) = self.stderr_task.take() {
             // Give the task a chance to finish naturally (up to 100ms)
             // This ensures we capture any final stderr output
-            let _ = tokio::time::timeout(
-                std::time::Duration::from_millis(100),
-                task
-            ).await;
+            let _ = tokio::time::timeout(std::time::Duration::from_millis(100), task).await;
         }
-        
+
         Ok(status)
     }
 }
@@ -195,7 +207,7 @@ impl Default for MessageQueue {
 }
 
 /// Read JSON lines from an async reader and send them to a handler.
-/// 
+///
 /// This function reads lines from the input, skips empty lines and whitespace,
 /// and passes valid lines to the provided handler. Errors in individual lines
 /// are logged but don't stop processing.
@@ -206,10 +218,12 @@ where
     Fut: std::future::Future<Output = Result<()>>,
 {
     let mut lines = BufReader::new(reader).lines();
-    
-    while let Some(line) = lines.next_line().await
-        .context("Failed to read line from stream")? {
-        
+
+    while let Some(line) = lines
+        .next_line()
+        .await
+        .context("Failed to read line from stream")?
+    {
         let trimmed = line.trim();
         if trimmed.is_empty() {
             trace!("Skipping empty line");
@@ -217,7 +231,7 @@ where
         }
 
         trace!("Read line: {}", trimmed);
-        
+
         // Validate it's valid JSON before passing to handler
         match serde_json::from_str::<Value>(trimmed) {
             Ok(_) => {
@@ -232,13 +246,13 @@ where
             }
         }
     }
-    
+
     debug!("Finished reading lines from stream");
     Ok(())
 }
 
 /// Read JSON values from an async reader and send parsed values to a handler.
-/// 
+///
 /// This function is more efficient than `read_lines` when the handler needs
 /// parsed JSON values, as it avoids double-parsing. Lines that aren't valid
 /// JSON are logged and skipped.
@@ -249,10 +263,12 @@ where
     Fut: std::future::Future<Output = Result<()>>,
 {
     let mut lines = BufReader::new(reader).lines();
-    
-    while let Some(line) = lines.next_line().await
-        .context("Failed to read line from stream")? {
-        
+
+    while let Some(line) = lines
+        .next_line()
+        .await
+        .context("Failed to read line from stream")?
+    {
         let trimmed = line.trim();
         if trimmed.is_empty() {
             trace!("Skipping empty line");
@@ -260,7 +276,7 @@ where
         }
 
         trace!("Read line: {}", trimmed);
-        
+
         // Parse JSON once and pass the Value to the handler
         match serde_json::from_str::<Value>(trimmed) {
             Ok(value) => {
@@ -275,35 +291,35 @@ where
             }
         }
     }
-    
+
     debug!("Finished reading values from stream");
     Ok(())
 }
 
 /// Write a JSON line to an async writer.
-/// 
+///
 /// Appends a newline and flushes the writer to ensure the message is sent immediately.
 pub async fn write_line<W>(writer: &mut W, json_str: &str) -> Result<()>
 where
     W: AsyncWrite + Unpin,
 {
     trace!("Writing line: {}", json_str);
-    
-    writer.write_all(json_str.as_bytes()).await
+
+    writer
+        .write_all(json_str.as_bytes())
+        .await
         .context("Failed to write JSON to stream")?;
-    writer.write_all(b"\n").await
+    writer
+        .write_all(b"\n")
+        .await
         .context("Failed to write newline to stream")?;
-    writer.flush().await
-        .context("Failed to flush stream")?;
-    
+    writer.flush().await.context("Failed to flush stream")?;
+
     Ok(())
 }
 
 /// Start a task that reads lines from a reader and sends them to a channel.
-pub fn spawn_reader_task<R>(
-    reader: R,
-    sender: UnboundedSender<String>,
-) -> JoinHandle<Result<()>>
+pub fn spawn_reader_task<R>(reader: R, sender: UnboundedSender<String>) -> JoinHandle<Result<()>>
 where
     R: AsyncRead + Unpin + Send + 'static,
 {
@@ -311,15 +327,17 @@ where
         read_lines(reader, |line| {
             let sender = sender.clone();
             async move {
-                sender.unbounded_send(line)
+                sender
+                    .unbounded_send(line)
                     .map_err(|e| anyhow::anyhow!("Failed to send message to queue: {}", e))
             }
-        }).await
+        })
+        .await
     })
 }
 
 /// Start a task that reads JSON values from a reader and sends them to a channel.
-/// 
+///
 /// This is more efficient than `spawn_reader_task` when values need to be parsed,
 /// as it avoids double-parsing.
 pub fn spawn_value_reader_task<R>(
@@ -333,26 +351,28 @@ where
         read_values(reader, |value| {
             let sender = sender.clone();
             async move {
-                sender.unbounded_send(value)
+                sender
+                    .unbounded_send(value)
                     .map_err(|e| anyhow::anyhow!("Failed to send value to queue: {}", e))
             }
-        }).await
+        })
+        .await
     })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::sync::{Arc, Mutex};
     use futures::StreamExt;
+    use std::sync::{Arc, Mutex};
 
     #[tokio::test]
     async fn test_write_line() {
         let mut buffer = Vec::new();
         let json = r#"{"test": "value"}"#;
-        
+
         write_line(&mut buffer, json).await.unwrap();
-        
+
         let result = String::from_utf8(buffer).unwrap();
         assert_eq!(result, "{\"test\": \"value\"}\n");
     }
@@ -361,18 +381,20 @@ mod tests {
     async fn test_read_lines_skip_empty() {
         let input = "  \n{\"valid\": 1}\n\n  \n{\"valid\": 2}\n";
         let cursor = std::io::Cursor::new(input);
-        
+
         let received = Arc::new(Mutex::new(Vec::new()));
         let received_clone = received.clone();
-        
+
         read_lines(cursor, move |line| {
             let received = received_clone.clone();
             async move {
                 received.lock().unwrap().push(line);
                 Ok(())
             }
-        }).await.unwrap();
-        
+        })
+        .await
+        .unwrap();
+
         let results = received.lock().unwrap();
         assert_eq!(results.len(), 2);
         assert_eq!(results[0], r#"{"valid": 1}"#);
@@ -383,18 +405,20 @@ mod tests {
     async fn test_read_lines_skip_invalid_json() {
         let input = "{\"valid\": 1}\ninvalid json\n{\"valid\": 2}\n";
         let cursor = std::io::Cursor::new(input);
-        
+
         let received = Arc::new(Mutex::new(Vec::new()));
         let received_clone = received.clone();
-        
+
         read_lines(cursor, move |line| {
             let received = received_clone.clone();
             async move {
                 received.lock().unwrap().push(line);
                 Ok(())
             }
-        }).await.unwrap();
-        
+        })
+        .await
+        .unwrap();
+
         let results = received.lock().unwrap();
         assert_eq!(results.len(), 2);
         assert_eq!(results[0], r#"{"valid": 1}"#);
@@ -406,10 +430,10 @@ mod tests {
         let mut queue = MessageQueue::new();
         let sender = queue.sender();
         let mut receiver = queue.take_receiver().unwrap();
-        
+
         sender.unbounded_send("message1".to_string()).unwrap();
         sender.unbounded_send("message2".to_string()).unwrap();
-        
+
         assert_eq!(receiver.next().await.unwrap(), "message1");
         assert_eq!(receiver.next().await.unwrap(), "message2");
     }
@@ -418,25 +442,30 @@ mod tests {
     async fn test_stderr_capture_on_exit() {
         // This test simulates a process that writes to stderr right before exiting
         // to ensure we don't lose tail output
-        
+
         // Use echo command to write to stderr and exit
         let mut transport = ProcessTransport::spawn(
             "sh",
-            &["-c".to_string(), "echo 'early stderr' >&2; sleep 0.01; echo 'final stderr' >&2".to_string()],
+            &[
+                "-c".to_string(),
+                "echo 'early stderr' >&2; sleep 0.01; echo 'final stderr' >&2".to_string(),
+            ],
             None,
-            None
-        ).await.unwrap();
-        
+            None,
+        )
+        .await
+        .unwrap();
+
         // Start monitoring stderr
         transport.monitor_stderr().unwrap();
-        
+
         // Wait for process to complete - should capture all stderr
         let status = transport.wait().await.unwrap();
         assert!(status.success());
-        
+
         // Give a moment for logs to be processed
         tokio::time::sleep(std::time::Duration::from_millis(50)).await;
-        
+
         // Note: In a real test we'd capture the logs, but for now
         // this ensures the code paths are exercised without panicking
     }
@@ -445,7 +474,7 @@ mod tests {
     async fn test_stderr_logging_severity() {
         // Test that error patterns trigger appropriate log levels
         // This test verifies the code paths work without panicking
-        
+
         // Simulate stderr with various severity patterns
         let mut transport = ProcessTransport::spawn(
             "sh",
@@ -454,17 +483,17 @@ mod tests {
             None,
             None
         ).await.unwrap();
-        
+
         // Start monitoring - will use smart severity detection
         transport.monitor_stderr().unwrap();
-        
+
         // Wait for process to complete
         let status = transport.wait().await.unwrap();
         assert!(status.success());
-        
+
         // Give a moment for logs to be processed
         tokio::time::sleep(std::time::Duration::from_millis(50)).await;
-        
+
         // In real usage, 'normal output' would be debug level,
         // 'WARNING: deprecated' would be warn level,
         // 'ERROR: failed' would be error level
@@ -477,10 +506,10 @@ mod tests {
 invalid json
 {"id": 3, "value": "third"}"#;
         let cursor = std::io::Cursor::new(input);
-        
+
         let received = Arc::new(Mutex::new(Vec::new()));
         let received_clone = received.clone();
-        
+
         read_values(cursor, move |value| {
             let received = received_clone.clone();
             async move {
@@ -490,8 +519,10 @@ invalid json
                 }
                 Ok(())
             }
-        }).await.unwrap();
-        
+        })
+        .await
+        .unwrap();
+
         let results = received.lock().unwrap();
         assert_eq!(results.len(), 3);
         assert_eq!(results[0], 1);
@@ -504,17 +535,17 @@ invalid json
         let input = r#"{"type": "message", "content": "hello"}
 {"type": "message", "content": "world"}"#;
         let cursor = std::io::Cursor::new(input);
-        
+
         let (tx, mut rx) = mpsc::unbounded::<Value>();
         let task = spawn_value_reader_task(cursor, tx);
-        
+
         task.await.unwrap().unwrap();
-        
+
         // Verify we received parsed Values
         let val1 = rx.next().await.unwrap();
         assert_eq!(val1["type"], "message");
         assert_eq!(val1["content"], "hello");
-        
+
         let val2 = rx.next().await.unwrap();
         assert_eq!(val2["type"], "message");
         assert_eq!(val2["content"], "world");

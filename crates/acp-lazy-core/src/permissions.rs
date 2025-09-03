@@ -30,7 +30,9 @@ impl std::str::FromStr for AcpPermissionMode {
             "default" => Self::Default,
             "plan" => Self::Plan,
             "acceptedits" | "accept-edits" | "accept_edits" => Self::AcceptEdits,
-            "bypasspermissions" | "bypass-permissions" | "bypass_permissions" => Self::BypassPermissions,
+            "bypasspermissions" | "bypass-permissions" | "bypass_permissions" => {
+                Self::BypassPermissions
+            }
             "yolo" | "danger" | "danger-full-access" => Self::Yolo,
             _ => return Err(()),
         };
@@ -101,9 +103,7 @@ impl CodexTurnOverrides {
 /// which would block the IDE integration.
 pub fn map_acp_to_codex(mode: AcpPermissionMode) -> CodexTurnOverrides {
     match mode {
-        AcpPermissionMode::Default | AcpPermissionMode::Plan => {
-            CodexTurnOverrides::default()
-        }
+        AcpPermissionMode::Default | AcpPermissionMode::Plan => CodexTurnOverrides::default(),
         AcpPermissionMode::AcceptEdits => CodexTurnOverrides {
             approval_policy: Cow::Borrowed("never"),
             sandbox_mode: Cow::Borrowed("workspace-write"),
@@ -123,16 +123,16 @@ pub fn map_acp_to_codex(mode: AcpPermissionMode) -> CodexTurnOverrides {
 /// Environment-based permission override.
 ///
 /// Allows overriding permissions via environment variables for testing.
-/// 
+///
 /// # Environment Variables
-/// 
+///
 /// The following environment variables are supported (using default prefix "ACPLB"):
 /// - `ACPLB_APPROVAL_POLICY`: Override approval policy (never|on-request|on-failure|untrusted)
 /// - `ACPLB_SANDBOX_MODE`: Override sandbox mode (read-only|workspace-write|danger-full-access)
 /// - `ACPLB_NETWORK_ACCESS`: Override network access (true|false)
-/// 
+///
 /// # Example
-/// 
+///
 /// ```bash
 /// export ACPLB_APPROVAL_POLICY=on-request
 /// export ACPLB_SANDBOX_MODE=workspace-write
@@ -151,7 +151,7 @@ impl Default for PermissionOverrides {
 
 impl PermissionOverrides {
     /// Create with a given environment variable prefix.
-    /// 
+    ///
     /// If you want the default "ACPLB" prefix, use `PermissionOverrides::default()`.
     pub fn new(env_prefix: impl Into<String>) -> Self {
         Self {
@@ -163,13 +163,13 @@ impl PermissionOverrides {
     /// Get an override value from environment.
     pub fn get(&mut self, key: &str) -> Option<&str> {
         let env_key = format!("{}_{}", self.env_prefix, key.to_uppercase());
-        
+
         if !self.cache.contains_key(&env_key) {
             if let Ok(value) = std::env::var(&env_key) {
                 self.cache.insert(env_key.clone(), value);
             }
         }
-        
+
         self.cache.get(&env_key).map(String::as_str)
     }
 
@@ -194,11 +194,26 @@ mod tests {
 
     #[test]
     fn test_permission_mode_parsing() {
-        assert_eq!("default".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::Default));
-        assert_eq!("Plan".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::Plan));
-        assert_eq!("accept-edits".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::AcceptEdits));
-        assert_eq!("bypass_permissions".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::BypassPermissions));
-        assert_eq!("yolo".parse::<AcpPermissionMode>().ok(), Some(AcpPermissionMode::Yolo));
+        assert_eq!(
+            "default".parse::<AcpPermissionMode>().ok(),
+            Some(AcpPermissionMode::Default)
+        );
+        assert_eq!(
+            "Plan".parse::<AcpPermissionMode>().ok(),
+            Some(AcpPermissionMode::Plan)
+        );
+        assert_eq!(
+            "accept-edits".parse::<AcpPermissionMode>().ok(),
+            Some(AcpPermissionMode::AcceptEdits)
+        );
+        assert_eq!(
+            "bypass_permissions".parse::<AcpPermissionMode>().ok(),
+            Some(AcpPermissionMode::BypassPermissions)
+        );
+        assert_eq!(
+            "yolo".parse::<AcpPermissionMode>().ok(),
+            Some(AcpPermissionMode::Yolo)
+        );
         assert_eq!("invalid".parse::<AcpPermissionMode>().ok(), None);
     }
 
@@ -273,14 +288,14 @@ mod tests {
         // Test that the default prefix is "ACPLB"
         std::env::set_var("ACPLB_APPROVAL_POLICY", "untrusted");
         std::env::set_var("ACPLB_SANDBOX_MODE", "read-only");
-        
+
         let mut overrides = PermissionOverrides::default();
         let base = CodexTurnOverrides::default();
         let modified = overrides.apply(base);
-        
+
         assert_eq!(modified.approval_policy, "untrusted");
         assert_eq!(modified.sandbox_mode, "read-only");
-        
+
         // Clean up
         std::env::remove_var("ACPLB_APPROVAL_POLICY");
         std::env::remove_var("ACPLB_SANDBOX_MODE");

@@ -85,19 +85,20 @@ impl Error {
 
     /// Create a method not found error.
     pub fn method_not_found(method: &str) -> Self {
-        Self::new(ErrorCode::MethodNotFound, format!("Method not found: {}", method))
+        Self::new(
+            ErrorCode::MethodNotFound,
+            format!("Method not found: {}", method),
+        )
     }
 
     /// Create an invalid params error.
     pub fn invalid_params(details: impl Into<String>) -> Self {
-        Self::new(ErrorCode::InvalidParams, "Invalid params")
-            .with_data(details.into())
+        Self::new(ErrorCode::InvalidParams, "Invalid params").with_data(details.into())
     }
 
     /// Create an internal error.
     pub fn internal_error(details: impl Into<String>) -> Self {
-        Self::new(ErrorCode::InternalError, "Internal error")
-            .with_data(details.into())
+        Self::new(ErrorCode::InternalError, "Internal error").with_data(details.into())
     }
 }
 
@@ -265,40 +266,32 @@ impl IncomingMessage {
 
         match (&self.id, &self.method, &self.result, &self.error) {
             // Request: has ID and method
-            (Some(id), Some(method), None, None) => {
-                Ok(MessageType::Request(Request {
-                    jsonrpc: JSONRPC_VERSION.to_string(),
-                    id: id.clone(),
-                    method: method.clone(),
-                    params: self.params.clone(),
-                }))
-            }
+            (Some(id), Some(method), None, None) => Ok(MessageType::Request(Request {
+                jsonrpc: JSONRPC_VERSION.to_string(),
+                id: id.clone(),
+                method: method.clone(),
+                params: self.params.clone(),
+            })),
             // Notification: has method but no ID
-            (None, Some(method), None, None) => {
-                Ok(MessageType::Notification(Notification {
-                    jsonrpc: JSONRPC_VERSION.to_string(),
-                    method: method.clone(),
-                    params: self.params.clone(),
-                }))
-            }
+            (None, Some(method), None, None) => Ok(MessageType::Notification(Notification {
+                jsonrpc: JSONRPC_VERSION.to_string(),
+                method: method.clone(),
+                params: self.params.clone(),
+            })),
             // Success Response: has ID and result
-            (Some(id), None, Some(result), None) => {
-                Ok(MessageType::Response(Response {
-                    jsonrpc: JSONRPC_VERSION.to_string(),
-                    id: id.clone(),
-                    result: Some(result.clone()),
-                    error: None,
-                }))
-            }
+            (Some(id), None, Some(result), None) => Ok(MessageType::Response(Response {
+                jsonrpc: JSONRPC_VERSION.to_string(),
+                id: id.clone(),
+                result: Some(result.clone()),
+                error: None,
+            })),
             // Error Response: has ID and error
-            (Some(id), None, None, Some(error)) => {
-                Ok(MessageType::Response(Response {
-                    jsonrpc: JSONRPC_VERSION.to_string(),
-                    id: id.clone(),
-                    result: None,
-                    error: Some(error.clone()),
-                }))
-            }
+            (Some(id), None, None, Some(error)) => Ok(MessageType::Response(Response {
+                jsonrpc: JSONRPC_VERSION.to_string(),
+                id: id.clone(),
+                result: None,
+                error: Some(error.clone()),
+            })),
             // Invalid combination
             _ => Err(Error::invalid_request().with_data("Invalid message structure")),
         }

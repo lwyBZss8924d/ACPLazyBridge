@@ -1,0 +1,35 @@
+name: Feature request
+
+description: Suggest an idea for this project
+
+labels: [enhancement]
+
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise description of the feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / Use case
+      description: What problem does this solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal / High-level design
+      description: Outline the approach and acceptance criteria
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Link to dev-docs/plan/issues, REQ/ARC/SPEC, local_refs where applicable
+
