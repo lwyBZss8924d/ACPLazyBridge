@@ -4,7 +4,11 @@ Team Development Workflow for Claude Code
 - Source of tasks: dev-docs/plan/issues/* (issue-list with design, references, acceptance criteria)
 - Start point: always from origin/main
 - Worktree-first: create a new worktree and feature branch per task
-  - git -C <root> worktree add ~/dev-space/<task-dir> origin/main -b feature/<slug>
+  - Container path (required): /Users/arthur/dev-space/acplb-worktrees/<task-dir>
+  - Command:
+    - git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/<task-dir> origin/main -b feature/<slug>
+  - Optional symlink for IDE navigation:
+    - ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-space/ACPLazyBridge/.worktrees/<task-dir>
 - Quality gates: cargo fmt --all -- --check; cargo clippy --workspace --all-targets --all-features -- -D warnings; cargo test --workspace --all-features --locked
 - Protocol discipline: logs to stderr only; stdout must be strict JSONL
 - Evidence: commit/run JSONL scenarios under dev-docs/review/_artifacts/tests and provide outputs/logs for review

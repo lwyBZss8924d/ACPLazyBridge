@@ -17,7 +17,11 @@ Prerequisites
 Branching & Worktrees
 - Naming: feature|fix|perf|chore|docs/<kebab-slug>
 - Create from origin/main:
-  git -C <root> worktree add ~/dev-space/<task-dir> origin/main -b feature/<slug>
+  - Container path (required): /Users/arthur/dev-space/acplb-worktrees/<task-dir>
+  - Command:
+    git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/<task-dir> origin/main -b feature/<slug>
+  - Optional symlink (for IDE navigation under repo root):
+    ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-space/ACPLazyBridge/.worktrees/<task-dir>
 - One worktree per feature branch. Do not checkout the same branch in multiple worktrees.
 - After PR merge, remove the worktree and delete the local branch if desired.
 
