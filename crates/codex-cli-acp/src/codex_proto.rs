@@ -134,7 +134,7 @@ pub enum SessionUpdateContent {
 }
 
 /// Manages streaming from Codex proto to ACP
-/// 
+///
 /// Note: Uses singular 'update' field per ACP spec SessionNotification structure,
 /// not 'updates' array. This matches agent-client-protocol/rust/client.rs.
 pub struct CodexStreamManager {
@@ -194,17 +194,13 @@ impl CodexStreamManager {
                 arguments,
                 status,
             } => {
-                self.send_tool_call(id, name, arguments, status.as_deref()).await?;
+                self.send_tool_call(id, name, arguments, status.as_deref())
+                    .await?;
             }
             CodexEvent::ToolCalls { calls } => {
                 for call in calls {
-                    self.send_tool_call(
-                        call.id,
-                        call.name,
-                        call.arguments,
-                        call.status.as_deref(),
-                    )
-                    .await?;
+                    self.send_tool_call(call.id, call.name, call.arguments, call.status.as_deref())
+                        .await?;
                 }
             }
             CodexEvent::TaskComplete { reason } => {
@@ -280,7 +276,7 @@ impl CodexStreamManager {
 
         // For tool calls, use the name as the title
         let title = name.clone();
-        
+
         // Determine tool kind based on the name (this is a heuristic)
         let kind = if name.contains("read") || name.contains("get") {
             Some("read".to_string())
@@ -325,8 +321,8 @@ impl CodexStreamManager {
                     session_id: self.session_id.clone(),
                     update: SessionUpdateContent::ToolCallUpdate {
                         tool_call_id: id,
-                        title: None,  // Don't repeat title in updates
-                        kind: None,   // Don't repeat kind in updates
+                        title: None, // Don't repeat title in updates
+                        kind: None,  // Don't repeat kind in updates
                         status: Some(tool_status),
                         content: if tool_status == ToolCallStatus::Completed {
                             // Include a preview of output when completed
@@ -337,8 +333,10 @@ impl CodexStreamManager {
                             None
                         },
                         locations: None,
-                        raw_input: None,  // Already sent in initial call
-                        raw_output: if tool_status == ToolCallStatus::Completed || tool_status == ToolCallStatus::Failed {
+                        raw_input: None, // Already sent in initial call
+                        raw_output: if tool_status == ToolCallStatus::Completed
+                            || tool_status == ToolCallStatus::Failed
+                        {
                             // TODO: Capture actual output from tool
                             Some(json!({"status": tool_status}))
                         } else {
@@ -385,7 +383,11 @@ where
         }
 
         if let Err(e) = manager.process_line(&line).await {
-            error!("Error processing Codex output line '{}': {}", line.trim(), e);
+            error!(
+                "Error processing Codex output line '{}': {}",
+                line.trim(),
+                e
+            );
             // Continue processing other lines despite individual errors
         }
 

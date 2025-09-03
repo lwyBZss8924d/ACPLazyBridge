@@ -41,7 +41,7 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
     let stdout_tx = tx.clone();
     let _stdout_thread = thread::spawn(move || {
         let reader = BufReader::new(stdout);
-for line in reader.lines().map_while(|l| l.ok()) {
+        for line in reader.lines().map_while(|l| l.ok()) {
             if !line.trim().is_empty() {
                 if let Ok(json) = serde_json::from_str::<Value>(&line) {
                     stdout_tx.send(json).ok();
@@ -53,7 +53,7 @@ for line in reader.lines().map_while(|l| l.ok()) {
     // Thread to log stderr
     thread::spawn(move || {
         let reader = BufReader::new(stderr);
-for line in reader.lines().map_while(|l| l.ok()) {
+        for line in reader.lines().map_while(|l| l.ok()) {
             eprintln!("STDERR: {}", line);
         }
     });
@@ -63,7 +63,7 @@ for line in reader.lines().map_while(|l| l.ok()) {
         .with_context(|| format!("Failed to read test file: {:?}", test_file))?;
 
     let mut results = Vec::new();
-    
+
     for line in test_content.lines() {
         let line = line.trim();
         if line.is_empty() || line.starts_with('#') {
@@ -112,21 +112,24 @@ for line in reader.lines().map_while(|l| l.ok()) {
 fn test_handshake() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/handshake.jsonl");
     let results = run_playback_test(test_file).expect("Playback failed");
-    
+
     assert!(!results.is_empty(), "No results from playback");
-    
+
     // Check the initialize response
     if let Some((req, Some(resp))) = results.first() {
         assert_eq!(req["method"], "initialize");
         assert_eq!(resp["jsonrpc"], "2.0");
         assert!(resp.get("result").is_some(), "Missing result in response");
-        
+
         let result = &resp["result"];
         // protocolVersion must be integer 1
         assert_eq!(result["protocolVersion"], 1);
         // New spec: agentCapabilities with nested promptCapabilities
         assert!(result.get("agentCapabilities").is_some());
-        assert_eq!(result["agentCapabilities"]["promptCapabilities"]["image"], false);
+        assert_eq!(
+            result["agentCapabilities"]["promptCapabilities"]["image"],
+            false
+        );
         // No top-level capabilities anymore
         assert!(result.get("capabilities").is_none());
     }
@@ -136,19 +139,19 @@ fn test_handshake() {
 fn test_basic_session() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/basic_session.jsonl");
     let results = run_playback_test(test_file).expect("Playback failed");
-    
+
     assert!(results.len() >= 2, "Expected at least 2 interactions");
-    
+
     // Check initialize
     let (_, init_resp) = &results[0];
     assert!(init_resp.is_some());
     assert!(init_resp.as_ref().unwrap().get("result").is_some());
-    
+
     // Check session/new
     let (req, resp) = &results[1];
     assert_eq!(req["method"], "session/new");
     assert!(resp.is_some());
-    
+
     let resp = resp.as_ref().unwrap();
     assert!(resp.get("result").is_some());
     assert!(resp["result"].get("sessionId").is_some());
@@ -158,13 +161,13 @@ fn test_basic_session() {
 fn test_unknown_method() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/unknown_method.jsonl");
     let results = run_playback_test(test_file).expect("Playback failed");
-    
+
     assert!(!results.is_empty());
-    
+
     let (req, resp) = &results[0];
     assert_eq!(req["method"], "unknown");
     assert!(resp.is_some());
-    
+
     let resp = resp.as_ref().unwrap();
     assert!(resp.get("error").is_some());
     assert_eq!(resp["error"]["code"], -32601); // Method not found
@@ -174,11 +177,14 @@ fn test_unknown_method() {
 fn test_invalid_params() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/invalid_params.jsonl");
     let results = run_playback_test(test_file).expect("Playback failed");
-    
+
     assert!(!results.is_empty());
-    
+
     // Should have an error response
-    if let Some((_, Some(resp))) = results.iter().find(|(req, _)| req["method"] == "session/prompt") {
+    if let Some((_, Some(resp))) = results
+        .iter()
+        .find(|(req, _)| req["method"] == "session/prompt")
+    {
         assert!(resp.get("error").is_some());
         assert_eq!(resp["error"]["code"], -32602); // Invalid params
     }
@@ -188,7 +194,7 @@ fn test_invalid_params() {
 fn test_cancel_notification() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/cancel.jsonl");
     let results = run_playback_test(test_file).expect("Playback failed");
-    
+
     // Cancel is a notification, should not get a response
     for (req, resp) in &results {
         if req["method"] == "session/cancel" {

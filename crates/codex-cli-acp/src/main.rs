@@ -63,7 +63,7 @@ impl AcpServer {
         );
         Self {
             sessions: Arc::new(RwLock::new(HashMap::new())),
-            protocol_version: 1,  // ACP protocol version 1
+            protocol_version: 1, // ACP protocol version 1
             config,
         }
     }
@@ -121,14 +121,13 @@ impl AcpServer {
 
         // Validate cwd is absolute path (required by ACP spec)
         // No default to "." - must be absolute
-        validation::validate_absolute_path(cwd)
-            .map_err(|e| anyhow::anyhow!(e))?;
+        validation::validate_absolute_path(cwd).map_err(|e| anyhow::anyhow!(e))?;
 
         // mcpServers is required by spec and must be an array
         let mcp_servers = params
             .get("mcpServers")
             .ok_or_else(|| validation::RpcError::invalid_params("Missing mcpServers parameter"))?;
-        
+
         if !mcp_servers.is_array() {
             return Err(validation::RpcError::invalid_params("mcpServers must be an array").into());
         }
@@ -179,26 +178,26 @@ impl AcpServer {
 
         info!("Processing prompt for session {}", session_id);
 
-        // Setup streaming channel 
+        // Setup streaming channel
         let (tx, mut rx) = mpsc::unbounded_channel::<codex_proto::SessionUpdate>();
-        
+
         // Create a fresh Codex process for each prompt to avoid stdout ownership issues
         let stdout = {
             let mut sessions = self.sessions.write().await;
             let session = sessions
                 .get_mut(session_id)
                 .ok_or_else(|| anyhow!("Session not found: {}", session_id))?;
-            
+
             // Store the sender for potential future use
             session.stream_tx = Some(tx.clone());
-            
+
             // Clean up any existing process first
             let mut process_guard = session.codex_process.write().await;
             if let Some(mut existing_process) = process_guard.take() {
                 debug!("Cleaning up existing Codex process");
                 let _ = existing_process.kill().await; // Best effort cleanup
             }
-            
+
             // Always create a fresh process for each prompt
             let codex_overrides = map_acp_to_codex(session.permission_mode);
             let mut args = vec!["proto".to_string()];
@@ -207,19 +206,20 @@ impl AcpServer {
             debug!("Spawning fresh Codex process with args: {:?}", args);
 
             // Support CODEX_CMD environment variable for custom Codex path
-            let codex_cmd = std::env::var("CODEX_CMD")
-                .unwrap_or_else(|_| "codex".to_string());
-            
+            let codex_cmd = std::env::var("CODEX_CMD").unwrap_or_else(|_| "codex".to_string());
+
             debug!("Using Codex command: {}", codex_cmd);
 
             let mut process = ProcessTransport::spawn(
-                &codex_cmd, 
-                &args, 
-                None, 
-                Some(&session.working_dir)
+                &codex_cmd,
+                &args,
+                None,
+                Some(&session.working_dir),
             )
             .await
-            .context("Failed to spawn Codex process. Set CODEX_CMD env var if codex is not in PATH")?;
+            .context(
+                "Failed to spawn Codex process. Set CODEX_CMD env var if codex is not in PATH",
+            )?;
 
             // Monitor stderr for debugging
             if let Err(e) = process.monitor_stderr() {
@@ -236,21 +236,19 @@ impl AcpServer {
                 }
             });
 
-            if let Err(e) = write_line(
-                process.stdin(),
-                &codex_request.to_string(),
-            ).await {
+            if let Err(e) = write_line(process.stdin(), &codex_request.to_string()).await {
                 error!("Failed to write prompt to Codex: {}", e);
                 return Err(anyhow!("Failed to send prompt to Codex: {}", e));
             }
-            
+
             // Take stdout for streaming
-            let stdout = process.take_stdout()
+            let stdout = process
+                .take_stdout()
                 .ok_or_else(|| anyhow!("Failed to take stdout from Codex process"))?;
-            
+
             // Store the process back
             *process_guard = Some(process);
-            
+
             stdout
         };
 
@@ -258,11 +256,7 @@ impl AcpServer {
         let session_id_clone = session_id.to_string();
         let session_id_for_error = session_id.to_string();
         let stream_task = tokio::spawn(async move {
-            match codex_proto::stream_codex_output(
-                stdout,
-                session_id_clone,
-                tx
-            ).await {
+            match codex_proto::stream_codex_output(stdout, session_id_clone, tx).await {
                 Ok(_) => {
                     debug!("Streaming completed successfully");
                 }
@@ -279,12 +273,12 @@ impl AcpServer {
         let mut _last_update = None;
         let mut timeout_counter = 0;
         let max_timeout_count = self.config.idle_timeout_ms / self.config.polling_interval_ms;
-        
+
         debug!(
-            "Starting stream forwarding with timeout={}ms ({}x{}ms polls)", 
+            "Starting stream forwarding with timeout={}ms ({}x{}ms polls)",
             self.config.idle_timeout_ms, max_timeout_count, self.config.polling_interval_ms
         );
-        
+
         loop {
             tokio::select! {
                 update = rx.recv() => {
@@ -374,11 +368,19 @@ impl AcpServer {
                     Ok(response) => Ok(serde_json::to_string(&response)?),
                     Err(e) => {
                         // Check if error is an RpcError with classification
-                        let rpc_error = if let Some(rpc_err) = e.downcast_ref::<validation::RpcError>() {
+                        let rpc_error = if let Some(rpc_err) =
+                            e.downcast_ref::<validation::RpcError>()
+                        {
                             match rpc_err.kind {
-                                validation::RpcErrorKind::InvalidParams => Error::invalid_params(rpc_err.message.clone()),
-                                validation::RpcErrorKind::MethodNotFound => Error::method_not_found(&rpc_err.message),
-                                validation::RpcErrorKind::Internal => Error::internal_error(rpc_err.message.clone()),
+                                validation::RpcErrorKind::InvalidParams => {
+                                    Error::invalid_params(rpc_err.message.clone())
+                                }
+                                validation::RpcErrorKind::MethodNotFound => {
+                                    Error::method_not_found(&rpc_err.message)
+                                }
+                                validation::RpcErrorKind::Internal => {
+                                    Error::internal_error(rpc_err.message.clone())
+                                }
                             }
                         } else {
                             // Fall back to string-based classification for legacy errors
@@ -459,7 +461,10 @@ mod tests {
 
     // Helper to run a JSON-RPC request through process_message
     async fn rpc(server: &AcpServer, req: serde_json::Value) -> serde_json::Value {
-        let out = server.process_message(&req.to_string()).await.expect("rpc ok");
+        let out = server
+            .process_message(&req.to_string())
+            .await
+            .expect("rpc ok");
         serde_json::from_str(&out).expect("json ok")
     }
 
@@ -541,7 +546,7 @@ mod tests {
     #[tokio::test]
     async fn session_new_validates_mcp_servers_is_array() {
         let server = AcpServer::new();
-        
+
         // mcpServers must be an array - test with object
         let req_obj = json!({
             "jsonrpc": "2.0",
@@ -551,7 +556,8 @@ mod tests {
         });
         let resp_obj = rpc(&server, req_obj).await;
         assert_eq!(resp_obj["error"]["code"], -32602);
-        assert!(resp_obj["error"]["message"].as_str().unwrap().contains("mcpServers must be an array"));
+        assert_eq!(resp_obj["error"]["message"], "Invalid params");
+        assert_eq!(resp_obj["error"]["data"], "mcpServers must be an array");
 
         // mcpServers must be an array - test with string
         let req_str = json!({
@@ -562,7 +568,8 @@ mod tests {
         });
         let resp_str = rpc(&server, req_str).await;
         assert_eq!(resp_str["error"]["code"], -32602);
-        assert!(resp_str["error"]["message"].as_str().unwrap().contains("mcpServers must be an array"));
+        assert_eq!(resp_str["error"]["message"], "Invalid params");
+        assert_eq!(resp_str["error"]["data"], "mcpServers must be an array");
 
         // Valid case with empty array should work
         let req_valid = json!({

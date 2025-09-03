@@ -21,14 +21,17 @@ fn test_agent_message_chunk_format() {
     };
 
     let json = serde_json::to_value(&update).unwrap();
-    
+
     // Verify structure
     assert_eq!(json["jsonrpc"], "2.0");
     assert_eq!(json["method"], "session/update");
     assert_eq!(json["params"]["sessionId"], "test_session");
-    
+
     // Verify nested update structure with sessionUpdate discriminator
-    assert_eq!(json["params"]["update"]["sessionUpdate"], "agent_message_chunk");
+    assert_eq!(
+        json["params"]["update"]["sessionUpdate"],
+        "agent_message_chunk"
+    );
     assert_eq!(json["params"]["update"]["content"]["type"], "text");
     assert_eq!(json["params"]["update"]["content"]["text"], "Test message");
 }
@@ -54,19 +57,22 @@ fn test_tool_call_format() {
     };
 
     let json = serde_json::to_value(&update).unwrap();
-    
+
     // Verify structure
     assert_eq!(json["jsonrpc"], "2.0");
     assert_eq!(json["method"], "session/update");
     assert_eq!(json["params"]["sessionId"], "test_session");
-    
+
     // Verify nested update structure with sessionUpdate discriminator
     assert_eq!(json["params"]["update"]["sessionUpdate"], "tool_call");
     assert_eq!(json["params"]["update"]["toolCallId"], "tool_123");
     assert_eq!(json["params"]["update"]["title"], "read_file");
     assert_eq!(json["params"]["update"]["kind"], "read");
     assert_eq!(json["params"]["update"]["status"], "pending");
-    assert_eq!(json["params"]["update"]["rawInput"]["path"], "/test/file.txt");
+    assert_eq!(
+        json["params"]["update"]["rawInput"]["path"],
+        "/test/file.txt"
+    );
 }
 
 #[test]
@@ -86,10 +92,13 @@ fn test_serialization_format() {
 
     let serialized = codex_cli_acp::codex_proto::serialize_update(&update).unwrap();
     let parsed: Value = serde_json::from_str(&serialized).unwrap();
-    
+
     // Ensure the serialized format maintains the correct structure
     assert!(parsed["params"]["update"]["sessionUpdate"].is_string());
-    assert_eq!(parsed["params"]["update"]["sessionUpdate"], "agent_message_chunk");
+    assert_eq!(
+        parsed["params"]["update"]["sessionUpdate"],
+        "agent_message_chunk"
+    );
 }
 
 #[test]
@@ -105,11 +114,9 @@ fn test_tool_call_content_structure() {
                 title: "execute_command".to_string(),
                 kind: Some("execute".to_string()),
                 status: Some(ToolCallStatus::Completed),
-                content: Some(vec![
-                    ContentBlock::Text {
-                        text: "Command output here".to_string(),
-                    },
-                ]),
+                content: Some(vec![ContentBlock::Text {
+                    text: "Command output here".to_string(),
+                }]),
                 locations: None,
                 raw_input: Some(json!({"command": "ls -la"})),
                 raw_output: Some(json!({"stdout": "file1.txt\nfile2.txt"})),
@@ -118,19 +125,22 @@ fn test_tool_call_content_structure() {
     };
 
     let json = serde_json::to_value(&update).unwrap();
-    
+
     // Verify content is an array of ContentBlocks directly
     assert!(json["params"]["update"]["content"].is_array());
     let content_array = &json["params"]["update"]["content"].as_array().unwrap();
     assert_eq!(content_array.len(), 1);
-    
+
     // Verify ContentBlock structure (should have type and text fields)
     let first_block = &content_array[0];
     assert_eq!(first_block["type"], "text");
     assert_eq!(first_block["text"], "Command output here");
-    
+
     // Ensure we're NOT using the old double-nested structure
-    assert!(first_block.get("content").is_none(), "Content should not be double-nested");
+    assert!(
+        first_block.get("content").is_none(),
+        "Content should not be double-nested"
+    );
 }
 
 #[test]
@@ -155,12 +165,15 @@ fn test_tool_call_update_structure() {
     };
 
     let json = serde_json::to_value(&update).unwrap();
-    
+
     // Verify ToolCallUpdate structure
-    assert_eq!(json["params"]["update"]["sessionUpdate"], "tool_call_update");
+    assert_eq!(
+        json["params"]["update"]["sessionUpdate"],
+        "tool_call_update"
+    );
     assert_eq!(json["params"]["update"]["toolCallId"], "tool_789");
     assert_eq!(json["params"]["update"]["status"], "in_progress");
-    
+
     // Verify optional fields are not included when None
     assert!(json["params"]["update"]["title"].is_null());
     assert!(json["params"]["update"]["kind"].is_null());
@@ -170,7 +183,7 @@ fn test_tool_call_update_structure() {
 #[test]
 fn test_initialize_response_spec_compliance() {
     // Test that initialize response matches ACP spec exactly
-    
+
     // Simulate what the server would return
     let response = json!({
         "jsonrpc": "2.0",
@@ -188,24 +201,39 @@ fn test_initialize_response_spec_compliance() {
             "authMethods": []  // Required field
         }
     });
-    
+
     // Verify critical structure points
     assert_eq!(response["result"]["protocolVersion"], 1);
-    assert!(response["result"]["protocolVersion"].is_u64(), "protocolVersion must be integer");
-    
+    assert!(
+        response["result"]["protocolVersion"].is_u64(),
+        "protocolVersion must be integer"
+    );
+
     // Verify agentCapabilities structure
     assert!(response["result"]["agentCapabilities"].is_object());
-    assert_eq!(response["result"]["agentCapabilities"]["loadSession"], false);
-    
+    assert_eq!(
+        response["result"]["agentCapabilities"]["loadSession"],
+        false
+    );
+
     // Verify promptCapabilities is nested correctly
     assert!(response["result"]["agentCapabilities"]["promptCapabilities"].is_object());
-    assert_eq!(response["result"]["agentCapabilities"]["promptCapabilities"]["audio"], false);
-    assert_eq!(response["result"]["agentCapabilities"]["promptCapabilities"]["embeddedContext"], false);
-    assert_eq!(response["result"]["agentCapabilities"]["promptCapabilities"]["image"], false);
-    
+    assert_eq!(
+        response["result"]["agentCapabilities"]["promptCapabilities"]["audio"],
+        false
+    );
+    assert_eq!(
+        response["result"]["agentCapabilities"]["promptCapabilities"]["embeddedContext"],
+        false
+    );
+    assert_eq!(
+        response["result"]["agentCapabilities"]["promptCapabilities"]["image"],
+        false
+    );
+
     // Verify authMethods is present
     assert!(response["result"]["authMethods"].is_array());
-    
+
     // Verify no fs capabilities in response (fs is client capability, not agent)
     assert!(response["result"].get("fs").is_none());
     assert!(response["result"].get("capabilities").is_none());
@@ -214,7 +242,7 @@ fn test_initialize_response_spec_compliance() {
 #[test]
 fn test_session_new_cwd_parameter() {
     // Test that session/new accepts "cwd" parameter per spec
-    
+
     // Simulate request with cwd (spec-compliant)
     let request = json!({
         "jsonrpc": "2.0",
@@ -225,11 +253,11 @@ fn test_session_new_cwd_parameter() {
             "mcpServers": []
         }
     });
-    
+
     // Verify structure
     assert_eq!(request["params"]["cwd"], "/absolute/path/to/project");
     assert!(request["params"]["mcpServers"].is_array());
-    
+
     // The handler should accept this without error
     // In actual implementation, this would be tested with the handler
 }
@@ -237,7 +265,7 @@ fn test_session_new_cwd_parameter() {
 #[test]
 fn test_session_new_validation_requirements() {
     // Test validation requirements for session/new
-    
+
     // Invalid: relative path should be rejected
     let invalid_request = json!({
         "jsonrpc": "2.0",
@@ -248,9 +276,12 @@ fn test_session_new_validation_requirements() {
             "mcpServers": []
         }
     });
-    
-    assert!(!invalid_request["params"]["cwd"].as_str().unwrap().starts_with('/'));
-    
+
+    assert!(!invalid_request["params"]["cwd"]
+        .as_str()
+        .unwrap()
+        .starts_with('/'));
+
     // Valid: absolute path
     let valid_request = json!({
         "jsonrpc": "2.0",
@@ -261,6 +292,9 @@ fn test_session_new_validation_requirements() {
             "mcpServers": []
         }
     });
-    
-    assert!(valid_request["params"]["cwd"].as_str().unwrap().starts_with('/'));
+
+    assert!(valid_request["params"]["cwd"]
+        .as_str()
+        .unwrap()
+        .starts_with('/'));
 }

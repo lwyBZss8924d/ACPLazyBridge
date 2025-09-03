@@ -26,7 +26,6 @@ impl RpcError {
             message: msg.into(),
         }
     }
-
 }
 
 impl std::fmt::Display for RpcError {
@@ -55,7 +54,7 @@ pub fn validate_line_number(line: Option<u32>) -> Result<(), RpcError> {
     if let Some(n) = line {
         if n < 1 {
             return Err(RpcError::invalid_params(format!(
-                "Line numbers must be 1-based (minimum 1), got: {}", 
+                "Line numbers must be 1-based (minimum 1), got: {}",
                 n
             )));
         }
@@ -73,7 +72,7 @@ mod tests {
         assert!(validate_absolute_path("/home/user/file.txt").is_ok());
         assert!(validate_absolute_path("/").is_ok());
         assert!(validate_absolute_path("/usr/bin/app").is_ok());
-        
+
         // Invalid relative paths
         assert!(validate_absolute_path("file.txt").is_err());
         assert!(validate_absolute_path("./file.txt").is_err());
@@ -88,7 +87,7 @@ mod tests {
         assert!(validate_line_number(Some(100)).is_ok());
         assert!(validate_line_number(Some(u32::MAX)).is_ok());
         assert!(validate_line_number(None).is_ok());
-        
+
         // Invalid line numbers (0-based)
         assert!(validate_line_number(Some(0)).is_err());
     }

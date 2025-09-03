@@ -43,7 +43,7 @@ fn main() -> Result<()> {
     // Thread to read stdout
     let _stdout_thread = thread::spawn(move || {
         let reader = BufReader::new(stdout);
-for line in reader.lines().map_while(|l| l.ok()) {
+        for line in reader.lines().map_while(|l| l.ok()) {
             if !line.trim().is_empty() {
                 println!("<<< {}", line);
                 if let Ok(json) = serde_json::from_str::<Value>(&line) {
@@ -56,7 +56,7 @@ for line in reader.lines().map_while(|l| l.ok()) {
     // Thread to log stderr
     thread::spawn(move || {
         let reader = BufReader::new(stderr);
-for line in reader.lines().map_while(|l| l.ok()) {
+        for line in reader.lines().map_while(|l| l.ok()) {
             eprintln!("STDERR: {}", line);
         }
     });
@@ -75,7 +75,7 @@ for line in reader.lines().map_while(|l| l.ok()) {
     for line in reader.lines() {
         let line = line?;
         let line = line.trim();
-        
+
         if line.is_empty() || line.starts_with('#') {
             continue;
         }
@@ -130,7 +130,7 @@ for line in reader.lines().map_while(|l| l.ok()) {
             eprintln!("ℹ️  Sent notification (no response expected)");
             thread::sleep(Duration::from_millis(100));
         }
-        
+
         println!(); // Empty line for readability
     }
 
