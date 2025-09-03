@@ -4,6 +4,7 @@ use anyhow::Result;
 use std::path::Path;
 
 /// Error kinds for proper JSON-RPC error code mapping
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum RpcErrorKind {
     InvalidParams,
@@ -26,12 +27,6 @@ impl RpcError {
         }
     }
 
-    pub fn internal(msg: impl Into<String>) -> Self {
-        Self {
-            kind: RpcErrorKind::Internal,
-            message: msg.into(),
-        }
-    }
 }
 
 impl std::fmt::Display for RpcError {
@@ -55,6 +50,7 @@ pub fn validate_absolute_path(path: &str) -> Result<(), RpcError> {
 }
 
 /// Validates that a line number is 1-based as required by ACP protocol
+#[allow(dead_code)]
 pub fn validate_line_number(line: Option<u32>) -> Result<(), RpcError> {
     if let Some(n) = line {
         if n < 1 {

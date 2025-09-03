@@ -4,7 +4,7 @@
 //! to verify protocol compliance and response correctness.
 
 use anyhow::{Context, Result};
-use serde_json::{json, Value};
+use serde_json::Value;
 use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
 use std::process::{Command, Stdio};
@@ -16,13 +16,13 @@ use std::time::Duration;
 fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
     // Build the binary first
     Command::new("cargo")
-        .args(&["build", "--bin", "codex-cli-acp"])
+        .args(["build", "--bin", "codex-cli-acp"])
         .output()
         .context("Failed to build codex-cli-acp")?;
 
     // Spawn the ACP server
     let mut child = Command::new("cargo")
-        .args(&["run", "--bin", "codex-cli-acp"])
+        .args(["run", "--bin", "codex-cli-acp"])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -39,14 +39,12 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
 
     // Thread to read stdout
     let stdout_tx = tx.clone();
-    let stdout_thread = thread::spawn(move || {
+    let _stdout_thread = thread::spawn(move || {
         let reader = BufReader::new(stdout);
-        for line in reader.lines() {
-            if let Ok(line) = line {
-                if !line.trim().is_empty() {
-                    if let Ok(json) = serde_json::from_str::<Value>(&line) {
-                        stdout_tx.send(json).ok();
-                    }
+for line in reader.lines().map_while(|l| l.ok()) {
+            if !line.trim().is_empty() {
+                if let Ok(json) = serde_json::from_str::<Value>(&line) {
+                    stdout_tx.send(json).ok();
                 }
             }
         }
@@ -55,10 +53,8 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
     // Thread to log stderr
     thread::spawn(move || {
         let reader = BufReader::new(stderr);
-        for line in reader.lines() {
-            if let Ok(line) = line {
-                eprintln!("STDERR: {}", line);
-            }
+for line in reader.lines().map_while(|l| l.ok()) {
+            eprintln!("STDERR: {}", line);
         }
     });
 
