@@ -3,8 +3,16 @@
 
 use anyhow::{anyhow, Result};
 use serde_json::{json, Value};
-use std::{collections::HashSet, sync::Arc, time::{SystemTime, UNIX_EPOCH}};
-use tokio::{io::{AsyncBufReadExt, AsyncWriteExt, BufReader}, sync::{Mutex, RwLock}, time::{sleep, Duration}};
+use std::{
+    collections::HashSet,
+    sync::Arc,
+    time::{SystemTime, UNIX_EPOCH},
+};
+use tokio::{
+    io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
+    sync::{Mutex, RwLock},
+    time::{sleep, Duration},
+};
 use tracing::{debug, info, warn};
 
 #[derive(Clone)]
@@ -81,7 +89,9 @@ async fn main() -> Result<()> {
 
     while let Some(line) = lines.next_line().await? {
         let trimmed = line.trim();
-        if trimmed.is_empty() { continue; }
+        if trimmed.is_empty() {
+            continue;
+        }
         let v: Value = match serde_json::from_str(trimmed) {
             Ok(v) => v,
             Err(e) => {
@@ -119,8 +129,10 @@ async fn main() -> Result<()> {
 async fn handle_initialize(state: &AppState, req: &Value) -> Result<()> {
     let id = req.get("id").cloned().unwrap_or(Value::Null);
     let protocol_version = req
-        .get("params").and_then(|p| p.get("protocolVersion"))
-        .cloned().unwrap_or(Value::String("2024-11-05".into()));
+        .get("params")
+        .and_then(|p| p.get("protocolVersion"))
+        .cloned()
+        .unwrap_or(Value::String("2024-11-05".into()));
     let resp = json!({
         "jsonrpc": "2.0",
         "id": id,
@@ -136,7 +148,9 @@ async fn handle_initialize(state: &AppState, req: &Value) -> Result<()> {
 
 async fn handle_new_session(state: &AppState, req: &Value) -> Result<()> {
     let id = req.get("id").cloned().unwrap_or(Value::Null);
-    let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default();
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default();
     let session_id = format!("session_{}", now.as_millis());
     {
         let mut sessions = state.sessions.write().await;
@@ -149,36 +163,57 @@ async fn handle_new_session(state: &AppState, req: &Value) -> Result<()> {
 async fn handle_prompt(state: &AppState, req: &Value) -> Result<()> {
     let id = req.get("id").cloned().unwrap_or(Value::Null);
     let params = req.get("params").ok_or_else(|| anyhow!("Missing params"))?;
-    let session_id = params.get("sessionId").and_then(|v| v.as_str()).ok_or_else(|| anyhow!("Missing params.sessionId"))?;
+    let session_id = params
+        .get("sessionId")
+        .and_then(|v| v.as_str())
+        .ok_or_else(|| anyhow!("Missing params.sessionId"))?;
 
     let prompt_text = if let Some(s) = params.get("prompt").and_then(|v| v.as_str()) {
         s.to_string()
     } else if let Some(arr) = params.get("prompt").and_then(|v| v.as_array()) {
         let mut acc = String::new();
-        for block in arr { if let Some(t) = block.get("text").and_then(|t| t.as_str()) { acc.push_str(t); } }
+        for block in arr {
+            if let Some(t) = block.get("text").and_then(|t| t.as_str()) {
+                acc.push_str(t);
+            }
+        }
         acc
-    } else { String::new() };
+    } else {
+        String::new()
+    };
 
     let session_id_owned = session_id.to_string();
     let state_clone = state.clone();
 
     tokio::spawn(async move {
         if prompt_text.is_empty() {
-            let _ = state_clone.notify_agent_message_chunk(&session_id_owned, "(no content)").await;
+            let _ = state_clone
+                .notify_agent_message_chunk(&session_id_owned, "(no content)")
+                .await;
         } else {
             let mid = prompt_text.len() / 2;
             let (first, second) = prompt_text.split_at(mid);
-            let _ = state_clone.notify_agent_message_chunk(&session_id_owned, &format!("Echo: {}", first)).await;
+            let _ = state_clone
+                .notify_agent_message_chunk(&session_id_owned, &format!("Echo: {}", first))
+                .await;
             sleep(Duration::from_millis(200)).await;
             if state_clone.take_cancelled(&session_id_owned).await {
                 let _ = state_clone.notify_turn_complete(&session_id_owned).await;
-                let _ = state_clone.write_json(&json!({"jsonrpc":"2.0","id":id,"result":{"stopReason":"cancelled"}})).await;
+                let _ = state_clone
+                    .write_json(
+                        &json!({"jsonrpc":"2.0","id":id,"result":{"stopReason":"cancelled"}}),
+                    )
+                    .await;
                 return;
             }
-            let _ = state_clone.notify_agent_message_chunk(&session_id_owned, second).await;
+            let _ = state_clone
+                .notify_agent_message_chunk(&session_id_owned, second)
+                .await;
         }
         let _ = state_clone.notify_turn_complete(&session_id_owned).await;
-        let _ = state_clone.write_json(&json!({"jsonrpc":"2.0","id":id,"result":{"stopReason":"end_turn"}})).await;
+        let _ = state_clone
+            .write_json(&json!({"jsonrpc":"2.0","id":id,"result":{"stopReason":"end_turn"}}))
+            .await;
     });
 
     Ok(())
@@ -186,9 +221,14 @@ async fn handle_prompt(state: &AppState, req: &Value) -> Result<()> {
 
 async fn handle_cancel(state: &AppState, req: &Value) -> Result<()> {
     let params = req.get("params").cloned().unwrap_or(Value::Null);
-    let session_id = params.get("sessionId").and_then(|v| v.as_str()).unwrap_or("");
-    if session_id.is_empty() { debug!("cancel without sessionId"); return Ok(()); }
+    let session_id = params
+        .get("sessionId")
+        .and_then(|v| v.as_str())
+        .unwrap_or("");
+    if session_id.is_empty() {
+        debug!("cancel without sessionId");
+        return Ok(());
+    }
     state.mark_cancelled(session_id).await;
     Ok(())
 }
-

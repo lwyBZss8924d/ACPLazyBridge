@@ -1,9 +1,9 @@
-use anyhow::{anyhow, Context, Result};
 use acp_lazy_core::{
     permissions::{map_acp_to_codex, AcpPermissionMode},
     protocol::{Error, RequestId, Response},
-    transport::{ProcessTransport, read_lines, write_line},
+    transport::{read_lines, write_line, ProcessTransport},
 };
+use anyhow::{anyhow, Context, Result};
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -37,7 +37,10 @@ impl AcpServer {
             .and_then(|v| v.as_str())
             .unwrap_or("2024-11-05");
 
-        info!("Initialize request from client with protocol version: {}", client_version);
+        info!(
+            "Initialize request from client with protocol version: {}",
+            client_version
+        );
 
         Ok(Response {
             jsonrpc: "2.0".to_string(),
@@ -76,9 +79,11 @@ impl AcpServer {
             .unwrap_or(AcpPermissionMode::Default);
 
         let session_id = format!("session_{}", uuid::Uuid::new_v4());
-        
-        info!("Creating new session {} with working dir: {} and permission mode: {:?}", 
-              session_id, working_dir, permission_mode);
+
+        info!(
+            "Creating new session {} with working dir: {} and permission mode: {:?}",
+            session_id, working_dir, permission_mode
+        );
 
         let session = SessionState {
             _id: session_id.clone(),
@@ -133,13 +138,10 @@ impl AcpServer {
             args.extend(codex_overrides.to_cli_args());
 
             debug!("Spawning Codex with args: {:?}", args);
-            
-            let mut process = ProcessTransport::spawn(
-                "codex",
-                &args,
-                None,
-                Some(&working_dir),
-            ).await.context("Failed to spawn Codex process")?;
+
+            let mut process = ProcessTransport::spawn("codex", &args, None, Some(&working_dir))
+                .await
+                .context("Failed to spawn Codex process")?;
 
             // Monitor stderr for debugging
             process.monitor_stderr()?;
@@ -157,7 +159,11 @@ impl AcpServer {
             }
         });
 
-        write_line(process_guard.as_mut().unwrap().stdin(), &codex_request.to_string()).await?;
+        write_line(
+            process_guard.as_mut().unwrap().stdin(),
+            &codex_request.to_string(),
+        )
+        .await?;
 
         // NOTE: In a real implementation, we would read the response from Codex
         // and stream it back. For now, return a simple response.
@@ -194,8 +200,7 @@ impl AcpServer {
     }
 
     async fn process_message(&self, line: &str) -> Result<String> {
-        let msg: Value = serde_json::from_str(line)
-            .context("Failed to parse JSON-RPC message")?;
+        let msg: Value = serde_json::from_str(line).context("Failed to parse JSON-RPC message")?;
 
         // Check if it's a request or notification
         if let Some(method) = msg.get("method").and_then(|m| m.as_str()) {
@@ -218,7 +223,9 @@ impl AcpServer {
                     Ok(response) => Ok(serde_json::to_string(&response)?),
                     Err(e) => {
                         let msg = e.to_string();
-                        let rpc_error = if msg.starts_with("Missing ") || msg.starts_with("Session not found") {
+                        let rpc_error = if msg.starts_with("Missing ")
+                            || msg.starts_with("Session not found")
+                        {
                             Error::invalid_params(msg)
                         } else {
                             Error::internal_error(msg)
@@ -234,20 +241,17 @@ impl AcpServer {
                         let empty_params = json!({});
                         let params = msg.get("params").unwrap_or(&empty_params);
                         self.handle_session_cancel(params).await?;
-                        Ok(String::new())  // No response for notifications
+                        Ok(String::new()) // No response for notifications
                     }
                     _ => {
                         debug!("Ignoring unknown notification: {}", method);
-                        Ok(String::new())  // No response for notifications
+                        Ok(String::new()) // No response for notifications
                     }
                 }
             }
         } else {
             // Invalid message - return error response
-            let error_response = Response::error(
-                RequestId::Null,
-                Error::invalid_request(),
-            );
+            let error_response = Response::error(RequestId::Null, Error::invalid_request());
             Ok(serde_json::to_string(&error_response)?)
         }
     }
@@ -276,16 +280,15 @@ async fn main() -> Result<()> {
                 Err(e) => {
                     error!("Error processing message: {}", e);
                     // Unknown parse or internal error prior to classification; no request ID
-                    let error_response = Response::error(
-                        RequestId::Null,
-                        Error::internal_error(e.to_string()),
-                    );
+                    let error_response =
+                        Response::error(RequestId::Null, Error::internal_error(e.to_string()));
                     write_line(&mut stdout, &serde_json::to_string(&error_response)?).await?;
                 }
             }
             Ok(())
         }
-    }).await?;
+    })
+    .await?;
 
     info!("codex-cli-acp exiting");
     Ok(())
