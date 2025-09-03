@@ -126,9 +126,13 @@ fn test_handshake() {
         assert!(resp.get("result").is_some(), "Missing result in response");
         
         let result = &resp["result"];
-        assert!(result.get("protocolVersion").is_some());
-        assert!(result.get("capabilities").is_some());
-        assert_eq!(result["promptCapabilities"]["image"], false);
+        // protocolVersion must be integer 1
+        assert_eq!(result["protocolVersion"], 1);
+        // New spec: agentCapabilities with nested promptCapabilities
+        assert!(result.get("agentCapabilities").is_some());
+        assert_eq!(result["agentCapabilities"]["promptCapabilities"]["image"], false);
+        // No top-level capabilities anymore
+        assert!(result.get("capabilities").is_none());
     }
 }
 
@@ -162,7 +166,7 @@ fn test_unknown_method() {
     assert!(!results.is_empty());
     
     let (req, resp) = &results[0];
-    assert_eq!(req["method"], "unknown/method");
+    assert_eq!(req["method"], "unknown");
     assert!(resp.is_some());
     
     let resp = resp.as_ref().unwrap();
