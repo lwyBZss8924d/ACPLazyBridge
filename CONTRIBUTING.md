@@ -70,3 +70,48 @@ Local Quickstart (example)
 Questions
 - Open a discussion or issue with context (link issues/specs). See ISSUE_TEMPLATE for guidance.
 
+Non-mock testing policy (scripts + manual smoke)
+- Scope: WARP-Agent scripted non-mock testing and Zed manual smoke testing (interfacing with real Provider CLI).
+- Current implementation: Codex via codex-cli-acp; Claude Code / Gemini agent adapters (ACPLazyBridge) will be added later.
+
+Prerequisites
+- Provider CLI installation and configuration:
+  - Codex CLI installed and configured (global config: ~/.codex/config.toml).
+  - Zed installed; user config: ~/.config/zed/settings.json.
+  - Claude Code (future): ~/.claude/settings.json; ANTHROPIC_API_KEY via environment variable or login flow.
+  - Gemini (future): GEMINI_API_KEY via environment variable.
+- Build adapter binaries:
+  - cargo build --release -p codex-cli-acp
+
+Secrets
+- Never print or echo keys. Inject via environment variables and use implicitly in commands.
+- In documentation/command examples, use placeholders like {{ANTHROPIC_API_KEY}} / {{GEMINI_API_KEY}}.
+
+WARP-Agent scripted non-mock tests (Codex)
+- JSONL scenario location: dev-docs/review/_artifacts/tests/
+- Run example:
+  - target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log
+- Optional validation:
+  - Use jq filters from dev-docs/review/_artifacts/jq/filters.md to generate review snapshots (error and result.stopReason).
+- Acceptance criteria:
+  - initialize returns protocolVersion, and agentCapabilities.promptCapabilities.image=false
+  - session/new returns non-empty sessionId
+  - session/prompt shows multiple session/update(type=agent_message_chunk) messages and finally returns result.stopReason
+  - session/cancel produces stopReason=Cancelled
+
+Zed manual smoke (manual smoke testing)
+- Configure ~/.config/zed/settings.json:
+  - Current: ACPLazyBridge (Codex) → points to absolute path of target/release/codex-cli-acp
+  - Claude/Gemini entries will be enabled later when corresponding ACPLazyBridge binaries are available
+- IDE side ensures adapter stdout only outputs JSONL; logs written to stderr and archived per specification.
+- After running, save complete output to dev-docs/review/_artifacts/logs/ (see dev-docs/review/_artifacts/logs/README.md).
+
+Evidence retention
+- Log files named with timestamps, stored in dev-docs/review/_artifacts/logs/.
+- Use jq filters to generate review summaries.
+- Do not record plaintext keys; sanitize when necessary.
+
+Notes
+- This section covers repository-level policies; detailed steps for each Agent are in WARP.md and CLAUDE.md respectively.
+- After Claude Code related branches are merged into main, enable Claude/Gemini non-mock smoke configurations per the supplementary M1 test environment ISSUE checklist.
+

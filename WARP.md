@@ -404,3 +404,39 @@ async fn test_acp_protocol_compliance() {
 - **Protocol issues**: Enable `RUST_LOG=debug` and examine stdout/stderr
 - **Permission errors**: Check permission mapping configuration
 - **Streaming issues**: Verify line-based JSON format and de-duplication logic
+
+## Non-mock Testing Plan (WARP-Agent + Zed smoke)
+
+Scope
+- Scripted tests executed by WARP-Agent using JSONL scenarios against real provider CLIs.
+- Manual smoke in Zed configured to use ACPLazyBridge binaries.
+
+Prerequisites
+- Codex CLI installed and configured (~/.codex/config.toml)
+- Build adapter: `cargo build --release -p codex-cli-acp`
+- Zed installed and configured (~/.config/zed/settings.json)
+- Future (post-merge): `claude-code-acplb` and `gemini-cli-acplb` binaries available
+
+Scripted runs (Codex)
+- Scenarios live in `dev-docs/review/_artifacts/tests/`
+- Example run (persist logs):
+  - `target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log`
+- Optional jq snapshots per `dev-docs/review/_artifacts/jq/filters.md`
+
+Zed manual smoke
+- Point `~/.config/zed/settings.json` → ACPLazyBridge (Codex): absolute path to `target/release/codex-cli-acp`
+- Keep Claude/Gemini entries disabled until their binaries exist
+- Save full run output to `dev-docs/review/_artifacts/logs/` per logs/README.md
+
+Acceptance checklist
+- initialize negotiates protocolVersion and promptCapabilities.image=false
+- new session returns a non-empty sessionId
+- prompt streams session/update(type=agent_message_chunk) and ends with result.stopReason
+- cancel leads to stopReason=Cancelled
+
+Secrets
+- Never echo secrets. Use env vars (e.g., `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`) set in the shell; do not print them.
+
+References
+- See CONTRIBUTING.md for repo-wide policy and evidence rules
+- See CLAUDE.md for Claude Code–specific setup to be enabled post-merge

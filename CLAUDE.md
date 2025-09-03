@@ -775,3 +775,39 @@ This section defines mandatory workflow rules for Claude Code (and any AI coding
 - Open PR with links to evidence files and relevant spec lines
 
 ---
+
+## Non-mock Testing Plan (Claude Code)
+
+Status
+- The current repository does not yet provide the `claude-code-acplb` binary; the process defined in this section will be enabled once that binary is delivered.
+
+Goals
+- Provide scripted non-mock testing and Zed manual smoke configuration for Claude Code, with unified evidence retention and acceptance standards.
+
+Prerequisites
+- Install Claude Code; global/project settings: `~/.claude/settings.json` / `.claude/settings.json`
+- Set API key (via environment variable, do not print): `ANTHROPIC_API_KEY`
+- Build bridge binary (after delivery): `cargo build --release -p claude-code-acplb`
+
+Scripted runs
+- Scenarios: `dev-docs/review/_artifacts/tests/`
+- Example (after delivery):
+  - `target/release/claude-code-acplb < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log`
+- Optional snapshots: refer to `dev-docs/review/_artifacts/jq/filters.md`
+
+Zed manual smoke testing
+- Add ACPLazyBridge (Claude) entry in `~/.config/zed/settings.json` pointing to `target/release/claude-code-acplb` (enable after delivery)
+- Keep stdout as pure JSONL, write logs to stderr and archive to `dev-docs/review/_artifacts/logs/`
+
+Acceptance criteria
+- initialize negotiation succeeds; prompts `promptCapabilities.image=false`
+- session/new returns valid `sessionId`
+- session/prompt streams continuous `session/update(type=agent_message_chunk)`, finally `result.stopReason` exists
+- session/cancel → `stopReason=Cancelled`
+
+Security / Secrets
+- Pass API key only via environment variables, do not expose in logs and PRs; example commands use placeholder `{{ANTHROPIC_API_KEY}}`
+
+References
+- Repository-level policy: `CONTRIBUTING.md`
+- WARP-Agent process: `WARP.md`
