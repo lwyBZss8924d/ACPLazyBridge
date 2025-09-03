@@ -71,4 +71,8 @@ coverage/
 .coverage
 
 # Debug
-*.dSYM//.worktrees
+*.dSYM
+
+# Local worktrees symlinks and workspace files
+.worktrees/
+*.code-workspace
