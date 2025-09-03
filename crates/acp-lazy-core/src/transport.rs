@@ -15,8 +15,8 @@ use tracing::{debug, error, trace, warn};
 /// Manages a child process with stdio communication channels.
 pub struct ProcessTransport {
     child: Child,
-    stdin: ChildStdin,
-    stdout: ChildStdout,
+    stdin: Option<ChildStdin>,
+    stdout: Option<ChildStdout>,
     stderr: Option<ChildStderr>,
     stderr_task: Option<JoinHandle<()>>,
 }
@@ -73,8 +73,8 @@ impl ProcessTransport {
 
         Ok(Self {
             child,
-            stdin,
-            stdout,
+            stdin: Some(stdin),
+            stdout: Some(stdout),
             stderr: Some(stderr),
             stderr_task: None,
         })
@@ -129,12 +129,17 @@ impl ProcessTransport {
 
     /// Get mutable reference to stdin for writing.
     pub fn stdin(&mut self) -> &mut ChildStdin {
-        &mut self.stdin
+        self.stdin.as_mut().expect("stdin already taken")
     }
 
     /// Get mutable reference to stdout for reading.
     pub fn stdout(&mut self) -> &mut ChildStdout {
-        &mut self.stdout
+        self.stdout.as_mut().expect("stdout already taken")
+    }
+    
+    /// Take ownership of stdout (can only be called once).
+    pub fn take_stdout(&mut self) -> Option<ChildStdout> {
+        self.stdout.take()
     }
 
     /// Check if the process is still running.
