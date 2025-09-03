@@ -7,14 +7,17 @@ use anyhow::{anyhow, Context, Result};
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::sync::Arc;
-use tokio::sync::RwLock;
+use tokio::sync::{mpsc, RwLock};
 use tracing::{debug, error, info};
+
+mod codex_proto;
 
 struct SessionState {
     _id: String,
     working_dir: String,
     codex_process: Arc<RwLock<Option<ProcessTransport>>>,
     permission_mode: AcpPermissionMode,
+    stream_tx: Option<mpsc::UnboundedSender<codex_proto::SessionUpdate>>,
 }
 
 #[derive(Clone)]
@@ -90,6 +93,7 @@ impl AcpServer {
             working_dir: working_dir.to_string(),
             codex_process: Arc::new(RwLock::new(None)),
             permission_mode,
+            stream_tx: None,
         };
 
         let mut sessions = self.sessions.write().await;
@@ -115,60 +119,111 @@ impl AcpServer {
             .get("prompt")
             .ok_or_else(|| anyhow!("Missing prompt"))?;
 
-        // Clone session data we need to avoid holding locks
-        let (working_dir, permission_mode, codex_process) = {
-            let sessions = self.sessions.read().await;
-            let session = sessions
-                .get(session_id)
-                .ok_or_else(|| anyhow!("Session not found: {}", session_id))?;
-            (
-                session.working_dir.clone(),
-                session.permission_mode,
-                session.codex_process.clone(),
-            )
-        };
-
         info!("Processing prompt for session {}", session_id);
 
-        // Spawn or reuse Codex process
-        let mut process_guard = codex_process.write().await;
-        if process_guard.is_none() {
-            let codex_overrides = map_acp_to_codex(permission_mode);
-            let mut args = vec!["proto".to_string()];
-            args.extend(codex_overrides.to_cli_args());
+        // Setup streaming channel if not already done
+        let (tx, mut rx) = mpsc::unbounded_channel::<codex_proto::SessionUpdate>();
+        
+        // Get or spawn Codex process and set up streaming
+        let stdout = {
+            let mut sessions = self.sessions.write().await;
+            let session = sessions
+                .get_mut(session_id)
+                .ok_or_else(|| anyhow!("Session not found: {}", session_id))?;
+            
+            // Store the sender for potential future use
+            session.stream_tx = Some(tx.clone());
+            
+            let mut process_guard = session.codex_process.write().await;
+            if process_guard.is_none() {
+                let codex_overrides = map_acp_to_codex(session.permission_mode);
+                let mut args = vec!["proto".to_string()];
+                args.extend(codex_overrides.to_cli_args());
 
-            debug!("Spawning Codex with args: {:?}", args);
+                debug!("Spawning Codex with args: {:?}", args);
 
-            let mut process = ProcessTransport::spawn("codex", &args, None, Some(&working_dir))
+                let mut process = ProcessTransport::spawn(
+                    "codex", 
+                    &args, 
+                    None, 
+                    Some(&session.working_dir)
+                )
                 .await
                 .context("Failed to spawn Codex process")?;
 
-            // Monitor stderr for debugging
-            process.monitor_stderr()?;
+                // Monitor stderr for debugging
+                process.monitor_stderr()?;
 
-            *process_guard = Some(process);
-        }
+                *process_guard = Some(process);
+            }
 
-        // Send prompt to Codex
-        let codex_request = json!({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompt",
-            "params": {
-                "messages": [prompt]
+            // Send prompt to Codex
+            let codex_request = json!({
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "prompt",
+                "params": {
+                    "messages": [prompt]
+                }
+            });
+
+            write_line(
+                process_guard.as_mut().unwrap().stdin(),
+                &codex_request.to_string(),
+            )
+            .await?;
+            
+            // Take stdout for streaming (can only be done once per process)
+            process_guard.as_mut().unwrap().take_stdout()
+                .ok_or_else(|| anyhow!("Failed to take stdout from Codex process"))?
+        };
+
+        // Start streaming task
+        let session_id_clone = session_id.to_string();
+        let stream_task = tokio::spawn(async move {
+            if let Err(e) = codex_proto::stream_codex_output(
+                stdout,
+                session_id_clone,
+                tx
+            ).await {
+                error!("Streaming error: {}", e);
             }
         });
 
-        write_line(
-            process_guard.as_mut().unwrap().stdin(),
-            &codex_request.to_string(),
-        )
-        .await?;
+        // Forward stream updates to stdout
+        let mut stdout = tokio::io::stdout();
+        let mut _last_update = None;
+        let mut timeout_counter = 0;
+        
+        loop {
+            tokio::select! {
+                update = rx.recv() => {
+                    match update {
+                        Some(update) => {
+                            let json = codex_proto::serialize_update(&update)?;
+                            write_line(&mut stdout, &json).await?;
+                            _last_update = Some(update);
+                            timeout_counter = 0;
+                        }
+                        None => {
+                            // Channel closed, streaming done
+                            break;
+                        }
+                    }
+                }
+                _ = tokio::time::sleep(tokio::time::Duration::from_millis(100)) => {
+                    timeout_counter += 1;
+                    // After 1.2 seconds of no activity, assume completion
+                    if timeout_counter > 12 {
+                        debug!("Idle timeout reached, ending turn");
+                        break;
+                    }
+                }
+            }
+        }
 
-        // NOTE: In a real implementation, we would read the response from Codex
-        // and stream it back. For now, return a simple response.
-        // The streaming would be handled in a separate task that reads from
-        // the Codex process stdout and forwards messages.
+        // Wait for streaming task to complete
+        let _ = stream_task.await;
 
         Ok(Response {
             jsonrpc: "2.0".to_string(),
