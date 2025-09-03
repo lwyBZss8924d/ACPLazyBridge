@@ -9,7 +9,7 @@ echo "Building codex-cli-acp..."
 cargo build -p codex-cli-acp 2>/dev/null
 
 echo "Starting ACP server and sending test messages..."
-RUST_LOG=debug timeout 5 cargo run -p codex-cli-acp 2>test_debug.log < dev-docs/review/_artifacts/tests/session_update_format.jsonl > test_output.jsonl || true
+RUST_LOG=debug timeout 5 cargo run -p codex-cli-acp --bin codex-cli-acp 2>test_debug.log < dev-docs/review/_artifacts/tests/session_update_format.jsonl > test_output.jsonl || true
 
 echo "Checking session/update message format..."
 # Extract session/update messages

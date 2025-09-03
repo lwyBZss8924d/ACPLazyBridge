@@ -45,7 +45,7 @@ EOF
 
 # First, get the session ID
 echo "Getting session ID..."
-RESPONSE=$(timeout 2 cargo run -p codex-cli-acp 2>/dev/null < test_with_mock.jsonl || true)
+RESPONSE=$(timeout 2 cargo run -p codex-cli-acp --bin codex-cli-acp 2>/dev/null < test_with_mock.jsonl || true)
 SESSION_ID=$(echo "$RESPONSE" | grep '"sessionId"' | head -1 | jq -r '.result.sessionId')
 
 if [ -z "$SESSION_ID" ]; then
@@ -64,7 +64,7 @@ EOF
 
 echo ""
 echo "Running test with mock Codex output..."
-timeout 5 cargo run -p codex-cli-acp 2>/dev/null < test_prompt.jsonl > test_output.jsonl || true
+timeout 5 cargo run -p codex-cli-acp --bin codex-cli-acp 2>/dev/null < test_prompt.jsonl > test_output.jsonl || true
 
 echo "Output received:"
 cat test_output.jsonl
