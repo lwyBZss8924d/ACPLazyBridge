@@ -105,13 +105,29 @@ fn main() -> Result<()> {
         let is_notification = request.get("id").is_none();
 
         if !is_notification {
-            // Wait for response
-            match rx.recv_timeout(Duration::from_secs(5)) {
-                Ok(resp) => {
-                    // Response already printed by stdout thread
+            // Wait for a matching response by id
+            let req_id = request.get("id").cloned();
+            let deadline = std::time::Instant::now() + Duration::from_secs(5);
+            loop {
+                let remain = deadline.saturating_duration_since(std::time::Instant::now());
+                if remain.is_zero() {
+                    eprintln!("⚠️  Timeout waiting for response (id={:?})", req_id);
+                    break;
                 }
-                Err(_) => {
-                    eprintln!("⚠️  Timeout waiting for response");
+                match rx.recv_timeout(remain) {
+                    Ok(resp) => {
+                        if let (Some(rid), Some(pid)) = (resp.get("id"), req_id.as_ref()) {
+                            if rid == pid {
+                                // matched; stdout thread already printed
+                                break;
+                            }
+                        }
+                        // Non-matching message (e.g., async notification): ignore and continue waiting
+                    }
+                    Err(_) => {
+                        eprintln!("⚠️  Timeout waiting for response (id={:?})", req_id);
+                        break;
+                    }
                 }
             }
         } else {
