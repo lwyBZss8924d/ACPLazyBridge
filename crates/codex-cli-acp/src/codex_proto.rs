@@ -4,7 +4,7 @@
 
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, trace, warn};
@@ -67,26 +67,78 @@ pub struct SessionUpdate {
 #[serde(rename_all = "camelCase")]
 pub struct SessionUpdateParams {
     pub session_id: String,
-    #[serde(flatten)]
-    pub content: SessionUpdateContent,
+    pub update: SessionUpdateContent,
+}
+
+/// Content blocks for agent messages
+#[derive(Debug, Clone, Serialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum ContentBlock {
+    Text {
+        text: String,
+    },
+}
+
+// ToolCallContent removed - using ContentBlock directly per ACP spec
+
+/// Tool call status
+#[derive(Debug, Clone, Copy, Serialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum ToolCallStatus {
+    Pending,
+    InProgress,
+    Completed,
+    Failed,
 }
 
 #[derive(Debug, Clone, Serialize)]
-#[serde(tag = "type", rename_all = "snake_case")]
+#[serde(tag = "sessionUpdate", rename_all = "snake_case")]
 pub enum SessionUpdateContent {
     AgentMessageChunk {
-        content: String,
+        content: ContentBlock,
     },
     ToolCall {
         #[serde(rename = "toolCallId")]
         tool_call_id: String,
-        name: String,
-        arguments: Value,
-        status: String,
+        title: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        kind: Option<String>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        status: Option<ToolCallStatus>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        content: Option<Vec<ContentBlock>>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        locations: Option<Vec<Value>>,
+        #[serde(skip_serializing_if = "Option::is_none", rename = "rawInput")]
+        raw_input: Option<Value>,
+        #[serde(skip_serializing_if = "Option::is_none", rename = "rawOutput")]
+        raw_output: Option<Value>,
+    },
+    // Now used for tool call status updates (pending -> in_progress -> completed/failed)
+    ToolCallUpdate {
+        #[serde(rename = "toolCallId")]
+        tool_call_id: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        title: Option<String>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        kind: Option<String>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        status: Option<ToolCallStatus>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        content: Option<Vec<ContentBlock>>,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        locations: Option<Vec<Value>>,
+        #[serde(skip_serializing_if = "Option::is_none", rename = "rawInput")]
+        raw_input: Option<Value>,
+        #[serde(skip_serializing_if = "Option::is_none", rename = "rawOutput")]
+        raw_output: Option<Value>,
     },
 }
 
 /// Manages streaming from Codex proto to ACP
+/// 
+/// Note: Uses singular 'update' field per ACP spec SessionNotification structure,
+/// not 'updates' array. This matches agent-client-protocol/rust/client.rs.
 pub struct CodexStreamManager {
     session_id: String,
     tx: mpsc::UnboundedSender<SessionUpdate>,
@@ -164,7 +216,12 @@ impl CodexStreamManager {
             CodexEvent::Error { message, code } => {
                 error!("Codex error: {} (code: {:?})", message, code);
                 // Send error as a message chunk
-                let error_msg = format!("Error: {}", message);
+                // TODO: When in context of a tool call, send as ToolCallUpdate with status=failed
+                let error_msg = if let Some(ref code) = code {
+                    format!("Error [{}]: {}", code, message)
+                } else {
+                    format!("Error: {}", message)
+                };
                 self.send_chunk(error_msg).await?;
             }
             CodexEvent::Unknown => {
@@ -195,7 +252,11 @@ impl CodexStreamManager {
             method: "session/update".to_string(),
             params: SessionUpdateParams {
                 session_id: self.session_id.clone(),
-                content: SessionUpdateContent::AgentMessageChunk { content: content.clone() },
+                update: SessionUpdateContent::AgentMessageChunk {
+                    content: ContentBlock::Text {
+                        text: content.clone(),
+                    },
+                },
             },
         };
 
@@ -212,20 +273,82 @@ impl CodexStreamManager {
         arguments: Value,
         status: Option<&str>,
     ) -> Result<()> {
-        let status = status.unwrap_or("pending").to_string();
+        let tool_status = match status.unwrap_or("pending") {
+            "completed" => ToolCallStatus::Completed,
+            "in_progress" => ToolCallStatus::InProgress,
+            "failed" => ToolCallStatus::Failed,
+            _ => ToolCallStatus::Pending,
+        };
 
-        let update = SessionUpdate {
-            jsonrpc: "2.0".to_string(),
-            method: "session/update".to_string(),
-            params: SessionUpdateParams {
-                session_id: self.session_id.clone(),
-                content: SessionUpdateContent::ToolCall {
-                    tool_call_id: id,
-                    name,
-                    arguments,
-                    status,
+        // For tool calls, use the name as the title
+        let title = name.clone();
+        
+        // Determine tool kind based on the name (this is a heuristic)
+        let kind = if name.contains("read") || name.contains("get") {
+            Some("read".to_string())
+        } else if name.contains("write") || name.contains("edit") || name.contains("update") {
+            Some("edit".to_string())
+        } else if name.contains("delete") || name.contains("remove") {
+            Some("delete".to_string())
+        } else if name.contains("search") || name.contains("find") {
+            Some("search".to_string())
+        } else if name.contains("exec") || name.contains("run") || name.contains("shell") {
+            Some("execute".to_string())
+        } else {
+            Some("other".to_string())
+        };
+
+        // Use ToolCall for initial call, ToolCallUpdate for status changes
+        let update = if tool_status == ToolCallStatus::Pending {
+            // Initial tool call
+            SessionUpdate {
+                jsonrpc: "2.0".to_string(),
+                method: "session/update".to_string(),
+                params: SessionUpdateParams {
+                    session_id: self.session_id.clone(),
+                    update: SessionUpdateContent::ToolCall {
+                        tool_call_id: id,
+                        title,
+                        kind,
+                        status: Some(tool_status),
+                        content: None,
+                        locations: None,
+                        raw_input: Some(arguments),
+                        raw_output: None,
+                    },
                 },
-            },
+            }
+        } else {
+            // Tool call update (status change)
+            SessionUpdate {
+                jsonrpc: "2.0".to_string(),
+                method: "session/update".to_string(),
+                params: SessionUpdateParams {
+                    session_id: self.session_id.clone(),
+                    update: SessionUpdateContent::ToolCallUpdate {
+                        tool_call_id: id,
+                        title: None,  // Don't repeat title in updates
+                        kind: None,   // Don't repeat kind in updates
+                        status: Some(tool_status),
+                        content: if tool_status == ToolCallStatus::Completed {
+                            // Include a preview of output when completed
+                            Some(vec![ContentBlock::Text {
+                                text: "Tool execution completed".to_string(),
+                            }])
+                        } else {
+                            None
+                        },
+                        locations: None,
+                        raw_input: None,  // Already sent in initial call
+                        raw_output: if tool_status == ToolCallStatus::Completed || tool_status == ToolCallStatus::Failed {
+                            // TODO: Capture actual output from tool
+                            Some(json!({"status": tool_status}))
+                        } else {
+                            None
+                        },
+                    },
+                },
+            }
         };
 
         self.tx.send(update).context("Failed to send tool call")?;
