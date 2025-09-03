@@ -53,7 +53,7 @@ jobs:
             for f in dev-docs/review/_artifacts/tests/*.jsonl; do
               out="_ci_artifacts/protocol/$(basename "$f").out.jsonl"
               echo "Running scenario: $f"
-              RUST_LOG=info cargo run -p codex-cli-acp < "$f" | tee "$out" | jq -c . >/dev/null
+              RUST_LOG=info cargo run -p codex-cli-acp --bin codex-cli-acp < "$f" | tee "$out" | jq -c . >/dev/null
             done
           else
             echo "No protocol scenarios found, skipping."

@@ -3,6 +3,12 @@ name = "codex-cli-acp"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
+# Ensure `cargo run -p codex-cli-acp` defaults to the main binary when no `--bin` is specified
+default-run = "codex-cli-acp"
+
+[[bin]]
+name = "playback"
+path = "src/bin/playback.rs"
 
 [dependencies]
 anyhow = "1"
