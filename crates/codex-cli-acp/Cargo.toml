@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT"
 
+[[bin]]
+name = "playback"
+path = "src/bin/playback.rs"
+
 [dependencies]
 anyhow = "1"
 tracing = "0.1"
