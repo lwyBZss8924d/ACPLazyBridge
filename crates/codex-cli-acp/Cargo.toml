@@ -10,8 +10,13 @@ default-run = "codex-cli-acp"
 name = "playback"
 path = "src/bin/playback.rs"
 
+[[bin]]
+name = "acplb-notify-forwarder"
+path = "src/bin/acplb_notify_forwarder.rs"
+
 [dependencies]
 anyhow = "1"
+async-trait = "0.1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 tokio = { version = "1", features = ["full"] }
@@ -19,4 +24,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 uuid = { version = "1", features = ["v4"] }
 acp-lazy-core = { path = "../acp-lazy-core" }
+
+[dev-dependencies]
+tempfile = "3"
 

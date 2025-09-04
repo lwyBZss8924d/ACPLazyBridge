@@ -231,6 +231,8 @@ impl CodexStreamManager {
             CodexEvent::TaskComplete { reason } => {
                 info!("Task complete: {:?}", reason);
                 self.finalized = true;
+                // Do not emit any synthetic content; allow upstream to observe
+                // stream completion by channel closure.
             }
             CodexEvent::Error { message, code } => {
                 error!("Codex error: {} (code: {:?})", message, code);
@@ -326,6 +328,7 @@ impl CodexStreamManager {
     async fn send_chunk(&mut self, content: String) -> Result<()> {
         // Skip if already finalized
         if self.finalized {
+            trace!("Skipping chunk after finalization");
             return Ok(());
         }
 

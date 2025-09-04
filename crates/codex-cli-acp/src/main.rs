@@ -37,15 +37,20 @@ impl Default for ServerConfig {
 }
 
 mod codex_proto;
+mod notify_source;
 mod tool_calls;
 mod validation;
+
+use notify_source::{create_notify_source, NotifyEvent, NotifySource};
+use std::path::PathBuf;
 
 struct SessionState {
     _id: String,
     working_dir: String,
     codex_process: Arc<RwLock<Option<ProcessTransport>>>,
     permission_mode: AcpPermissionMode,
-    stream_tx: Option<mpsc::UnboundedSender<codex_proto::SessionUpdate>>,
+    #[allow(dead_code)]
+    notify_source: Option<Box<dyn NotifySource>>,
 }
 
 #[derive(Clone)]
@@ -56,6 +61,40 @@ struct AcpServer {
 }
 
 impl AcpServer {
+    /// Resolve the path to the acplb-notify-forwarder binary
+    fn resolve_forwarder_path() -> Result<String> {
+        // Try to find forwarder as a sibling to our executable
+        if let Ok(current_exe) = std::env::current_exe() {
+            if let Some(parent) = current_exe.parent() {
+                let forwarder = parent.join("acplb-notify-forwarder");
+                if forwarder.exists() {
+                    debug!("Found forwarder as sibling: {:?}", forwarder);
+                    return Ok(forwarder.to_string_lossy().to_string());
+                }
+            }
+        }
+
+        // Try cargo target directory (for development)
+        let target_paths = [
+            "target/debug/acplb-notify-forwarder",
+            "target/release/acplb-notify-forwarder",
+            "../target/debug/acplb-notify-forwarder",
+            "../target/release/acplb-notify-forwarder",
+        ];
+
+        for target_path in &target_paths {
+            let path = PathBuf::from(target_path);
+            if path.exists() {
+                debug!("Found forwarder at: {:?}", path);
+                return Ok(path.canonicalize()?.to_string_lossy().to_string());
+            }
+        }
+
+        // Fall back to PATH
+        debug!("Falling back to PATH for acplb-notify-forwarder");
+        Ok("acplb-notify-forwarder".to_string())
+    }
+
     fn new() -> Self {
         let config = ServerConfig::default();
         debug!(
@@ -151,7 +190,7 @@ impl AcpServer {
             working_dir: cwd.to_string(),
             codex_process: Arc::new(RwLock::new(None)),
             permission_mode,
-            stream_tx: None,
+            notify_source: None,
         };
 
         let mut sessions = self.sessions.write().await;
@@ -182,15 +221,33 @@ impl AcpServer {
         // Setup streaming channel
         let (tx, mut rx) = mpsc::unbounded_channel::<codex_proto::SessionUpdate>();
 
+        // Setup notify monitoring if configured
+        let (notify_tx, mut notify_rx) = mpsc::unbounded_channel::<NotifyEvent>();
+        let notify_path = std::env::var("ACPLB_NOTIFY_PATH").ok();
+        let mut notify_source_handle = None;
+
+        if let Some(ref path) = notify_path {
+            let notify_kind = std::env::var("ACPLB_NOTIFY_KIND").ok();
+            let mut notify_source = create_notify_source(
+                path,
+                notify_kind.as_deref(),
+                self.config.polling_interval_ms,
+            );
+
+            info!("Starting notify monitoring for: {}", path);
+            if let Err(e) = notify_source.start_monitoring(notify_tx.clone()).await {
+                error!("Failed to start notify monitoring: {}", e);
+            } else {
+                notify_source_handle = Some(notify_source);
+            }
+        }
+
         // Create a fresh Codex process for each prompt to avoid stdout ownership issues
         let stdout = {
             let mut sessions = self.sessions.write().await;
             let session = sessions
                 .get_mut(session_id)
                 .ok_or_else(|| anyhow!("Session not found: {}", session_id))?;
-
-            // Store the sender for potential future use
-            session.stream_tx = Some(tx.clone());
 
             // Clean up any existing process first
             let mut process_guard = session.codex_process.write().await;
@@ -203,6 +260,34 @@ impl AcpServer {
             let codex_overrides = map_acp_to_codex(session.permission_mode);
             let mut args = vec!["proto".to_string()];
             args.extend(codex_overrides.to_cli_args());
+
+            // Check if we should inject notify forwarder
+            let notify_path = std::env::var("ACPLB_NOTIFY_PATH").ok();
+            let notify_inject =
+                std::env::var("ACPLB_NOTIFY_INJECT").unwrap_or_else(|_| "auto".to_string());
+            let notify_cmd = std::env::var("ACPLB_NOTIFY_CMD").ok();
+
+            if let Some(ref _path) = notify_path {
+                // Determine if we should inject
+                let should_inject = match notify_inject.as_str() {
+                    "never" => false,
+                    "force" => true,
+                    _ => notify_cmd.is_none(), // Auto: inject if no custom cmd
+                };
+
+                if should_inject {
+                    // Resolve forwarder path
+                    let forwarder_path = Self::resolve_forwarder_path()?;
+                    info!("Injecting notify forwarder: {}", forwarder_path);
+                    args.push("-c".to_string());
+                    args.push(format!("notify=[\"{}\"]", forwarder_path));
+                } else if let Some(cmd) = notify_cmd {
+                    // Use custom notify command
+                    info!("Using custom notify command: {}", cmd);
+                    args.push("-c".to_string());
+                    args.push(format!("notify={}", cmd));
+                }
+            }
 
             debug!("Spawning fresh Codex process with args: {:?}", args);
 
@@ -285,14 +370,24 @@ impl AcpServer {
                 update = rx.recv() => {
                     match update {
                         Some(update) => {
+
                             let json = codex_proto::serialize_update(&update)?;
                             write_line(&mut stdout, &json).await?;
                             _last_update = Some(update);
                             timeout_counter = 0; // Reset timeout on activity
+
                         }
                         None => {
                             // Channel closed, streaming done
                             debug!("Stream channel closed, ending turn");
+                            break;
+                        }
+                    }
+                }
+                notify_event = notify_rx.recv() => {
+                    if let Some(event) = notify_event {
+                        if event.event_type == "agent-turn-complete" {
+                            info!("Immediate completion due to notify: agent-turn-complete");
                             break;
                         }
                     }
@@ -310,6 +405,13 @@ impl AcpServer {
 
         // Wait for streaming task to complete
         let _ = stream_task.await;
+
+        // Clean up notify source
+        if let Some(mut source) = notify_source_handle {
+            if let Err(e) = source.stop().await {
+                error!("Failed to stop notify source: {}", e);
+            }
+        }
 
         Ok(Response {
             jsonrpc: "2.0".to_string(),
