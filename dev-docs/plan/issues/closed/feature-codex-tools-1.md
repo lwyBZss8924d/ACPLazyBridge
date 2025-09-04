@@ -1,3 +1,9 @@
+---
+
+Issue status: "closed"
+
+---
+
 # feature/codex-tools-1 — ToolCalls standardization + 2KB preview
 
 ## 背景 / 需求

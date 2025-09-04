@@ -1,3 +1,9 @@
+---
+
+Issue status: "closed"
+
+---
+
 # ACPLB: codex-cli-acp Alignment with ACP v1, Codex CLI, and claude-code-acp Best Practices
 
 Status: Proposed

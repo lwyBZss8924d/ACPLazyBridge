@@ -1,3 +1,9 @@
+---
+
+Issue status: "closed"
+
+---
+
 # ISSUE: codex-tools-1 — ToolCalls Standardization & 2KB Preview (COMPLETED)
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
