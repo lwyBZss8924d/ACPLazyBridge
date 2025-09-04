@@ -4,6 +4,9 @@
 - 每个 ISSUE 按可测试的合理范围拆分，包含：需求、技术方案、local_refs 引用、对应的 review 条目（SPEC/REQ/ARC/CODEX/ZED）、验收标准、Worktree 指南。
 - 提交要求遵循 Worktree-first 规范（见下方模板与 CLAUDE.md）。
 
+⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+
 ---
 
 ## ISSUE: core-transport-1 — 行级 JSONL 传输与子进程管控
