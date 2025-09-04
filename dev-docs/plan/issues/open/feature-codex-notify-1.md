@@ -9,6 +9,7 @@ Issue owner: "lwyBZss8924d", "claude-code", "warp-agent", "claude[bot]"
 Task Worktree directory: acplb-worktrees/codex-notify-1
 Task Feature branch: feature/codex-notify-1
 Linked plan issue file: dev-docs/plan/issues/open/feature-codex-notify-1.md
+Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with idle fallback and dedup
 
 ---
 
