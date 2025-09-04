@@ -36,7 +36,7 @@ fn test_notify_forwarder_writes_to_file() -> Result<()> {
         PathBuf::from("../../target/debug/acplb-notify-forwarder"),
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug/acplb-notify-forwarder"),
     ];
-    
+
     let forwarder_path = possible_paths
         .iter()
         .find(|p| p.exists())
@@ -95,7 +95,7 @@ fn test_notify_forwarder_appends_to_existing_file() -> Result<()> {
         PathBuf::from("../../target/debug/acplb-notify-forwarder"),
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug/acplb-notify-forwarder"),
     ];
-    
+
     let forwarder_path = possible_paths
         .iter()
         .find(|p| p.exists())
@@ -133,7 +133,7 @@ fn test_notify_forwarder_fails_without_env() -> Result<()> {
         PathBuf::from("../../target/debug/acplb-notify-forwarder"),
         PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug/acplb-notify-forwarder"),
     ];
-    
+
     let forwarder_path = possible_paths
         .iter()
         .find(|p| p.exists())

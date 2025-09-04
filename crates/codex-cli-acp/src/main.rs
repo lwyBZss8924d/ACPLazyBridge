@@ -49,7 +49,6 @@ struct SessionState {
     working_dir: String,
     codex_process: Arc<RwLock<Option<ProcessTransport>>>,
     permission_mode: AcpPermissionMode,
-    stream_tx: Option<mpsc::UnboundedSender<codex_proto::SessionUpdate>>,
     #[allow(dead_code)]
     notify_source: Option<Box<dyn NotifySource>>,
 }
@@ -191,7 +190,6 @@ impl AcpServer {
             working_dir: cwd.to_string(),
             codex_process: Arc::new(RwLock::new(None)),
             permission_mode,
-            stream_tx: None,
             notify_source: None,
         };
 
@@ -250,9 +248,6 @@ impl AcpServer {
             let session = sessions
                 .get_mut(session_id)
                 .ok_or_else(|| anyhow!("Session not found: {}", session_id))?;
-
-            // Store the sender for potential future use
-            session.stream_tx = Some(tx.clone());
 
             // Clean up any existing process first
             let mut process_guard = session.codex_process.write().await;
@@ -364,7 +359,6 @@ impl AcpServer {
         let mut _last_update = None;
         let mut timeout_counter = 0;
         let max_timeout_count = self.config.idle_timeout_ms / self.config.polling_interval_ms;
-        let mut completion_triggered = false;
 
         debug!(
             "Starting stream forwarding with timeout={}ms ({}x{}ms polls)",
@@ -376,25 +370,12 @@ impl AcpServer {
                 update = rx.recv() => {
                     match update {
                         Some(update) => {
-                            // Check for task_complete in the update
-                            if let codex_proto::SessionUpdateContent::AgentMessageChunk {
-                                content: codex_proto::ContentBlock::Text { ref text }
-                            } = update.params.update {
-                                if text.contains("task_complete") {
-                                    debug!("Detected task_complete, triggering immediate completion");
-                                    completion_triggered = true;
-                                }
-                            }
 
                             let json = codex_proto::serialize_update(&update)?;
                             write_line(&mut stdout, &json).await?;
                             _last_update = Some(update);
                             timeout_counter = 0; // Reset timeout on activity
 
-                            if completion_triggered {
-                                info!("Immediate completion due to task_complete");
-                                break;
-                            }
                         }
                         None => {
                             // Channel closed, streaming done
