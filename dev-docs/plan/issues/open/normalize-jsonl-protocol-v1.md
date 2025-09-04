@@ -4,7 +4,7 @@ Issue status: "open"
 Issue number: [#14]
 Issue title: Normalize JSONL fixtures to ACP v1 protocolVersion (1)
 Issue URL: [Normalize JSONL fixtures to ACP v1 protocolVersion (1)](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/14)
-Issue type: "feature"
+Issue type: "ci"
 Issue owner: "lwyBZss8924d", "claude", "claude[bot]", "warp-agent"
 
 ---
