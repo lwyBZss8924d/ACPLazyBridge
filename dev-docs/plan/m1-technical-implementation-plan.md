@@ -5,6 +5,10 @@
 - 不在本阶段实现 Proxy 与插件；仅完成 M1 范围内的 Streaming/ToolCalls/权限映射/错误码/约束校验与测试。
 
 规范与参考（必须对照）
+
+⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+
 - ACP 规范（local_refs/agent-client-protocol）
   - JSON-RPC 2.0、方法/通知集合、错误码（-32700/-32600/-32601/-32602/-32603）、绝对路径与 1-based 行号、JSONL 单行
   - 事件：agent_message_chunk、tool_call（pending→completed）、Plan（可选）
