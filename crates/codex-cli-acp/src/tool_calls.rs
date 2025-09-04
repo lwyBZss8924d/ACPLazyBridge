@@ -206,7 +206,7 @@ pub fn extract_shell_command(tool_name: &str, arguments: &Value) -> Option<Strin
                 }
             }
         }
-        
+
         // Try other common field names (usually strings)
         if let Some(cmd) = arguments.get("cmd").and_then(|v| v.as_str()) {
             return Some(cmd.to_string());
@@ -227,7 +227,7 @@ pub fn extract_shell_command(tool_name: &str, arguments: &Value) -> Option<Strin
 /// Extracts command, workdir, timeout, and permission fields per Codex ShellToolCallParams
 pub fn extract_shell_params(tool_name: &str, arguments: &Value) -> ExtractedShellParams {
     let name_lower = tool_name.to_lowercase();
-    
+
     // Only extract for shell-like tools
     if !name_lower.contains("shell")
         && !name_lower.contains("exec")
@@ -238,42 +238,58 @@ pub fn extract_shell_params(tool_name: &str, arguments: &Value) -> ExtractedShel
         return ExtractedShellParams::default();
     }
 
-    let mut params = ExtractedShellParams::default();
-    
     // Extract command (string or array)
-    params.command = extract_shell_command(tool_name, arguments);
-    
-    // Extract workdir
-    if let Some(workdir) = arguments.get("workdir").and_then(|v| v.as_str()) {
-        params.workdir = Some(workdir.to_string());
-    } else if let Some(cwd) = arguments.get("cwd").and_then(|v| v.as_str()) {
-        params.workdir = Some(cwd.to_string());
-    } else if let Some(dir) = arguments.get("working_directory").and_then(|v| v.as_str()) {
-        params.workdir = Some(dir.to_string());
-    }
-    
+    let command = extract_shell_command(tool_name, arguments);
+
+    // Extract workdir (check multiple field names for compatibility)
+    let workdir = arguments
+        .get("workdir")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+        .or_else(|| {
+            arguments
+                .get("cwd")
+                .and_then(|v| v.as_str())
+                .map(|s| s.to_string())
+        })
+        .or_else(|| {
+            arguments
+                .get("working_directory")
+                .and_then(|v| v.as_str())
+                .map(|s| s.to_string())
+        });
+
     // Extract timeout_ms (also check "timeout" alias)
-    if let Some(timeout) = arguments.get("timeout_ms").and_then(|v| v.as_u64()) {
-        params.timeout_ms = Some(timeout);
-    } else if let Some(timeout) = arguments.get("timeout").and_then(|v| v.as_u64()) {
-        params.timeout_ms = Some(timeout);
-    }
-    
+    let timeout_ms = arguments
+        .get("timeout_ms")
+        .and_then(|v| v.as_u64())
+        .or_else(|| arguments.get("timeout").and_then(|v| v.as_u64()));
+
     // Extract escalated permissions flag
-    if let Some(escalated) = arguments.get("with_escalated_permissions").and_then(|v| v.as_bool()) {
-        params.with_escalated_permissions = Some(escalated);
-    } else if let Some(sudo) = arguments.get("sudo").and_then(|v| v.as_bool()) {
-        params.with_escalated_permissions = Some(sudo);
-    }
-    
+    let with_escalated_permissions = arguments
+        .get("with_escalated_permissions")
+        .and_then(|v| v.as_bool())
+        .or_else(|| arguments.get("sudo").and_then(|v| v.as_bool()));
+
     // Extract justification for escalated permissions
-    if let Some(just) = arguments.get("justification").and_then(|v| v.as_str()) {
-        params.justification = Some(just.to_string());
-    } else if let Some(reason) = arguments.get("reason").and_then(|v| v.as_str()) {
-        params.justification = Some(reason.to_string());
+    let justification = arguments
+        .get("justification")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+        .or_else(|| {
+            arguments
+                .get("reason")
+                .and_then(|v| v.as_str())
+                .map(|s| s.to_string())
+        });
+
+    ExtractedShellParams {
+        command,
+        workdir,
+        timeout_ms,
+        with_escalated_permissions,
+        justification,
     }
-    
-    params
 }
 
 /// Format tool output for display in content blocks
@@ -476,14 +492,17 @@ mod tests {
             "with_escalated_permissions": true,
             "justification": "Need to install global packages"
         });
-        
+
         let params = extract_shell_params("local_shell", &args_full);
         assert_eq!(params.command, Some("npm test".to_string()));
         assert_eq!(params.workdir, Some("/project".to_string()));
         assert_eq!(params.timeout_ms, Some(30000));
         assert_eq!(params.with_escalated_permissions, Some(true));
-        assert_eq!(params.justification, Some("Need to install global packages".to_string()));
-        
+        assert_eq!(
+            params.justification,
+            Some("Need to install global packages".to_string())
+        );
+
         // Test alternative field names
         let args_alt = json!({
             "command": "ls -la",
@@ -492,20 +511,20 @@ mod tests {
             "sudo": false,
             "reason": "List files"
         });
-        
+
         let params_alt = extract_shell_params("bash", &args_alt);
         assert_eq!(params_alt.command, Some("ls -la".to_string()));
         assert_eq!(params_alt.workdir, Some("/tmp".to_string()));
         assert_eq!(params_alt.timeout_ms, Some(5000));
         assert_eq!(params_alt.with_escalated_permissions, Some(false));
         assert_eq!(params_alt.justification, Some("List files".to_string()));
-        
+
         // Test non-shell tool returns defaults
         let args_other = json!({
             "command": "test",
             "workdir": "/project"
         });
-        
+
         let params_none = extract_shell_params("read_file", &args_other);
         assert_eq!(params_none.command, None);
         assert_eq!(params_none.workdir, None);

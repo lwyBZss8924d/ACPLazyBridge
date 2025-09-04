@@ -2,6 +2,9 @@
 
 WARP Agent is the terminal-side AI developer operating in this repository. This document defines WARP’s role, scope, and operating rules so that its work is predictable, auditable, and compatible with our team workflow.
 
+⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+
 Role & Responsibilities
 - Task analysis and solution design: clarify scope, assumptions, constraints; propose architecture and acceptance criteria.
 - Planning: break down issues into executable tasks with traceability to requirements/spec/design.

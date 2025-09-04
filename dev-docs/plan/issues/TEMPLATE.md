@@ -5,6 +5,9 @@
 ## 背景 / 需求
 - 说明要解决的问题与范围（引用 REQ/ARC/SPEC）
 
+⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+
 ## 技术方案
 - 设计与实现要点（接口/数据结构/并发/错误处理/日志）
 

@@ -37,6 +37,7 @@ impl Default for ServerConfig {
 }
 
 mod codex_proto;
+mod tool_calls;
 mod validation;
 
 struct SessionState {

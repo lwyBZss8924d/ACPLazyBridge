@@ -3,7 +3,8 @@
 //! This module handles parsing and mapping of Codex native proto events to ACP events.
 
 use crate::tool_calls::{
-    extract_shell_command, format_tool_output, map_tool_kind, MAX_OUTPUT_PREVIEW_BYTES,
+    extract_shell_command, extract_shell_params, format_tool_output, map_tool_kind,
+    MAX_OUTPUT_PREVIEW_BYTES,
 };
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
@@ -233,7 +234,7 @@ impl CodexStreamManager {
             }
             CodexEvent::Error { message, code } => {
                 error!("Codex error: {} (code: {:?})", message, code);
-                
+
                 // Map Codex error codes to semantic categories
                 let error_category = match code.as_deref() {
                     Some("timeout") | Some("TIMEOUT") => "timeout",
@@ -243,13 +244,13 @@ impl CodexStreamManager {
                     Some("rate_limit") | Some("RATE_LIMIT") => "rate_limit",
                     _ => "error",
                 };
-                
+
                 // Check if this error is in the context of a tool call
                 // If we have active tool calls, map the error to the most recent one
                 if let Some((tool_id, _)) = self.tool_call_states.iter().last() {
                     // Send as ToolCallUpdate with status=failed for the last tool
                     let tool_id_str = tool_id.clone();
-                    
+
                     // Format error message with category
                     let error_text = match error_category {
                         "timeout" => format!("Tool execution timed out: {}", message),
@@ -257,13 +258,15 @@ impl CodexStreamManager {
                         "not_found" => format!("Resource not found: {}", message),
                         "cancelled" => format!("Tool execution cancelled: {}", message),
                         "rate_limit" => format!("Rate limit exceeded: {}", message),
-                        _ => if let Some(ref code) = code {
-                            format!("Error [{}]: {}", code, message)
-                        } else {
-                            format!("Error: {}", message)
-                        },
+                        _ => {
+                            if let Some(ref code) = code {
+                                format!("Error [{}]: {}", code, message)
+                            } else {
+                                format!("Error: {}", message)
+                            }
+                        }
                     };
-                    
+
                     let update = SessionUpdate {
                         jsonrpc: "2.0".to_string(),
                         method: "session/update".to_string(),
@@ -274,9 +277,7 @@ impl CodexStreamManager {
                                 title: None,
                                 kind: None,
                                 status: Some(ToolCallStatus::Failed),
-                                content: Some(vec![ContentBlock::Text {
-                                    text: error_text,
-                                }]),
+                                content: Some(vec![ContentBlock::Text { text: error_text }]),
                                 locations: None,
                                 raw_input: None,
                                 raw_output: Some(json!({
@@ -287,10 +288,13 @@ impl CodexStreamManager {
                             },
                         },
                     };
-                    self.tx.send(update).context("Failed to send error update")?;
-                    
+                    self.tx
+                        .send(update)
+                        .context("Failed to send error update")?;
+
                     // Mark the tool as failed in our tracking
-                    self.tool_call_states.insert(tool_id_str, ToolCallStatus::Failed);
+                    self.tool_call_states
+                        .insert(tool_id_str, ToolCallStatus::Failed);
                 } else {
                     // No tool context, send as a message chunk
                     let error_msg = match error_category {
@@ -299,11 +303,13 @@ impl CodexStreamManager {
                         "not_found" => format!("Not found: {}", message),
                         "cancelled" => format!("Operation cancelled: {}", message),
                         "rate_limit" => format!("Rate limit exceeded: {}", message),
-                        _ => if let Some(ref code) = code {
-                            format!("Error [{}]: {}", code, message)
-                        } else {
-                            format!("Error: {}", message)
-                        },
+                        _ => {
+                            if let Some(ref code) = code {
+                                format!("Error [{}]: {}", code, message)
+                            } else {
+                                format!("Error: {}", message)
+                            }
+                        }
                     };
                     self.send_chunk(error_msg).await?;
                 }
@@ -376,15 +382,43 @@ impl CodexStreamManager {
         // Update our tracking
         self.tool_call_states.insert(id.clone(), tool_status);
 
-        // Determine the title - for shell commands, use the command itself
+        // Extract shell parameters if this is a shell tool
+        let shell_params =
+            if name.contains("shell") || name.contains("bash") || name.contains("command") {
+                Some(extract_shell_params(&name, &arguments))
+            } else {
+                None
+            };
+
+        // Determine the title - for shell commands, include workdir if different
         let title = if let Some(cmd) = extract_shell_command(&name, &arguments) {
-            format!("{}: {}", name, cmd)
+            if let Some(ref params) = shell_params {
+                if let Some(ref workdir) = params.workdir {
+                    format!("{}: {} (in {})", name, cmd, workdir)
+                } else {
+                    format!("{}: {}", name, cmd)
+                }
+            } else {
+                format!("{}: {}", name, cmd)
+            }
         } else {
             name.clone()
         };
 
         // Map to ACP tool kind using our utility
         let kind = Some(map_tool_kind(&name));
+
+        // Build locations array if workdir is present
+        let locations = if let Some(ref params) = shell_params {
+            params.workdir.as_ref().map(|dir| {
+                vec![json!({
+                    "path": dir,
+                    "type": "directory"
+                })]
+            })
+        } else {
+            None
+        };
 
         // Format content based on output/error
         let content =
@@ -428,6 +462,36 @@ impl CodexStreamManager {
                 None
             };
 
+        // Enhance raw_input with extracted parameters for debugging
+        let enhanced_raw_input = if let Some(ref params) = shell_params {
+            let mut enhanced = json!({
+                "original": arguments,
+                "extracted": {}
+            });
+
+            if let Some(obj) = enhanced["extracted"].as_object_mut() {
+                if let Some(ref cmd) = params.command {
+                    obj.insert("command".to_string(), json!(cmd));
+                }
+                if let Some(ref workdir) = params.workdir {
+                    obj.insert("workdir".to_string(), json!(workdir));
+                }
+                if let Some(timeout) = params.timeout_ms {
+                    obj.insert("timeout_ms".to_string(), json!(timeout));
+                }
+                if let Some(escalated) = params.with_escalated_permissions {
+                    obj.insert("with_escalated_permissions".to_string(), json!(escalated));
+                }
+                if let Some(ref justification) = params.justification {
+                    obj.insert("justification".to_string(), json!(justification));
+                }
+            }
+
+            enhanced
+        } else {
+            arguments.clone()
+        };
+
         // Prepare raw output for completed/failed states
         let raw_output = if tool_status == ToolCallStatus::Completed
             || tool_status == ToolCallStatus::Failed
@@ -467,8 +531,8 @@ impl CodexStreamManager {
                         kind: kind.clone(),
                         status: Some(tool_status),
                         content: content.clone(),
-                        locations: None,
-                        raw_input: Some(arguments),
+                        locations,
+                        raw_input: Some(enhanced_raw_input.clone()),
                         raw_output: raw_output.clone(),
                     },
                 },

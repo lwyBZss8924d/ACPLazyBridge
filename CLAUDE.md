@@ -29,9 +29,7 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 ACPLazyBridge is an IDE-agnostic Agent Client Protocol (ACP) bridge that provides unified adapter implementations for various AI agents (Claude, Gemini, Codex). The project uses Rust and implements ACP over stdio with line-separated JSON (JSONL), featuring streaming support, tool calls, permission mapping, and a plugin system.
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
 
 ## Prerequisites
 

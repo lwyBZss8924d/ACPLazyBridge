@@ -6,6 +6,9 @@
   - 字段：toolCallId/title/kind/status/content[](ContentBlock)/locations/rawInput/rawOutput
 - 对于本地命令（local_shell 等），在 `completed` 时提供 stdout 预览（2KB 截断），便于 IDE 侧 UI 快速呈现。
 
+⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+
 参考（需求/架构/计划）
 - dev-docs/requirements/acp-lazybridge-requirements.md
 - dev-docs/design/acp-lazybridge-architecture.md
