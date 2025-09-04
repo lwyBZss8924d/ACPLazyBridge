@@ -1,3 +1,0 @@
-{"jsonrpc":"2.0","id":1,"result":{"capabilities":{"fs":{"readTextFile":true,"writeTextFile":true},"loadSession":false},"promptCapabilities":{"image":false},"protocolVersion":"2024-11-05","serverInfo":{"name":"codex-cli-acp","version":"0.1.0"}}}
-{"jsonrpc":"2.0","id":2,"result":{"sessionId":"session_21fad81d-5381-40da-9723-f8df021ae87d"}}
-{"jsonrpc":"2.0","id":3,"error":{"code":-32602,"message":"Invalid params","data":"Session not found: test_session"}}

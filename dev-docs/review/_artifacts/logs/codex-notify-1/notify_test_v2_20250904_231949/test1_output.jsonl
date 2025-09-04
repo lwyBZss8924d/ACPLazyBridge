@@ -1,0 +1,2 @@
+{"jsonrpc":"2.0","id":1,"result":{"agentCapabilities":{"loadSession":false,"promptCapabilities":{"audio":false,"embeddedContext":false,"image":false}},"authMethods":[],"protocolVersion":1}}
+{"jsonrpc":"2.0","id":2,"result":{"sessionId":"session_98c9e4d6-04df-4d54-ad0e-8e3620b0bb6b"}}

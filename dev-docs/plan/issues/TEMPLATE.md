@@ -3,12 +3,22 @@
 Title: <module> - <serial number> - <sentence objective>
 
 ## Metadata
+
+---
+
+- Updated at: <updated_at>
 - Issue status: "waiting" / "open" / "closed"
 - Issue number: [#<issue_number>] is open on Github's issue # Number tracker
 - Issue title: <sentence objective>
-- Issue URL: [Normalize JSONL fixtures to ACP v1 protocolVersion (1)](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/14)
+- Issue URL: example: [Normalize JSONL fixtures to ACP v1 protocolVersion (1)](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/14)
 - Issue type: "Engineering task" / "Feature request" / "docs" / "ci" / "Bug report" etc.
 - Issue owner: "github_user_name", "claude", "claude[bot]", "warp-agent", "example_ai_developer_agent_name"
+- Task Worktree directory: <task_worktree_directory>
+- Task Feature branch: <task_feature_branch>
+- Linked plan issue file: <linked_plan_issue_file>
+- Implementation commit: <implementation_commit>
+
+---
 
 ## Background / Requirement
 - Explain the problem and scope (reference REQ/ARC/SPEC)

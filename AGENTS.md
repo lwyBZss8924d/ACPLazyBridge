@@ -1,5 +1,19 @@
 # AGENTS.md
 
+Team Development Workflow for any Coding Agent (Claude-Code / Codex Agent / Gemini Agent e.g.)
+- Source of tasks: dev-docs/plan/issues/* (issue-list with design, references, acceptance criteria)
+- Start point: always from origin/main
+- Worktree-first: create a new worktree and feature branch per task
+  - Container path (required): /Users/arthur/dev-space/acplb-worktrees/<task-dir>
+  - Command:
+    - git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/<task-dir> origin/main -b feature/<slug>
+  - Optional symlink for IDE navigation:
+    - ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-space/ACPLazyBridge/.worktrees/<task-dir>
+- Quality gates: cargo fmt --all -- --check; cargo clippy --workspace --all-targets --all-features -- -D warnings; cargo test --workspace --all-features --locked
+- Protocol discipline: logs to stderr only; stdout must be strict JSONL
+- Evidence: commit/run JSONL scenarios under dev-docs/review/_artifacts/tests and provide outputs/logs for review
+- PR: link to the issue, explain design, include evidence, and use squash merge after approval
+
 This Development guide file offers instructions for any AI Developer coding agent. Such as *Claude Code (claude.ai/code)* working on this repository project High-Level Concept Overview & Software Development Team AI Developer Member Collaboration Global Standards. AI Developer coding agents team members include:
 
 - **CLAUDE** "Claude Code Agent" (anthropic Claude Code CLI client link - `CLAUDE.md` )
@@ -15,9 +29,7 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 ACPLazyBridge is an IDE-agnostic Agent Client Protocol (ACP) bridge that provides unified adapter implementations for various AI agents (Claude, Gemini, Codex). The project uses Rust and implements ACP over stdio with line-separated JSON (JSONL), featuring streaming support, tool calls, permission mapping, and a plugin system.
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
 
 ## Prerequisites
 
@@ -576,7 +588,7 @@ writeln!(stdin, "{}", prompt)?;
 loop {
     let line = stdout.read_line()?;
     let msg: Value = serde_json::from_str(&line)?;
-    
+
     if msg["method"] == "session/update" {
         match msg["params"]["type"].as_str() {
             Some("agent_message_chunk") => {
@@ -601,6 +613,48 @@ loop {
 }
 ```
 
+### Environment Variable Overrides
+
+ACPLazyBridge supports environment variable overrides for permissions and behavior using the `ACPLB` prefix:
+
+#### Permission Overrides
+```bash
+# Override approval policy (never|on-request|on-failure|untrusted)
+export ACPLB_APPROVAL_POLICY=on-request
+
+# Override sandbox mode (read-only|workspace-write|danger-full-access)
+export ACPLB_SANDBOX_MODE=workspace-write
+
+# Override network access (true|false)
+export ACPLB_NETWORK_ACCESS=true
+```
+
+#### Notify Integration
+```bash
+# Enable notify sink monitoring for immediate turn completion
+export ACPLB_NOTIFY_PATH=/tmp/codex-notify.jsonl
+export ACPLB_NOTIFY_KIND=file  # or "fifo"
+
+# Control forwarder injection (auto|never|force)
+export ACPLB_NOTIFY_INJECT=auto
+
+# Use custom notify command (JSON array format)
+export ACPLB_NOTIFY_CMD='["python", "/path/to/custom-notify.py"]'
+
+# Timing configuration
+export ACPLB_IDLE_TIMEOUT_MS=1200  # Default idle timeout
+export ACPLB_POLLING_INTERVAL_MS=100  # Polling interval
+```
+
+#### Run with environment overrides
+```bash
+# With notify integration
+ACPLB_NOTIFY_PATH=/tmp/notify.jsonl cargo run -p codex-cli-acp
+
+# With custom settings
+ACPLB_IDLE_TIMEOUT_MS=2000 ACPLB_NOTIFY_KIND=fifo cargo run -p codex-cli-acp
+```
+
 ### Testing ACP Compliance
 ```bash
 # Test initialize handshake
@@ -623,18 +677,18 @@ RUST_LOG=debug codex proto 2>debug.log
 async fn test_acp_protocol_compliance() {
     // Spawn codex-cli-acp adapter
     let adapter = spawn_adapter()?;
-    
+
     // Test initialize
     let init_response = adapter.initialize("2024-11-05").await?;
     assert!(init_response.capabilities.contains_key("fs"));
-    
+
     // Test session creation
     let session = adapter.new_session("/test/project").await?;
     assert!(!session.id.is_empty());
-    
+
     // Test prompt with streaming
     let mut stream = adapter.prompt(&session.id, "test prompt").await?;
-    
+
     let mut chunks = vec![];
     while let Some(update) = stream.next().await {
         match update.type {
@@ -646,7 +700,7 @@ async fn test_acp_protocol_compliance() {
             _ => {}
         }
     }
-    
+
     assert!(!chunks.is_empty());
 }
 ```
@@ -673,3 +727,111 @@ async fn test_acp_protocol_compliance() {
 - **Protocol issues**: Enable `RUST_LOG=debug` and examine stdout/stderr
 - **Permission errors**: Check permission mapping configuration
 - **Streaming issues**: Verify line-based JSON format and de-duplication logic
+
+---
+
+## Engineering Workflow Policy (Worktree-first, Submission & Evidence)
+
+This section defines mandatory workflow rules for Claude Code (and any AI coding agent) when contributing to ACPLazyBridge. Follow these rules strictly to keep CI/CD deterministic and reviews traceable.
+
+### 1) Worktree-first Rule
+- Before any task:
+  - List worktrees: `git worktree list`
+  - Ensure current path is a valid worktree and the intended branch is checked out
+- Creating a worktree for a new task branch:
+  - Branch naming: `feature/<module>-<id>`, `fix/<module>-<id>`, `docs/<module>-<id>`, `chore/<module>-<id>`
+  - Create: `git worktree add ../<module>-<id> <branch>`
+- Multi-worktree runtime isolation (if running multiple apps/tools):
+  - Use unique ports or sockets per worktree (if applicable to your task)
+  - Store per-worktree env in `.env.worktree` if necessary
+
+### 2) Task Source of Truth
+- Use the M1 task list as the task index:
+  - `dev-docs/plan/issues/m1-issue-list.md`
+- For each ISSUE, use this template:
+  - `dev-docs/plan/issues/TEMPLATE.md`
+- Implementation plan and specs reference:
+  - `dev-docs/plan/m1-technical-implementation-plan.md`
+  - `dev-docs/requirements/acp-lazybridge-requirements.md`
+  - `dev-docs/design/acp-lazybridge-architecture.md`
+  - `local_refs/agent-client-protocol/`, `local_refs/codex/`, `local_refs/zed-acp-examples/`
+
+### 3) Submission Requirements
+- JSON-RPC / ACP compliance:
+  - Use proper error codes: -32700/-32600/-32601/-32602/-32603
+  - Enforce constraints: absolute paths, 1-based line numbers, JSONL one message per line
+- Non-interactive permissions mapping:
+  - Default to `approval_policy=never`; sandbox per mode; network access only when required by the mode
+  - YOLO/danger modes must be explicitly opted-in and produce conspicuous warnings
+- Streaming & turn completion:
+  - Forward agent_message_delta → agent_message_chunk
+  - Prefer notify("agent-turn-complete"); fallback to idle timer (default ~1200ms)
+  - De-duplicate final chunks
+
+### 4) Evidence & Logs (Mandatory)
+- Tests and logs directory:
+  - Tests: `dev-docs/review/_artifacts/tests/*.jsonl`
+  - Logs: `dev-docs/review/_artifacts/logs/`
+- Run with persistent logs:
+  - `... | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log`
+- Use jq filters for snapshotting:
+  - See `dev-docs/review/_artifacts/jq/filters.md`
+- Privacy & safety:
+  - Do not log secrets; redact sensitive values
+  - YOLO usage must be explicitly justified in PR description
+
+### 5) Traceability Updates (No Orphans)
+- Update mapping files before requesting review:
+  - `dev-docs/review/_artifacts/IMPL.csv` — symbol → file:line → mapped IDs
+  - `dev-docs/review/_artifacts/traceability.csv` — set each touched REQ/ARC → SPEC/CODEX/ZED to `Verified` or `Partial`
+- PR description must include:
+  - Issue ID, branch/worktree, test JSONL file names, log file name, jq snapshots
+  - SPEC/REQ/ARC/CODEX/ZED lines referenced
+
+### 6) Example Branch Flow
+- Create branch/worktree:
+  - `git worktree add ../codex-proto-1 feature/codex-proto-1`
+- Implement task per ISSUE and plan
+- Run JSONL tests and capture logs with `tee`
+- Update `traceability.csv` and `IMPL.csv`
+- Open PR with links to evidence files and relevant spec lines
+
+---
+
+## Non-mock Testing Plan
+
+for any Coding Agent Testing Task (Claude-Code / Codex Agent / Gemini Agent e.g. )
+
+Status
+- The current repository does not yet provide the `claude-code-acplb` binary; the process defined in this section will be enabled once that binary is delivered.
+
+Goals
+- Provide scripted non-mock testing and Zed manual smoke configuration for Claude Code, with unified evidence retention and acceptance standards.
+
+Prerequisites
+- Install Claude Code; global/project settings: `~/.claude/settings.json` / `.claude/settings.json`
+- Set API key (via environment variable, do not print): `ANTHROPIC_API_KEY`
+- Build bridge binary (after delivery): `cargo build --release -p claude-code-acplb`
+
+Scripted runs
+- Scenarios: `dev-docs/review/_artifacts/tests/`
+- Example (after delivery):
+  - `target/release/claude-code-acplb < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log`
+- Optional snapshots: refer to `dev-docs/review/_artifacts/jq/filters.md`
+
+Zed manual smoke testing
+- Add ACPLazyBridge (Claude) entry in `~/.config/zed/settings.json` pointing to `target/release/claude-code-acplb` (enable after delivery)
+- Keep stdout as pure JSONL, write logs to stderr and archive to `dev-docs/review/_artifacts/logs/`
+
+Acceptance criteria
+- initialize negotiation succeeds; prompts `promptCapabilities.image=false`
+- session/new returns valid `sessionId`
+- session/prompt streams continuous `session/update(type=agent_message_chunk)`, finally `result.stopReason` exists
+- session/cancel → `stopReason=Cancelled`
+
+Security / Secrets
+- Pass API key only via environment variables, do not expose in logs and PRs; example commands use placeholder `{{ANTHROPIC_API_KEY}}`
+
+References
+- Repository-level policy: `CONTRIBUTING.md`
+- WARP-Agent process: `WARP.md`
