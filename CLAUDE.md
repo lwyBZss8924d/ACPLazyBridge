@@ -29,9 +29,7 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 ACPLazyBridge is an IDE-agnostic Agent Client Protocol (ACP) bridge that provides unified adapter implementations for various AI agents (Claude, Gemini, Codex). The project uses Rust and implements ACP over stdio with line-separated JSON (JSONL), featuring streaming support, tool calls, permission mapping, and a plugin system.
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
+**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
 
 ## Prerequisites
 
@@ -617,8 +615,9 @@ loop {
 
 ### Environment Variable Overrides
 
-ACPLazyBridge supports environment variable overrides for permissions using the `ACPLB` prefix:
+ACPLazyBridge supports environment variable overrides for permissions and behavior using the `ACPLB` prefix:
 
+#### Permission Overrides
 ```bash
 # Override approval policy (never|on-request|on-failure|untrusted)
 export ACPLB_APPROVAL_POLICY=on-request
@@ -628,9 +627,32 @@ export ACPLB_SANDBOX_MODE=workspace-write
 
 # Override network access (true|false)
 export ACPLB_NETWORK_ACCESS=true
+```
 
-# Run with environment overrides
-cargo run -p codex-cli-acp
+#### Notify Integration
+```bash
+# Enable notify sink monitoring for immediate turn completion
+export ACPLB_NOTIFY_PATH=/tmp/codex-notify.jsonl
+export ACPLB_NOTIFY_KIND=file  # or "fifo"
+
+# Control forwarder injection (auto|never|force)
+export ACPLB_NOTIFY_INJECT=auto
+
+# Use custom notify command (JSON array format)
+export ACPLB_NOTIFY_CMD='["python", "/path/to/custom-notify.py"]'
+
+# Timing configuration
+export ACPLB_IDLE_TIMEOUT_MS=1200  # Default idle timeout
+export ACPLB_POLLING_INTERVAL_MS=100  # Polling interval
+```
+
+#### Run with environment overrides
+```bash
+# With notify integration
+ACPLB_NOTIFY_PATH=/tmp/notify.jsonl cargo run -p codex-cli-acp
+
+# With custom settings
+ACPLB_IDLE_TIMEOUT_MS=2000 ACPLB_NOTIFY_KIND=fifo cargo run -p codex-cli-acp
 ```
 
 ### Testing ACP Compliance

@@ -91,6 +91,9 @@ WARP-Agent scripted non-mock tests (Codex)
 - JSONL scenario location: dev-docs/review/_artifacts/tests/
 - Run example:
   - target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log
+- Notify integration test:
+  - ACPLB_NOTIFY_PATH=/tmp/notify.jsonl target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/notify_idle.jsonl | tee dev-docs/review/_artifacts/logs/notify_$(date +%Y%m%d_%H%M%S).log
+  - Verify immediate completion on notify signal vs idle timeout fallback
 - Optional validation:
   - Use jq filters from dev-docs/review/_artifacts/jq/filters.md to generate review snapshots (error and result.stopReason).
 - Acceptance criteria:
@@ -98,6 +101,8 @@ WARP-Agent scripted non-mock tests (Codex)
   - session/new returns non-empty sessionId
   - session/prompt shows multiple session/update(type=agent_message_chunk) messages and finally returns result.stopReason
   - session/cancel produces stopReason=Cancelled
+  - With notify: immediate completion on agent-turn-complete signal
+  - Without notify: completion after idle timeout (default 1200ms)
 
 Zed manual smoke (manual smoke testing)
 - Configure ~/.config/zed/settings.json:

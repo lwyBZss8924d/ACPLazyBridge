@@ -41,6 +41,7 @@ You can expose a YOLO profile (danger-full-access) as an explicit opt-in only.
 - Tooling: map single + batched tool_calls; improve titles/kinds; show stdout preview in tool_call_update
 - Turn completion: prefer notify agent-turn-complete; idle fallback only
 - Capabilities: return promptCapabilities in initialize
+- Notify integration: Auto-inject forwarder for immediate turn completion via external signals
 
 2) Shared adapter skeleton
 - Provide base spawn/handshake/stream utilities (based on Zed’s agent_servers patterns)
@@ -49,6 +50,49 @@ You can expose a YOLO profile (danger-full-access) as an explicit opt-in only.
 3) Tests & smoke tools
 - Mocked stdout event sequences (streaming + tool_calls + errors)
 - Non-interactive turn completion & duplicate-chunk guards
+
+## Configuration
+
+### Notify Integration
+
+The adapter supports external notification signals for immediate turn completion:
+
+#### Environment Variables
+
+- `ACPLB_NOTIFY_PATH`: Path to notify sink file/FIFO (enables notify integration)
+- `ACPLB_NOTIFY_KIND`: Type of sink - `file` or `fifo` (default: `file`)
+- `ACPLB_NOTIFY_INJECT`: Auto-injection policy - `auto`, `never`, or `force` (default: `auto`)
+  - `auto`: Inject forwarder if no custom command is provided
+  - `never`: Never inject forwarder, respect Codex config
+  - `force`: Always inject forwarder, override Codex config
+- `ACPLB_NOTIFY_CMD`: Custom notify command array in JSON format (overrides forwarder)
+- `ACPLB_IDLE_TIMEOUT_MS`: Idle timeout in milliseconds (default: 1200)
+- `ACPLB_POLLING_INTERVAL_MS`: Polling interval for timeout checks (default: 100)
+
+#### How It Works
+
+1. When `ACPLB_NOTIFY_PATH` is set, the adapter monitors the specified sink for notifications
+2. In `auto` mode, it injects `acplb-notify-forwarder` to forward Codex notifications to the sink
+3. On receiving `agent-turn-complete` notification, the turn ends immediately
+4. Idle timeout serves as a fallback if no completion signal is received
+
+#### Example Usage
+
+```bash
+# Use file-based notify sink
+export ACPLB_NOTIFY_PATH=/tmp/codex-notify.jsonl
+export ACPLB_NOTIFY_KIND=file
+cargo run -p codex-cli-acp
+
+# Use FIFO for real-time notifications
+mkfifo /tmp/codex-notify.fifo
+export ACPLB_NOTIFY_PATH=/tmp/codex-notify.fifo
+export ACPLB_NOTIFY_KIND=fifo
+cargo run -p codex-cli-acp
+
+# Disable auto-injection if using custom Codex notify
+export ACPLB_NOTIFY_INJECT=never
+```
 
 ## License
 

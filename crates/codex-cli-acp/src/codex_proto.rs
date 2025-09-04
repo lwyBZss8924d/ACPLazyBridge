@@ -231,6 +231,11 @@ impl CodexStreamManager {
             CodexEvent::TaskComplete { reason } => {
                 info!("Task complete: {:?}", reason);
                 self.finalized = true;
+                // Send a completion marker to help immediate termination
+                // This is detected by the main loop for immediate completion
+                self.send_chunk("[internal:task_complete]".to_string())
+                    .await
+                    .ok();
             }
             CodexEvent::Error { message, code } => {
                 error!("Codex error: {} (code: {:?})", message, code);
@@ -324,8 +329,9 @@ impl CodexStreamManager {
 
     /// Send an agent message chunk
     async fn send_chunk(&mut self, content: String) -> Result<()> {
-        // Skip if already finalized
-        if self.finalized {
+        // Skip if already finalized (except for internal markers)
+        if self.finalized && !content.starts_with("[internal:") {
+            trace!("Skipping chunk after finalization");
             return Ok(());
         }
 
