@@ -234,11 +234,36 @@ impl CodexStreamManager {
             CodexEvent::Error { message, code } => {
                 error!("Codex error: {} (code: {:?})", message, code);
                 
+                // Map Codex error codes to semantic categories
+                let error_category = match code.as_deref() {
+                    Some("timeout") | Some("TIMEOUT") => "timeout",
+                    Some("permission_denied") | Some("PERMISSION_DENIED") => "permission_denied",
+                    Some("not_found") | Some("NOT_FOUND") => "not_found",
+                    Some("cancelled") | Some("CANCELLED") => "cancelled",
+                    Some("rate_limit") | Some("RATE_LIMIT") => "rate_limit",
+                    _ => "error",
+                };
+                
                 // Check if this error is in the context of a tool call
                 // If we have active tool calls, map the error to the most recent one
                 if let Some((tool_id, _)) = self.tool_call_states.iter().last() {
                     // Send as ToolCallUpdate with status=failed for the last tool
                     let tool_id_str = tool_id.clone();
+                    
+                    // Format error message with category
+                    let error_text = match error_category {
+                        "timeout" => format!("Tool execution timed out: {}", message),
+                        "permission_denied" => format!("Permission denied: {}", message),
+                        "not_found" => format!("Resource not found: {}", message),
+                        "cancelled" => format!("Tool execution cancelled: {}", message),
+                        "rate_limit" => format!("Rate limit exceeded: {}", message),
+                        _ => if let Some(ref code) = code {
+                            format!("Error [{}]: {}", code, message)
+                        } else {
+                            format!("Error: {}", message)
+                        },
+                    };
+                    
                     let update = SessionUpdate {
                         jsonrpc: "2.0".to_string(),
                         method: "session/update".to_string(),
@@ -250,17 +275,14 @@ impl CodexStreamManager {
                                 kind: None,
                                 status: Some(ToolCallStatus::Failed),
                                 content: Some(vec![ContentBlock::Text {
-                                    text: if let Some(ref code) = code {
-                                        format!("Error [{}]: {}", code, message)
-                                    } else {
-                                        format!("Error: {}", message)
-                                    },
+                                    text: error_text,
                                 }]),
                                 locations: None,
                                 raw_input: None,
                                 raw_output: Some(json!({
                                     "error": message,
-                                    "code": code
+                                    "code": code,
+                                    "category": error_category
                                 })),
                             },
                         },
@@ -271,10 +293,17 @@ impl CodexStreamManager {
                     self.tool_call_states.insert(tool_id_str, ToolCallStatus::Failed);
                 } else {
                     // No tool context, send as a message chunk
-                    let error_msg = if let Some(ref code) = code {
-                        format!("Error [{}]: {}", code, message)
-                    } else {
-                        format!("Error: {}", message)
+                    let error_msg = match error_category {
+                        "timeout" => format!("Operation timed out: {}", message),
+                        "permission_denied" => format!("Permission denied: {}", message),
+                        "not_found" => format!("Not found: {}", message),
+                        "cancelled" => format!("Operation cancelled: {}", message),
+                        "rate_limit" => format!("Rate limit exceeded: {}", message),
+                        _ => if let Some(ref code) = code {
+                            format!("Error [{}]: {}", code, message)
+                        } else {
+                            format!("Error: {}", message)
+                        },
                     };
                     self.send_chunk(error_msg).await?;
                 }

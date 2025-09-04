@@ -11,6 +11,16 @@ use tracing::debug;
 /// Maximum size for tool output preview in bytes (2KB)
 pub const MAX_OUTPUT_PREVIEW_BYTES: usize = 2048;
 
+/// Extracted shell tool parameters matching Codex's ShellToolCallParams
+#[derive(Debug, Clone, Default)]
+pub struct ExtractedShellParams {
+    pub command: Option<String>,
+    pub workdir: Option<String>,
+    pub timeout_ms: Option<u64>,
+    pub with_escalated_permissions: Option<bool>,
+    pub justification: Option<String>,
+}
+
 /// Map a tool name to an ACP ToolKind category
 ///
 /// This function categorizes tools based on their names to help clients
@@ -212,6 +222,60 @@ pub fn extract_shell_command(tool_name: &str, arguments: &Value) -> Option<Strin
     None
 }
 
+/// Extract all shell tool parameters from arguments
+///
+/// Extracts command, workdir, timeout, and permission fields per Codex ShellToolCallParams
+pub fn extract_shell_params(tool_name: &str, arguments: &Value) -> ExtractedShellParams {
+    let name_lower = tool_name.to_lowercase();
+    
+    // Only extract for shell-like tools
+    if !name_lower.contains("shell")
+        && !name_lower.contains("exec")
+        && !name_lower.contains("run")
+        && !name_lower.contains("cmd")
+        && !name_lower.contains("bash")
+    {
+        return ExtractedShellParams::default();
+    }
+
+    let mut params = ExtractedShellParams::default();
+    
+    // Extract command (string or array)
+    params.command = extract_shell_command(tool_name, arguments);
+    
+    // Extract workdir
+    if let Some(workdir) = arguments.get("workdir").and_then(|v| v.as_str()) {
+        params.workdir = Some(workdir.to_string());
+    } else if let Some(cwd) = arguments.get("cwd").and_then(|v| v.as_str()) {
+        params.workdir = Some(cwd.to_string());
+    } else if let Some(dir) = arguments.get("working_directory").and_then(|v| v.as_str()) {
+        params.workdir = Some(dir.to_string());
+    }
+    
+    // Extract timeout_ms (also check "timeout" alias)
+    if let Some(timeout) = arguments.get("timeout_ms").and_then(|v| v.as_u64()) {
+        params.timeout_ms = Some(timeout);
+    } else if let Some(timeout) = arguments.get("timeout").and_then(|v| v.as_u64()) {
+        params.timeout_ms = Some(timeout);
+    }
+    
+    // Extract escalated permissions flag
+    if let Some(escalated) = arguments.get("with_escalated_permissions").and_then(|v| v.as_bool()) {
+        params.with_escalated_permissions = Some(escalated);
+    } else if let Some(sudo) = arguments.get("sudo").and_then(|v| v.as_bool()) {
+        params.with_escalated_permissions = Some(sudo);
+    }
+    
+    // Extract justification for escalated permissions
+    if let Some(just) = arguments.get("justification").and_then(|v| v.as_str()) {
+        params.justification = Some(just.to_string());
+    } else if let Some(reason) = arguments.get("reason").and_then(|v| v.as_str()) {
+        params.justification = Some(reason.to_string());
+    }
+    
+    params
+}
+
 /// Format tool output for display in content blocks
 ///
 /// Handles special formatting for different tool types
@@ -400,6 +464,51 @@ mod tests {
         // Test missing command field
         let args5 = json!({"other": "value"});
         assert_eq!(extract_shell_command("shell", &args5), None);
+    }
+
+    #[test]
+    fn test_extract_shell_params() {
+        // Test comprehensive parameter extraction
+        let args_full = json!({
+            "command": ["npm", "test"],
+            "workdir": "/project",
+            "timeout_ms": 30000,
+            "with_escalated_permissions": true,
+            "justification": "Need to install global packages"
+        });
+        
+        let params = extract_shell_params("local_shell", &args_full);
+        assert_eq!(params.command, Some("npm test".to_string()));
+        assert_eq!(params.workdir, Some("/project".to_string()));
+        assert_eq!(params.timeout_ms, Some(30000));
+        assert_eq!(params.with_escalated_permissions, Some(true));
+        assert_eq!(params.justification, Some("Need to install global packages".to_string()));
+        
+        // Test alternative field names
+        let args_alt = json!({
+            "command": "ls -la",
+            "cwd": "/tmp",
+            "timeout": 5000,
+            "sudo": false,
+            "reason": "List files"
+        });
+        
+        let params_alt = extract_shell_params("bash", &args_alt);
+        assert_eq!(params_alt.command, Some("ls -la".to_string()));
+        assert_eq!(params_alt.workdir, Some("/tmp".to_string()));
+        assert_eq!(params_alt.timeout_ms, Some(5000));
+        assert_eq!(params_alt.with_escalated_permissions, Some(false));
+        assert_eq!(params_alt.justification, Some("List files".to_string()));
+        
+        // Test non-shell tool returns defaults
+        let args_other = json!({
+            "command": "test",
+            "workdir": "/project"
+        });
+        
+        let params_none = extract_shell_params("read_file", &args_other);
+        assert_eq!(params_none.command, None);
+        assert_eq!(params_none.workdir, None);
     }
 
     #[test]
