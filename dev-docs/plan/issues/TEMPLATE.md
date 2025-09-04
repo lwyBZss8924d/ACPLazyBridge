@@ -1,35 +1,42 @@
-# ISSUE 模板（提交到仓库的任务建议使用本模板）
+# ISSUE Template (Humans and AI Developers should submit tasks to the repository using this template)
 
-标题：<模块>-<序号> — <一句话目标>
+Title: <module> - <serial number> - <sentence objective>
 
-## 背景 / 需求
-- 说明要解决的问题与范围（引用 REQ/ARC/SPEC）
+## Metadata
+- Issue status: "waiting" / "open" / "closed"
+- Issue number: [#<issue_number>] is open on Github's issue # Number tracker
+- Issue title: <sentence objective>
+- Issue URL: [Normalize JSONL fixtures to ACP v1 protocolVersion (1)](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/14)
+- Issue type: "Engineering task" / "Feature request" / "docs" / "ci" / "Bug report" etc.
+- Issue owner: "github_user_name", "claude", "claude[bot]", "warp-agent", "example_ai_developer_agent_name"
+
+## Background / Requirement
+- Explain the problem and scope (reference REQ/ARC/SPEC)
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
 **ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
 
-## 技术方案
-- 设计与实现要点（接口/数据结构/并发/错误处理/日志）
+## Technical Solution
+- Design and implementation points (interface/data structure/concurrency/error handling/logging)
 
-## local_refs 引用
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
+## Refs
+- Repo url: <repo_url>
+- Docs url/path: <docs_url>
+- Code url/path: <code_url>
+- Examples url/path: <examples_url>
 
-## 对应的 dev-docs/review 条目
+## Corresponding dev-docs/review items
 - SPEC: ...
 - REQ: ...
 - ARC: ...
 - CODEX: ...
 - ZED: ...
 
-## 验收标准
-- 测试用例：_artifacts/tests/<file>.jsonl
-- 日志证据：_artifacts/logs/<run_yyyymmdd_hhmmss>.log + jq 过滤脚本
+## Acceptance Criteria
+- Test cases: _artifacts/tests/<file>.jsonl
+- Log evidence: _artifacts/logs/<run_yyyymmdd_hhmmss>.log + jq filter script
 
 ## Worktree-first
-- 分支：feature/<模块>-<序号>
-- 初始化：git worktree add ../<模块>-<序号> feature/<模块>-<序号>
-- 合并：以 PR 方式合入主仓；提交前确保 traceability.csv 更新到 Verified/Partial，无孤儿条目
-
-
+- Branch: feature/<module>-<serial number>
+- Initialize: git worktree add ../<module>-<serial number> feature/<module>-<serial number>
+- Merge: via PR to main repo; ensure traceability.csv is updated to Verified/Partial, no orphan entries
