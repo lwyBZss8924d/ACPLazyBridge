@@ -25,6 +25,7 @@ dev-docs/review/_artifacts/parsed/
 
 # Local references (vendored documentation)
 /local_refs/
+ACP-DocsAndSourceCodeReference.md
 
 # MCP and agent-specific
 .serena/
