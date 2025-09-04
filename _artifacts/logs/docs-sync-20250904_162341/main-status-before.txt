@@ -1,0 +1,5 @@
+1 .M N... 100644 100644 100644 22644d6af155b3167b3262b328345ea7a57232ff 22644d6af155b3167b3262b328345ea7a57232ff dev-docs/plan/issues/TEMPLATE.md
+1 A. N... 000000 100644 100644 0000000000000000000000000000000000000000 de8e2d6be13c74f6bc78cb2de488f80ed67299ef dev-docs/plan/issues/open/feature-codex-notify-1.md
+1 .M N... 100644 100644 100644 ff527b1a558bd91f62e0211d107b85dad1c9f113 ff527b1a558bd91f62e0211d107b85dad1c9f113 dev-docs/plan/issues/open/normalize-jsonl-protocol-v1.md
+? _artifacts/
+? sync_docs_to_worktrees.sh

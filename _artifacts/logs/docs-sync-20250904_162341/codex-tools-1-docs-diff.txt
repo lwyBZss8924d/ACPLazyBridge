@@ -1,0 +1,7 @@
+M	dev-docs/plan/issues/TEMPLATE.md
+A	dev-docs/plan/issues/acp-v1-codex-cli-alignment-and-best-practices.md
+A	dev-docs/plan/issues/ci-replay-acp-v1-runner.md
+A	dev-docs/plan/issues/codex-tools-1-DONE.md
+A	dev-docs/plan/issues/feature-codex-tools-1.md
+A	dev-docs/plan/issues/normalize-jsonl-protocol-v1.md
+A	dev-docs/plan/issues/refresh-docs-examples-protocol-v1.md

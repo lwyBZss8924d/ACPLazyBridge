@@ -1,0 +1,2 @@
+origin	https://github.com/lwyBZss8924d/ACPLazyBridge.git (fetch)
+origin	https://github.com/lwyBZss8924d/ACPLazyBridge.git (push)

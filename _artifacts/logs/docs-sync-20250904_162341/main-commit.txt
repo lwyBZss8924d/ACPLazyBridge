@@ -1,0 +1,10 @@
+commit 5f66abb35e0f5aa87c3a7734b69dd724cce9736a
+Author: Li aiguo <sj112358@gmail.com>
+Date:   Thu Sep 4 16:23:42 2025 +0800
+
+    docs(issues): update TEMPLATE to English, normalize-jsonl type to ci, add feature-codex-notify-1
+
+ dev-docs/plan/issues/TEMPLATE.md                   |  45 ++-
+ .../plan/issues/open/feature-codex-notify-1.md     | 421 +++++++++++++++++++++
+ .../issues/open/normalize-jsonl-protocol-v1.md     |   2 +-
+ 3 files changed, 448 insertions(+), 20 deletions(-)

@@ -1,0 +1,5 @@
+path	branch	before	after	merge_result	stash_used	stash_restore	status
+/Users/arthur/dev-space/acplb-worktrees/codex-notify-1	feature/codex-notify-1	09584e4	44fc2f1	merged_or_ff	yes	applied_and_kept	1_changed_paths
+/Users/arthur/dev-space/acplb-worktrees/codex-tools-1	pr/codex-tools-1-scope	93d5fd0	80d10ac	merged_or_ff	no	NA	0_changed_paths
+/Users/arthur/dev-space/acplb-worktrees/docs-usage-1	docs/usage-1	7ce8526	a3ee8d6	merged_or_ff	yes	applied_and_kept	1_changed_paths
+/Users/arthur/dev-space/acplb-worktrees/tests-jsonl-1	chore/tests-jsonl-1	ac24890	d8d9281	merged_or_ff	yes	applied_and_kept	1_changed_paths
