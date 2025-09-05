@@ -1,0 +1,12 @@
+# ACPLazyBridge Custom CodeQL Query Suite
+# Enforces WARP rules and ACP protocol compliance
+
+- description: ACPLazyBridge custom Rust security and quality checks
+- queries: queries
+- apply: codeql-suites/rust-code-scanning.qls
+  from: codeql/rust-queries
+  exclude:
+    tags contain:
+      - diagnostics
+      - telemetry
+      - summary

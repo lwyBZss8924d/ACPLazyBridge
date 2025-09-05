@@ -77,3 +77,8 @@ coverage/
 # Local worktrees symlinks and workspace files
 .worktrees/
 *.code-workspace
+
+# CodeQL
+dev-docs/review/_artifacts/
+.codeql-db/
+.codeql-results/
