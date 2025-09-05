@@ -77,6 +77,9 @@ cargo clippy --workspace --all-targets -- -D warnings
 
 # Quick check without building
 cargo check --workspace
+
+# Run CodeQL security analysis locally (optional, runs in CI)
+# See dev-docs/engineering/codeql.md for setup and custom queries
 ```
 
 ### Documentation

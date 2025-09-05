@@ -36,6 +36,7 @@ Quality Gates (must pass)
 - cargo clippy --workspace --all-targets --all-features -- -D warnings
 - cargo test --workspace --all-features --locked
 - Protocol JSONL scenarios (if present) replay without errors; stdout is valid JSONL.
+- CodeQL security analysis (automated in CI). See `dev-docs/engineering/codeql.md` for custom queries.
 
 Security & Compliance
 - Do not log secrets; never print secrets to CI logs; use env vars and GitHub secrets.

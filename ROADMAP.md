@@ -1,10 +1,12 @@
 # ACPLazyBridge – Implementation Plan
 
 ## Milestone 1 – Bootstrap repo (done)
+
 - Clone empty repo and vendor references under local_refs/
 - Include zed-acp-examps/agent_servers and agent_ui for best-practice reference
 
 ## Milestone 2 – Codex adapter skeleton (@zed-industries/codex-cli-acp)
+
 - Structure
   - adapters/codex-cli-acp/
     - src/index.ts – ACP server entry (stdio)
@@ -22,6 +24,7 @@
 - Initialize: return promptCapabilities (image=false)
 
 ## Milestone 3 – Shared utilities
+
 - adapters/_shared/
   - spawn.ts – portable spawn via path/args/env
   - line_reader.ts – robust queue-based JSON line reader
@@ -29,17 +32,19 @@
   - permissions.ts – ACP → adapter mapping helpers
 
 ## Milestone 4 – Tests & examples
+
 - tests/unit/line_reader.test.ts
 - tests/unit/tools_mapping.test.ts
 - tests/integration/codex_stream.test.ts
 - examples/zed/settings.json snippets
 
 ## Milestone 5 – Optional adapters
+
 - wrappers for existing Zed agents to demonstrate external embedding
 - MCP server compatibility notes
 
 ## Notes
+
 - Keep adapters non-interactive by default to avoid IDE stalls
 - Offer explicit YOLO profile (danger-full-access) as opt-in only
 - Prefer small, inspectable JSON contracts on stdio; log stderr to aid diagnostics
-

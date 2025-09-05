@@ -5,6 +5,7 @@ ACP bridge for agents / agent-tools plugin Hub connects IDEs, other types of edi
 ## Purpose
 
 Provide a reusable, IDE-agnostic ACP bridge that:
+
 - Adopts Zed’s official ACP integration patterns (agent_servers/agent_ui) as best practice.
 - Hosts external CLI agent adapters (Claude, Gemini, Codex, …) with a consistent capability surface.
 - Ensures non-interactive approvals by default for IDEs without a UI approval flow.
@@ -27,6 +28,7 @@ Provide a reusable, IDE-agnostic ACP bridge that:
 ## Non‑interactive approvals (recommended defaults)
 
 To avoid stalling tool_calls in IDEs with no approval UI, map permission modes to:
+
 - default:  approval_policy=never, sandbox_mode=read-only,      network_access=false
 - plan:     approval_policy=never, sandbox_mode=read-only,      network_access=false
 - acceptEdits:       approval_policy=never, sandbox_mode=workspace-write, network_access=false
@@ -36,18 +38,21 @@ You can expose a YOLO profile (danger-full-access) as an explicit opt-in only.
 
 ## Roadmap (high level)
 
-1) Codex ACP adapter (codex-cli-acp)
+1. Codex ACP adapter (codex-cli-acp)
+
 - Stream: robust stdout line queue; forward agent_message_delta as agent_message_chunk in real time
 - Tooling: map single + batched tool_calls; improve titles/kinds; show stdout preview in tool_call_update
 - Turn completion: prefer notify agent-turn-complete; idle fallback only
 - Capabilities: return promptCapabilities in initialize
 - Notify integration: Auto-inject forwarder for immediate turn completion via external signals
 
-2) Shared adapter skeleton
+1. Shared adapter skeleton
+
 - Provide base spawn/handshake/stream utilities (based on Zed’s agent_servers patterns)
 - Add approval policy + sandbox policy bridge helpers
 
-3) Tests & smoke tools
+1. Tests & smoke tools
+
 - Mocked stdout event sequences (streaming + tool_calls + errors)
 - Non-interactive turn completion & duplicate-chunk guards
 
@@ -94,7 +99,27 @@ cargo run -p codex-cli-acp
 export ACPLB_NOTIFY_INJECT=never
 ```
 
+## Security & Testing
+
+### Code Quality
+The project enforces strict code quality standards:
+- Rust formatting with `cargo fmt`
+- Linting with `cargo clippy` (all warnings are errors)
+- Comprehensive unit and integration tests
+
+### Security Analysis
+Automated security scanning with CodeQL:
+- Runs on every PR and push to main
+- Custom queries enforce WARP protocol rules
+- Results available in GitHub Security tab
+- See `dev-docs/engineering/codeql.md` for details
+
+### Testing
+- Unit tests: `cargo test --workspace`
+- Protocol compliance: JSONL scenario replay tests
+- Integration tests: Real provider CLI interactions
+- See `CONTRIBUTING.md` for complete testing guidelines
+
 ## License
 
 MIT
-
