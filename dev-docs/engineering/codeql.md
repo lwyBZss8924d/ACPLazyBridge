@@ -63,15 +63,13 @@ We maintain custom CodeQL queries in `queries/codeql/acp-rust/` to enforce ACPLa
 
 ## CI/CD Integration
 
-CodeQL runs automatically on:
-- Every push to `main`
-- Every pull request
-- Weekly schedule (Mondays at 04:36 UTC)
+CodeQL is configured using GitHub's default setup:
+- Runs automatically on every push and pull request
+- Managed through GitHub repository settings (Settings > Security > Code scanning)
+- Results available in the GitHub Security tab
+- Uses GitHub's standard security queries for Rust
 
-Results are:
-- Uploaded to GitHub Security tab (requires appropriate permissions)
-- Stored as artifacts for 30 days
-- Available in SARIF format for further analysis
+Note: Custom queries in `queries/codeql/acp-rust/` are available for local testing only.
 
 ## Triaging Results
 
