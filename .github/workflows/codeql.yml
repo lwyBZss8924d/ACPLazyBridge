@@ -33,19 +33,8 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: rust
-          queries: |
-            security-extended
-            security-and-quality
-          config: |
-            name: "ACPLazyBridge CodeQL configuration"
-            paths:
-              - crates
-            paths-ignore:
-              - target
-              - dev-docs
-              - local_refs
-              - vendor
-              - "**/*.gen.rs"
+          queries: +security-extended,+security-and-quality
+          config-file: ./.codeql/config.yml
 
       - name: Build workspace
         run: |
