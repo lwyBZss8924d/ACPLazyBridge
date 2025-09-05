@@ -1,0 +1,10 @@
+name: "ACPLazyBridge CodeQL configuration"
+paths:
+  - crates
+  - src
+paths-ignore:
+  - target
+  - dev-docs
+  - local_refs
+  - vendor
+  - "**/*.gen.rs"

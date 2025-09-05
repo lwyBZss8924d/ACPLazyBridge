@@ -1,0 +1,8 @@
+---
+library: false
+warnOnImplicitThis: false
+name: acplazybridge/rust-acp-queries
+version: 0.1.0
+extractor: rust
+dependencies:
+  codeql/rust-all: "*"
