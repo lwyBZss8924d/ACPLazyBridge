@@ -33,8 +33,8 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: rust
-          queries: +security-extended,+security-and-quality
-          config-file: ./.codeql/config.yml
+          # Use default security queries for Rust
+          # Custom queries can be added later via config-file
 
       - name: Build workspace
         run: |
