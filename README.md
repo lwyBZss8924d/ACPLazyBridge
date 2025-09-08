@@ -10,20 +10,16 @@ Provide a reusable, IDE-agnostic ACP bridge that:
 - Hosts external CLI agent adapters (Claude, Gemini, Codex, …) with a consistent capability surface.
 - Ensures non-interactive approvals by default for IDEs without a UI approval flow.
 
-## Layout
+## Supported Adapters
 
-- local_refs/
-  - zed-acp-examps/
-    - agent_servers/ (vendored reference)
-    - agent_ui/ (vendored reference)
-  - codex/ (docs gathered during Codex adapter work)
-  - agent-client-protocol/ (ACP docs, if any)
+This repository implements the following adapter:
 
-## Planned adapters
+- **Codex (`codex-cli-acp`)**: A new adapter that aligns with the ACP stream, supports `tool_calls`, and enables non-interactive approvals.
 
-- @zed-industries/claude-code-acp (use Zed’s official adapter directly)
-- @google/gemini-cli (use Zed’s official adapter directly via --experimental-acp)
-- @zed-industries/codex-cli-acp (new adapter implemented here; aligns ACP stream, tool_calls, and non-interactive approvals)
+Additionally, the ACPLazyBridge is designed to work with other official adapters, such as:
+
+- **Claude (`@zed-industries/claude-code-acp`)**: Use Zed’s official adapter directly.
+- **Gemini (`@google/gemini-cli`)**: Use Zed’s official adapter directly via the `--experimental-acp` flag.
 
 ## Non‑interactive approvals (recommended defaults)
 
@@ -36,25 +32,21 @@ To avoid stalling tool_calls in IDEs with no approval UI, map permission modes t
 
 You can expose a YOLO profile (danger-full-access) as an explicit opt-in only.
 
-## Roadmap (high level)
+## Features
 
-1. Codex ACP adapter (codex-cli-acp)
-
-- Stream: robust stdout line queue; forward agent_message_delta as agent_message_chunk in real time
-- Tooling: map single + batched tool_calls; improve titles/kinds; show stdout preview in tool_call_update
-- Turn completion: prefer notify agent-turn-complete; idle fallback only
-- Capabilities: return promptCapabilities in initialize
-- Notify integration: Auto-inject forwarder for immediate turn completion via external signals
-
-1. Shared adapter skeleton
-
-- Provide base spawn/handshake/stream utilities (based on Zed’s agent_servers patterns)
-- Add approval policy + sandbox policy bridge helpers
-
-1. Tests & smoke tools
-
-- Mocked stdout event sequences (streaming + tool_calls + errors)
-- Non-interactive turn completion & duplicate-chunk guards
+- **Codex ACP Adapter (`codex-cli-acp`)**:
+  - Robust handling of stdout streaming.
+  - Real-time forwarding of `agent_message_chunk`.
+  - Mapping for single and batched `tool_calls`.
+  - Support for `notify` to complete turns and `idle` fallback.
+  - Reports `promptCapabilities` on initialization.
+  - Auto-injects a forwarder for immediate turn completion via external signals.
+- **Shared Adapter Skeleton (`acp-lazy-core`)**:
+  - Provides base utilities for spawning processes, handling handshakes, and managing streams, based on Zed's patterns.
+  - Includes helpers for approval and sandbox policies.
+- **Comprehensive Testing**:
+  - Mocked stdout event sequences for streaming, `tool_calls`, and errors.
+  - Guards against duplicate chunks and ensures reliable non-interactive turn completion.
 
 ## Configuration
 
