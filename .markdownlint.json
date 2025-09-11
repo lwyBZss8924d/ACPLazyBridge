@@ -1,25 +1,56 @@
 {
-    "default": true,
-    "MD003": { "style": "atx" },
-    "MD004": { "style": "dash" },
-    "MD007": { "indent": 2 },
-    "MD013": false,
-    "MD024": { "siblings_only": true },
-    "MD025": true,
-    "MD026": { "punctuation": ".,;:!" },
-    "MD029": { "style": "ordered" },
-    "MD033": false,
-    "MD035": { "style": "---" },
-    "MD036": false,
-    "MD041": false,
-    "MD046": { "style": "fenced" },
-    "MD048": { "style": "backtick" },
-    "MD049": { "style": "underscore" },
-    "MD050": { "style": "asterisk" },
-    "line-length": false,
-    "no-bare-urls": false,
-    "no-emphasis-as-heading": true,
-    "no-trailing-spaces": true,
-    "no-hard-tabs": true,
-    "no-duplicate-heading": { "siblings_only": true }
-  }
+  "default": true,
+  "MD003": { 
+    "style": "atx"
+  },
+  "MD025": true,
+  "MD024": { 
+    "siblings_only": true
+  },
+  "MD041": false,
+  "MD004": { 
+    "style": "dash"
+  },
+  "MD007": { 
+    "indent": 2
+  },
+  "MD029": { 
+    "style": "ordered"
+  },
+  "MD046": { 
+    "style": "fenced"
+  },
+  "MD048": { 
+    "style": "backtick"
+  },
+  "MD040": true,
+  "MD049": { 
+    "style": "underscore"
+  },
+  "MD050": { 
+    "style": "asterisk"
+  },
+  "MD036": false,
+  "MD026": { 
+    "punctuation": ".,;:!"
+  },
+  "MD035": { 
+    "style": "---"
+  },
+  "no-trailing-spaces": true,
+  "no-hard-tabs": true,
+  "MD033": false,
+  "no-bare-urls": false,
+  "MD051": false,
+  "MD013": false,
+  "line-length": false,
+  "MD055": {
+    "style": "leading_and_trailing"
+  },
+  "no-emphasis-as-heading": true,
+  "no-duplicate-heading": { 
+    "siblings_only": true
+  },
+  "MD010": false,
+  "MD012": false
+}

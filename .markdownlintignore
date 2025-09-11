@@ -1,0 +1,35 @@
+# Markdownlint ignore patterns for ACPLazyBridge
+
+# Build and dependency directories
+node_modules/
+target/
+dist/
+build/
+.venv/
+venv/
+
+# Git and development directories
+.git/
+.worktrees/
+.codeql-db/
+
+# External/canonical specifications (preserve original formatting)
+sdd-rules/rules/changelog/semver.md
+
+# Generated documentation
+docs/api/
+coverage/
+
+# Temporary and cache directories
+tmp/
+temp/
+.cache/
+*.tmp
+
+# IDE directories
+.vscode/
+.idea/
+
+# Archive directories
+archive/
+deprecated/

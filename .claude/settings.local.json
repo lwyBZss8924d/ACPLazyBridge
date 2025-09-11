@@ -26,7 +26,10 @@
       "Bash(markdownlint --version)",
       "Bash(./scripts/ci/run-markdown-style.sh:*)",
       "Bash(markdownlint-cli2:*)",
-      "Bash(scripts/ci/run-local-ci.sh:*)"
+      "Bash(scripts/ci/run-local-ci.sh:*)",
+      "Bash(scripts/sdd/check-markdown.sh:*)",
+      "Bash(scripts/ci/run-markdown-style.sh:*)",
+      "Bash(scripts/sdd/fix-markdown.sh:*)"
     ],
     "deny": [],
     "ask": []
