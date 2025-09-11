@@ -67,6 +67,7 @@ References
 - CONTRIBUTING.md
 - sdd-rules/lifecycle.md
 - sdd-rules/spec-template.md, sdd-rules/plan-template.md, sdd-rules/tasks-template.md
+- rules index: rules/README.md
 
 ---
 

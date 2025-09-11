@@ -102,6 +102,7 @@ Communication
 References
 - Authority: CONTRIBUTING.md, sdd-rules/spec-driven.md, sdd-rules/lifecycle.md, sdd-rules/AGENTS.md
 - SDD templates: sdd-rules/spec-template.md, sdd-rules/plan-template.md, sdd-rules/tasks-template.md
+- SDD rules index: sdd-rules/rules/README.md
 - SDD commands: sdd-rules/commands/specify.md, sdd-rules/commands/plan.md, sdd-rules/commands/tasks.md
 - Project references: dev-docs/references/, dev-docs/references/acp_adapters/, dev-docs/references/cli_agents/, dev-docs/references/acp.md, dev-docs/references/zed_ide.md
 - Design/Plan/Requirements: dev-docs/design/, dev-docs/plan/, dev-docs/requirements/

@@ -1,4 +1,24 @@
-# CLAUDE.md (AGENTS.md)
+# CLAUDE.md (Repository-level Claude Code Guide)
+
+Authority and scope
+- Normative authority: CONTRIBUTING.md, sdd-rules/CLAUDE.md, sdd-rules/AGENTS.md, sdd-rules/lifecycle.md
+- Rules index: sdd-rules/rules/README.md
+- This file provides repository-level guidance for Claude Code; it must align with the authoritative files above.
+
+SDD navigation (three-horse synergy)
+- Scripts: scripts/ (ci/sdd/common/utilities)
+- Specs: specs/<NNN>-<slug>/(spec.md, plan.md, tasks.md)
+- Dev-docs & Issues & Review: dev-docs/requirements, dev-docs/design, dev-docs/plan/issues, dev-docs/review/changes, dev-docs/review/_artifacts, GitHub Issues (with comments)
+- Templates: sdd-rules/spec-template.md, sdd-rules/plan-template.md, sdd-rules/tasks-template.md
+- Commands: sdd-rules/commands/specify.md, sdd-rules/commands/plan.md, sdd-rules/commands/tasks.md
+
+Memory layering (Claude Code)
+- Root CLAUDE.md (this file): global repository guidance and SDD navigation
+- sdd-rules/CLAUDE.md: authoritative Claude policy (must-read)
+- Per-directory memory (optional, keep minimal and purposeful):
+  - crates/acp-lazy-core/CLAUDE.md — crate-specific build/test notes and links
+  - crates/codex-cli-acp/CLAUDE.md — protocol/adapter focus and test notes
+  - scripts/CLAUDE.md — how to use SDD scripts safely (no secrets), common flows
 
 Team Development Workflow for Claude Code
 - Source of tasks: dev-docs/plan/issues/* (issue-list with design, references, acceptance criteria)
