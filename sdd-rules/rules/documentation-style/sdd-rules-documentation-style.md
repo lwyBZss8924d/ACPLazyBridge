@@ -28,6 +28,7 @@ This repository standardizes Markdown style using markdownlint with a project-wi
   - Trailing spaces/hard tabs disallowed (no-trailing-spaces=true, no-hard-tabs=true)
 
 Recommended tools and workflow:
+
 - Local non-blocking lint (developer convenience): `scripts/sdd/lint_docs.sh`
   - Suggests installing `markdownlint-cli` locally and can generate `.markdownlint.json` if missing
   - Produces a documentation report and warns but does not fail
@@ -38,10 +39,12 @@ Recommended tools and workflow:
   - Runs structure, language, markdown style, and semantic checks in one pass
 
 Scope (lint targets):
+
 - `dev-docs/**/*.md`, `specs/**/*.md`, `sdd-rules/**/*.md`
 - Top-level docs: `README.md`, `CONTRIBUTING.md`, `WARP.md`, `AGENTS.md`, `CLAUDE.md`
 
 Exclusions (ignored by search or via git ls-files):
+
 - `node_modules/`, `.git/`, `target/`, `dist/`, `build/`, `.venv/`
 
 ---

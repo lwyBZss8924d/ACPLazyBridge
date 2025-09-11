@@ -15,7 +15,10 @@
       "Bash(python -m pytest tests/test_sdd_validation.py -v)",
       "Bash(./scripts/sdd/run_semantic_checks.sh:*)",
       "Bash(git fetch:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "mcp__serena__list_memories",
+      "mcp__serena__read_memory",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

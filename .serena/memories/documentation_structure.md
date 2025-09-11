@@ -4,116 +4,223 @@
 
 ```tree
 ACPLazyBridge/
-├── README.md                 # Project overview (cleaned up)
-├── CLAUDE.md                 # AI agent instructions
-├── AGENTS.md                 # Linked to CLAUDE.md
-├── CONTRIBUTING.md           # Development guidelines
+├── README.md                 # Project overview
+├── CLAUDE.md                 # Claude Code agent instructions (normative)
+├── AGENTS.md                 # Links to sdd-rules/AGENTS.md
+├── WARP.md                   # WARP agent instructions
+├── CONTRIBUTING.md           # Engineering ground rules (normative)
 ├── ROADMAP.md               # Project roadmap
 │
-├── dev-docs/                # Development documentation
-│   ├── references/          # NEW: Centralized reference hub
-│   │   ├── acp.md          # Agent Client Protocol
-│   │   ├── zed_ide.md      # Zed IDE integration
-│   │   ├── acp_adapters/   # ACP adapter references
-│   │   └── cli_agents/     # CLI agent documentation
+├── sdd-rules/               # NORMATIVE: SDD governance
+│   ├── spec-driven.md       # Core SDD principles
+│   ├── lifecycle.md         # SDD lifecycle phases
+│   ├── AGENTS.md           # Team AI agents rules
+│   ├── commands/           # SDD command docs
+│   │   ├── specify.md      # /specify command
+│   │   ├── plan.md         # /plan command
+│   │   └── tasks.md        # /tasks command
+│   ├── templates/          # SDD templates
+│   │   ├── spec-template.md
+│   │   ├── plan-template.md
+│   │   └── tasks-template.md
+│   └── rules/              # Categorized rules
+│       ├── README.md       # Rules index
+│       ├── documentation-style/
+│       │   ├── sdd-rules-documentation-style.md
+│       │   ├── Google-developer-documentation-style-guide.md
+│       │   └── markdownlint-config.md
+│       ├── git/
+│       │   ├── worktree/   # Worktree management
+│       │   ├── pr/         # Pull request rules
+│       │   ├── issues/     # Issue tracking
+│       │   └── comments/   # Commit messages
+│       ├── ci/             # CI/CD requirements
+│       ├── tests/          # Testing standards
+│       ├── code-analysis/  # Code quality
+│       ├── tools-cli/      # CLI guidelines
+│       ├── tools-mcp/      # MCP guidelines
+│       ├── research/       # Research methodology
+│       └── changelog/      # Changelog standards
+│
+├── specs/                   # SDD specifications
+│   ├── 000-example/        # Example spec structure
+│   └── <NNN>-<slug>/       # Feature specifications
+│       ├── spec.md         # Specification
+│       ├── plan.md         # Technical plan
+│       └── tasks.md        # Task breakdown
+│
+├── dev-docs/               # Development documentation
+│   ├── references/         # Centralized reference hub
+│   │   ├── acp.md         # Agent Client Protocol
+│   │   ├── zed_ide.md     # Zed IDE integration
+│   │   ├── acp_adapters/  # ACP adapter references
+│   │   │   └── claude_code_acp.md
+│   │   └── cli_agents/    # CLI agent documentation
+│   │       ├── ClaudeCode/
+│   │       ├── codex.md
+│   │       └── gemini.md
 │   │
-│   ├── engineering/         # Engineering practices
-│   │   ├── workflow.md     # NEW: Reference maintenance workflow
-│   │   └── codeql.md       # Security analysis
+│   ├── engineering/        # Engineering practices (non-normative)
+│   │   ├── workflow.md    # Reference maintenance
+│   │   └── codeql.md      # Security analysis
 │   │
-│   ├── requirements/        # Project requirements
+│   ├── requirements/       # Project requirements
 │   │   └── acp-lazybridge-requirements.md
 │   │
-│   ├── design/             # Architecture & design
+│   ├── design/            # Architecture & design
 │   │   └── acp-lazybridge-architecture.md
 │   │
-│   ├── plan/               # Planning documents
-│   │   ├── issues/         # Task tracking
+│   ├── plan/              # Planning documents
+│   │   ├── issues/        # Task tracking
 │   │   └── m1-technical-implementation-plan.md
 │   │
-│   └── review/             # Review artifacts
-│       └── _artifacts/     # Test results, logs, evidence
+│   ├── review/            # Review artifacts
+│   │   └── _artifacts/    # Evidence storage
+│   │       ├── tests/     # Test scenarios
+│   │       ├── logs/      # Execution logs
+│   │       ├── jq/        # JSON filters
+│   │       ├── reports/   # Test reports
+│   │       ├── IMPL.csv   # Symbol mapping
+│   │       └── traceability.csv
+│   │
+│   └── zh-CN/             # Chinese documentation (non-normative)
+│       └── (with disclaimer)
 │
-└── dev-docs/references/             # Vendored reference materials
-    ├── acp.md
-    ├── zed_ide.md
-    ├── acp_adapters/
-    └── cli_agents/
+└── scripts/               # Automation scripts
+    ├── ci/               # CI scripts
+    └── sdd/              # SDD validation
 ```
 
-## Recent Changes (feat/add-dev-docs-hub)
+## Documentation Categories
 
-### Updated
+### Normative Documents (Authoritative)
 
-1. **dev-docs/references/** - New centralized reference hub
-   - Replaces informal tracking of third-party dependencies
-   - All references use public, permanent URLs
-   - Organized by category (protocols, agents, adapters)
+These documents define the rules and must be followed:
 
-### Added
+1. **CLAUDE.md** - Primary AI agent instructions
+2. **CONTRIBUTING.md** - Engineering ground rules
+3. **sdd-rules/** - All SDD governance documents
+   - `spec-driven.md` - Core principles
+   - `lifecycle.md` - Development phases
+   - `rules/` - Categorized rules
+4. **specs/** - Feature specifications
 
-1. **dev-docs/references/** - New centralized reference hub
-   - Replaces informal tracking of third-party dependencies
-   - All references use public, permanent URLs
-   - Organized by category (protocols, agents, adapters)
+### Non-Normative Documents (Informative)
 
-2. **dev-docs/engineering/workflow.md** - Reference maintenance guide
-   - How to add new references
-   - Update procedures for upstream changes
-   - Quality standards for documentation
+These provide guidance but aren't authoritative:
 
-### Modified
+1. **dev-docs/engineering/** - Links back to normative sources
+2. **dev-docs/zh-CN/** - Chinese documentation with disclaimer
+3. **dev-docs/references/** - Vendored external documentation
 
-- **README.md** - Cleaned up and streamlined
-  - Removed redundant information
-  - Better focus on core purpose
-  - Links to new reference documentation
+## SDD Documentation Requirements
+
+### Specification Documents (`specs/<NNN>-<slug>/`)
+
+1. **spec.md** - Feature specification
+   - Overview and context
+   - Requirements (functional/non-functional)
+   - User stories
+   - Acceptance criteria
+
+2. **plan.md** - Technical plan
+   - Architecture decisions
+   - Component design
+   - Integration points
+   - Risk assessment
+
+3. **tasks.md** - Task breakdown
+   - Executable task list
+   - Dependencies
+   - Time estimates
+
+### Evidence Documents (`dev-docs/review/_artifacts/`)
+
+For each task, maintain:
+
+- `tests/` - JSONL test scenarios
+- `logs/` - Execution logs with timestamps
+- `reports/` - Test results and coverage
+- `IMPL.csv` - Symbol to requirement mapping
+- `traceability.csv` - Requirement verification
 
 ## Documentation Standards
 
-### Reference Documents
+### Markdown Style
 
-- Must contain only public, permanent URLs
-- Should include version information where applicable
-- Cross-reference with dev-docs/references/ for vendored copies
-- Update when upstream changes occur
+Enforced by `.markdownlint.json`:
 
-### Development Docs
+- Consistent heading levels
+- Proper list formatting
+- Code block language tags
+- No trailing whitespace
+- Line length limits (where applicable)
 
-- Chinese documentation in dev-docs/ for implementation details
-- English for API documentation and public interfaces
-- Markdown format with clear structure
-- Include examples where helpful
+### Language Policy
 
-### AI Agent Instructions
+**English Required (Normative)**:
 
-- CLAUDE.md as primary source
-- AGENTS.md links to CLAUDE.md
-- Keep synchronized across AI tools
-- Include workflow and quality gates
+- Specifications (`specs/`)
+- Plans and tasks
+- Issues and PRs
+- Commit messages
+- Code comments
+- SDD rules
+
+**Any Language (Non-Normative)**:
+
+- Development notes
+- Team discussions
+- Chinese docs under `dev-docs/zh-CN/`
+
+### Cross-References
+
+- Use relative links for internal docs
+- Include version/date in external references
+- Link non-normative docs back to authority
+- Maintain reference hub in `dev-docs/references/`
 
 ## Maintenance Workflow
 
-### Adding New References
+### Adding Documentation
 
-1. Create appropriate file in dev-docs/references/
-2. Follow template structure from existing files
-3. Include official URLs and documentation links
-4. Update this memory if structure changes
+1. Determine if normative or non-normative
+2. Place in appropriate directory
+3. Follow templates if available
+4. Add to relevant index/README
+5. Update serena memories if structural
 
-### Updating Existing References
+### Updating Documentation
 
-1. Check upstream for changes regularly
-2. Update URLs if repositories move
-3. Note version changes
-4. Keep dev-docs/references/ synchronized if vendored
+1. Check if document is normative
+2. If normative, follow SDD process
+3. Update version and date stamps
+4. Verify cross-references still valid
+5. Run markdown lint checks
 
 ### Quality Checks
 
-- Verify all URLs are accessible
-- Ensure no internal/private links
-- Check cross-references are valid
-- Update related memories in Serena
+```bash
+# Markdown style validation
+markdownlint . --config .markdownlint.json
+
+# SDD structure validation
+scripts/ci/run-sdd-structure-lint.sh
+
+# Language policy check
+scripts/ci/check-language-policy.sh
+
+# Full documentation check
+scripts/ci/run-local-ci.sh
+```
+
+## Key Documentation Paths
+
+- **SDD Rules**: `sdd-rules/rules/`
+- **Specifications**: `specs/<NNN>-<slug>/`
+- **References**: `dev-docs/references/`
+- **Evidence**: `dev-docs/review/_artifacts/<task>/`
+- **Templates**: `sdd-rules/templates/`
 
 ---
 

@@ -1,219 +1,271 @@
 # ACPLazyBridge Development Workflow
 
-## Team Development Policy
-All AI developers (Claude Code, WARP Agent, GEMINI CLI, Cursor, CODEX) follow this unified workflow.
+## Specification-Driven Development (SDD) Workflow
 
-## 1. Task Selection
-- Source: `dev-docs/plan/issues/m1-issue-list.md`
-- Each issue contains:
-  - Design specifications
-  - References to specs
-  - Acceptance criteria
-  - Implementation hints
+The project follows a strict SDD methodology. Every feature or change must follow this workflow:
 
-## 2. Worktree-First Development
+### 1. Specification Phase (`/specify`)
 
-### Create New Worktree
+Create a feature specification under `specs/<NNN>-<slug>/spec.md`:
+
+```markdown
+# Specification: <Feature Name>
+
+## Overview
+Brief description of the feature
+
+## Requirements
+- Functional requirements
+- Non-functional requirements
+- Constraints
+
+## User Stories
+As a [role], I want [feature], so that [benefit]
+
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+```
+
+### 2. Planning Phase (`/plan`)
+
+Create technical design in `specs/<NNN>-<slug>/plan.md`:
+
+```markdown
+# Implementation Plan: <Feature Name>
+
+## Technical Approach
+- Architecture decisions
+- Component design
+- Integration points
+
+## Dependencies
+- External libraries
+- Internal modules
+
+## Risk Assessment
+- Technical risks
+- Mitigation strategies
+```
+
+### 3. Task Breakdown (`/tasks`)
+
+Create executable tasks in `specs/<NNN>-<slug>/tasks.md`:
+
+```markdown
+# Tasks: <Feature Name>
+
+## Task List
+- [ ] Task 1: Description
+- [ ] Task 2: Description
+- [ ] Task 3: Description
+
+## Task Dependencies
+Task 2 depends on Task 1
+
+## Estimates
+- Task 1: 2 hours
+- Task 2: 4 hours
+```
+
+## 4. Implementation Phase
+
+### Worktree-First Development
+
+**ALWAYS** create a new worktree for development:
+
 ```bash
-# Standard format
-git worktree add ../task-dir origin/main -b feature/module-id
+# Create worktree from origin/main
+git -C /Users/arthur/dev-space/ACPLazyBridge worktree add \
+  /Users/arthur/dev-space/acplb-worktrees/<task-dir> \
+  origin/main -b <branch>
 
-# Example
-git worktree add ../codex-proto-1 origin/main -b feature/codex-proto-1
+# Example for SDD feature
+git -C /Users/arthur/dev-space/ACPLazyBridge worktree add \
+  /Users/arthur/dev-space/acplb-worktrees/001-feature-name \
+  origin/main -b feature/001-feature-name
 
-# Container path (required)
-/Users/arthur/dev-space/acplb-worktrees/<task-dir>
-
-# Optional symlink for IDE navigation
-ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-space/ACPLazyBridge/.worktrees/<task-dir>
+# Optional IDE navigation symlink
+ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> \
+  /Users/arthur/dev-space/ACPLazyBridge/.worktrees/<task-dir>
 ```
 
 ### Branch Naming Convention
 
-- `feature/<module>-<id>` - New features
-- `fix/<module>-<id>` - Bug fixes
-- `perf/<module>-<id>` - Performance work
-- `docs/<module>-<id>` - Documentation
-- `chore/<module>-<id>` - Maintenance
+Format: `<category>/<NNN>-<module>-<description>`
 
-## 3. Development Process
+Categories:
 
-### Pre-Implementation
+- `feature/` - New features
+- `fix/` - Bug fixes
+- `perf/` - Performance improvements
+- `chore/` - Maintenance tasks
+- `docs/` - Documentation
 
-1. Review issue template
-2. Check references: (dev-docs/references/)
-   - (dev-docs/references/acp.md) - ACP spec
-   - (dev-docs/references/zed_ide.md) - Zed IDE documentation
-   - (dev-docs/references/acp_adapters/claude_code_acp.md) - ACP adapters for Claude Code documentation
-   - (dev-docs/references/cli_agents/) - CLI agents documentation
-3. Review implementation plan
+Examples:
 
-### Implementation
+- `feature/001-codex-initialize`
+- `fix/002-streaming-buffer`
+- `docs/003-sdd-rules`
 
-1. Write code following conventions
-2. Maintain protocol discipline:
-   - stderr for logs
-   - stdout for JSONL only
-3. Add tests as you go
-4. Document complex logic
+## 5. Validation Phase
 
-### Testing Protocol
+### Quality Gates (Must Pass)
 
 ```bash
-# Create test scenarios
-cat > dev-docs/review/_artifacts/tests/feature_test.jsonl << EOF
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}
-EOF
-
-# Run with logging
-cargo run -p codex-cli-acp < dev-docs/review/_artifacts/tests/feature_test.jsonl \
-  2>&1 | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log
-
-# Extract snapshots with jq
-cat log.jsonl | jq -c 'select(.method == "session/update")'
-```
-
-## 4. Quality Assurance
-
-### Local Validation
-
-```bash
-# Full quality gate
+# Rust formatting
 cargo fmt --all -- --check
+
+# Clippy linting
 cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+# Tests
 cargo test --workspace --all-features --locked
+
+# SDD structure validation
+scripts/ci/run-sdd-structure-lint.sh
+
+# Language policy check
+scripts/ci/check-language-policy.sh
+
+# Markdown style check
+markdownlint . --config .markdownlint.json
+
+# Full local CI (runs all checks)
+scripts/ci/run-local-ci.sh
 ```
 
 ### Evidence Collection
 
-- Test files: `dev-docs/review/_artifacts/tests/*.jsonl`
-- Execution logs: `dev-docs/review/_artifacts/logs/*.log`
-- JQ snapshots: Apply filters from `dev-docs/review/_artifacts/jq/filters.md`
-
-## 5. Documentation & Traceability
-
-### Update Tracking Files
-
-1. `dev-docs/review/_artifacts/IMPL.csv`:
-
-   ```csv
-   Symbol,File:Line,Mapped_IDs
-   handle_initialize,main.rs:111,ACP-INIT-01
-   ```
-
-2. `dev-docs/review/_artifacts/traceability.csv`:
-
-   ```csv
-   REQ_ID,SPEC_REF,Status
-   ACP-INIT-01,ACP/initialize,Verified
-   ```
-
-## 6. Git Commit
-
-### Commit Message Format
-
-```markdown
-feat(codex): implement initialize handler
-
-- Add JSON-RPC 2.0 compliant initialization
-- Map ACP capabilities to Codex format
-- Include protocol version negotiation
-
-References: ACP-INIT-01, CODEX-SPEC-3.2
-Evidence: dev-docs/review/_artifacts/tests/init_test.jsonl
-```
-
-### Commit Command
+Store evidence in `dev-docs/review/_artifacts/<task>/`:
 
 ```bash
-git add -A
-git commit -m "feat(module): description
+# Create task evidence directory
+mkdir -p dev-docs/review/_artifacts/<task>/{tests,logs,reports}
 
-- Detail 1
-- Detail 2
+# Run tests with evidence
+cargo test --workspace 2>&1 | tee dev-docs/review/_artifacts/<task>/logs/test_$(date +%Y%m%d_%H%M%S).log
 
-References: ISSUE-ID
-Evidence: path/to/evidence"
+# Capture ACP protocol tests
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | \
+  cargo run -p codex-cli-acp 2>&1 | \
+  tee dev-docs/review/_artifacts/<task>/logs/acp_test_$(date +%Y%m%d_%H%M%S).log
 ```
 
-## 7. Pull Request
+## 6. Review Phase
 
-### PR Template
+### Pull Request Requirements
+
+**(1) Title Format**:
+
+`<category>(<module>): <description>`
+
+- Example: `feat(codex): implement initialize handler`
+
+**(2) Description Template**:
 
 ```markdown
 ## Summary
-Implements [feature] as specified in #ISSUE
+Implements [feature] as specified in specs/<NNN>-<slug>/
 
 ## Changes
 - Added X to handle Y
 - Modified Z for compatibility
 
 ## Testing
-- Test scenario: dev-docs/review/_artifacts/tests/test.jsonl
-- Execution log: dev-docs/review/_artifacts/logs/run_20250101.log
+- Test evidence: dev-docs/review/_artifacts/<task>/
 - All quality gates pass
+- Local CI run: ✅
+
+## SDD Compliance
+- [ ] Specification: specs/<NNN>-<slug>/spec.md
+- [ ] Plan: specs/<NNN>-<slug>/plan.md
+- [ ] Tasks: specs/<NNN>-<slug>/tasks.md
+- [ ] Evidence: dev-docs/review/_artifacts/<task>/
 
 ## References
+- Issue: #<issue-number>
 - ACP Spec: Section X.Y
-- Codex Docs: Page Z
-- Issue: #ISSUE-ID
 ```
 
-### PR Commands
+**(3) Create PR**:
 
 ```bash
 # Push to remote
-git push -u origin feature/module-id
+git push -u origin <branch-name>
 
 # Create PR via GitHub CLI
-gh pr create --title "feat(module): description" \
+gh pr create --title "<category>(<module>): <description>" \
   --body "$(cat pr_description.md)"
 ```
 
-## 8. Post-Merge Cleanup
+## 7. Post-Merge Cleanup
 
 ```bash
-# After squash merge
-git worktree remove ../task-dir
+# Remove worktree after merge
+git worktree remove /Users/arthur/dev-space/acplb-worktrees/<task-dir>
 
-# Update main
+# Remove symlink if created
+rm /Users/arthur/dev-space/ACPLazyBridge/.worktrees/<task-dir>
+
+# Update main branch
 git checkout main
 git pull origin main
 
-# Clean up remote branches
+# Prune remote branches
 git remote prune origin
 ```
 
-## Multi-Worktree Management
+## Constitutional Requirements
 
-### List Active Worktrees
+### Simplicity (Article VII)
 
-```bash
-git worktree list
-```
+- Maximum 3 projects in workspace
+- No future-proofing
+- Remove unused features
 
-### Switch Between Worktrees
+### Anti-Abstraction (Article VIII)
 
-```bash
-cd /Users/arthur/dev-space/acplb-worktrees/feature-name
-```
+- Use framework features directly
+- No unnecessary wrappers
+- Concrete implementations
 
-### Port Isolation (if running multiple instances)
+### Integration-First (Article IX)
 
-```bash
-# Use unique ports per worktree
-ACPLB_PORT=8001 cargo run  # Worktree 1
-ACPLB_PORT=8002 cargo run  # Worktree 2
-```
+- Define contracts before implementation
+- Test with real protocol messages
+- Validate against ACP spec
 
-## Collaboration Notes
+### Test-First (Article III)
+
+- Write failing tests first (RED)
+- Implement to pass (GREEN)
+- Refactor if needed (REFACTOR)
+
+## Language Policy
+
+### Normative Artifacts (English Required)
+
+- Specifications (`specs/`)
+- Plans and tasks
+- Issues and PRs
+- Commit messages
+- Code comments
+
+### Non-Normative (Any Language)
+
+- Development notes
+- Chinese docs under `dev-docs/zh-CN/`
+- Team discussions
+
+## Collaboration Guidelines
 
 - Always start from `origin/main`
 - Never commit directly to main
 - Use squash merge for clean history
-- Keep evidence files for review
-- Update tracking documents immediately
-- Coordinate on shared modules via issues
+- Keep evidence for traceability
+- Coordinate via issues and specs
+- Follow SDD lifecycle strictly
 
 ---
 

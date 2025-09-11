@@ -12,17 +12,23 @@
 
 ## Workspace Structure
 
-### Root Files
+### Root Configuration Files
 
 - `Cargo.toml` - Workspace configuration
-- `rust-toolchain.toml` - Rust version specification  
-- `CLAUDE.md` / `AGENTS.md` - AI agent instructions
+- `rust-toolchain.toml` - Rust version specification
+- `.markdownlint.json` - Markdown style configuration
+- `CLAUDE.md` - Claude Code agent instructions
+- `AGENTS.md` - Team AI agents rules (links to sdd-rules/AGENTS.md)
+- `WARP.md` - WARP agent instructions
+- `CONTRIBUTING.md` - Engineering ground rules
 - `README.md` - Project documentation
-- `CONTRIBUTING.md` - Development guidelines
+- `ROADMAP.md` - Project roadmap
 
-### Crates Structure
+### Core Directories
 
-#### `crates/acp-lazy-core/` - Core Library
+#### `crates/` - Rust Workspace
+
+##### `crates/acp-lazy-core/` - Core Library
 
 Shared utilities and foundational components:
 
@@ -41,7 +47,7 @@ Shared utilities and foundational components:
   - Log configuration
   - stderr/stdout separation
 
-#### `crates/codex-cli-acp/` - Codex Native Adapter
+##### `crates/codex-cli-acp/` - Codex Native Adapter
 
 Binary implementation for Codex CLI integration:
 
@@ -59,45 +65,116 @@ Binary implementation for Codex CLI integration:
   - `acplb_notify_forwarder.rs` - Notification forwarding utility
   - `playback.rs` - Test playback tool
 
-### Reference Materials (`dev-docs/references/`)
+#### `sdd-rules/` - Specification-Driven Development Rules
+
+**Normative authority for development process:**
+
+- **`spec-driven.md`** - SDD principles and workflow
+- **`lifecycle.md`** - SDD lifecycle phases
+- **`AGENTS.md`** - Team AI agents rules
+- **`commands/`** - SDD command documentation
+  - `/specify` command docs
+  - `/plan` command docs
+  - `/tasks` command docs
+- **`templates/`** - SDD document templates
+  - `spec-template.md`
+  - `plan-template.md`
+  - `tasks-template.md`
+- **`rules/`** - Categorized development rules
+  - `documentation-style/` - Markdown and doc standards
+  - `git/` - Git workflow rules (worktree, PR, issues)
+  - `ci/` - CI/CD requirements
+  - `tests/` - Testing standards
+  - `code-analysis/` - Code quality rules
+  - `tools-cli/` - CLI tool guidelines
+  - `tools-mcp/` - MCP tool guidelines
+  - `research/` - Research methodology
+  - `changelog/` - Changelog standards
+
+#### `specs/` - SDD Specifications
+
+Feature specifications following SDD lifecycle:
+
+```tree
+specs/
+├── 000-example/           # Example specification
+│   ├── spec.md           # Feature specification
+│   ├── TASK-PLAN.md      # Implementation plan
+│   └── ISSUE.md          # Issue template
+└── 001-claude-memory-sdd-alignment/
+    ├── spec.md           # Feature specification
+    ├── plan.md           # Technical plan
+    └── tasks.md          # Task breakdown
+```
+
+#### `scripts/` - Automation Scripts
+
+##### `scripts/ci/` - CI Scripts
+
+- `run-local-ci.sh` - Complete local CI validation
+- `run-sdd-structure-lint.sh` - SDD structure validation
+- `check-language-policy.sh` - Language policy enforcement
+- Various other validation scripts
+
+##### `scripts/sdd/` - SDD Validation
+
+- `validate_structure.py` - Python SDD structure validator
+- `run_semantic_checks.sh` - Semantic validation script
+
+#### `dev-docs/` - Development Documentation
+
+##### `dev-docs/references/` - Reference Materials
 
 - `acp.md` - ACP specification
-- `acp_adapters/claude_code_acp.md` - ACP adapters for Claude Code documentation
-- `cli_agents/` - CLI agents documentation
-- `zed_ide.md` - Zed IDE documentation
+- `acp_adapters/` - Adapter documentation
+  - `claude_code_acp.md` - Claude Code ACP adapter
+- `cli_agents/` - CLI agent references
+  - `ClaudeCode/` - Claude Code documentation
+  - `codex.md` - Codex CLI documentation
+  - `gemini.md` - Gemini CLI documentation
+- `zed_ide.md` - Zed IDE integration
 
-### Development Documentation (`dev-docs/`)
+##### `dev-docs/engineering/` - Engineering Guides
 
-#### `requirements/`
+Non-normative guides linking to authority:
 
-- Project requirements and specifications
-- Acceptance criteria
+- `workflow.md` - Reference maintenance workflow
+- `codeql.md` - Security analysis
 
-#### `design/`
+##### `dev-docs/review/` - Review Artifacts
 
-- Architecture decisions
-- Design documents
-- Protocol mappings
-
-#### `plan/`
-
-- `issues/` - Task tracking
-  - `m1-issue-list.md` - Current milestone tasks
-  - `TEMPLATE.md` - Issue template
-- `m1-technical-implementation-plan.md` - Implementation roadmap
-
-#### `review/`
-
-- `_artifacts/`
-  - `tests/` - JSONL test scenarios
+- `_artifacts/` - Evidence storage
+  - `tests/` - Test scenarios (JSONL)
   - `logs/` - Execution logs
   - `jq/` - JSON processing filters
+  - `reports/` - Test reports
   - `IMPL.csv` - Symbol mapping
   - `traceability.csv` - Requirements tracking
 
-## Key Components
+##### `dev-docs/zh-CN/` - Chinese Documentation
 
-### Protocol Flow
+Non-normative Chinese language documentation (with disclaimer)
+
+### Supporting Directories
+
+#### `.github/` - GitHub Configuration
+
+- `workflows/` - GitHub Actions
+- Issue and PR templates
+
+#### `.serena/` - Serena MCP Memories
+
+Project context and knowledge base
+
+#### `queries/` - CodeQL Queries
+
+Custom security analysis queries
+
+#### `memory/` - Project Memory
+
+Historical context and decisions
+
+## Protocol Flow
 
 1. **Initialize**: Capability negotiation
 2. **Session Management**: Create/load sessions
@@ -105,14 +182,17 @@ Binary implementation for Codex CLI integration:
 4. **Tool Calls**: Execute and respond to tool requests
 5. **Streaming**: Real-time response delivery
 
-### Permission System
+## Permission System
 
 - Maps ACP modes to provider parameters
 - Non-interactive by default
-- Configurable sandbox levels
+- Configurable sandbox levels:
+  - `read-only` - No file system writes
+  - `workspace-write` - Write within workspace
+  - `full` - Unrestricted access
 - Network access control
 
-### Event Processing
+## Event Processing
 
 - Codex event deserialization
 - Stream deduplication
@@ -140,6 +220,14 @@ acp-lazy-core
 - Additional provider adapters
 - HTTP/SSE bridge
 - Custom permission policies
+
+## Key Paths
+
+- **Evidence**: `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`
+- **Worktrees**: `/Users/arthur/dev-space/acplb-worktrees/`
+- **IDE links**: `.worktrees/` (symlinks to worktrees)
+- **Specs**: `specs/<NNN>-<slug>/`
+- **SDD Rules**: `sdd-rules/rules/`
 
 ---
 
