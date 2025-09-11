@@ -18,7 +18,10 @@
       "Bash(test:*)",
       "mcp__serena__list_memories",
       "mcp__serena__read_memory",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

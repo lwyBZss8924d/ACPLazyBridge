@@ -3,6 +3,7 @@
 This index links to the baseline SDD rules for the Developer Team AI Engineers.
 
 Categories
+
 - changelog
   - sdd-rules/rules/changelog/semver.md
   - sdd-rules/rules/changelog/sdd-rules-changelog.md
@@ -29,7 +30,11 @@ Categories
   - sdd-rules/rules/tools-mcp/sdd-rules-tools-mcp.md
 
 References
+
 - sdd-rules/AGENTS.md (authoritative agent rules)
 - sdd-rules/lifecycle.md (authoritative lifecycle)
 - WARP.md (repository agent operations)
 
+---
+
+Specification Version: 1.0.3 | sdd-rules/rules/README.md Format: 1.0 | Last Updated: 2025-09-11

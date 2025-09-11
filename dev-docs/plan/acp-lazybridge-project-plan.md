@@ -43,6 +43,7 @@
 ## 2. 任务分解（M1~M3 详列）
 
 ### M1 Codex（2 周）
+
 - 核心：
   - [ ] ACP 初始化/会话/提示/取消 stdio 循环
   - [ ] spawn codex proto（PATH/env），stderr 与 notify 处理
@@ -56,6 +57,7 @@
   - [ ] examples/zed/settings.json + 使用手册
 
 ### M2 Proxy（2 周）
+
 - 核心：
   - [ ] ACP→ACP 代理：上行/下行透传（可加策略与插件）
   - [ ] 健康检查（--version/--help）、版本能力日志
@@ -66,6 +68,7 @@
   - [ ] 集成（claude/gemini），Zed 端流式与工具事件一致
 
 ### M3 插件（2 周）
+
 - 核心：
   - [ ] Plugin trait 与可插拔管线（inbound/outbound）
   - [ ] 子代理（Sub-Agent）调用框架：ACP Client 调另一 ACP Server
@@ -75,6 +78,7 @@
   - [ ] 子代理稳定性与超时/预算
 
 ## 3. 时间安排（建议）
+
 - 第 1~2 周：M1 Codex 最小可用
 - 第 3~4 周：M2 Proxy（Claude/Gemini 包装）
 - 第 5~6 周：M3 插件系统 v0（翻译/提示词优化）
@@ -82,16 +86,19 @@
 > 备注：Native（Claude/Gemini）可作为 M4 延伸；非 ACP 编辑器桥接作为 M5。
 
 ## 4. 依赖/资源
+
 - 依赖：tokio/serde/tracing，Rust 1.76+；Codex/Claude/Gemini CLI 二进制；OpenRouter/Anthropic/Google API Key
 - 资源：本地/CI 构建机器；测试用 OpenRouter 账户
 
 ## 5. 风险与缓解
+
 - Provider 行为变化 → 宽松解析 + 明确降级路径（日志提示）
 - 工具输出过大 → 统一裁剪（2KB 预览）+ 文件链接/附件策略（后续）
 - 审批策略误配置 → 默认为 never；YOLO 仅显式启用
 - 安全 → 日志脱敏；危险模式强提示；沙箱默认 workspace-write/只读
 
 ## 6. 验收标准（阶段性）
+
 - M1：
   - Zed 端可见 Codex 流式输出，tool_calls 不再 pending；finish_reason=tool_calls 后仍继续执行直至 turn 完成
   - smoke 成功（stream + tool_calls + 无 task_complete 也能结束）
@@ -101,6 +108,7 @@
   - 开关插件 + 子代理调用可用；翻译/提示词优化在 Zed 端可见
 
 ## 7. 交付物
+
 - 二进制：codex-cli-acp、acp-proxy
 - 文档：
   - dev-docs/requirements/*.md
