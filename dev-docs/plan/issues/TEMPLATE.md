@@ -43,10 +43,10 @@ Title: <module> - <serial number> - <sentence objective>
 - ZED: ...
 
 ## Acceptance Criteria
-- Test cases: _artifacts/tests/<file>.jsonl
-- Log evidence: _artifacts/logs/<run_yyyymmdd_hhmmss>.log + jq filter script
+- Test cases: dev-docs/review/_artifacts/tests/<file>.jsonl
+- Log evidence: dev-docs/review/_artifacts/logs/<run_yyyymmdd_hhmmss>.log + jq filter script
 
 ## Worktree-first
 - Branch: feature/<module>-<serial number>
-- Initialize: git worktree add ../<module>-<serial number> feature/<module>-<serial number>
+- Initialize: git worktree add ../<module>-<serial number> origin/main -b feature/<module>-<serial number>
 - Merge: via PR to main repo; ensure traceability.csv is updated to Verified/Partial, no orphan entries
