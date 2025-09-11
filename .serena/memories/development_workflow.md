@@ -29,6 +29,7 @@ ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-spa
 ```
 
 ### Branch Naming Convention
+
 - `feature/<module>-<id>` - New features
 - `fix/<module>-<id>` - Bug fixes
 - `perf/<module>-<id>` - Performance work
@@ -38,14 +39,17 @@ ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-spa
 ## 3. Development Process
 
 ### Pre-Implementation
+
 1. Review issue template
-2. Check references:
-   - `local_refs/agent-client-protocol/` - ACP spec
-   - `local_refs/codex/` - Codex docs
-   - `local_refs/zed-acp-examples/` - Examples
+2. Check references: (dev-docs/references/)
+   - (dev-docs/references/acp.md) - ACP spec
+   - (dev-docs/references/zed_ide.md) - Zed IDE documentation
+   - (dev-docs/references/acp_adapters/claude_code_acp.md) - ACP adapters for Claude Code documentation
+   - (dev-docs/references/cli_agents/) - CLI agents documentation
 3. Review implementation plan
 
 ### Implementation
+
 1. Write code following conventions
 2. Maintain protocol discipline:
    - stderr for logs
@@ -54,6 +58,7 @@ ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> /Users/arthur/dev-spa
 4. Document complex logic
 
 ### Testing Protocol
+
 ```bash
 # Create test scenarios
 cat > dev-docs/review/_artifacts/tests/feature_test.jsonl << EOF
@@ -71,6 +76,7 @@ cat log.jsonl | jq -c 'select(.method == "session/update")'
 ## 4. Quality Assurance
 
 ### Local Validation
+
 ```bash
 # Full quality gate
 cargo fmt --all -- --check
@@ -79,6 +85,7 @@ cargo test --workspace --all-features --locked
 ```
 
 ### Evidence Collection
+
 - Test files: `dev-docs/review/_artifacts/tests/*.jsonl`
 - Execution logs: `dev-docs/review/_artifacts/logs/*.log`
 - JQ snapshots: Apply filters from `dev-docs/review/_artifacts/jq/filters.md`
@@ -86,13 +93,16 @@ cargo test --workspace --all-features --locked
 ## 5. Documentation & Traceability
 
 ### Update Tracking Files
+
 1. `dev-docs/review/_artifacts/IMPL.csv`:
+
    ```csv
    Symbol,File:Line,Mapped_IDs
    handle_initialize,main.rs:111,ACP-INIT-01
    ```
 
 2. `dev-docs/review/_artifacts/traceability.csv`:
+
    ```csv
    REQ_ID,SPEC_REF,Status
    ACP-INIT-01,ACP/initialize,Verified
@@ -101,7 +111,8 @@ cargo test --workspace --all-features --locked
 ## 6. Git Commit
 
 ### Commit Message Format
-```
+
+```markdown
 feat(codex): implement initialize handler
 
 - Add JSON-RPC 2.0 compliant initialization
@@ -113,6 +124,7 @@ Evidence: dev-docs/review/_artifacts/tests/init_test.jsonl
 ```
 
 ### Commit Command
+
 ```bash
 git add -A
 git commit -m "feat(module): description
@@ -127,6 +139,7 @@ Evidence: path/to/evidence"
 ## 7. Pull Request
 
 ### PR Template
+
 ```markdown
 ## Summary
 Implements [feature] as specified in #ISSUE
@@ -147,6 +160,7 @@ Implements [feature] as specified in #ISSUE
 ```
 
 ### PR Commands
+
 ```bash
 # Push to remote
 git push -u origin feature/module-id
@@ -173,16 +187,19 @@ git remote prune origin
 ## Multi-Worktree Management
 
 ### List Active Worktrees
+
 ```bash
 git worktree list
 ```
 
 ### Switch Between Worktrees
+
 ```bash
 cd /Users/arthur/dev-space/acplb-worktrees/feature-name
 ```
 
 ### Port Isolation (if running multiple instances)
+
 ```bash
 # Use unique ports per worktree
 ACPLB_PORT=8001 cargo run  # Worktree 1
@@ -190,9 +207,14 @@ ACPLB_PORT=8002 cargo run  # Worktree 2
 ```
 
 ## Collaboration Notes
+
 - Always start from `origin/main`
 - Never commit directly to main
 - Use squash merge for clean history
 - Keep evidence files for review
 - Update tracking documents immediately
 - Coordinate on shared modules via issues
+
+---
+
+Specification Version: 1.0.3 | development_workflow.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11

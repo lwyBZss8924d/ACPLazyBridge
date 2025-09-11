@@ -10,15 +10,6 @@ Provide a reusable, IDE-agnostic ACP bridge that:
 - Hosts external CLI agent adapters (Claude, Gemini, Codex, …) with a consistent capability surface.
 - Ensures non-interactive approvals by default for IDEs without a UI approval flow.
 
-## Layout
-
-- local_refs/
-  - zed-acp-examps/
-    - agent_servers/ (vendored reference)
-    - agent_ui/ (vendored reference)
-  - codex/ (docs gathered during Codex adapter work)
-  - agent-client-protocol/ (ACP docs, if any)
-
 ## Planned adapters
 
 - @zed-industries/claude-code-acp (use Zed’s official adapter directly)
@@ -99,27 +90,12 @@ cargo run -p codex-cli-acp
 export ACPLB_NOTIFY_INJECT=never
 ```
 
-## Security & Testing
-
-### Code Quality
-The project enforces strict code quality standards:
-- Rust formatting with `cargo fmt`
-- Linting with `cargo clippy` (all warnings are errors)
-- Comprehensive unit and integration tests
-
-### Security Analysis
-Automated security scanning with CodeQL:
-- Runs on every PR and push to main
-- Custom queries enforce WARP protocol rules
-- Results available in GitHub Security tab
-- See `dev-docs/engineering/codeql.md` for details
-
-### Testing
-- Unit tests: `cargo test --workspace`
-- Protocol compliance: JSONL scenario replay tests
-- Integration tests: Real provider CLI interactions
-- See `CONTRIBUTING.md` for complete testing guidelines
+---
 
 ## License
 
 MIT
+
+---
+
+Specification Version: 1.0.3 | README.md ("ACPLazyBridge" Repo Root README) Format: 1.0 | Last Updated: 2025-09-11

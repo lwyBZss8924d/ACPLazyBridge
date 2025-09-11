@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Team Development Workflow for any Coding Agent (Claude-Code / Codex Agent / Gemini Agent e.g.)
+Team Development Workflow for any Coding Agent (Codex Agent / Gemini Agent e.g.)
 
 - Source of tasks: dev-docs/plan/issues/* (issue-list with design, references, acceptance criteria)
 - Start point: always from origin/main
@@ -15,9 +15,8 @@ Team Development Workflow for any Coding Agent (Claude-Code / Codex Agent / Gemi
 - Evidence: commit/run JSONL scenarios under dev-docs/review/_artifacts/tests and provide outputs/logs for review
 - PR: link to the issue, explain design, include evidence, and use squash merge after approval
 
-This Development guide file offers instructions for any AI Developer coding agent. Such as *Claude Code (claude.ai/code)* working on this repository project High-Level Concept Overview & Software Development Team AI Developer Member Collaboration Global Standards. AI Developer coding agents team members include:
+This Development guide file offers instructions for any AI Developer coding agent. Such as **Claude Code (claude.ai/code)** working on this repository project High-Level Concept Overview & Software Development Team AI Developer Member Collaboration Global Standards. AI Developer coding agents team members include:
 
-- **CLAUDE** "Claude Code Agent" (anthropic Claude Code CLI client link - `CLAUDE.md` )
 - **WARP** "WARP Agent" (WARP.dev Terminal link - `WARP.md` )
 - **GEMINI** "GEMINI CLI Agent" (google gemini-cli link - `GEMINI.md` )
 - **CURSOR** "Cursor Agent" (Cursor IDE cursor-agent link - cursor rules file `.cursorrules` )
@@ -30,7 +29,33 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 ACPLazyBridge is an IDE-agnostic Agent Client Protocol (ACP) bridge that provides unified adapter implementations for various AI agents (Claude, Gemini, Codex). The project uses Rust and implements ACP over stdio with line-separated JSON (JSONL), featuring streaming support, tool calls, permission mapping, and a plugin system.
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
-**ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+Path: (dev-docs/references/)
+
+```tree
+ACPLazyBridge/dev-docs/references
+❯ tree
+.
+├── acp.md
+├── acp_adapters
+│   └── claude_code_acp.md
+├── cli_agents
+│   ├── ClaudeCode
+│   │   ├── ClaudeCode-Config.md
+│   │   ├── cli-reference.md
+│   │   ├── hooks.md
+│   │   ├── sdk-headless.md
+│   │   ├── sdk-overview.md
+│   │   ├── sdk-python.md
+│   │   ├── sdk-rust(Unofficial).md
+│   │   ├── sdk-typescript.md
+│   │   ├── slash-commands.md
+│   │   └── troubleshooting.md
+│   ├── CodexCLI-Config.md
+│   ├── claude_code.md
+│   ├── codex.md
+│   └── gemini.md
+└── zed_ide.md
+```
 
 ## Prerequisites
 
@@ -301,10 +326,7 @@ Override config.toml values using dotted paths:
   - Handles initialize/new_session/prompt/cancel requests
   - Streams agent responses and tool calls
 
-- **`local_refs/`**: Vendored references from Zed
-  - `zed-acp-examples/`: Reference implementations
-  - `codex/`: Codex documentation
-  - `agent-client-protocol/`: ACP specification
+- **`dev-docs/references/`**: ACP & CLI Agents references docs
 
 - **`dev-docs/`**: Development documentation (Chinese)
   - `requirements/`: Project requirements
@@ -517,7 +539,7 @@ Stream agent responses as they're generated:
 - No pretty-printing or multi-line JSON
 - Example stdio stream:
 
-```
+```jsonl
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}
 {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"capabilities":{}}}
 {"jsonrpc":"2.0","id":2,"method":"session/new","params":{"workingDirectory":"/path/to/project"}}
@@ -767,18 +789,39 @@ let init_response = adapter.initialize(1).await?;
 }
 ```
 
-## References
+## Core References
 
-- ACP Specification: See `local_refs/agent-client-protocol/`
-- Zed Examples: See `local_refs/zed-acp-examples/`
-- Codex Documentation: See `local_refs/codex/`
-- Design Docs: See `dev-docs/design/acp-lazybridge-architecture.md` (Chinese)
-- Project Plan: See `dev-docs/plan/acp-lazybridge-project-plan.md` (Chinese)
-- Requirements: See `dev-docs/requirements/acp-lazybridge-requirements.md` (Chinese)
+Path: (dev-docs/references/)
+
+```tree
+ACPLazyBridge/dev-docs/references
+❯ tree
+.
+├── acp.md
+├── acp_adapters
+│   └── claude_code_acp.md
+├── cli_agents
+│   ├── ClaudeCode
+│   │   ├── ClaudeCode-Config.md
+│   │   ├── cli-reference.md
+│   │   ├── hooks.md
+│   │   ├── sdk-headless.md
+│   │   ├── sdk-overview.md
+│   │   ├── sdk-python.md
+│   │   ├── sdk-rust(Unofficial).md
+│   │   ├── sdk-typescript.md
+│   │   ├── slash-commands.md
+│   │   └── troubleshooting.md
+│   ├── CodexCLI-Config.md
+│   ├── claude_code.md
+│   ├── codex.md
+│   └── gemini.md
+└── zed_ide.md
+```
 
 ## Important Notes
 
-- The project strictly follows ACP specifications - check `local_refs/` for reference
+- The project strictly follows ACP specifications - check `dev-docs/references/` for reference
 - Default configuration uses non-interactive approvals to prevent IDE stalls
 - YOLO/danger-full-access mode must be explicitly opted into
 - Chinese documentation in `dev-docs/` contains detailed implementation guidance
@@ -818,7 +861,7 @@ This section defines mandatory workflow rules for Claude Code (and any AI coding
   - `dev-docs/plan/m1-technical-implementation-plan.md`
   - `dev-docs/requirements/acp-lazybridge-requirements.md`
   - `dev-docs/design/acp-lazybridge-architecture.md`
-  - `local_refs/agent-client-protocol/`, `local_refs/codex/`, `local_refs/zed-acp-examples/`
+  - `dev-docs/references/acp.md`, `dev-docs/references/acp_adapters/claude_code_acp.md`, `dev-docs/references/zed_ide.md`, and (dev-docs/references/cli_agents/)
 
 ### 3) Submission Requirements
 
@@ -911,3 +954,7 @@ References
 
 - Repository-level policy: `CONTRIBUTING.md`
 - WARP-Agent process: `WARP.md`
+
+---
+
+Specification Version: 1.0.3 | AGENTS.md ("ACPLazyBridge" Repo "Agent Team" Root memory) Format: 1.0 | Last Updated: 2025-09-11

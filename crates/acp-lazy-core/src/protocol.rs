@@ -1,6 +1,7 @@
 //! JSON-RPC 2.0 protocol types for ACP communication.
 //!
-//! Based on patterns from local_refs/agent-client-protocol and the JSON-RPC 2.0 spec.
+//! Based on patterns from https://github.com/zed-industries/agent-client-protocol/blob/main/schema/schema.json
+//! and https://github.com/zed-industries/agent-client-protocol/blob/main/schema/meta.json the JSON-RPC 2.0 spec.
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;

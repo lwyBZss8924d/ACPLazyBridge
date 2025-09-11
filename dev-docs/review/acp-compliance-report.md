@@ -26,7 +26,7 @@
 
 2) 方法与范围
 - 文档：dev-docs/requirements/*、dev-docs/design/*、WARP.md
-- 参考：local_refs/{agent-client-protocol,codex,zed-acp-examples}（本仓库被 .gitignore 忽略，回退到本机已索引仓库作为对照：/Users/arthur/dev-space/{zed,codex,acp-claude-code}）
+- 参考：(dev-docs/references/)
 - 代码实现范围：crates/*（后续在 IMPL.csv 汇总）
 - 工具：parse/search（semtools）、jq、cargo、git
 

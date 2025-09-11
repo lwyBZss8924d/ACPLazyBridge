@@ -82,6 +82,4 @@
 
 ⚠️ ACPLazyBridge 相关接口设计 & 实现时必须严格遵循 ACP 规范 & 查询 Codex CLI 参数!
 
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
+path: (dev-docs/references/)

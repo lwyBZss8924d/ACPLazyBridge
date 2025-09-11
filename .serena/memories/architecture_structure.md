@@ -1,7 +1,8 @@
 # ACPLazyBridge Architecture and Structure
 
 ## High-Level Architecture
-```
+
+```text
 ┌─────────────────┐     ┌──────────────┐     ┌─────────────┐
 │   IDE/Editor    │────▶│  ACPLazyBridge│────▶│  AI Agent   │
 │  (ACP Client)   │◀────│   (Bridge)    │◀────│  (Provider) │
@@ -12,6 +13,7 @@
 ## Workspace Structure
 
 ### Root Files
+
 - `Cargo.toml` - Workspace configuration
 - `rust-toolchain.toml` - Rust version specification  
 - `CLAUDE.md` / `AGENTS.md` - AI agent instructions
@@ -21,6 +23,7 @@
 ### Crates Structure
 
 #### `crates/acp-lazy-core/` - Core Library
+
 Shared utilities and foundational components:
 
 - **`src/permissions.rs`**
@@ -39,6 +42,7 @@ Shared utilities and foundational components:
   - stderr/stdout separation
 
 #### `crates/codex-cli-acp/` - Codex Native Adapter
+
 Binary implementation for Codex CLI integration:
 
 - **`src/main.rs`**
@@ -55,29 +59,35 @@ Binary implementation for Codex CLI integration:
   - `acplb_notify_forwarder.rs` - Notification forwarding utility
   - `playback.rs` - Test playback tool
 
-### Reference Materials (`local_refs/`)
-- `agent-client-protocol/` - ACP specification
-- `codex/` - Codex documentation
-- `zed-acp-examples/` - Reference implementations
+### Reference Materials (`dev-docs/references/`)
+
+- `acp.md` - ACP specification
+- `acp_adapters/claude_code_acp.md` - ACP adapters for Claude Code documentation
+- `cli_agents/` - CLI agents documentation
+- `zed_ide.md` - Zed IDE documentation
 
 ### Development Documentation (`dev-docs/`)
 
 #### `requirements/`
+
 - Project requirements and specifications
 - Acceptance criteria
 
 #### `design/`
+
 - Architecture decisions
 - Design documents
 - Protocol mappings
 
 #### `plan/`
+
 - `issues/` - Task tracking
   - `m1-issue-list.md` - Current milestone tasks
   - `TEMPLATE.md` - Issue template
 - `m1-technical-implementation-plan.md` - Implementation roadmap
 
 #### `review/`
+
 - `_artifacts/`
   - `tests/` - JSONL test scenarios
   - `logs/` - Execution logs
@@ -88,6 +98,7 @@ Binary implementation for Codex CLI integration:
 ## Key Components
 
 ### Protocol Flow
+
 1. **Initialize**: Capability negotiation
 2. **Session Management**: Create/load sessions
 3. **Prompt Processing**: Handle user prompts
@@ -95,19 +106,22 @@ Binary implementation for Codex CLI integration:
 5. **Streaming**: Real-time response delivery
 
 ### Permission System
+
 - Maps ACP modes to provider parameters
 - Non-interactive by default
 - Configurable sandbox levels
 - Network access control
 
 ### Event Processing
+
 - Codex event deserialization
 - Stream deduplication
 - Idle timeout handling
 - Turn completion detection
 
 ## Module Dependencies
-```
+
+```tree
 codex-cli-acp
     ├── acp-lazy-core (permissions, transport, logging)
     ├── serde_json (JSON handling)
@@ -121,7 +135,12 @@ acp-lazy-core
 ```
 
 ## Extension Points
+
 - Plugin system (planned)
 - Additional provider adapters
 - HTTP/SSE bridge
 - Custom permission policies
+
+---
+
+Specification Version: 1.0.3 | architecture_structure.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11

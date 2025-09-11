@@ -5,6 +5,6 @@ paths:
 paths-ignore:
   - target
   - dev-docs
-  - local_refs
+  - dev-docs/references
   - vendor
   - "**/*.gen.rs"

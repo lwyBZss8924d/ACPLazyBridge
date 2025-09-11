@@ -23,8 +23,13 @@
     - （可选）acp_wire：最小 ACP 消息定义（serde）
   - codex-cli-acp（二进制）：Native 适配器
   - acp-proxy（可选二进制）：包装现有 ACP Server（claude/gemini）
-- local_refs/
-  - zed-acp-examps/agent_servers, agent_ui（仅作参考）
+- (dev-docs/references/)
+  - acp.md - ACP spec
+  - zed_ide.md - Zed IDE documentation
+  - acp_adapters/claude_code_acp.md - ACP adapters for Claude Code documentation
+  - cli_agents/claude_code.md - Claude Code CLI documentation
+  - cli_agents/codex.md - Codex CLI documentation
+  - cli_agents/gemini.md - Gemini CLI documentation
 
 ## 3. ACP 协议与事件映射
 
@@ -121,6 +126,4 @@
 
 ⚠️ ACPLazyBridge 相关接口设计 & 实现时必须严格遵循 ACP 规范 & 查询 Codex CLI 参数!
 
-- (local_refs/agent-client-protocol)
-- (local_refs/codex)
-- (local_refs/zed-acp-examples)
+path: (dev-docs/references/)

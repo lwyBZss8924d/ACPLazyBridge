@@ -1,11 +1,13 @@
 # CLAUDE.md - ACPLazyBridge Repository
 
 ## Repository Overview
+
 ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents and agent-tools plugins with IDEs, editors, and development tools. It provides native adapters for various AI systems while maintaining protocol consistency and developer workflow integration.
 
 ## Authority and Governance
 
 ### Normative Documents (Authoritative)
+
 - **Engineering Ground Rules**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **SDD Principles & Workflow**: [sdd-rules/spec-driven.md](sdd-rules/spec-driven.md)
 - **SDD Lifecycle**: [sdd-rules/lifecycle.md](sdd-rules/lifecycle.md)
@@ -13,13 +15,16 @@ ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents a
 - **Rules Index**: [sdd-rules/rules/README.md](sdd-rules/rules/README.md)
 
 ### Non-Normative References
+
 - Engineering guides: `dev-docs/engineering/*` (each file links back to authority)
 - Chinese documentation: `dev-docs/zh-CN/` (with disclaimer)
 
 ## SDD Developer Team Workflow
 
 ### Specification-Driven Development
+
 Every feature or change follows the SDD workflow:
+
 1. **Specify**: Create specification under `specs/<NNN>-<slug>/spec.md`
 2. **Plan**: Technical design in `specs/<NNN>-<slug>/plan.md`
 3. **Tasks**: Breakdown in `specs/<NNN>-<slug>/tasks.md`
@@ -28,6 +33,7 @@ Every feature or change follows the SDD workflow:
 6. **Review**: PR with full traceability
 
 ### SDD Commands
+
 - `/specify` - Generate feature specification
 - `/plan` - Create implementation plan
 - `/tasks` - Derive executable tasks
@@ -37,7 +43,8 @@ See [sdd-rules/commands/](sdd-rules/commands/) for details.
 ## Project Navigation
 
 ### Core Structure
-```
+
+```tree
 ├── crates/              # Rust workspace
 │   ├── acp-lazy-core/   # Core protocol implementation
 │   └── codex-cli-acp/   # Codex CLI adapter
@@ -56,6 +63,7 @@ See [sdd-rules/commands/](sdd-rules/commands/) for details.
 ```
 
 ### Key Paths
+
 - Evidence: `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`
 - Worktrees: `/Users/arthur/dev-space/acplb-worktrees/`
 - IDE links: `.worktrees/` (symlinks to worktrees)
@@ -63,9 +71,11 @@ See [sdd-rules/commands/](sdd-rules/commands/) for details.
 ## ACP Protocol Implementation
 
 ### Version
+
 **Current**: ACP v1 (protocolVersion: 1 as integer)
 
 ### Protocol Examples
+
 ```jsonl
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1,"capabilities":{}}}
 {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"capabilities":{},"serverInfo":{"name":"codex-cli-acp","version":"0.1.0"}}}
@@ -73,6 +83,7 @@ See [sdd-rules/commands/](sdd-rules/commands/) for details.
 ```
 
 ### Key Conventions
+
 - **stdout**: Reserved for JSON-RPC/JSONL protocol messages only
 - **stderr**: All logs, debug output, and diagnostics
 - **Format**: One JSON message per line, newline-terminated
@@ -80,6 +91,7 @@ See [sdd-rules/commands/](sdd-rules/commands/) for details.
 ## Quality Gates
 
 ### Local CI Checks (Must Pass)
+
 ```bash
 # Rust quality
 cargo fmt --all -- --check
@@ -95,6 +107,7 @@ scripts/ci/run-local-ci.sh
 ```
 
 ### Constitutional Gates
+
 - **Simplicity** (Article VII): ≤3 projects, no future-proofing
 - **Anti-Abstraction** (Article VIII): Use framework features directly
 - **Integration-First** (Article IX): Contracts defined before implementation
@@ -103,11 +116,13 @@ scripts/ci/run-local-ci.sh
 ## Development Workflow
 
 ### Branch Management
+
 - **Categories**: `feature | fix | perf | chore | docs`
 - **Format**: `<category>/<NNN>-<module>-<description>`
 - **Worktree-first**: Never develop on main
 
 ### Worktree Creation
+
 ```bash
 # Create worktree from origin/main
 git -C /Users/arthur/dev-space/ACPLazyBridge worktree add \
@@ -122,6 +137,7 @@ ln -sfn /Users/arthur/dev-space/acplb-worktrees/<task-dir> \
 ## Common Development Commands
 
 ### Build
+
 ```bash
 # Build entire workspace
 cargo build --workspace
@@ -135,6 +151,7 @@ cargo build -p acp-lazy-core
 ```
 
 ### Test
+
 ```bash
 # Run all tests in workspace
 cargo test --workspace --all-targets
@@ -147,6 +164,7 @@ cargo test -p acp-lazy-core
 ```
 
 ### Running the Codex Adapter
+
 ```bash
 # Run with default settings
 cargo run -p codex-cli-acp
@@ -159,6 +177,7 @@ RUST_LOG=debug RUST_BACKTRACE=1 cargo run -p codex-cli-acp
 ```
 
 ### Testing ACP Protocol Compliance
+
 ```bash
 # Test basic ACP handshake with Codex proto
 echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | codex proto
@@ -180,12 +199,14 @@ codex proto < test/requests.jsonl | jq -c 'select(.jsonrpc == "2.0")'
 ## Security and Compliance
 
 ### Security Policies
+
 - No secrets in code or logs
 - Use environment variables for sensitive data
 - GitHub secrets for CI/CD
 - Code scanning enabled (GitHub + local CodeQL)
 
 ### Language Policy
+
 - **Normative artifacts**: English only (specs, plans, tasks, issues)
 - **Chinese docs**: Allowed as non-normative under `dev-docs/zh-CN/`
 - **Conversations**: Any language acceptable
@@ -193,6 +214,7 @@ codex proto < test/requests.jsonl | jq -c 'select(.jsonrpc == "2.0")'
 ## Team AI Agents
 
 AI Developer coding agents team members include:
+
 - **CLAUDE** "Claude Code Agent" (anthropic Claude Code CLI client link - `CLAUDE.md`)
 - **WARP** "WARP Agent" (WARP.dev Terminal link - `WARP.md`)
 - **GEMINI** "GEMINI CLI Agent" (google gemini-cli link - `GEMINI.md`)
@@ -204,11 +226,13 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 ## Implementation Status
 
 ### Completed (M0)
+
 - Rust workspace bootstrapped
 - References vendored
 - SDD rules integrated
 
 ### In Progress (M1)
+
 - Codex native adapter
   - stdio loop implementation
   - Streaming support
@@ -217,6 +241,7 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
   - Smoke testing
 
 ### Planned
+
 - Proxy adapter
 - Plugin system v0
 - Native adapters
@@ -225,11 +250,14 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 ## ACP Protocol Specification
 
 ### Protocol Overview
+
 The Agent Client Protocol (ACP) follows the JSON-RPC 2.0 specification with two message types:
+
 - **Methods**: Request-response pairs expecting a result or error
 - **Notifications**: One-way messages without expected responses
 
 ### Message Flow Sequence
+
 1. **Initialization Phase**
    - Client → Agent: `initialize` request with capabilities
    - Agent → Client: `initialize` response with server capabilities
@@ -250,27 +278,66 @@ The Agent Client Protocol (ACP) follows the JSON-RPC 2.0 specification with two 
 ### Agent Methods (Server-side)
 
 #### Baseline Methods (Required)
+
 - `initialize`: Negotiate versions and exchange capabilities
 - `authenticate`: Authenticate with the agent (if required)
 - `session/new`: Create a new conversation session
 - `session/prompt`: Send user prompts to the agent
 
 #### Optional Methods
+
 - `session/load`: Load an existing session (requires `loadSession` capability)
 
 #### Notifications
+
 - `session/cancel`: Cancel ongoing operations (no response expected)
 
 ### Client Methods (IDE-side)
 
 #### Baseline Methods (Required)
+
 - `session/request_permission`: Request user authorization for tool calls
 
 #### Optional Methods
+
 - `fs/read_text_file`: Read file contents (requires `fs.readTextFile` capability)
 - `fs/write_text_file`: Write file contents (requires `fs.writeTextFile` capability)
 - `fs/create_directory`: Create directories (requires `fs.createDirectory` capability)
 - `fs/delete`: Delete files/directories (requires `fs.delete` capability)
 - `fs/list_directory`: List directory contents (requires `fs.listDirectory` capability)
 
-For complete implementation details, see [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
+---
+
+## Core References
+
+Path: (dev-docs/references/)
+
+```tree
+ACPLazyBridge/dev-docs/references
+❯ tree
+.
+├── acp.md
+├── acp_adapters
+│   └── claude_code_acp.md
+├── cli_agents
+│   ├── ClaudeCode
+│   │   ├── ClaudeCode-Config.md
+│   │   ├── cli-reference.md
+│   │   ├── hooks.md
+│   │   ├── sdk-headless.md
+│   │   ├── sdk-overview.md
+│   │   ├── sdk-python.md
+│   │   ├── sdk-rust(Unofficial).md
+│   │   ├── sdk-typescript.md
+│   │   ├── slash-commands.md
+│   │   └── troubleshooting.md
+│   ├── CodexCLI-Config.md
+│   ├── claude_code.md
+│   ├── codex.md
+│   └── gemini.md
+└── zed_ide.md
+```
+
+---
+
+Specification Version: 1.0.3 | CLAUDE.md ("ACPLazyBridge" Repo "Claude Code" Root memory) Format: 1.0 | Last Updated: 2025-09-11

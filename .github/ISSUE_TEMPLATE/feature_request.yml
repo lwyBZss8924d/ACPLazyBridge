@@ -31,5 +31,5 @@ body:
     id: references
     attributes:
       label: References
-      description: Link to dev-docs/plan/issues, REQ/ARC/SPEC, local_refs where applicable
+      description: Link to dev-docs/plan/issues, REQ/ARC/SPEC, dev-docs/references/ where applicable
 

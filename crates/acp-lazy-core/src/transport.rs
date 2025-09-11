@@ -1,7 +1,7 @@
 //! Transport layer for ACP communication, based on Zed's RPC patterns.
 //!
 //! This module provides line-based JSONL communication with proper async handling,
-//! following patterns from local_refs/agent-client-protocol/rust/rpc.rs
+//! following patterns from https://github.com/zed-industries/agent-client-protocol/blob/main/rust/rpc.rs
 
 use anyhow::{Context, Result};
 use futures::channel::mpsc::{self, UnboundedReceiver, UnboundedSender};

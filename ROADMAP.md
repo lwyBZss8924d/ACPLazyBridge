@@ -2,7 +2,7 @@
 
 ## Milestone 1 – Bootstrap repo (done)
 
-- Clone empty repo and vendor references under local_refs/
+- Clone empty repo and vendor references under dev-docs/references/
 - Include zed-acp-examps/agent_servers and agent_ui for best-practice reference
 
 ## Milestone 2 – Codex adapter skeleton (@zed-industries/codex-cli-acp)
