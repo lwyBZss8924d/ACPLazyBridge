@@ -16,7 +16,7 @@
   - 复刻 Zed 官方 Claude/Gemini 的 ACP 语义与最佳实践（复刻其 crates/agent_servers 的实现，但不直接作为代码依赖导入）。
   - 新增 Codex 的 ACP 适配器（原生 Rust 实现），Codex CLI 多轮响应的流式转发、Codex 各种响应事件的适配、tool_calls 适配、非交互审批策略。
   - 统一权限模型：通过 sandbox/network/approval_policy 的非交互映射，规避无审批 UI 的卡顿。
-  - 插件系统（agent_subservers）：对输入/输出做翻译、提示词优化、会话压缩、计划/任务管理等可扩展处理；可调用外部 ACP Server 作为“子代理”。*后续 0.2.x 迭代增加插件系统（agent_subservers）*
+  - 插件系统（agent_subservers）：对输入/输出做翻译、提示词优化、会话压缩、计划/任务管理等可扩展处理；可调用外部 ACP Server 作为“子代理”。_后续 0.2.x 迭代增加插件系统（agent_subservers）_
   - 兼容多编辑器：默认支持 Zed（ACP v1），可拓展到其它支持 ACP 协议的客户端；对于非 ACP 编辑器，后续 ACPLazyBridge 提供增加第三方 API HTTP → ACP 的桥接。
 - 不在范围内（初期）
   - 直接把 Zed 内部 crates/agent_servers 作为编译依赖（直接依赖的工程维护和后续兼容复杂度高）。

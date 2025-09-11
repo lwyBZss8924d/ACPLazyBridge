@@ -13,12 +13,14 @@ Successfully implemented notify sink integration for immediate turn completion v
 ## Key Components Implemented
 
 ### 1. acplb-notify-forwarder Binary
+
 - **File**: `crates/codex-cli-acp/src/bin/acplb_notify_forwarder.rs`
 - Minimal forwarder that reads JSON from argv[1]
 - Writes to ACPLB_NOTIFY_PATH (file or FIFO)
 - Supports ACPLB_NOTIFY_KIND (file/fifo)
 
 ### 2. NotifySource Abstraction
+
 - **File**: `crates/codex-cli-acp/src/notify_source.rs`
 - Trait-based monitoring for notification sinks
 - FileNotifySource: Polls regular files for new lines
@@ -26,6 +28,7 @@ Successfully implemented notify sink integration for immediate turn completion v
 - Detects "agent-turn-complete" events for immediate completion
 
 ### 3. Notify Injection Logic
+
 - **File**: `crates/codex-cli-acp/src/main.rs`
 - Resolves forwarder path (sibling, target dirs, PATH fallback)
 - Auto-injects forwarder when ACPLB_NOTIFY_PATH is set
@@ -33,6 +36,7 @@ Successfully implemented notify sink integration for immediate turn completion v
 - Supports ACPLB_NOTIFY_CMD for custom notify programs
 
 ### 4. Immediate Completion Semantics
+
 - Monitors both stdout and notify sink concurrently
 - Immediate turn completion on:
   - task_complete from Codex stdout
@@ -41,7 +45,9 @@ Successfully implemented notify sink integration for immediate turn completion v
 - No duplicate final chunks
 
 ### 5. Configuration
+
 Environment variables:
+
 - ACPLB_NOTIFY_PATH: Path to notify sink
 - ACPLB_NOTIFY_KIND: file|fifo (default: file)
 - ACPLB_NOTIFY_INJECT: auto|never|force (default: auto)
@@ -54,10 +60,12 @@ Environment variables:
 ✅ **Formatting**: `cargo fmt --all -- --check`
 ✅ **Linting**: `cargo clippy --workspace --all-targets --all-features -- -D warnings`
 ✅ **Tests**: `cargo test --workspace --all-features --locked`
+
 - All 4 notify tests passing
 - Existing tests remain green
 
 ✅ **JSONL Scenarios**:
+
 - Created `notify_idle.jsonl` test scenario
 - ACP protocol compliance verified
 
@@ -77,13 +85,15 @@ Environment variables:
 
 ## Files Changed
 
-### New Files:
+### New Files
+
 - `crates/codex-cli-acp/src/bin/acplb_notify_forwarder.rs`
 - `crates/codex-cli-acp/src/notify_source.rs`
 - `crates/codex-cli-acp/tests/notify_test.rs`
 - `dev-docs/review/_artifacts/tests/notify_idle.jsonl`
 
-### Modified Files:
+### Modified Files
+
 - `crates/codex-cli-acp/Cargo.toml` - Added forwarder binary, async-trait, tempfile deps
 - `crates/codex-cli-acp/src/main.rs` - Inject notify, integrate monitoring
 - `crates/codex-cli-acp/src/codex_proto.rs` - Enhanced completion signaling

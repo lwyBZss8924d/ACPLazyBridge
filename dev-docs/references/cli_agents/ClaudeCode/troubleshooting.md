@@ -10,8 +10,8 @@ You might encounter the following issues in WSL:
 
 **OS/platform detection issues**: If you receive an error during installation, WSL may be using Windows `npm`. Try:
 
-* Run `npm config set os linux` before installation
-* Install with `npm install -g @anthropic-ai/claude-code --force --no-os-check` (Do NOT use `sudo`)
+- Run `npm config set os linux` before installation
+- Install with `npm install -g @anthropic-ai/claude-code --force --no-os-check` (Do NOT use `sudo`)
 
 **Node not found errors**: If you see `exec: node: not found` when running `claude`, your WSL environment may be using a Windows installation of Node.js. You can confirm this with `which npm` and `which node`, which should point to Linux paths starting with `/usr/` rather than `/mnt/c/`. To fix this, try installing Node via your Linux distribution's package manager or via [`nvm`](https://github.com/nvm-sh/nvm).
 
@@ -19,8 +19,8 @@ You might encounter the following issues in WSL:
 
 You can identify this issue by:
 
-* Running `which npm` and `which node` - if they point to Windows paths (starting with `/mnt/c/`), Windows versions are being used
-* Experiencing broken functionality after switching Node versions with nvm in WSL
+- Running `which npm` and `which node` - if they point to Windows paths (starting with `/mnt/c/`), Windows versions are being used
+- Experiencing broken functionality after switching Node versions with nvm in WSL
 
 To resolve this issue, fix your Linux PATH to ensure the Linux node/npm versions take priority:
 
@@ -224,15 +224,18 @@ WSL2 uses NAT networking by default, which can prevent IDE detection. You have t
 **Option 1: Configure Windows Firewall** (recommended)
 
 1. Find your WSL2 IP address:
+
    ```bash
    wsl hostname -I
    # Example output: 172.21.123.456
    ```
 
 2. Open PowerShell as Administrator and create a firewall rule:
+
    ```powershell
    New-NetFirewallRule -DisplayName "Allow WSL2 Internal Traffic" -Direction Inbound -Protocol TCP -Action Allow -RemoteAddress 172.21.0.0/16 -LocalAddress 172.21.0.0/16
    ```
+
    (Adjust the IP range based on your WSL2 subnet from step 1)
 
 3. Restart both your IDE and Claude Code
@@ -266,8 +269,8 @@ To fix this issue:
 
 1. Go to Settings → Tools → Terminal
 2. Either:
-   * Uncheck "Move focus to the editor with Escape", or
-   * Click "Configure terminal keybindings" and delete the "Switch focus to Editor" shortcut
+   - Uncheck "Move focus to the editor with Escape", or
+   - Click "Configure terminal keybindings" and delete the "Switch focus to Editor" shortcut
 3. Apply the changes
 
 This allows the ESC key to properly interrupt Claude Code operations.
@@ -322,9 +325,9 @@ If generated markdown has excessive blank lines or inconsistent spacing:
 
 To minimize formatting issues:
 
-* **Be explicit in requests**: Ask for "properly formatted markdown with language-tagged code blocks"
-* **Use project conventions**: Document your preferred markdown style in [CLAUDE.md](/en/docs/claude-code/memory)
-* **Set up validation hooks**: Use post-processing hooks to automatically verify and fix common formatting issues
+- **Be explicit in requests**: Ask for "properly formatted markdown with language-tagged code blocks"
+- **Use project conventions**: Document your preferred markdown style in [CLAUDE.md](/en/docs/claude-code/memory)
+- **Set up validation hooks**: Use post-processing hooks to automatically verify and fix common formatting issues
 
 ## Getting more help
 

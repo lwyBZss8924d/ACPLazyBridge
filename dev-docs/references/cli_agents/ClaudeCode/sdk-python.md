@@ -4,10 +4,10 @@
 
 ## Prerequisites
 
-* Python 3.10+
-* `claude-code-sdk` from PyPI
-* Node.js 18+
-* `@anthropic-ai/claude-code` from NPM
+- Python 3.10+
+- `claude-code-sdk` from PyPI
+- Node.js 18+
+- `@anthropic-ai/claude-code` from NPM
 
 <Note>
   To view the Python SDK source code, see the [`claude-code-sdk`](https://github.com/anthropics/claude-code-sdk-python) repo.
@@ -181,29 +181,29 @@ options = ClaudeCodeOptions(
 
 #### Parameter details
 
-* **`system_prompt`**: `str | None` - Custom system prompt defining the agent's role
-* **`append_system_prompt`**: `str | None` - Additional text appended to system prompt
-* **`max_turns`**: `int | None` - Maximum conversation turns (unlimited if None)
-* **`model`**: `str | None` - Specific Claude model to use
-* **`max_thinking_tokens`**: `int` - Maximum tokens for Claude's thinking process (default: 8000)
-* **`allowed_tools`**: `list[str]` - Tools specifically allowed for use
-* **`disallowed_tools`**: `list[str]` - Tools that should not be used
-* **`continue_conversation`**: `bool` - Continue most recent conversation (default: False)
-* **`resume`**: `str | None` - Session UUID to resume specific conversation
-* **`cwd`**: `str | Path | None` - Working directory for the session
-* **`add_dirs`**: `list[str | Path]` - Additional directories to include in context
-* **`settings`**: `str | None` - Path to settings file or settings JSON string
-* **`permission_mode`**: `str | None` - Permission handling mode
-* **`permission_prompt_tool_name`**: `str | None` - Custom permission prompt tool name
-* **`mcp_servers`**: `dict | str | Path` - MCP server configurations
-* **`extra_args`**: `dict[str, str | None]` - Pass arbitrary CLI flags to underlying Claude Code CLI
+- **`system_prompt`**: `str | None` - Custom system prompt defining the agent's role
+- **`append_system_prompt`**: `str | None` - Additional text appended to system prompt
+- **`max_turns`**: `int | None` - Maximum conversation turns (unlimited if None)
+- **`model`**: `str | None` - Specific Claude model to use
+- **`max_thinking_tokens`**: `int` - Maximum tokens for Claude's thinking process (default: 8000)
+- **`allowed_tools`**: `list[str]` - Tools specifically allowed for use
+- **`disallowed_tools`**: `list[str]` - Tools that should not be used
+- **`continue_conversation`**: `bool` - Continue most recent conversation (default: False)
+- **`resume`**: `str | None` - Session UUID to resume specific conversation
+- **`cwd`**: `str | Path | None` - Working directory for the session
+- **`add_dirs`**: `list[str | Path]` - Additional directories to include in context
+- **`settings`**: `str | None` - Path to settings file or settings JSON string
+- **`permission_mode`**: `str | None` - Permission handling mode
+- **`permission_prompt_tool_name`**: `str | None` - Custom permission prompt tool name
+- **`mcp_servers`**: `dict | str | Path` - MCP server configurations
+- **`extra_args`**: `dict[str, str | None]` - Pass arbitrary CLI flags to underlying Claude Code CLI
 
 #### Permission modes
 
-* **`"default"`**: CLI prompts for dangerous tools (default behavior)
-* **`"acceptEdits"`**: Automatically accept file edits without prompting
-* **`"plan"`**: Plan Mode - analyze without making changes
-* **`"bypassPermissions"`**: Allow all tools without prompting (use with caution)
+- **`"default"`**: CLI prompts for dangerous tools (default behavior)
+- **`"acceptEdits"`**: Automatically accept file edits without prompting
+- **`"plan"`**: Plan Mode - analyze without making changes
+- **`"bypassPermissions"`**: Allow all tools without prompting (use with caution)
 
 ### Advanced configuration example
 
@@ -801,6 +801,6 @@ async def stream_print(client, prompt):
 
 ## Related resources
 
-* [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
-* [GitHub Actions integration](/en/docs/claude-code/github-actions) - Automate your GitHub workflow with Claude
-* [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases
+- [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
+- [GitHub Actions integration](/en/docs/claude-code/github-actions) - Automate your GitHub workflow with Claude
+- [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases

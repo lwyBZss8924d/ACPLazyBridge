@@ -22,6 +22,7 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 - 满足 ACP v1 规范的 session/update 结构，避免重复最终块；可配置 idle 超时。
 
 **References/Requirements/Architecture/Plan**:
+
 - @dev-docs/requirements/acp-lazybridge-requirements.md
 - @dev-docs/design/acp-lazybridge-architecture.md
 - @dev-docs/plan/acp-lazybridge-project-plan.md
@@ -89,19 +90,23 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 - **ACP Example Client**: @/Users/arthur/dev-space/agent-client-protocol/rust/example_client.rs
 
 **Zed ACP Examples**:
+
 - @/Users/arthur/dev-space/ACPLazyBridge/local_refs/zed-acp-examples/agent_servers/src/acp.rs
 
 **Agent Client adapter for ACP IDE Client Best Practice "claude-code-acp"**:
+
 - (/Users/arthur/dev-space/claude-code-acp)
 
 **codex cli source code & docs reference**:
+
 - (/Users/arthur/dev-space/codex)
 - (/Users/arthur/dev-space/codex/codex-cli)
 - (/Users/arthur/dev-space/codex/codex-rs)
 - @codex-cli/README.md
 
 - @codex-rs/core/src/codex.rs
-```
+
+```rust
 631    pub fn notify_approval(&self, sub_id: &str, decision: ReviewDecision) {
 632           let entry = {
 907    /// notification issues do not interfere with the main workflow.
@@ -110,7 +115,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/mcp-server/src/outgoing_message.rs
-```
+
+```rust
 59           rx_approve
 60    }
 61
@@ -121,7 +127,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/core/src/mcp_tool_call.rs
-```
+
+```rust
 73     ResponseInputItem::McpToolCallOutput { call_id, result }
 74 }
 75
@@ -132,7 +139,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/login/src/server.rs
-```
+
+```rust
 72
 73 #[derive(Clone, Debug)]
 74 pub struct ShutdownHandle {
@@ -143,7 +151,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/core/src/config.rs
-```
+
+```rust
 423
 424    /// Optional external command to spawn for end-user notifications.
 425    #[serde(default)]
@@ -154,7 +163,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/tui/src/streaming/controller.rs
-```
+
+```rust
 170            if self.finishing_after_drain {
 171                // Reset and notify
 172                self.state.clear();
@@ -164,7 +174,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/mcp-server/src/message_processor.rs
-```
+
+```rust
 147   pub(crate) async fn process_response(&mut self, response: JSONRPCResponse) {
 148        tracing::info!("<- response: {:?}", response);
 149        let JSONRPCResponse { id, result, .. } = response;
@@ -175,7 +186,8 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 - @codex-rs/mcp-server/src/codex_message_processor.rs
-```
+
+```rust
 234                        // Update in-memory auth cache now that login completed.
 235                        auth_manager.reload();
 236
@@ -186,6 +198,7 @@ Implementation commit: 7471368 feat(codex-notify-1): integrate notify sink with 
 ```
 
 > (/Users/arthur/dev-space/codex/docs)
+
 - /Users/arthur/dev-space/codex/docs/advanced.md
 - /Users/arthur/dev-space/codex/docs/authentication.md
 - /Users/arthur/dev-space/codex/docs/config.md
@@ -362,7 +375,7 @@ Codex configuration files can be placed in the `~/.codex/` directory, supporting
 | `model`             | string  | `o4-mini`  | AI model to use                  | Any model name supporting OpenAI API                                                           |
 | `approvalMode`      | string  | `suggest`  | AI assistant's permission mode   | `suggest` (suggestions only)<br>`auto-edit` (automatic edits)<br>`full-auto` (fully automatic) |
 | `fullAutoErrorMode` | string  | `ask-user` | Error handling in full-auto mode | `ask-user` (prompt for user input)<br>`ignore-and-continue` (ignore and proceed)               |
-| `notify`            | boolean | `true`     | Enable desktop notifications     | `true`/`false`      
+| `notify`            | boolean | `true`     | Enable desktop notifications     | `true`/`false`
 
 ### Configuration examples
 

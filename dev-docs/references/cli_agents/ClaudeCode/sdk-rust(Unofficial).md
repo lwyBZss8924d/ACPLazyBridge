@@ -4,6 +4,7 @@ repo: [cc-sdk-rs](https://github.com/ZhangHanDong/claude-code-api-rs/tree/main/c
 cargo: [cc-sdk](https://crates.io/crates/cc-sdk) `cargo install cc-sdk`
 
 docs:
+
 - [Environment Variables](https://github.com/ZhangHanDong/claude-code-api-rs/blob/main/claude-code-sdk-rs/docs/ENVIRONMENT_VARIABLES.md)
 - [Features and Parameters](https://github.com/ZhangHanDong/claude-code-api-rs/blob/main/claude-code-sdk-rs/docs/features-and-parameters.md)
 - [Models Guide](https://github.com/ZhangHanDong/claude-code-api-rs/blob/main/claude-code-sdk-rs/docs/models-guide.md)
@@ -61,6 +62,7 @@ npm install -g @anthropic-ai/claude-code
 The SDK supports the latest Claude models available in 2025:
 
 ### Latest Models
+
 - **Opus 4.1** - Most capable model
   - Full name: `"claude-opus-4-1-20250805"`
   - Alias: `"opus"` (recommended - uses latest Opus)
@@ -70,6 +72,7 @@ The SDK supports the latest Claude models available in 2025:
   - Alias: `"sonnet"` (recommended - uses latest Sonnet)
 
 ### Previous Generation
+
 - **Claude 3.5 Sonnet** - `"claude-3-5-sonnet-20241022"`
 - **Claude 3.5 Haiku** - `"claude-3-5-haiku-20241022"` (fastest)
 
@@ -299,10 +302,12 @@ Test the latest features with these examples:
 - `test_new_options.rs` - Testing the new builder methods
 
 Example settings files are provided:
+
 - `examples/claude-settings.json` - Basic settings configuration
 - `examples/custom-claude-settings.json` - Advanced settings with MCP servers
 
 **Note**: When running examples from the project root, use:
+
 ```bash
 cargo run --example test_settings
 ```

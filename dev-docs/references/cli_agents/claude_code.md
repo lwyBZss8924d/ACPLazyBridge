@@ -19,4 +19,4 @@ The official documentation website is the best source of information. Here are l
 - **SDK Overview:** [https://docs.anthropic.com/en/docs/claude-code/sdk/overview](https://docs.anthropic.com/en/docs/claude-code/sdk/overview)
 - **Configuration:** The tool is configured via `~/.claude/settings.json`.
 
-*Note: The local configuration file for this project's integration is `dev-docs/coding-agents-cli-config/ClaudeCode/ClaudeCode-Config.md`.*
+_Note: The local configuration file for this project's integration is `dev-docs/coding-agents-cli-config/ClaudeCode/ClaudeCode-Config.md`._

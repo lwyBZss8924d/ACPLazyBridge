@@ -1,6 +1,7 @@
 # M1 详细技术实现开发计划（Codex Native 适配、最小可用）
 
 目标与范围
+
 - 产出符合 ACP 规范的最小可用 Codex 适配器（Native，经 CLI proto），严格对齐 dev-docs/requirements 与 dev-docs/design，并以 local_refs 为规范/对照来源。
 - 不在本阶段实现 Proxy 与插件；仅完成 M1 范围内的 Streaming/ToolCalls/权限映射/错误码/约束校验与测试。
 
@@ -20,6 +21,7 @@
   - session/update 变体全集、ToolCall/ToolCallUpdate 字段、UI 状态映射与行为
 
 里程碑与交付物
+
 - 里程碑
   - D1：acp-lazy-core 完成 transport/permissions/logging（具备行级 JSONL 读写、spawn、错误与日志）；acp_wire（可选）基础消息类型
   - D2：codex-cli-acp 完成 stdio 循环（initialize/new/prompt/cancel）；对接 codex proto（spawn/notify/idle fallback/去重）
@@ -30,6 +32,7 @@
   - 测试：JSONL 回放用例、集成 smoke、日志证据
 
 实现分解（包/模块）
+
 - crates/acp-lazy-core（库）
   - transport
     - 需求：
@@ -102,6 +105,7 @@
       - 无效参数/路径/行号用例覆盖
 
 接口/配置
+
 - 环境变量（示例）
   - CODEX_PATH：codex 二进制路径（默认 PATH）
   - CODEX_MODEL：模型名（默认 openai/gpt-5）
@@ -113,6 +117,7 @@
   - --notify-sink：自定义 notify sink 路径
 
 测试与证据
+
 - JSONL 回放用例（dev-docs/review/_artifacts/tests/）
   - handshake.jsonl：initialize 基本握手
   - basic_session.jsonl：initialize + session/new
@@ -129,6 +134,7 @@
   - 对齐清单：traceability.csv 中 REQ/ARC ↔ SPEC/CODEX/ZED 均为 Verified/Partial，无孤儿项
 
 与 dev-docs/requirements 与 dev-docs/design 的映射
+
 - REQ-LAZY-0001：ACP 基线方法（stdio JSONL）→ 上述 stdio 主循环/错误码/校验
 - REQ-LAZY-0002：流式分片 → agent_message_delta→chunk、去重、idle fallback
 - REQ-LAZY-0003：工具事件与 2KB 预览 → ToolCalls 标准化实现
@@ -138,6 +144,7 @@
 - ARC-LAZY-*：transport/permissions/logging/acp_wire 对应实现
 
 与 local_refs 的配合方式
+
 - 目录要求（建议）
   - local_refs/agent-client-protocol：ACP 规范（JSON-RPC/结构/错误码/事件）
   - local_refs/codex：Codex CLI 与协议（proto 事件、参数、平台沙箱）
@@ -148,6 +155,7 @@
   - /Users/arthur/dev-space/acp-claude-code
 
 代码开发工作分解（交付工程师用）
+
 - 任务板（建议）
   - core-transport-1：spawn/stdio、read_lines/write_line、stderr 收集、单测
   - core-permissions-1：map_acp_to_codex、env 覆盖、单测
@@ -161,6 +169,7 @@
   - docs-usage-1：使用手册与 settings.json 示例
 
 评审与验收流程（由我维护）
+
 - PR 评审：
   - 对照 SPEC/REQ/ARC/CODEX/ZED 的映射（traceability.csv），拒绝产生孤儿条目或未达成的 Required 条目
   - 检查错误码与 data 字段、绝对路径/1-based 行号、JSONL 单行约束
@@ -170,12 +179,13 @@
   - 测试 JSONL 与实际输出对照
 
 分工与时间
+
 - 建议：2 周
   - 第 1 周：core-transport/perms + stdio 主循环 + proto 对接（仅消息/流式）
   - 第 2 周：工具/错误码/约束校验 + notify/idle/去重 + 文档与测试
 
 风险与回退
+
 - 平台沙箱不可用：降级提示，必要时拒绝运行（never 模式不可自动提升权限）
 - Provider 事件变化：解析器兼容多形态（单/批 tool_calls），宽容而显式日志
 - 输出过大：统一裁剪策略（2KB 预览 + raw_output 附件/日志）
-

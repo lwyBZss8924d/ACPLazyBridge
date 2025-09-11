@@ -21,21 +21,25 @@ Title: <module> - <serial number> - <sentence objective>
 ---
 
 ## Background / Requirement
+
 - Explain the problem and scope (reference REQ/ARC/SPEC)
 
 ⚠️ ACPLazyBridge related interface design & implementation must strictly follow ACP specifications & check Codex CLI parameters!
 **ACP-DocsAndSourceCodeReference**: [ACP-DocsAndSourceCodeReference.md](ACP-DocsAndSourceCodeReference.md)
 
 ## Technical Solution
+
 - Design and implementation points (interface/data structure/concurrency/error handling/logging)
 
 ## Refs
+
 - Repo url: <repo_url>
 - Docs url/path: <docs_url>
 - Code url/path: <code_url>
 - Examples url/path: <examples_url>
 
 ## Corresponding dev-docs/review items
+
 - SPEC: ...
 - REQ: ...
 - ARC: ...
@@ -43,10 +47,12 @@ Title: <module> - <serial number> - <sentence objective>
 - ZED: ...
 
 ## Acceptance Criteria
+
 - Test cases: dev-docs/review/_artifacts/tests/<file>.jsonl
 - Log evidence: dev-docs/review/_artifacts/logs/<run_yyyymmdd_hhmmss>.log + jq filter script
 
 ## Worktree-first
+
 - Branch: feature/<module>-<serial number>
 - Initialize: git worktree add ../<module>-<serial number> origin/main -b feature/<module>-<serial number>
 - Merge: via PR to main repo; ensure traceability.csv is updated to Verified/Partial, no orphan entries

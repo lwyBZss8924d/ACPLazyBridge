@@ -170,7 +170,7 @@ claude -p --resume "$session_id" "Generate executive summary of risks"
 
 ## Best Practices
 
-* **Use JSON output format** for programmatic parsing of responses:
+- **Use JSON output format** for programmatic parsing of responses:
 
   ```bash
   # Parse JSON response with jq
@@ -179,7 +179,7 @@ claude -p --resume "$session_id" "Generate executive summary of risks"
   cost=$(echo "$result" | jq -r '.cost_usd')
   ```
 
-* **Handle errors gracefully** - check exit codes and stderr:
+- **Handle errors gracefully** - check exit codes and stderr:
 
   ```bash
   if ! claude -p "$prompt" 2>error.log; then
@@ -189,17 +189,17 @@ claude -p --resume "$session_id" "Generate executive summary of risks"
   fi
   ```
 
-* **Use session management** for maintaining context in multi-turn conversations
+- **Use session management** for maintaining context in multi-turn conversations
 
-* **Consider timeouts** for long-running operations:
+- **Consider timeouts** for long-running operations:
 
   ```bash
   timeout 300 claude -p "$complex_prompt" || echo "Timed out after 5 minutes"
   ```
 
-* **Respect rate limits** when making multiple requests by adding delays between calls
+- **Respect rate limits** when making multiple requests by adding delays between calls
 
 ## Related Resources
 
-* [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
-* [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases
+- [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
+- [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases

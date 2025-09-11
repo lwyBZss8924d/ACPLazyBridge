@@ -13,15 +13,15 @@ the LLM to choose to run them.
 
 Example use cases for hooks include:
 
-* **Notifications**: Customize how you get notified when Claude Code is awaiting
+- **Notifications**: Customize how you get notified when Claude Code is awaiting
   your input or permission to run something.
-* **Automatic formatting**: Run `prettier` on .ts files, `gofmt` on .go files,
+- **Automatic formatting**: Run `prettier` on .ts files, `gofmt` on .go files,
   etc. after every file edit.
-* **Logging**: Track and count all executed commands for compliance or
+- **Logging**: Track and count all executed commands for compliance or
   debugging.
-* **Feedback**: Provide automated feedback when Claude Code produces code that
+- **Feedback**: Provide automated feedback when Claude Code produces code that
   does not follow your codebase conventions.
-* **Custom permissions**: Block modifications to production files or sensitive
+- **Custom permissions**: Block modifications to production files or sensitive
   directories.
 
 By encoding these rules as hooks rather than prompting instructions, you turn
@@ -39,15 +39,15 @@ suggestions into app-level code that executes every time it is expected to run.
 Claude Code provides several hook events that run at different points in the
 workflow:
 
-* **PreToolUse**: Runs before tool calls (can block them)
-* **PostToolUse**: Runs after tool calls complete
-* **UserPromptSubmit**: Runs when the user submits a prompt, before Claude processes it
-* **Notification**: Runs when Claude Code sends notifications
-* **Stop**: Runs when Claude Code finishes responding
-* **SubagentStop**: Runs when subagent tasks complete
-* **PreCompact**: Runs before Claude Code is about to run a compact operation
-* **SessionStart**: Runs when Claude Code starts a new session or resumes an existing session
-* **SessionEnd**: Runs when Claude Code session ends
+- **PreToolUse**: Runs before tool calls (can block them)
+- **PostToolUse**: Runs after tool calls complete
+- **UserPromptSubmit**: Runs when the user submits a prompt, before Claude processes it
+- **Notification**: Runs when Claude Code sends notifications
+- **Stop**: Runs when Claude Code finishes responding
+- **SubagentStop**: Runs when subagent tasks complete
+- **PreCompact**: Runs before Claude Code is about to run a compact operation
+- **SessionStart**: Runs when Claude Code starts a new session or resumes an existing session
+- **SessionEnd**: Runs when Claude Code session ends
 
 Each event receives different data and can control Claude's behavior in
 different ways.
@@ -125,7 +125,7 @@ cat ~/.claude/bash-command-log.txt
 
 You should see entries like:
 
-```
+```text
 ls - Lists files and directories
 ```
 
@@ -275,10 +275,10 @@ chmod +x .claude/hooks/markdown_formatter.py
 
 This hook automatically:
 
-* Detects programming languages in unlabeled code blocks
-* Adds appropriate language tags for syntax highlighting
-* Fixes excessive blank lines while preserving code content
-* Only processes markdown files (`.md`, `.mdx`)
+- Detects programming languages in unlabeled code blocks
+- Adds appropriate language tags for syntax highlighting
+- Fixes excessive blank lines while preserving code content
+- Only processes markdown files (`.md`, `.mdx`)
 
 ### Custom Notification Hook
 
@@ -326,9 +326,9 @@ Block edits to sensitive files:
 
 ## Learn more
 
-* For reference documentation on hooks, see [Hooks reference](/en/docs/claude-code/hooks).
-* For comprehensive security best practices and safety guidelines, see [Security Considerations](/en/docs/claude-code/hooks#security-considerations) in the hooks reference documentation.
-* For troubleshooting steps and debugging techniques, see [Debugging](/en/docs/claude-code/hooks#debugging) in the hooks reference
+- For reference documentation on hooks, see [Hooks reference](/en/docs/claude-code/hooks).
+- For comprehensive security best practices and safety guidelines, see [Security Considerations](/en/docs/claude-code/hooks#security-considerations) in the hooks reference documentation.
+- For troubleshooting steps and debugging techniques, see [Debugging](/en/docs/claude-code/hooks#debugging) in the hooks reference
   documentation.
 
 # Hooks reference
@@ -343,10 +343,10 @@ Block edits to sensitive files:
 
 Claude Code hooks are configured in your [settings files](/en/docs/claude-code/settings):
 
-* `~/.claude/settings.json` - User settings
-* `.claude/settings.json` - Project settings
-* `.claude/settings.local.json` - Local project settings (not committed)
-* Enterprise managed policy settings
+- `~/.claude/settings.json` - User settings
+- `.claude/settings.json` - Project settings
+- `.claude/settings.local.json` - Local project settings (not committed)
+- Enterprise managed policy settings
 
 ### Structure
 
@@ -370,17 +370,17 @@ Hooks are organized by matchers, where each matcher can have multiple hooks:
 }
 ```
 
-* **matcher**: Pattern to match tool names, case-sensitive (only applicable for
+- **matcher**: Pattern to match tool names, case-sensitive (only applicable for
   `PreToolUse` and `PostToolUse`)
-  * Simple strings match exactly: `Write` matches only the Write tool
-  * Supports regex: `Edit|Write` or `Notebook.*`
-  * Use `*` to match all tools. You can also use empty string (`""`) or leave
+  - Simple strings match exactly: `Write` matches only the Write tool
+  - Supports regex: `Edit|Write` or `Notebook.*`
+  - Use `*` to match all tools. You can also use empty string (`""`) or leave
     `matcher` blank.
-* **hooks**: Array of commands to execute when the pattern matches
-  * `type`: Currently only `"command"` is supported
-  * `command`: The bash command to execute (can use `$CLAUDE_PROJECT_DIR`
+- **hooks**: Array of commands to execute when the pattern matches
+  - `type`: Currently only `"command"` is supported
+  - `command`: The bash command to execute (can use `$CLAUDE_PROJECT_DIR`
     environment variable)
-  * `timeout`: (Optional) How long a command should run, in seconds, before
+  - `timeout`: (Optional) How long a command should run, in seconds, before
     canceling that specific command.
 
 For events like `UserPromptSubmit`, `Notification`, `Stop`, and `SubagentStop`
@@ -435,14 +435,14 @@ Runs after Claude creates tool parameters and before processing the tool call.
 
 **Common matchers:**
 
-* `Task` - Subagent tasks (see [subagents documentation](/en/docs/claude-code/sub-agents))
-* `Bash` - Shell commands
-* `Glob` - File pattern matching
-* `Grep` - Content search
-* `Read` - File reading
-* `Edit`, `MultiEdit` - File editing
-* `Write` - File writing
-* `WebFetch`, `WebSearch` - Web operations
+- `Task` - Subagent tasks (see [subagents documentation](/en/docs/claude-code/sub-agents))
+- `Bash` - Shell commands
+- `Glob` - File pattern matching
+- `Grep` - Content search
+- `Read` - File reading
+- `Edit`, `MultiEdit` - File editing
+- `Write` - File writing
+- `WebFetch`, `WebSearch` - Web operations
 
 ### PostToolUse
 
@@ -480,8 +480,8 @@ Runs before Claude Code is about to run a compact operation.
 
 **Matchers:**
 
-* `manual` - Invoked from `/compact`
-* `auto` - Invoked from auto-compact (due to full context window)
+- `manual` - Invoked from `/compact`
+- `auto` - Invoked from auto-compact (due to full context window)
 
 ### SessionStart
 
@@ -491,10 +491,10 @@ development context like existing issues or recent changes to your codebase.
 
 **Matchers:**
 
-* `startup` - Invoked from startup
-* `resume` - Invoked from `--resume`, `--continue`, or `/resume`
-* `clear` - Invoked from `/clear`
-* `compact` - Invoked from auto or manual compact.
+- `startup` - Invoked from startup
+- `resume` - Invoked from `--resume`, `--continue`, or `/resume`
+- `clear` - Invoked from `/clear`
+- `compact` - Invoked from auto or manual compact.
 
 ### SessionEnd
 
@@ -503,10 +503,10 @@ statistics, or saving session state.
 
 The `reason` field in the hook input will be one of:
 
-* `clear` - Session cleared with /clear command
-* `logout` - User logged out
-* `prompt_input_exit` - User exited while prompt input was visible
-* `other` - Other exit reasons
+- `clear` - Session cleared with /clear command
+- `logout` - User logged out
+- `prompt_input_exit` - User exited while prompt input was visible
+- `other` - Other exit reasons
 
 ## Hook Input
 
@@ -653,12 +653,12 @@ and the user.
 
 Hooks communicate status through exit codes, stdout, and stderr:
 
-* **Exit code 0**: Success. `stdout` is shown to the user in transcript mode
+- **Exit code 0**: Success. `stdout` is shown to the user in transcript mode
   (CTRL-R), except for `UserPromptSubmit` and `SessionStart`, where stdout is
   added to the context.
-* **Exit code 2**: Blocking error. `stderr` is fed back to Claude to process
+- **Exit code 2**: Blocking error. `stderr` is fed back to Claude to process
   automatically. See per-hook-event behavior below.
-* **Other exit codes**: Non-blocking error. `stderr` is shown to the user and
+- **Other exit codes**: Non-blocking error. `stderr` is shown to the user and
   execution continues.
 
 <Warning>
@@ -700,14 +700,14 @@ All hook types can include these optional fields:
 
 If `continue` is false, Claude stops processing after the hooks run.
 
-* For `PreToolUse`, this is different from `"permissionDecision": "deny"`, which
+- For `PreToolUse`, this is different from `"permissionDecision": "deny"`, which
   only blocks a specific tool call and provides automatic feedback to Claude.
-* For `PostToolUse`, this is different from `"decision": "block"`, which
+- For `PostToolUse`, this is different from `"decision": "block"`, which
   provides automated feedback to Claude.
-* For `UserPromptSubmit`, this prevents the prompt from being processed.
-* For `Stop` and `SubagentStop`, this takes precedence over any
+- For `UserPromptSubmit`, this prevents the prompt from being processed.
+- For `Stop` and `SubagentStop`, this takes precedence over any
   `"decision": "block"` output.
-* In all cases, `"continue" = false` takes precedence over any
+- In all cases, `"continue" = false` takes precedence over any
   `"decision": "block"` output.
 
 `stopReason` accompanies `continue` with a reason shown to the user, not shown
@@ -717,11 +717,11 @@ to Claude.
 
 `PreToolUse` hooks can control whether a tool call proceeds.
 
-* `"allow"` bypasses the permission system. `permissionDecisionReason` is shown
+- `"allow"` bypasses the permission system. `permissionDecisionReason` is shown
   to the user but not to Claude.
-* `"deny"` prevents the tool call from executing. `permissionDecisionReason` is
+- `"deny"` prevents the tool call from executing. `permissionDecisionReason` is
   shown to Claude.
-* `"ask"` asks the user to confirm the tool call in the UI.
+- `"ask"` asks the user to confirm the tool call in the UI.
   `permissionDecisionReason` is shown to the user but not to Claude.
 
 ```json
@@ -745,9 +745,9 @@ to Claude.
 
 `PostToolUse` hooks can provide feedback to Claude after tool execution.
 
-* `"block"` automatically prompts Claude with `reason`.
-* `undefined` does nothing. `reason` is ignored.
-* `"hookSpecificOutput.additionalContext"` adds context for Claude to consider.
+- `"block"` automatically prompts Claude with `reason`.
+- `undefined` does nothing. `reason` is ignored.
+- `"hookSpecificOutput.additionalContext"` adds context for Claude to consider.
 
 ```json
 {
@@ -764,10 +764,10 @@ to Claude.
 
 `UserPromptSubmit` hooks can control whether a user prompt is processed.
 
-* `"block"` prevents the prompt from being processed. The submitted prompt is
+- `"block"` prevents the prompt from being processed. The submitted prompt is
   erased from context. `"reason"` is shown to the user but not added to context.
-* `undefined` allows the prompt to proceed normally. `"reason"` is ignored.
-* `"hookSpecificOutput.additionalContext"` adds the string to the context if not
+- `undefined` allows the prompt to proceed normally. `"reason"` is ignored.
+- `"hookSpecificOutput.additionalContext"` adds the string to the context if not
   blocked.
 
 ```json
@@ -785,9 +785,9 @@ to Claude.
 
 `Stop` and `SubagentStop` hooks can control whether Claude must continue.
 
-* `"block"` prevents Claude from stopping. You must populate `reason` for Claude
+- `"block"` prevents Claude from stopping. You must populate `reason` for Claude
   to know how to proceed.
-* `undefined` allows Claude to stop. `reason` is ignored.
+- `undefined` allows Claude to stop. `reason` is ignored.
 
 ```json
 {
@@ -800,8 +800,8 @@ to Claude.
 
 `SessionStart` hooks allow you to load in context at the start of a session.
 
-* `"hookSpecificOutput.additionalContext"` adds the string to the context.
-* Multiple hooks' `additionalContext` values are concatenated.
+- `"hookSpecificOutput.additionalContext"` adds the string to the context.
+- Multiple hooks' `additionalContext` values are concatenated.
 
 ```json
 {
@@ -874,8 +874,8 @@ if issues:
 <Note>
   For `UserPromptSubmit` hooks, you can inject context using either method:
 
-  * Exit code 0 with stdout: Claude sees the context (special case for `UserPromptSubmit`)
-  * JSON output: Provides more control over the behavior
+- Exit code 0 with stdout: Claude sees the context (special case for `UserPromptSubmit`)
+- JSON output: Provides more control over the behavior
 </Note>
 
 ```python
@@ -972,9 +972,9 @@ your hooks.
 
 MCP tools follow the pattern `mcp__<server>__<tool>`, for example:
 
-* `mcp__memory__create_entities` - Memory server's create entities tool
-* `mcp__filesystem__read_file` - Filesystem server's read file tool
-* `mcp__github__search_repositories` - GitHub server's search tool
+- `mcp__memory__create_entities` - Memory server's create entities tool
+- `mcp__filesystem__read_file` - Filesystem server's read file tool
+- `mcp__github__search_repositories` - GitHub server's search tool
 
 ### Configuring Hooks for MCP Tools
 
@@ -1020,12 +1020,12 @@ You can target specific MCP tools or entire MCP servers:
 **USE AT YOUR OWN RISK**: Claude Code hooks execute arbitrary shell commands on
 your system automatically. By using hooks, you acknowledge that:
 
-* You are solely responsible for the commands you configure
-* Hooks can modify, delete, or access any files your user account can access
-* Malicious or poorly written hooks can cause data loss or system damage
-* Anthropic provides no warranty and assumes no liability for any damages
+- You are solely responsible for the commands you configure
+- Hooks can modify, delete, or access any files your user account can access
+- Malicious or poorly written hooks can cause data loss or system damage
+- Anthropic provides no warranty and assumes no liability for any damages
   resulting from hook usage
-* You should thoroughly test hooks in a safe environment before production use
+- You should thoroughly test hooks in a safe environment before production use
 
 Always review and understand any hook commands before adding them to your
 configuration.
@@ -1055,18 +1055,18 @@ This prevents malicious hook modifications from affecting your current session.
 
 ## Hook Execution Details
 
-* **Timeout**: 60-second execution limit by default, configurable per command.
-  * A timeout for an individual command does not affect the other commands.
-* **Parallelization**: All matching hooks run in parallel
-* **Deduplication**: Multiple identical hook commands are deduplicated automatically
-* **Environment**: Runs in current directory with Claude Code's environment
-  * The `CLAUDE_PROJECT_DIR` environment variable is available and contains the
+- **Timeout**: 60-second execution limit by default, configurable per command.
+  - A timeout for an individual command does not affect the other commands.
+- **Parallelization**: All matching hooks run in parallel
+- **Deduplication**: Multiple identical hook commands are deduplicated automatically
+- **Environment**: Runs in current directory with Claude Code's environment
+  - The `CLAUDE_PROJECT_DIR` environment variable is available and contains the
     absolute path to the project root directory (where Claude Code was started)
-* **Input**: JSON via stdin
-* **Output**:
-  * PreToolUse/PostToolUse/Stop/SubagentStop: Progress shown in transcript (Ctrl-R)
-  * Notification/SessionEnd: Logged to debug only (`--debug`)
-  * UserPromptSubmit/SessionStart: stdout added as context for Claude
+- **Input**: JSON via stdin
+- **Output**:
+  - PreToolUse/PostToolUse/Stop/SubagentStop: Progress shown in transcript (Ctrl-R)
+  - Notification/SessionEnd: Logged to debug only (`--debug`)
+  - UserPromptSubmit/SessionStart: stdout added as context for Claude
 
 ## Debugging
 
@@ -1082,9 +1082,9 @@ If your hooks aren't working:
 
 Common issues:
 
-* **Quotes not escaped** - Use `\"` inside JSON strings
-* **Wrong matcher** - Check tool names match exactly (case-sensitive)
-* **Command not found** - Use full paths for scripts
+- **Quotes not escaped** - Use `\"` inside JSON strings
+- **Wrong matcher** - Check tool names match exactly (case-sensitive)
+- **Command not found** - Use full paths for scripts
 
 ### Advanced Debugging
 
@@ -1103,7 +1103,7 @@ For complex hook issues:
 
 Use `claude --debug` to see hook execution details:
 
-```
+```text
 [DEBUG] Executing hooks for PostToolUse:Write
 [DEBUG] Getting matching hook commands for PostToolUse with query: Write
 [DEBUG] Found 1 hook matchers in settings
@@ -1115,7 +1115,7 @@ Use `claude --debug` to see hook execution details:
 
 Progress messages appear in transcript mode (Ctrl-R) showing:
 
-* Which hook is running
-* Command being executed
-* Success/failure status
-* Output or error messages
+- Which hook is running
+- Command being executed
+- Success/failure status
+- Output or error messages

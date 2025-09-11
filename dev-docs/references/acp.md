@@ -17,10 +17,12 @@ This document contains links to the official documentation, source code, and oth
 The official documentation provides a comprehensive overview of the protocol.
 
 ### Overview
+
 - **Introduction:** [introduction.mdx](https://github.com/zed-industries/agent-client-protocol/blob/main/docs/overview/introduction.mdx)
 - **Architecture:** [architecture.mdx](https://github.com/zed-industries/agent-client-protocol/blob/main/docs/overview/architecture.mdx)
 
 ### Protocol Details
+
 - **Overview:** [overview.mdx](https://github.com/zed-industries/agent-client-protocol/blob/main/docs/protocol/overview.mdx)
 - **Schema:** [schema.mdx](https://github.com/zed-industries/agent-client-protocol/blob/main/docs/protocol/schema.mdx)
 - **Initialization:** [initialization.mdx](https://github.com/zed-industries/agent-client-protocol/blob/main/docs/protocol/initialization.mdx)

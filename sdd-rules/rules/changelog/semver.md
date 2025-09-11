@@ -1,8 +1,6 @@
-Semantic Versioning 2.0.0
-==============================
+# Semantic Versioning 2.0.0
 
-Summary
--------
+## Summary
 
 Given a version number MAJOR.MINOR.PATCH, increment the:
 
@@ -14,8 +12,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
 Additional labels for pre-release and build metadata are available as extensions
 to the MAJOR.MINOR.PATCH format.
 
-Introduction
-------------
+## Introduction
 
 In the world of software management there exists a dreaded place called
 "dependency hell." The bigger your system grows and the more packages you
@@ -48,8 +45,7 @@ We call this system "Semantic Versioning." Under this scheme, version numbers
 and the way they change convey meaning about the underlying code and what has
 been modified from one version to the next.
 
-Semantic Versioning Specification (SemVer)
-------------------------------------------
+## Semantic Versioning Specification (SemVer)
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
@@ -141,12 +137,12 @@ have the same precedence. Examples: 1.0.0-alpha+001, 1.0.0+20130313144700,
       1. A larger set of pre-release fields has a higher precedence than a
          smaller set, if all of the preceding identifiers are equal.
 
-      Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 
+      Example: 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta <
       1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
 
-Backus–Naur Form Grammar for Valid SemVer Versions
---------------------------------------------------
-```
+## Backus–Naur Form Grammar for Valid SemVer Versions
+
+```bnf
 <valid semver> ::= <version core>
                  | <version core> "-" <pre-release>
                  | <version core> "+" <build>
@@ -210,8 +206,7 @@ Backus–Naur Form Grammar for Valid SemVer Versions
            | "y" | "z"
 ```
 
-Why Use Semantic Versioning?
-----------------------------
+## Why Use Semantic Versioning?
 
 This is not a new or revolutionary idea. In fact, you probably do something
 close to this already. The problem is that "close" isn't good enough. Without
@@ -243,8 +238,7 @@ Versioning is to declare that you are doing so and then follow the rules. Link
 to this website from your README so others know the rules and can benefit from
 them.
 
-FAQ
----
+## FAQ
 
 ### How should I deal with revisions in the 0.y.z initial development phase?
 
@@ -273,7 +267,7 @@ Having to bump major versions to release incompatible changes means you'll
 think through the impact of your changes, and evaluate the cost/benefit ratio
 involved.
 
-### Documenting the entire public API is too much work!
+### Documenting the entire public API is too much work
 
 It is your responsibility as a professional developer to properly document
 software that is intended for use by others. Managing software complexity is a
@@ -342,7 +336,7 @@ and Go).
 
 See: <https://regex101.com/r/Ly7O1x/3/>
 
-```
+```regex
 ^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
 ```
 
@@ -353,12 +347,11 @@ i.e. Perl, PHP and R), Python and Go.
 
 See: <https://regex101.com/r/vkijKf/1/>
 
-```
+```regex
 ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
 ```
 
-About
------
+## About
 
 The Semantic Versioning specification was originally authored by [Tom
 Preston-Werner](https://tom.preston-werner.com), inventor of Gravatar and
@@ -367,7 +360,6 @@ cofounder of GitHub.
 If you'd like to leave feedback, please [open an issue on
 GitHub](https://github.com/semver/semver/issues).
 
-License
--------
+## License
 
 [Creative Commons ― CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)

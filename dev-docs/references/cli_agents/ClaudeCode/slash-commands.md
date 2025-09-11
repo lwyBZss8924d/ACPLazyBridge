@@ -34,7 +34,7 @@ Custom slash commands allow you to define frequently-used prompts as Markdown fi
 
 ### Syntax
 
-```
+```text
 /<command-name> [arguments]
 ```
 
@@ -103,7 +103,7 @@ echo 'Fix issue #$ARGUMENTS following our coding standards' > .claude/commands/f
 # $ARGUMENTS becomes: "123 high-priority"
 ```
 
-##### Individual arguments with `$1`, `$2`, etc.
+##### Individual arguments with `$1`, `$2`, etc
 
 Access specific arguments individually using positional parameters (similar to shell scripts):
 
@@ -118,13 +118,13 @@ echo 'Review PR #$1 with priority $2 and assign to $3' > .claude/commands/review
 
 Use positional arguments when you need to:
 
-* Access arguments individually in different parts of your command
-* Provide defaults for missing arguments
-* Build more structured commands with specific parameter roles
+- Access arguments individually in different parts of your command
+- Provide defaults for missing arguments
+- Build more structured commands with specific parameter roles
 
 #### Bash command execution
 
-Execute bash commands before the slash command runs using the `!` prefix. The output is included in the command context. You *must* include `allowed-tools` with the `Bash` tool, but you can choose the specific bash commands to allow.
+Execute bash commands before the slash command runs using the `!` prefix. The output is included in the command context. You _must_ include `allowed-tools` with the `Bash` tool, but you can choose the specific bash commands to allow.
 
 For example:
 
@@ -210,7 +210,7 @@ MCP servers can expose prompts as slash commands that become available in Claude
 
 MCP commands follow the pattern:
 
-```
+```text
 /mcp__<server-name>__<prompt-name> [arguments]
 ```
 
@@ -220,15 +220,15 @@ MCP commands follow the pattern:
 
 MCP commands are automatically available when:
 
-* An MCP server is connected and active
-* The server exposes prompts through the MCP protocol
-* The prompts are successfully retrieved during connection
+- An MCP server is connected and active
+- The server exposes prompts through the MCP protocol
+- The prompts are successfully retrieved during connection
 
 #### Arguments
 
 MCP prompts can accept arguments defined by the server:
 
-```
+```bash
 # Without arguments
 > /mcp__github__list_prs
 
@@ -239,34 +239,34 @@ MCP prompts can accept arguments defined by the server:
 
 #### Naming conventions
 
-* Server and prompt names are normalized
-* Spaces and special characters become underscores
-* Names are lowercased for consistency
+- Server and prompt names are normalized
+- Spaces and special characters become underscores
+- Names are lowercased for consistency
 
 ### Managing MCP connections
 
 Use the `/mcp` command to:
 
-* View all configured MCP servers
-* Check connection status
-* Authenticate with OAuth-enabled servers
-* Clear authentication tokens
-* View available tools and prompts from each server
+- View all configured MCP servers
+- Check connection status
+- Authenticate with OAuth-enabled servers
+- Clear authentication tokens
+- View available tools and prompts from each server
 
 ### MCP permissions and wildcards
 
 When configuring [permissions for MCP tools](/en/docs/claude-code/iam#tool-specific-permission-rules), note that **wildcards are not supported**:
 
-* ✅ **Correct**: `mcp__github` (approves ALL tools from the github server)
-* ✅ **Correct**: `mcp__github__get_issue` (approves specific tool)
-* ❌ **Incorrect**: `mcp__github__*` (wildcards not supported)
+- ✅ **Correct**: `mcp__github` (approves ALL tools from the github server)
+- ✅ **Correct**: `mcp__github__get_issue` (approves specific tool)
+- ❌ **Incorrect**: `mcp__github__*` (wildcards not supported)
 
 To approve all tools from an MCP server, use just the server name: `mcp__servername`. To approve specific tools only, list each tool individually.
 
 ## See also
 
-* [Identity and Access Management](/en/docs/claude-code/iam) - Complete guide to permissions, including MCP tool permissions
-* [Interactive mode](/en/docs/claude-code/interactive-mode) - Shortcuts, input modes, and interactive features
-* [CLI reference](/en/docs/claude-code/cli-reference) - Command-line flags and options
-* [Settings](/en/docs/claude-code/settings) - Configuration options
-* [Memory management](/en/docs/claude-code/memory) - Managing Claude's memory across sessions
+- [Identity and Access Management](/en/docs/claude-code/iam) - Complete guide to permissions, including MCP tool permissions
+- [Interactive mode](/en/docs/claude-code/interactive-mode) - Shortcuts, input modes, and interactive features
+- [CLI reference](/en/docs/claude-code/cli-reference) - Command-line flags and options
+- [Settings](/en/docs/claude-code/settings) - Configuration options
+- [Memory management](/en/docs/claude-code/memory) - Managing Claude's memory across sessions

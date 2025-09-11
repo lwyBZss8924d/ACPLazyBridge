@@ -28,4 +28,4 @@ The official documentation is located in the `docs/` directory of the repository
 - **Contributing:** [contributing.md](https://github.com/openai/codex/blob/main/docs/contributing.md)
 - **FAQ:** [faq.md](https://github.com/openai/codex/blob/main/docs/faq.md)
 
-*Note: The local configuration file for this project's integration is `dev-docs/coding-agents-cli-config/CodexCLI/CodexCLI-Config.md`.*
+_Note: The local configuration file for this project's integration is `dev-docs/coding-agents-cli-config/CodexCLI/CodexCLI-Config.md`._

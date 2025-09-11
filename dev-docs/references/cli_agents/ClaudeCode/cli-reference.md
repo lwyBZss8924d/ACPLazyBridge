@@ -49,9 +49,9 @@ streaming, verbose logging, and programmatic usage, see the
 
 ## See also
 
-* [Interactive mode](/en/docs/claude-code/interactive-mode) - Shortcuts, input modes, and interactive features
-* [Slash commands](/en/docs/claude-code/slash-commands) - Interactive session commands
-* [Quickstart guide](/en/docs/claude-code/quickstart) - Getting started with Claude Code
-* [Common workflows](/en/docs/claude-code/common-workflows) - Advanced workflows and patterns
-* [Settings](/en/docs/claude-code/settings) - Configuration options
-* [SDK documentation](/en/docs/claude-code/sdk) - Programmatic usage and integrations
+- [Interactive mode](/en/docs/claude-code/interactive-mode) - Shortcuts, input modes, and interactive features
+- [Slash commands](/en/docs/claude-code/slash-commands) - Interactive session commands
+- [Quickstart guide](/en/docs/claude-code/quickstart) - Getting started with Claude Code
+- [Common workflows](/en/docs/claude-code/common-workflows) - Advanced workflows and patterns
+- [Settings](/en/docs/claude-code/settings) - Configuration options
+- [SDK documentation](/en/docs/claude-code/sdk) - Programmatic usage and integrations

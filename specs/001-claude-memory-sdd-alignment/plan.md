@@ -1,6 +1,7 @@
 # Implementation Plan: Claude Memory and SDD Rules Index Alignment
 
 ## Metadata
+
 - Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/26
 - Plan-URI: specs/001-claude-memory-sdd-alignment/plan.md
 - Evidence-URIs: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/
@@ -8,7 +9,8 @@
 ## Architecture Overview
 
 ### Component Structure
-```
+
+```text
 Repository Root
 ├── CLAUDE.md (repository-level memory - updated)
 ├── crates/
@@ -26,6 +28,7 @@ Repository Root
 ```
 
 ### Information Hierarchy
+
 1. **Root CLAUDE.md**: Repository governance, SDD workflow, authority chain
 2. **Module CLAUDE.md**: Local conventions, build/test specifics, inherits from root
 3. **Rules Index**: Centralized navigation, categorized by domain
@@ -33,6 +36,7 @@ Repository Root
 ## Technical Design
 
 ### Root CLAUDE.md Structure
+
 ```markdown
 # CLAUDE.md
 
@@ -59,6 +63,7 @@ Repository Root
 ```
 
 ### Module CLAUDE.md Template
+
 ```markdown
 # CLAUDE.md - [Module Name]
 
@@ -78,6 +83,7 @@ Inherits from: [parent CLAUDE.md]
 ```
 
 ### Rules Index Structure
+
 ```markdown
 # SDD Rules Index
 
@@ -96,16 +102,19 @@ Inherits from: [parent CLAUDE.md]
 ## Implementation Steps
 
 ### Phase 1: Documentation Updates
+
 1. Update root CLAUDE.md with SDD workflow integration
 2. Create module-specific CLAUDE.md files
 3. Create rules index README.md
 
 ### Phase 2: Cross-References
+
 1. Update AGENTS.md with rules index link
 2. Update WARP.md with rules index link
 3. Verify all internal links resolve
 
 ### Phase 3: Validation
+
 1. Run SDD structure lint
 2. Run language policy check
 3. Verify protocol examples use integer 1
@@ -114,6 +123,7 @@ Inherits from: [parent CLAUDE.md]
 ## Testing Strategy
 
 ### Local Validation
+
 ```bash
 # Structure lint
 scripts/ci/run-sdd-structure-lint.sh
@@ -126,6 +136,7 @@ grep -r "sdd-rules/rules/README.md" sdd-rules/
 ```
 
 ### Evidence Collection
+
 - Lint output: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/lint.log
 - Language check: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/language.log
 - Link validation: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/links.log
@@ -133,21 +144,25 @@ grep -r "sdd-rules/rules/README.md" sdd-rules/
 ## Trade-offs and Decisions
 
 ### Decision: Hierarchical CLAUDE.md Structure
+
 - Pro: Clear inheritance, module-specific context
 - Con: Multiple files to maintain
 - Rationale: Aligns with Claude Code's memory hierarchy model
 
 ### Decision: Centralized Rules Index
+
 - Pro: Single navigation point, easier discovery
 - Con: Requires maintenance when rules change
 - Rationale: Improves developer and agent efficiency
 
 ## Rollback Plan
+
 1. Revert branch merge if issues detected
 2. CLAUDE.md files are documentation-only, no runtime impact
 3. Rules index is additive, no breaking changes
 
 ## Success Metrics
+
 - All CI checks pass
 - No broken internal links
 - Consistent protocol version usage (integer 1)

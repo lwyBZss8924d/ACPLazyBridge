@@ -3,6 +3,7 @@
 This lifecycle defines the end-to-end workflow for every task (human or AI engineer).
 
 Nodes and expected artifacts
+
 1) Requirements analysis
    - Artifact: specs/<NNN>-<slug>/spec.md (WHAT/WHY; acceptance criteria)
    - Includes metadata (Issue-URI, Spec-URI, Evidence-URIs)
@@ -39,5 +40,6 @@ Nodes and expected artifacts
    - Close Issue; run drift checks if needed
 
 References
+
 - CONTRIBUTING.md
 - sdd-rules/spec-template.md, sdd-rules/plan-template.md, sdd-rules/tasks-template.md

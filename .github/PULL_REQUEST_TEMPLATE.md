@@ -1,16 +1,20 @@
 # Pull Request Template
 
 ## Summary
+
 - What does this change do and why?
 
 ## Linked Issues
+
 - Closes: <link to dev-docs/plan/issues item or GitHub issue>
 
 ## Design & Changes
+
 - Key design points / trade-offs
 - Affected modules / crates
 
 ## Tests & Evidence
+
 - Commands run:
   - cargo fmt / clippy / test results
   - JSONL scenarios executed (list files)
@@ -18,10 +22,12 @@
   - Output logs / snapshots (link to _artifacts or CI Artifacts)
 
 ## Risk & Rollback
+
 - Risks and mitigations
 - Rollback plan (revert/switch off)
 
 ## Checklist
+
 - [ ] Worktree-first (developed in dedicated worktree/branch from origin/main)
 - [ ] Branch uses canonical category (feature|fix|perf|chore|docs)
 - [ ] Spec/Plan/Tasks links included (specs/<NNN>-<slug>/...)
@@ -33,4 +39,3 @@
 - [ ] ACP examples (if any) use protocolVersion: 1
 - [ ] Risks & rollback section completed
 - [ ] Docs updated (CONTRIBUTING.md/CLAUDE.md/WARP.md/dev-docs)
-

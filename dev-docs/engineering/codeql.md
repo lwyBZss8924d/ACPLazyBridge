@@ -42,21 +42,25 @@ jq '.runs[].results | length' dev-docs/review/_artifacts/sarif/*.sarif
 We maintain custom CodeQL queries in `queries/codeql/acp-rust/` to enforce ACPLazyBridge-specific rules:
 
 ### 1. No stdout logging (`no-stdout-logging.ql`)
+
 - **Rule**: `println!` and `print!` macros are forbidden in production code
 - **Reason**: stdout is reserved for JSON-RPC protocol messages
 - **Fix**: Use `eprintln!` or structured logging (tracing) to stderr
 
 ### 2. No panics in protocol code (`no-panics-in-protocol.ql`)
+
 - **Rule**: No `panic!`, `unwrap()`, or `expect()` in protocol handling files
 - **Reason**: Protocol code must return structured JSON-RPC errors
 - **Fix**: Use proper error handling with `Result` and JSON-RPC error responses
 
 ### 3. Subprocess stdio safety (`subprocess-stdio-safety.ql`)
+
 - **Rule**: Subprocess spawning must explicitly configure stdio
 - **Reason**: Enforce strict I/O separation per WARP logging rules
 - **Fix**: Use `Stdio::piped()` for stdin/stdout/stderr
 
 ### 4. No secret logging (`no-secret-logging.ql`)
+
 - **Rule**: Detect potential secrets in log statements
 - **Reason**: Prevent accidental exposure of sensitive data
 - **Fix**: Remove or redact sensitive information before logging
@@ -64,6 +68,7 @@ We maintain custom CodeQL queries in `queries/codeql/acp-rust/` to enforce ACPLa
 ## CI/CD Integration
 
 CodeQL is configured using GitHub's default setup:
+
 - Runs automatically on every push and pull request
 - Managed through GitHub repository settings (Settings > Security > Code scanning)
 - Results available in the GitHub Security tab
@@ -90,6 +95,7 @@ Note: Custom queries in `queries/codeql/acp-rust/` are available for local testi
 ### False Positives
 
 If a finding is a false positive:
+
 1. Document the reasoning
 2. Consider refining the query
 3. Add inline suppression comment if appropriate
@@ -100,6 +106,7 @@ To add new custom queries:
 
 1. Create `.ql` file in `queries/codeql/acp-rust/queries/`
 2. Include proper metadata:
+
    ```ql
    /**
     * @name Query name
@@ -110,22 +117,26 @@ To add new custom queries:
     * @tags category tags
     */
    ```
+
 3. Test locally before committing
 4. Update this documentation
 
 ## Troubleshooting
 
 ### Database creation fails
+
 - Ensure clean build: `cargo clean`
 - Check Rust toolchain: `rustup show`
 - Verify no interactive prompts in build
 
 ### Query compilation errors
+
 - Check imports match installed packs
 - Verify API usage against CodeQL Rust documentation
 - Use `codeql query compile` to debug
 
 ### No results found
+
 - Verify database was created successfully
 - Check query patterns match actual code patterns
 - Review file path filters in queries

@@ -1,6 +1,7 @@
 # M1 任务清单（ISSUE 草案）
 
 说明
+
 - 每个 ISSUE 按可测试的合理范围拆分，包含：需求、技术方案、local_refs 引用、对应的 review 条目（SPEC/REQ/ARC/CODEX/ZED）、验收标准、Worktree 指南。
 - 提交要求遵循 Worktree-first 规范（见下方模板与 CLAUDE.md）。
 
@@ -10,6 +11,7 @@
 ---
 
 ## ISSUE: core-transport-1 — 行级 JSONL 传输与子进程管控
+
 - 需求
   - 提供 spawn_with_stdio(cmd,args,env)、read_lines(reader,handler)、write_line(writer,json_str)
   - 子进程退出监听、stderr 收集（DEBUG 可转发关键行）
@@ -29,6 +31,7 @@
   - git worktree add ../acplb-core-transport-1 origin/main -b feature/core-transport-1
 
 ## ISSUE: core-permissions-1 — ACP→Codex 权限映射
+
 - 需求
   - map_acp_to_codex(mode)：default/plan/acceptEdits/bypassPerms 映射 approval/sandbox/network
   - 支持 env 覆盖（turn 级优先）
@@ -45,6 +48,7 @@
   - 分支名：feature/core-permissions-1
 
 ## ISSUE: acp-wire-0 — ACP/JSON-RPC 线协议封装（可选）
+
 - 需求
   - 封装请求/响应/错误结构，统一错误码与 data 字段
 - 技术方案
@@ -60,6 +64,7 @@
   - 分支名：feature/acp-wire-0
 
 ## ISSUE: codex-stdio-1 — ACP 主循环（initialize/new/prompt/cancel）
+
 - 需求
   - 解析每行 JSON；根据 method 分发；返回协议化结果或错误
 - 技术方案
@@ -75,6 +80,7 @@
   - 分支名：feature/codex-stdio-1
 
 ## ISSUE: codex-proto-1 — 对接 codex proto（消息/流式）
+
 - 需求
   - spawn codex；解析 agent_message/agent_message_delta → agent_message_chunk
 - 技术方案
@@ -90,6 +96,7 @@
   - 分支名：feature/codex-proto-1
 
 ## ISSUE: codex-notify-1 — notify + idle fallback + 去重
+
 - 需求
   - 接入 codex notify sink；1.2s idle fallback；lastSentChunk/finalized 去重
 - 技术方案
@@ -105,6 +112,7 @@
   - 分支名：feature/codex-notify-1
 
 ## ISSUE: codex-tools-1 — ToolCalls 标准化与 2KB 预览
+
 - 需求
   - 单/批工具：pending → completed；local_shell stdout 预览（2KB）
 - 技术方案
@@ -120,6 +128,7 @@
   - 分支名：feature/codex-tools-1
 
 ## ISSUE: codex-errors-1 — 错误码/约束校验
+
 - 需求
   - -32700/-32600/-32601/-32602/-32603；绝对路径/1-based 行号/JSONL 单行
 - 技术方案
@@ -135,6 +144,7 @@
   - 分支名：feature/codex-errors-1
 
 ## ISSUE: tests-jsonl-1 — JSONL 用例与日志证据
+
 - 需求
   - 新增 large_output/tool_calls 用例；完善 logs/README 与 jq 过滤
 - 技术方案
@@ -150,6 +160,7 @@
   - 分支名：chore/tests-jsonl-1
 
 ## ISSUE: docs-usage-1 — 使用手册与 settings.json 示例
+
 - 需求
   - 面向 Zed 的配置与说明，含权限模式/网络开关
 - 技术方案
@@ -161,14 +172,15 @@
 - 验收标准
   - 新手可按文档跑通 smoke
   - 状态：❌ 未开始
- - Worktree 指南
-  - 分支名：docs/usage-1
+- Worktree 指南
+- 分支名：docs/usage-1
 
 ---
 
 ## 补充：测试环境与流程配置（待合并后执行）
 
 ### ISSUE: tests-env-zed-config-1 — Zed settings.json 配置 ACPLazyBridge
+
 - 需求
   - 在 `~/.config/zed/settings.json` 中添加 ACPLazyBridge (Codex) 项（绝对路径指向 `target/release/codex-cli-acp`）
   - 预留 ACPLazyBridge (Claude/Gemini) 条目，待二进制落地后启用
@@ -182,6 +194,7 @@
   - 分支名：docs/zed-config-1
 
 ### ISSUE: tests-env-codex-cli-setup-1 — 验证 Codex CLI 安装与配置
+
 - 需求
   - 确认 `codex` 在 PATH；校验 `~/.codex/config.toml` 基本可用
 - 技术方案
@@ -194,6 +207,7 @@
   - 分支名：docs/codex-setup-1
 
 ### ISSUE: warp-script-nonmock-1 — WARP-Agent 非mock 脚本化测试入口
+
 - 需求
   - 在文档中给出脚本化运行命令与日志归档规范；可选地在 `scripts/smoke/` 放置示例脚本
 - 技术方案
@@ -206,6 +220,7 @@
   - 分支名：chore/warp-script-nonmock-1
 
 ### ISSUE: claude-proxy-acplb-1 — Claude Code 代理二进制与冒烟配置
+
 - 需求
   - 落地 `claude-code-acplb`，支持 ACP 透传；提供 Zed 配置与脚本化运行说明
 - 技术方案
@@ -218,6 +233,7 @@
   - 分支名：feature/claude-proxy-acplb-1
 
 ### ISSUE: gemini-proxy-acplb-1 — Gemini CLI 代理二进制与冒烟配置
+
 - 需求
   - 落地 `gemini-cli-acplb`，默认追加 `--experimental-acp`；提供 Zed 配置与脚本化运行说明
 - 技术方案
@@ -230,6 +246,7 @@
   - 分支名：feature/gemini-proxy-acplb-1
 
 ### ISSUE: logs-jq-templates-1 — jq 过滤模板与错误码用例完善
+
 - 需求
   - 增补 -32600/-32602 等错误用例与 jq 过滤示例
 - 技术方案
@@ -240,4 +257,3 @@
   - 评审者可一键得到错误与 stopReason 摘要
 - Worktree 指南
   - 分支名：chore/logs-jq-templates-1
-

@@ -21,7 +21,12 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(./scripts/ci/run-local-ci.sh:*)",
+      "Bash(markdownlint --version)",
+      "Bash(./scripts/ci/run-markdown-style.sh:*)",
+      "Bash(markdownlint-cli2:*)",
+      "Bash(scripts/ci/run-local-ci.sh:*)"
     ],
     "deny": [],
     "ask": []

@@ -7,6 +7,7 @@
 **File**: `src/tool_calls.rs`
 
 Added comprehensive support for all Codex ShellToolCallParams fields:
+
 - `command`: Supports both string and Vec<String> formats
 - `workdir`: Extracted with fallback support for `cwd` and `working_directory`
 - `timeout_ms`: Supports both `timeout_ms` and `timeout` aliases
@@ -14,6 +15,7 @@ Added comprehensive support for all Codex ShellToolCallParams fields:
 - `justification`: Extracted with fallback to `reason`
 
 **New Struct**:
+
 ```rust
 pub struct ExtractedShellParams {
     pub command: Option<String>,
@@ -29,6 +31,7 @@ pub struct ExtractedShellParams {
 **File**: `src/codex_proto.rs`
 
 Implemented semantic error categorization for better user feedback:
+
 - `timeout` / `TIMEOUT` → "Tool execution timed out"
 - `permission_denied` / `PERMISSION_DENIED` → "Permission denied"
 - `not_found` / `NOT_FOUND` → "Resource not found"
@@ -40,6 +43,7 @@ Error messages are now more descriptive and include category information in `raw
 ### 3. Improved Tool Call Handling ✅
 
 **Enhancements**:
+
 - Better error context preservation in tool failures
 - Semantic error messages based on error codes
 - Extended parameter extraction for shell tools
@@ -48,6 +52,7 @@ Error messages are now more descriptive and include category information in `raw
 ## Test Coverage
 
 Added comprehensive tests for:
+
 - Shell parameter extraction with all fields
 - Alternative field name handling
 - Error categorization logic
@@ -64,6 +69,7 @@ Added comprehensive tests for:
 ## API Improvements
 
 The new functions provide:
+
 - `extract_shell_params()`: Complete parameter extraction for shell tools
 - Enhanced error mapping with categories
 - Backward compatibility with existing field names
@@ -72,16 +78,19 @@ The new functions provide:
 ## Compliance Status
 
 ✅ ACP v1 Protocol Compliance:
+
 - Initialize response with integer protocolVersion
 - Proper agentCapabilities structure
 - Session validation with cwd and mcpServers
 
 ✅ Codex Integration:
+
 - Full ShellToolCallParams support
 - Error code mapping
 - Tool event lifecycle management
 
 ✅ Best Practices:
+
 - Minimal update payloads
 - Deduplication of events
 - Stable tool_call_id tracking

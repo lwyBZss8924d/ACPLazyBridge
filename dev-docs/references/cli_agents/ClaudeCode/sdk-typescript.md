@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-* Node.js 18+
+- Node.js 18+
 
 ## Installation
 
@@ -375,11 +375,11 @@ for await (const message of query({
 
 ### Benefits of SDK MCP servers
 
-* **Type Safety**: Full TypeScript type inference from Zod schemas
-* **Performance**: No IPC or network overhead - tools run in the same process
-* **Direct Access**: Tools can directly access your application's state, database, and services
-* **Easy Testing**: Simple to unit test since tools are just async functions
-* **No Configuration**: No need for separate server processes or configuration files
+- **Type Safety**: Full TypeScript type inference from Zod schemas
+- **Performance**: No IPC or network overhead - tools run in the same process
+- **Direct Access**: Tools can directly access your application's state, database, and services
+- **Easy Testing**: Simple to unit test since tools are just async functions
+- **No Configuration**: No need for separate server processes or configuration files
 
 ## Custom tools using external MCP servers
 
@@ -689,6 +689,6 @@ Additional supporting types:
 
 ## Related resources
 
-* [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
-* [GitHub Actions integration](/en/docs/claude-code/github-actions) - Automate your GitHub workflow with Claude
-* [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases
+- [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
+- [GitHub Actions integration](/en/docs/claude-code/github-actions) - Automate your GitHub workflow with Claude
+- [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases
