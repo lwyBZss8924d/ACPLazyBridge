@@ -66,7 +66,7 @@ This repository follows a worktree-first, trunk-based development workflow with 
 
 ## Evidence & Traceability
 
-- Keep JSONL tests under `dev-docs/review/_artifacts/tests/` and outputs under `_artifacts/logs/` when running locally.
+- Keep JSONL tests under `dev-docs/review/_artifacts/tests/` and outputs under `dev-docs/review/_artifacts/logs/` when running locally.
 - Maintain traceability (e.g., dev-docs/review/_artifacts/traceability.csv) linking requirements/specs/implementation/tests.
 
 ## Local Quickstart (example)

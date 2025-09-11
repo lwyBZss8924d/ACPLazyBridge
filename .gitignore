@@ -13,6 +13,7 @@ Cargo.lock
 *.swo
 *~
 .DS_Store
+.editorconfig
 
 # Local environment
 .env
@@ -26,10 +27,6 @@ dev-docs/review/_artifacts/parsed/
 # Local references (vendored documentation)
 /local_refs/
 ACP-DocsAndSourceCodeReference.md
-
-# MCP and agent-specific
-.serena/
-.claude/
 
 # Testing
 /test/
