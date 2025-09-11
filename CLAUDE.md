@@ -106,7 +106,7 @@ RUST_LOG=debug RUST_BACKTRACE=1 cargo run -p codex-cli-acp
 ### Testing ACP Protocol Compliance
 ```bash
 # Test basic ACP handshake with Codex proto
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}' | codex proto
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | codex proto
 
 # Test with JSONL file containing multiple messages
 cat test/acp_messages.jsonl | codex proto -c approval_policy="never"
@@ -472,8 +472,8 @@ Stream agent responses as they're generated:
 - No pretty-printing or multi-line JSON
 - Example stdio stream:
 ```
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}
-{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{}}}
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"capabilities":{}}}
 {"jsonrpc":"2.0","id":2,"method":"session/new","params":{"workingDirectory":"/path/to/project"}}
 {"jsonrpc":"2.0","id":2,"result":{"sessionId":"session_123"}}
 ```
@@ -543,7 +543,7 @@ let init_request = json!({
     "id": 1,
     "method": "initialize",
     "params": {
-        "protocolVersion": "2024-11-05",
+        "protocolVersion": 1,
         "capabilities": {
             "fs": {
                 "readTextFile": true,
@@ -661,7 +661,7 @@ ACPLB_IDLE_TIMEOUT_MS=2000 ACPLB_NOTIFY_KIND=fifo cargo run -p codex-cli-acp
 ### Testing ACP Compliance
 ```bash
 # Test initialize handshake
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}' | codex proto
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | codex proto
 
 # Test with custom model and permissions
 codex proto \
@@ -682,7 +682,7 @@ async fn test_acp_protocol_compliance() {
     let adapter = spawn_adapter()?;
     
     // Test initialize
-    let init_response = adapter.initialize("2024-11-05").await?;
+let init_response = adapter.initialize(1).await?;
     assert!(init_response.capabilities.contains_key("fs"));
     
     // Test session creation

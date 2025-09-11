@@ -40,6 +40,12 @@ jobs:
       - name: Tests
         run: cargo test --workspace --all-features --locked
 
+      - name: SDD structure lint
+        run: bash scripts/ci/run-sdd-structure-lint.sh
+
+      - name: Language policy check (normative artifacts)
+        run: bash scripts/ci/check-language-policy.sh
+
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 

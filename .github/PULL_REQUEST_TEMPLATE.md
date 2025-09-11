@@ -23,10 +23,14 @@
 
 ## Checklist
 - [ ] Worktree-first (developed in dedicated worktree/branch from origin/main)
+- [ ] Branch uses canonical category (feature|fix|perf|chore|docs)
+- [ ] Spec/Plan/Tasks links included (specs/<NNN>-<slug>/...)
+- [ ] Evidence uses dev-docs/review/_artifacts/{tests,logs,jq,reports}/
 - [ ] cargo fmt --all -- --check passes
 - [ ] cargo clippy --workspace --all-targets --all-features -- -D warnings passes
 - [ ] cargo test --workspace --all-features --locked passes
 - [ ] Protocol stdout is strict JSONL; logs go to stderr
-- [ ] Evidence attached or linked
+- [ ] ACP examples (if any) use protocolVersion: 1
+- [ ] Risks & rollback section completed
 - [ ] Docs updated (CONTRIBUTING.md/CLAUDE.md/WARP.md/dev-docs)
 

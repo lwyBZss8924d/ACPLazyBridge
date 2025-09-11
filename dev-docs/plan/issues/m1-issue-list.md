@@ -26,7 +26,7 @@
 - 状态：✅ 已完成（acp-lazy-core::transport 实现 + 单测通过；stderr 日志分级与退出尾日志保留）
 - Worktree 指南
   - 分支名：feature/core-transport-1
-  - git worktree add ../acplb-core-transport-1 feature/core-transport-1
+  - git worktree add ../acplb-core-transport-1 origin/main -b feature/core-transport-1
 
 ## ISSUE: core-permissions-1 — ACP→Codex 权限映射
 - 需求
@@ -138,7 +138,7 @@
 - 需求
   - 新增 large_output/tool_calls 用例；完善 logs/README 与 jq 过滤
 - 技术方案
-  - 统一在 _artifacts/tests 归档；输出快照存 logs
+  - 统一在 dev-docs/review/_artifacts/tests 归档；输出快照存 dev-docs/review/_artifacts/logs
 - local_refs 引用
   - (local_refs/zed-acp-examples)
 - 对应 review 条目
