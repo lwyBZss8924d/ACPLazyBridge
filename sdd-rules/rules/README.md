@@ -19,8 +19,8 @@ Categories
   - sdd-rules/rules/git/issues/sdd-rules-issues.md
   - sdd-rules/rules/git/pr/sdd-rules-pr.md
   - sdd-rules/rules/git/worktree/sdd-rules-worktrees.md
-- resaerch
-  - sdd-rules/rules/resaerch/sdd-rules-resaerch.md
+- research
+  - sdd-rules/rules/research/sdd-rules-research.md
 - tests
   - sdd-rules/rules/tests/sdd-rules-tests.md
 - tools-cli

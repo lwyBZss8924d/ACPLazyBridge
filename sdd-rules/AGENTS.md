@@ -144,7 +144,7 @@ ACPLazyBridge/sdd-rules/rules
 │   └── worktree
 │       └── worktrees.md
 ├── plan
-├── resaerch
+├── research
 ├── spec
 ├── tasks
 ├── test
