@@ -35,7 +35,8 @@
       "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md\" --config .markdownlint.json)",
       "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/*.md\" --config .markdownlint.json)",
       "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/sdd-rules-documentation-*.md\" --config .markdownlint.json)",
-      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json)"
+      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/tools-cli/*.md\" --config .markdownlint.json)"
     ],
     "deny": [],
     "ask": []

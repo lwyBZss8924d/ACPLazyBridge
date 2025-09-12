@@ -10,7 +10,7 @@ and code analysis.
 ### Installation Methods
 
 ```bash
-# Cargo (Rust)
+# Cargo (Rust) - Recommended
 cargo install ast-grep --locked
 
 # Homebrew (macOS/Linux)
@@ -18,6 +18,15 @@ brew install ast-grep
 
 # npm (Node.js)
 npm install -g @ast-grep/cli
+
+# pip (Python)
+pip install ast-grep-cli
+
+# MacPorts
+sudo port install ast-grep
+
+# Nix
+nix-shell -p ast-grep
 
 # Pre-built binaries
 curl -fsSL https://get.ast-grep.com | sh
@@ -29,8 +38,8 @@ curl -fsSL https://get.ast-grep.com | sh
 # Check installation
 ast-grep --version
 
-# Verify language support
-ast-grep --lang list
+# Note: For supported languages, see:
+# https://ast-grep.github.io/reference/languages.html
 ```
 
 ## Core Concepts
@@ -75,39 +84,47 @@ ast-grep --pattern 'function $FUNC($$$ARGS) { $$$BODY }' --lang js
 ### Basic Search Operations
 
 ```bash
-# Search with pattern
-ast-grep --pattern 'TODO' --lang python
+# Note: 'run' is the default command and can be omitted
+# These are equivalent:
+ast-grep run --pattern 'print($_)' --lang python
+ast-grep --pattern 'print($_)' --lang python
 
-# Search with regex filter
-ast-grep --pattern '$FUNC($$$)' --lang python \
-  --filter 'FUNC: "test_.*"'
+# Short flags are also available
+ast-grep -p 'console.log($_)' -l js
+
+# Search with pattern (Python)
+ast-grep -p 'def $FUNC($$$PARAMS):' -l python scripts/
 
 # Search specific files
-ast-grep --pattern 'async function $NAME' --lang ts \
-  src/**/*.ts
+ast-grep -p 'async function $NAME' -l ts src/**/*.ts
 
 # Output formats
-ast-grep --pattern '$_' --lang rust --json
-ast-grep --pattern '$_' --lang rust --format compact
+ast-grep -p 'println!($$$)' -l rust --json
+ast-grep -p 'fmt.Println($_)' -l go --format compact
 ```
 
 ### Advanced Search Features
 
 ```bash
 # Context lines
-ast-grep --pattern 'throw $_' --lang js \
+ast-grep -p 'throw $_' -l js \
   --before 2 --after 2
 
 # Limit results
-ast-grep --pattern 'console.log' --lang js \
+ast-grep -p 'console.log' -l js \
   --max-results 10
 
-# Interactive mode
-ast-grep --pattern '$_' --lang python --interactive
+# Interactive mode for selective changes
+ast-grep -p 'print($_)' -r 'logger.info($_)' -l python \
+  --interactive
 
-# Debug query
-ast-grep --pattern 'class $NAME' --lang python \
-  --debug-query
+# Debug query (shows AST structure)
+ast-grep -p 'class $NAME' -l python \
+  --debug-query=ast  # or 'pattern' or 'cst'
+
+# Use selector for sub-pattern matching
+ast-grep -p 'if ($COND) { $$$BODY }' \
+  --selector 'binary_expression' -l js
 ```
 
 ## Rule Configuration
@@ -135,6 +152,21 @@ metadata:
 
 ### Complex Rule Examples
 
+#### Pattern with Constraints
+
+```yaml
+id: find-hooks
+language: javascript
+message: Found React Hook
+
+rule:
+  pattern: $HOOK($$$ARGS)
+  
+constraints:
+  HOOK:
+    regex: '^use[A-Z]'
+```
+
 #### Security: SQL Injection Detection
 
 ```yaml
@@ -145,24 +177,22 @@ message: Potential SQL injection vulnerability
 
 rule:
   all:
-    - pattern: |
-        cursor.execute($QUERY, $$$ARGS)
+    - pattern: cursor.execute($QUERY)
     - any:
-        - pattern: $QUERY
-          regex: '.*\+.*'
-        - pattern: $QUERY
-          regex: '.*%.*'
+        - has:
+            pattern: $QUERY + $_
+        - has:
+            pattern: f"{$$$}"
     - not:
         inside:
-          pattern: |
-            def $TEST_FUNC($$$):
-              $$$
-          regex:
-            TEST_FUNC: '^test_'
+          kind: function_definition
+          has:
+            field: name
+            regex: '^test_'
 
 fix: |
   # Use parameterized query
-  cursor.execute($QUERY, $$$ARGS)
+  cursor.execute($QUERY, params)
 ```
 
 #### Refactoring: Modernize Code
@@ -173,14 +203,27 @@ language: typescript
 message: Use optional chaining operator
 
 rule:
-  pattern: |
-    $OBJ && $OBJ.$PROP
+  pattern: $OBJ && $OBJ.$PROP
 
 fix: '$OBJ?.$PROP'
 
 constraints:
   OBJ:
     regex: '^[a-zA-Z_][a-zA-Z0-9_]*$'
+```
+
+#### Using Kind with Pattern
+
+```yaml
+id: find-test-functions
+language: go
+message: Found test function
+
+rule:
+  kind: function_declaration
+  has:
+    field: name
+    regex: '^Test'
 ```
 
 #### Performance: Optimize Loops
@@ -192,10 +235,7 @@ message: Use Set for better performance
 
 rule:
   inside:
-    pattern: |
-      for ($_ of $ARRAY) {
-        $$$
-      }
+    pattern: for ($_ of $ARRAY) { $$$BODY }
   pattern: $ARRAY.includes($_)
 
 fix: |
@@ -210,22 +250,26 @@ fix: |
 ### Basic Transformations
 
 ```bash
-# Simple replacement
-ast-grep --pattern 'var $NAME = $_' \
-  --rewrite 'const $NAME = $_' \
-  --lang js
+# Simple replacement (short flags)
+ast-grep -p 'var $NAME = $_' \
+  -r 'const $NAME = $_' \
+  -l js
 
-# Dry run (preview changes)
-ast-grep --pattern 'print($MSG)' \
-  --rewrite 'logger.info($MSG)' \
-  --lang python \
-  --dry-run
+# Interactive mode for selective changes
+ast-grep -p 'print($MSG)' \
+  -r 'logger.info($MSG)' \
+  -l python \
+  --interactive
 
 # Apply to specific files
-ast-grep --pattern 'assertEquals' \
-  --rewrite 'assert.equal' \
-  --lang js \
+ast-grep -p 'assertEquals' \
+  -r 'assert.equal' \
+  -l js \
   test/**/*.js
+
+# Using stdin/stdout
+echo 'console.log("test")' | \
+  ast-grep -p 'console.log($_)' -r 'debug($_)' -l js --stdin
 ```
 
 ### Complex Transformations
@@ -249,10 +293,21 @@ ast-grep --pattern 'if ($COND) { $$$BODY }' \
 
 ## Testing and Validation
 
+### Test Directory Structure
+
+```bash
+my-project/
+  ├── rules/
+  │   └── no-console.yml
+  ├── rule-tests/
+  │   └── no-console-test.yml
+  └── sgconfig.yml
+```
+
 ### Test Configuration
 
 ```yaml
-# test-rule.yml
+# rule-tests/test-rule.yml
 id: test-rule
 language: python
 
@@ -274,14 +329,23 @@ tests:
 ### Running Tests
 
 ```bash
-# Test single rule
-ast-grep test rule.yml
+# Test all rules in test directory (default: rule-tests/)
+ast-grep test
 
-# Test all rules in directory
-ast-grep test rules/
+# Test specific directory
+ast-grep test -t tests/
 
-# Verbose output
-ast-grep test --verbose rule.yml
+# Filter tests by regex
+ast-grep test -f 'console'
+
+# Interactive snapshot update
+ast-grep test -i
+
+# Update all snapshots
+ast-grep test -U
+
+# Skip snapshot validation
+ast-grep test --skip-snapshot-tests
 ```
 
 ## Project Configuration
@@ -463,12 +527,14 @@ find . -name "*.js" -print0 | \
 ### Caching Strategies
 
 ```bash
-# Cache parsed ASTs
-export AST_GREP_CACHE_DIR=/tmp/ast-grep-cache
-ast-grep --pattern '$_' --cache
+# Process files in parallel
+ast-grep -p '$_' -l python -j 8
 
-# Incremental analysis
-ast-grep scan --incremental --since HEAD~1
+# Batch processing with fd
+fd -e py -x ast-grep -p 'import $_' -l python {} \;
+
+# Note: Incremental analysis is planned but not yet available
+# Future: ast-grep scan --incremental --since HEAD~1
 ```
 
 ## Common Patterns Library
@@ -476,16 +542,20 @@ ast-grep scan --incremental --since HEAD~1
 ### Error Handling
 
 ```yaml
-# Catch empty catch blocks
-pattern: |
-  try {
-    $$$
-  } catch($_) {}
+# Catch empty catch blocks (JavaScript)
+rule:
+  pattern: try { $$$TRY } catch($_) {}
 
-# Find unhandled promises
-pattern: |
-  $PROMISE()
-  not: await $PROMISE()
+# Find unhandled promises (JavaScript)
+rule:
+  all:
+    - pattern: $PROMISE($$$)
+    - not:
+        has:
+          pattern: await $PROMISE($$$)
+constraints:
+  PROMISE:
+    regex: '^(fetch|axios|.*Async)$'
 ```
 
 ### Security
@@ -518,6 +588,43 @@ pattern: |
   [x for x in $LIST if $COND][0]
 fix: next((x for x in $LIST if $COND), None)
 ```
+
+## Quick Reference
+
+### Essential Commands
+
+```bash
+# Search patterns
+ast-grep -p 'pattern' -l lang [files]
+
+# Replace patterns
+ast-grep -p 'old' -r 'new' -l lang
+
+# Run rules from YAML
+ast-grep scan --rule rule.yml
+
+# Test rules
+ast-grep test -t test-dir/
+
+# Create new project
+ast-grep new project
+
+# Start LSP server
+ast-grep lsp
+```
+
+### Language Codes
+
+| Language | Code | Extensions |
+|----------|------|------------|
+| Python | `python` | `.py` |
+| JavaScript | `js` | `.js` |
+| TypeScript | `ts` | `.ts` |
+| Rust | `rust` | `.rs` |
+| Go | `go` | `.go` |
+| Java | `java` | `.java` |
+| C++ | `cpp` | `.cpp`, `.cc` |
+| Ruby | `ruby` | `.rb` |
 
 ## Best Practices
 
@@ -565,34 +672,81 @@ fix: next((x for x in $LIST if $COND), None)
 - Generate SARIF reports for GitHub integration
 - Use rule severity levels appropriately
 
+## Real-World Examples
+
+### OpenAI SDK Migration
+
+```yaml
+# Migrate from v0 to v1
+id: migrate-openai-client
+language: python
+
+rule:
+  pattern: openai.api_key = $KEY
+  
+fix: |
+  from openai import Client
+  client = Client($KEY)
+```
+
+### React Hooks Detection
+
+```yaml
+id: detect-hooks
+language: typescript
+
+rule:
+  all:
+    - pattern: $FUNC($$$)
+    - inside:
+        kind: function_declaration
+
+constraints:
+  FUNC:
+    regex: '^use[A-Z]'
+```
+
+### XState v5 Migration
+
+```bash
+# Migrate Machine to createMachine
+ast-grep -p 'Machine($CONFIG)' \
+  -r 'createMachine($CONFIG)' \
+  -l typescript --interactive
+
+# Update imports
+ast-grep -p "import { Machine } from 'xstate'" \
+  -r "import { createMachine } from 'xstate'" \
+  -l typescript
+```
+
 ## Troubleshooting
 
 ### Common Issues
 
 ```bash
 # Debug pattern matching
-ast-grep --pattern 'class $_' --debug-query
+ast-grep -p 'class $_' -l python --debug-query=ast
 
-# Show AST structure
-ast-grep --pattern '$_' --lang python --show-ast file.py
+# Show pattern structure
+ast-grep -p 'def $F(): $$$' -l python --debug-query=pattern
 
-# Validate rule syntax
-ast-grep test --validate-only rule.yml
-
-# Check language support
-ast-grep --lang list
+# Show CST (concrete syntax tree) with all tokens
+ast-grep -p 'if True: pass' -l python --debug-query=cst
 ```
 
-### Error Messages
+### Error Messages and Solutions
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| "Pattern parse error" | Invalid pattern syntax | Check metavariable usage |
-| "No matches found" | Pattern too specific | Generalize pattern |
-| "Language not supported" | Missing parser | Install language support |
-| "Rule validation failed" | YAML syntax error | Validate YAML structure |
+| "Pattern parse error" | Invalid pattern syntax | Check metavariable usage ($ for single, $$ for list, $$$ for statements) |
+| "No matches found" | Pattern too specific | Use $_ for wildcards, check language syntax |
+| "Language not supported" | Wrong language code | Check https://ast-grep.github.io/reference/languages.html |
+| "Rule must specify AST kinds" | Missing pattern/kind in YAML | Add `pattern:` or `kind:` to rule |
+| "Cannot parse rule" | Invalid YAML structure | Check indentation, constraints placement |
+| "unexpected argument found" | Wrong command syntax | Remember `run` is default, check subcommand help |
 
 ---
 
-specification_version: 1.0.5 | sdd-rules-tools-cli-astgrep.md Format: 2.0 |
+specification_version: 1.0.6 | sdd-rules-tools-cli-astgrep.md Format: 2.1 |
 Last Updated: 2025-09-12
