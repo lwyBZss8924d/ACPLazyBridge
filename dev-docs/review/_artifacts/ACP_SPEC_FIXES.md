@@ -35,7 +35,7 @@ Fixed critical ACP protocol specification compliance issues identified in WARP r
 
 **File**: `crates/codex-cli-acp/src/main.rs:77-131`
 
-### 3. ✅ Removed Agent-Side fs/* Handlers  
+### 3. ✅ Removed Agent-Side fs/* Handlers
 
 **Issue**: fs/read_text_file and fs/write_text_file are client methods, not agent methods
 **Fix**: Removed handlers completely - agent sends these TO client, doesn't receive them

@@ -29,7 +29,13 @@
       "Bash(scripts/ci/run-local-ci.sh:*)",
       "Bash(scripts/sdd/check-markdown.sh:*)",
       "Bash(scripts/ci/run-markdown-style.sh:*)",
-      "Bash(scripts/sdd/fix-markdown.sh:*)"
+      "Bash(scripts/sdd/fix-markdown.sh:*)",
+      "mcp__serena__think_about_collected_information",
+      "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/sdd-rules-documentation-style.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/*.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \"sdd-rules/rules/documentation-style/sdd-rules-documentation-*.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json)"
     ],
     "deny": [],
     "ask": []

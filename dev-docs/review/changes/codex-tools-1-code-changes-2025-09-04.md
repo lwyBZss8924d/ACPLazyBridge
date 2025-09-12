@@ -13,7 +13,7 @@ Summary
 
 Changes
 
-1) UTF-8 boundary fix (safe truncation)
+(1) UTF-8 boundary fix (safe truncation)
 
 - File: crates/codex-cli-acp/src/tool_calls.rs
 - Function: find_char_boundary_reverse(s: &str, target: usize) -> usize
@@ -21,7 +21,7 @@ Changes
 - Why: Prevents invalid UTF-8 slices in the 2KB preview truncation path; ensures both prefix and suffix trimming respect codepoint boundaries.
 - Impact: Improves robustness of preview content for multi-byte texts; no API change.
 
-2) Formatting (rustfmt conformance)
+(2) Formatting (rustfmt conformance)
 
 - Files:
   - crates/codex-cli-acp/src/codex_proto.rs
@@ -30,7 +30,7 @@ Changes
 - Why: Keep formatting standardized; prevents fmt check failures in CI.
 - Impact: No semantic changes.
 
-3) Test file EOF newline for fmt
+(3) Test file EOF newline for fmt
 
 - File: crates/codex-cli-acp/tests/tool_calls_test.rs
 - What: Ensured a final newline so cargo fmt --check succeeds.

@@ -10,9 +10,9 @@
 
 ### Task 1: Update Root CLAUDE.md
 
-**ID**: 001-01  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-01
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Update root CLAUDE.md with SDD workflow integration and authority chain
 
 **Subtasks**:
@@ -36,9 +36,9 @@
 
 ### Task 2: Create Module CLAUDE.md Files
 
-**ID**: 001-02  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-02
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Create CLAUDE.md files for key modules
 
 **Subtasks**:
@@ -59,9 +59,9 @@
 
 ### Task 3: Create Rules Index
 
-**ID**: 001-03  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-03
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Create sdd-rules/rules/README.md as centralized navigation
 
 **Subtasks**:
@@ -83,9 +83,9 @@
 
 ### Task 4: Update Cross-References
 
-**ID**: 001-04  
-**Priority**: Medium  
-**Assignee**: WARP Agent  
+**ID**: 001-04
+**Priority**: Medium
+**Assignee**: WARP Agent
 **Description**: Update AGENTS.md and WARP.md with rules index links
 
 **Subtasks**:
@@ -105,9 +105,9 @@
 
 ### Task 5: Run Local CI Validation
 
-**ID**: 001-05  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-05
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Execute all local CI checks and store evidence
 
 **Subtasks**:
@@ -131,9 +131,9 @@
 
 ### Task 6: Create GitHub Issue
 
-**ID**: 001-06  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-06
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Create GitHub issue #26 for tracking
 
 **Subtasks**:
@@ -153,9 +153,9 @@
 
 ### Task 7: Commit and Push Changes
 
-**ID**: 001-07  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-07
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Commit changes with proper message format
 
 **Subtasks**:
@@ -175,9 +175,9 @@
 
 ### Task 8: Create Pull Request
 
-**ID**: 001-08  
-**Priority**: High  
-**Assignee**: WARP Agent  
+**ID**: 001-08
+**Priority**: High
+**Assignee**: WARP Agent
 **Description**: Create PR with full SDD traceability
 
 **Subtasks**:

@@ -56,7 +56,7 @@ Successfully implemented comprehensive tool call support for the ACPLazyBridge C
   - Output truncation
   - Shell command extraction
   - Output formatting
-  
+
 - **Integration Tests**: `crates/codex-cli-acp/tests/tool_calls_test.rs` (8 tests)
   - Single tool call progression
   - Batch tool calls processing

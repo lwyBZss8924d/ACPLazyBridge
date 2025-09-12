@@ -3,7 +3,7 @@
 ## Context-Specific Memory Imports
 
 @specs/CLAUDE.md
-@dev-docs/CLAUDE.md  
+@dev-docs/CLAUDE.md
 @crates/CLAUDE.md
 @.github/CLAUDE.md
 @sdd-rules/CLAUDE.md
@@ -19,7 +19,7 @@ Our development follows the **Specification-Driven Development (SDD)** methodolo
 ### 🎯 The Three-Horse Carriage Model
 
 1. **Specifications** (`specs/<NNN>-<slug>/`) - The source of truth
-2. **Development Docs** (`dev-docs/`) - Evidence and artifacts  
+2. **Development Docs** (`dev-docs/`) - Evidence and artifacts
 3. **GitHub Issues** - Coordination and tracking
 
 These three components work together to ensure **dynamic consistency** and **standard-driven development**.

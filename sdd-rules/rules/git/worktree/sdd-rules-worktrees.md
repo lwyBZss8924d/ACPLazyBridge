@@ -65,7 +65,7 @@ Pattern: ../spec-kit-<type>-<id>-<description>
 Types:
 
 - feature: New functionality
-- bugfix: Bug repairs  
+- bugfix: Bug repairs
 - hotfix: Emergency fixes
 - experiment: Exploratory work
 - review: PR reviews

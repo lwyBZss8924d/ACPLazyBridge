@@ -7,14 +7,18 @@
     "style": "dash"
   },
   "MD007": {
-    "indent": 2
+    "indent": 4
   },
   "MD009": {
     "br_spaces": 0
   },
   "MD010": true,
   "MD012": false,
-  "MD013": false,
+  "MD013": {
+    "line_length": 80,
+    "code_blocks": false,
+    "tables": false
+  },
   "MD022": true,
   "MD024": {
     "siblings_only": true

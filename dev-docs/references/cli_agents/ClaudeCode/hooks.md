@@ -331,7 +331,7 @@ Block edits to sensitive files:
 - For troubleshooting steps and debugging techniques, see [Debugging](/en/docs/claude-code/hooks#debugging) in the hooks reference
   documentation.
 
-# Hooks reference
+## Hooks reference
 
 > This page provides reference documentation for implementing hooks in Claude Code.
 

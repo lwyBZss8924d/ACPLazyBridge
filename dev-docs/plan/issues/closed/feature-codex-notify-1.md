@@ -375,11 +375,11 @@ Codex configuration files can be placed in the `~/.codex/` directory, supporting
 | `model`             | string  | `o4-mini`  | AI model to use                  | Any model name supporting OpenAI API                                                           |
 | `approvalMode`      | string  | `suggest`  | AI assistant's permission mode   | `suggest` (suggestions only)<br>`auto-edit` (automatic edits)<br>`full-auto` (fully automatic) |
 | `fullAutoErrorMode` | string  | `ask-user` | Error handling in full-auto mode | `ask-user` (prompt for user input)<br>`ignore-and-continue` (ignore and proceed)               |
-| `notify`            | boolean | `true`     | Enable desktop notifications     | `true`/`false`
+| `notify`            | boolean | `true`     | Enable desktop notifications     | `true`/`false`                                                                                     |
 
 ### Configuration examples
 
-1. YAML format (save as `~/.codex/config.yaml`):
+(1) YAML format (save as `~/.codex/config.yaml`):
 
 ```yaml
 model: o4-mini
@@ -388,7 +388,7 @@ fullAutoErrorMode: ask-user
 notify: true
 ```
 
-2. JSON format (save as `~/.codex/config.json`):
+(2) JSON format (save as `~/.codex/config.json`):
 
 ```json
 {
