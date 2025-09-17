@@ -1,5 +1,14 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Security Advisories
+    url: https://github.com/lwyBZss8924d/ACPLazyBridge/security/advisories
+    about: Report security vulnerabilities privately
+  - name: Contributing Guide
+    url: https://github.com/lwyBZss8924d/ACPLazyBridge/blob/main/CONTRIBUTING.md
+    about: Learn how to contribute to ACPLazyBridge
+  - name: SDD Documentation
+    url: https://github.com/lwyBZss8924d/ACPLazyBridge/tree/main/.specify
+    about: Specification-Driven Development guides and templates
   - name: Questions / Discussions
     url: https://github.com/lwyBZss8924d/ACPLazyBridge/discussions
     about: Ask questions and discuss ideas here

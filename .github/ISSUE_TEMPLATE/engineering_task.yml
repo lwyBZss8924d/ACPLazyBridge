@@ -1,46 +1,219 @@
 name: Engineering task
 
-description: Implementation task based on dev-docs/plan/issues
+description: Implementation task with SDD governance (v1.0.1)
 
-labels: [task]
+title: "[TASK-XXX] "
+
+labels: [task, sdd-tracked]
 
 body:
-  - type: input
-    id: issue_ref
+  - type: markdown
     attributes:
-      label: Linked plan issue
-      description: Path in repo (e.g., dev-docs/plan/issues/m1-issue-list.md)
-      placeholder: dev-docs/plan/issues/...
+      value: |
+        ## Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
+
+        This form tracks engineering tasks following SDD workflow.
+        All normative artifacts must be written in English per SDD policy.
+        Ensure spec/plan/tasks documents exist before creating implementation tasks.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Task Category
+      description: Select the type of engineering work
+      options:
+        - feature (new functionality)
+        - fix (bug fix)
+        - perf (performance improvement)
+        - chore (maintenance/refactoring)
+        - docs (documentation only)
+    validations:
+      required: true
+
+  - type: input
+    id: summary
+    attributes:
+      label: Task Summary
+      description: Brief description of the task
+      placeholder: Implement X to achieve Y
+    validations:
+      required: true
+
+  - type: input
+    id: spec_uri
+    attributes:
+      label: Specification URI
+      description: Link to the specification document
+      placeholder: specs/XXX-feature-name/spec.md or https://github.com/.../specs/XXX/spec.md
+    validations:
+      required: true
+
+  - type: input
+    id: plan_uri
+    attributes:
+      label: Plan URI
+      description: Link to the implementation plan
+      placeholder: specs/XXX-feature-name/plan.md or https://github.com/.../specs/XXX/plan.md
+    validations:
+      required: true
+
+  - type: input
+    id: tasks_uri
+    attributes:
+      label: Tasks URI
+      description: Link to the tasks breakdown
+      placeholder: specs/XXX-feature-name/tasks.md or https://github.com/.../specs/XXX/tasks.md
+    validations:
+      required: true
+
+  - type: input
+    id: evidence_uris
+    attributes:
+      label: Evidence URIs
+      description: Path where test results and logs will be stored
+      placeholder: _artifacts/XXX-feature/ or dev-docs/review/_artifacts/XXX/
     validations:
       required: true
 
   - type: input
     id: branch
     attributes:
-      label: Feature branch
-      placeholder: feature/<slug>
+      label: Feature Branch
+      description: Branch name for this work
+      placeholder: feature/XXX-module-description
     validations:
       required: true
 
   - type: input
     id: worktree
     attributes:
-      label: Worktree directory
-      placeholder: /Users/arthur/dev-space/<task-dir>
+      label: Worktree Directory
+      description: Local worktree path for development
+      placeholder: /Users/arthur/dev-space/acplb-worktrees/XXX-feature
     validations:
       required: true
 
   - type: textarea
-    id: plan
+    id: acceptance_criteria
     attributes:
-      label: Plan
-      description: Subtasks, acceptance criteria, and references (REQ/ARC/SPEC/CODEX/ZED)
+      label: Acceptance Criteria
+      description: Specific, measurable criteria for task completion
+      placeholder: |
+        - [ ] Component X implemented and tested
+        - [ ] Integration with Y verified
+        - [ ] Documentation updated
+        - [ ] Performance meets threshold
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
     validations:
       required: true
 
   - type: textarea
-    id: tests
+    id: implementation_plan
     attributes:
-      label: Tests & Evidence
-      description: JSONL scenarios to add/run, expected outputs, log paths
+      label: Implementation Plan
+      description: Step-by-step approach for completing this task
+      placeholder: |
+        1. Setup development environment
+        2. Write failing tests (RED phase)
+        3. Implement functionality
+        4. Verify tests pass (GREEN phase)
+        5. Refactor if needed
+        6. Update documentation
+    validations:
+      required: true
 
+  - type: textarea
+    id: risks_rollback
+    attributes:
+      label: Risks & Rollback Strategy
+      description: Potential risks and how to mitigate/rollback if issues arise
+      placeholder: |
+        Risks:
+        - Risk 1: Description and mitigation
+        - Risk 2: Description and mitigation
+
+        Rollback:
+        - Step 1 to safely rollback changes
+        - Step 2 to verify system stability
+
+  - type: textarea
+    id: test_plan
+    attributes:
+      label: Test Plan
+      description: Testing approach including JSONL scenarios if applicable
+      placeholder: |
+        Unit tests:
+        - Test case 1
+        - Test case 2
+
+        Integration tests:
+        - Scenario 1
+        - JSONL replay: scenarios/XXX.jsonl
+
+        Acceptance tests:
+        - User flow validation
+
+  - type: checkboxes
+    id: quality_gates
+    attributes:
+      label: Quality Gates Checklist
+      description: Confirm these checks before marking task complete
+      options:
+        - label: "cargo fmt --all -- --check passes"
+        - label: "cargo clippy --workspace --all-targets --all-features -- -D warnings passes"
+        - label: "cargo test --workspace --all-features --locked passes"
+        - label: "JSONL scenarios replay without errors (stdout valid JSONL, logs to stderr)"
+        - label: "scripts/ci/run-local-ci.sh passes"
+        - label: "Evidence collected in _artifacts/ or dev-docs/review/_artifacts/"
+        - label: "SDD structure validation passes"
+        - label: "Language policy check passes (English-only)"
+        - label: "Markdown style check passes"
+        - label: "Security scanning enabled (no secrets exposed)"
+
+  - type: checkboxes
+    id: constitutional_gates
+    attributes:
+      label: Constitutional Gates
+      description: Confirm adherence to SDD Constitution principles
+      options:
+        - label: "Article I (Library-First): Feature implemented as library/crate first"
+        - label: "Article III (Test-First): Tests written and fail before implementation"
+        - label: "Article VII (Simplicity): ≤3 projects, no premature abstractions"
+        - label: "Article VIII (Anti-Abstraction): Framework features used directly"
+        - label: "Article IX (Integration-First): Contracts defined, contract tests written"
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Other tasks, issues, or external dependencies
+      placeholder: |
+        - Depends on: Issue #X completion
+        - Blocked by: PR #Y merge
+        - Requires: Library Z v1.2.3
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Any other relevant information
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance Confirmation
+      description: Please confirm the following before submitting
+      options:
+        - label: This task is written in English (SDD normative artifacts requirement)
+          required: true
+        - label: I have not included any secrets, tokens, passwords, or sensitive data
+          required: true
+        - label: Spec/Plan/Tasks documents exist and are linked above
+          required: true
+        - label: I understand the quality gates and will ensure they pass
+          required: true
+        - label: I will follow Test-First development (RED→GREEN→REFACTOR)
+          required: true
