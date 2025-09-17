@@ -8,28 +8,28 @@
 ## Milestone 2 – Codex adapter skeleton (@zed-industries/codex-cli-acp)
 
 - Structure
-  - adapters/codex-cli-acp/
-    - src/index.ts – ACP server entry (stdio)
-    - src/codex.ts – spawn + handshake + stream line-queue
-    - src/mapping.ts – ACP mode → Codex approval/sandbox mapping
-    - src/tools.ts – normalize tool_calls (single + batch) → ACP tool events
-    - src/notify.ts – agent-turn-complete integration (FIFO/file)
-  - scripts/smoke-codex.ts – standalone smoke test
+    - adapters/codex-cli-acp/
+        - src/index.ts – ACP server entry (stdio)
+        - src/codex.ts – spawn + handshake + stream line-queue
+        - src/mapping.ts – ACP mode → Codex approval/sandbox mapping
+        - src/tools.ts – normalize tool_calls (single + batch) → ACP tool events
+        - src/notify.ts – agent-turn-complete integration (FIFO/file)
+    - scripts/smoke-codex.ts – standalone smoke test
 - Behavior
-  - Non-interactive approvals by default (approval_policy=never)
-  - Sandbox workspace-write for acceptEdits/bypassPermissions; plan/default read-only
-  - Network only in bypassPermissions
-  - Streaming: emit agent_message_chunk for deltas; de-dup final chunk; idle fallback
-  - Tool calls: pending → completed with stdout preview (2KB cap)
+    - Non-interactive approvals by default (approval_policy=never)
+    - Sandbox workspace-write for acceptEdits/bypassPermissions; plan/default read-only
+    - Network only in bypassPermissions
+    - Streaming: emit agent_message_chunk for deltas; de-dup final chunk; idle fallback
+    - Tool calls: pending → completed with stdout preview (2KB cap)
 - Initialize: return promptCapabilities (image=false)
 
 ## Milestone 3 – Shared utilities
 
 - adapters/_shared/
-  - spawn.ts – portable spawn via path/args/env
-  - line_reader.ts – robust queue-based JSON line reader
-  - end_of_turn.ts – notify + idle fallback combiner
-  - permissions.ts – ACP → adapter mapping helpers
+    - spawn.ts – portable spawn via path/args/env
+    - line_reader.ts – robust queue-based JSON line reader
+    - end_of_turn.ts – notify + idle fallback combiner
+    - permissions.ts – ACP → adapter mapping helpers
 
 ## Milestone 4 – Tests & examples
 

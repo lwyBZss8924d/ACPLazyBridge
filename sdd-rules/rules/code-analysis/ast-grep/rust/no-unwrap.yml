@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.rs"
+  - "!**/*_test.rs"
+  - "!**/*tests.rs"
+  - "!**/tests/**"
+  - "!**/benches/**"
+id: rust-no-unwrap
+language: Rust
+message: Avoid unwrap()/expect() in non-test code; handle errors explicitly
+rule:
+  any:
+    - pattern: $EXPR.unwrap()
+    - pattern: $EXPR.expect($MSG)
+severity: warning

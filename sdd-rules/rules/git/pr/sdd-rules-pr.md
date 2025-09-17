@@ -1,7 +1,12 @@
 # SDD Rules - Git PR
-
 [TODO: Add git PR rules]
+---
 
 ---
 
-specification_version: 1.0.3 | sdd-rules-pr.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+Constitution version: 1.0.1
+Rules: sdd-rules-pr.md
+Rules version: 1.0
+Last Updated: 2025-09-11
+```

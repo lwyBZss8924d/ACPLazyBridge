@@ -217,4 +217,16 @@ codeql database analyze codeql-db \
 
 ---
 
-Specification Version: 1.0.3 | queries/CLAUDE.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"
+    path: "./queries/CLAUDE.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - "./CLAUDE.md"
+```

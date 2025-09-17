@@ -81,9 +81,9 @@ class SDDValidator:
     def check_governance_files(self) -> bool:
         """Check SDD governance documents exist and are valid."""
         required_files = {
-            "dev-docs/sdd/constitution.md": ["Core Principles", "Development Gates", "Version"],
-            "dev-docs/sdd/constitution_update_checklist.md": ["Pre-Amendment", "Post-Amendment"],
-            "dev-docs/sdd/lifecycle.md": ["Lifecycle Phases", "Enforcement", "Traceability"],
+            ".specify/memory/constitution.md": ["Core Principles", "Development Workflow", "Governance"],
+            ".specify/memory/constitution_update_checklist.md": ["Templates to Update", "Validation Steps", "Template Sync Status"],
+            ".specify/memory/lifecycle.md": ["Lifecycle", "Phases", "Traceability"],
         }
         
         all_valid = True

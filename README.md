@@ -2,7 +2,17 @@
 
 ACP bridge for agents / agent-tools plugin Hub connects IDEs, other types of editors, etc.
 
+## ACP (Agent Client Protocol) Protocol
+
+- Agent Client Protocol: <https://github.com/zed-industries/agent-client-protocol>
+- ACP JSON Schema: <https://github.com/zed-industries/agent-client-protocol/blob/main/schema/schema.json>
+
+> The Agent Client Protocol (ACP) standardizes communication between code editors (interactive programs for viewing and editing source code) and coding agents (programs that use generative AI to autonomously modify code).
+> The protocol is still under heavy development, and we aim to mature it as we get confidence in the design by implementing it in various settings.
+
 ## Purpose
+
+Governance: .specify/memory/constitution.md (normative; English-only)
 
 Provide a reusable, IDE-agnostic ACP bridge that:
 
@@ -58,9 +68,9 @@ The adapter supports external notification signals for immediate turn completion
 - `ACPLB_NOTIFY_PATH`: Path to notify sink file/FIFO (enables notify integration)
 - `ACPLB_NOTIFY_KIND`: Type of sink - `file` or `fifo` (default: `file`)
 - `ACPLB_NOTIFY_INJECT`: Auto-injection policy - `auto`, `never`, or `force` (default: `auto`)
-  - `auto`: Inject forwarder if no custom command is provided
-  - `never`: Never inject forwarder, respect Codex config
-  - `force`: Always inject forwarder, override Codex config
+    - `auto`: Inject forwarder if no custom command is provided
+    - `never`: Never inject forwarder, respect Codex config
+    - `force`: Always inject forwarder, override Codex config
 - `ACPLB_NOTIFY_CMD`: Custom notify command array in JSON format (overrides forwarder)
 - `ACPLB_IDLE_TIMEOUT_MS`: Idle timeout in milliseconds (default: 1200)
 - `ACPLB_POLLING_INTERVAL_MS`: Polling interval for timeout checks (default: 100)
@@ -95,7 +105,3 @@ export ACPLB_NOTIFY_INJECT=never
 ## License
 
 MIT
-
----
-
-Specification Version: 1.0.3 | README.md ("ACPLazyBridge" Repo Root README) Format: 1.0 | Last Updated: 2025-09-11

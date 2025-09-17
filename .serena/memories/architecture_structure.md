@@ -33,37 +33,37 @@
 Shared utilities and foundational components:
 
 - **`src/permissions.rs`**
-  - Maps ACP permission modes to provider-specific parameters
-  - Handles non-interactive approval policies
-  - Sandbox mode configuration
+    - Maps ACP permission modes to provider-specific parameters
+    - Handles non-interactive approval policies
+    - Sandbox mode configuration
 
 - **`src/transport.rs`**
-  - Spawn/stdio communication utilities
-  - Line-based JSON reading/writing
-  - Stream handling primitives
+    - Spawn/stdio communication utilities
+    - Line-based JSON reading/writing
+    - Stream handling primitives
 
 - **`src/logging.rs`**
-  - Tracing initialization
-  - Log configuration
-  - stderr/stdout separation
+    - Tracing initialization
+    - Log configuration
+    - stderr/stdout separation
 
 ##### `crates/codex-cli-acp/` - Codex Native Adapter
 
 Binary implementation for Codex CLI integration:
 
 - **`src/main.rs`**
-  - Entry point and CLI handling
-  - ACP server implementation
-  - Message routing and dispatch
+    - Entry point and CLI handling
+    - ACP server implementation
+    - Message routing and dispatch
 
 - **`src/codex_proto.rs`**
-  - Codex event parsing
-  - Stream management
-  - Protocol translation layer
+    - Codex event parsing
+    - Stream management
+    - Protocol translation layer
 
 - **`src/bin/`**
-  - `acplb_notify_forwarder.rs` - Notification forwarding utility
-  - `playback.rs` - Test playback tool
+    - `acplb_notify_forwarder.rs` - Notification forwarding utility
+    - `playback.rs` - Test playback tool
 
 #### `sdd-rules/` - Specification-Driven Development Rules
 
@@ -73,23 +73,23 @@ Binary implementation for Codex CLI integration:
 - **`lifecycle.md`** - SDD lifecycle phases
 - **`AGENTS.md`** - Team AI agents rules
 - **`commands/`** - SDD command documentation
-  - `/specify` command docs
-  - `/plan` command docs
-  - `/tasks` command docs
+    - `/specify` command docs
+    - `/plan` command docs
+    - `/tasks` command docs
 - **`templates/`** - SDD document templates
-  - `spec-template.md`
-  - `plan-template.md`
-  - `tasks-template.md`
+    - `spec-template.md`
+    - `plan-template.md`
+    - `tasks-template.md`
 - **`rules/`** - Categorized development rules
-  - `documentation-style/` - Markdown and doc standards
-  - `git/` - Git workflow rules (worktree, PR, issues)
-  - `ci/` - CI/CD requirements
-  - `tests/` - Testing standards
-  - `code-analysis/` - Code quality rules
-  - `tools-cli/` - CLI tool guidelines
-  - `tools-mcp/` - MCP tool guidelines
-  - `research/` - Research methodology
-  - `changelog/` - Changelog standards
+    - `documentation-style/` - Markdown and doc standards
+    - `git/` - Git workflow rules (worktree, PR, issues)
+    - `ci/` - CI/CD requirements
+    - `tests/` - Testing standards
+    - `code-analysis/` - Code quality rules
+    - `tools-cli/` - CLI tool guidelines
+    - `tools-mcp/` - MCP tool guidelines
+    - `research/` - Research methodology
+    - `changelog/` - Changelog standards
 
 #### `specs/` - SDD Specifications
 
@@ -127,11 +127,11 @@ specs/
 
 - `acp.md` - ACP specification
 - `acp_adapters/` - Adapter documentation
-  - `claude_code_acp.md` - Claude Code ACP adapter
+    - `claude_code_acp.md` - Claude Code ACP adapter
 - `cli_agents/` - CLI agent references
-  - `ClaudeCode/` - Claude Code documentation
-  - `codex.md` - Codex CLI documentation
-  - `gemini.md` - Gemini CLI documentation
+    - `ClaudeCode/` - Claude Code documentation
+    - `codex.md` - Codex CLI documentation
+    - `gemini.md` - Gemini CLI documentation
 - `zed_ide.md` - Zed IDE integration
 
 ##### `dev-docs/engineering/` - Engineering Guides
@@ -144,12 +144,12 @@ Non-normative guides linking to authority:
 ##### `dev-docs/review/` - Review Artifacts
 
 - `_artifacts/` - Evidence storage
-  - `tests/` - Test scenarios (JSONL)
-  - `logs/` - Execution logs
-  - `jq/` - JSON processing filters
-  - `reports/` - Test reports
-  - `IMPL.csv` - Symbol mapping
-  - `traceability.csv` - Requirements tracking
+    - `tests/` - Test scenarios (JSONL)
+    - `logs/` - Execution logs
+    - `jq/` - JSON processing filters
+    - `reports/` - Test reports
+    - `IMPL.csv` - Symbol mapping
+    - `traceability.csv` - Requirements tracking
 
 ##### `dev-docs/zh-CN/` - Chinese Documentation
 
@@ -187,9 +187,9 @@ Historical context and decisions
 - Maps ACP modes to provider parameters
 - Non-interactive by default
 - Configurable sandbox levels:
-  - `read-only` - No file system writes
-  - `workspace-write` - Write within workspace
-  - `full` - Unrestricted access
+    - `read-only` - No file system writes
+    - `workspace-write` - Write within workspace
+    - `full` - Unrestricted access
 - Network access control
 
 ## Event Processing
@@ -231,4 +231,15 @@ acp-lazy-core
 
 ---
 
-Specification Version: 1.0.3 | architecture_structure.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "serena-memories"
+    memories: "architecture_structure"
+    status: "expired"
+    path: ".serena/memories/architecture_structure.md"
+    version: "1.0.1"
+    last_updated: "2025-09-14T08:26:00Z"
+```

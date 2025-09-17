@@ -4,9 +4,9 @@
 
 - Use Rust stable toolchain (defined in rust-toolchain.toml)
 - Follow standard Rust naming conventions:
-  - snake_case for functions and variables
-  - PascalCase for types and traits
-  - SCREAMING_SNAKE_CASE for constants
+    - snake_case for functions and variables
+    - PascalCase for types and traits
+    - SCREAMING_SNAKE_CASE for constants
 - Use `Result<T>` for fallible operations
 - Prefer `anyhow::Result` for error handling in binaries
 - Use `thiserror` for library error types
@@ -14,8 +14,8 @@
 ## Project Structure
 
 - Workspace with two main crates:
-  - `acp-lazy-core`: Shared utilities and core functionality
-  - `codex-cli-acp`: Binary implementation for Codex adapter
+    - `acp-lazy-core`: Shared utilities and core functionality
+    - `codex-cli-acp`: Binary implementation for Codex adapter
 - Modular design with clear separation of concerns
 - Each module should have a focused responsibility
 
@@ -78,4 +78,15 @@
 
 ---
 
-Specification Version: 1.0.3 | code_style_conventions.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "serena-memories"
+    memories: "code_style_conventions"
+    status: "expired"
+    path: ".serena/memories/code_style_conventions.md"
+    version: "1.0.1"
+    last_updated: "2025-09-14T08:26:00Z"
+```

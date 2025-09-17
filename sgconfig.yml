@@ -1,0 +1,24 @@
+# ast-grep project config for ACPLazyBridge
+# Project-level configuration. Commit this file.
+# Docs: https://ast-grep.github.io/guide/project/project-config
+
+ignores:
+  - node_modules/**
+  - target/**
+  - dist/**
+  - build/**
+  - .git/**
+  - .venv/**
+  - .cache/**
+  - coverage/**
+  - tmp/**
+
+ruleDirs:
+  - sdd-rules/rules/code-analysis/ast-grep/go
+  - sdd-rules/rules/code-analysis/ast-grep/js
+  - sdd-rules/rules/code-analysis/ast-grep/python
+  - sdd-rules/rules/code-analysis/ast-grep/rust
+
+# You can add more rule directories (e.g., js/py) later:
+#   - sdd-rules/rules/code-analysis/ast-grep/js
+#   - sdd-rules/rules/code-analysis/ast-grep/python

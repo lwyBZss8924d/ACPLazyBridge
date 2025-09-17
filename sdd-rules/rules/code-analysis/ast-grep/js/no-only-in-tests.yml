@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.{js,jsx,ts,tsx}"
+id: js-no-test-only
+language: TypeScript
+message: Remove `.only` from tests (it.only/describe.only)
+rule:
+  any:
+    - pattern: it.only($$$ARGS)
+    - pattern: describe.only($$$ARGS)
+severity: error

@@ -220,7 +220,7 @@ EOF
     fi
     if [ "$MANUAL_COUNT" -gt 0 ]; then
       echo "  2. Manually fix $MANUAL_COUNT remaining issues"
-      echo "     See: ${BLUE}sdd-rules/rules/documentation-style/markdownlint-config.md${NC}"
+      echo "     See: ${BLUE}sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md${NC}"
     fi
     ;;
 esac

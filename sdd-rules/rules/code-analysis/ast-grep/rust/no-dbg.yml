@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+fix: "// dbg!($$$ARGS)"
+id: rust-no-dbg
+language: Rust
+message: Avoid dbg! in committed Rust code
+rule:
+  pattern: dbg!($$$ARGS)
+severity: warning

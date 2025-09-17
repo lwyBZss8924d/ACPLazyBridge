@@ -19,10 +19,8 @@ Worktrees provide isolated development environments where each feature, bug fix,
 ```bash
 # Create new worktree with new branch
 git worktree add ../spec-kit-feature-auth -b 001-auth
-
 # Create worktree from existing branch
 git worktree add ../spec-kit-bugfix bugfix/security-patch
-
 # Create worktree at specific commit
 git worktree add ../spec-kit-experiment HEAD~3
 ```
@@ -32,16 +30,12 @@ git worktree add ../spec-kit-experiment HEAD~3
 ```bash
 # List all worktrees
 git worktree list
-
 # Show detailed worktree information
 git worktree list --verbose
-
 # Remove worktree (clean)
 git worktree remove ../spec-kit-feature-auth
-
 # Remove worktree (force)
 git worktree remove --force ../spec-kit-broken
-
 # Prune stale worktree information
 git worktree prune
 ```
@@ -51,7 +45,6 @@ git worktree prune
 ```bash
 # Move worktree to new location
 git worktree move ../spec-kit-old ../spec-kit-new
-
 # Repair worktree references after move
 git worktree repair
 ```
@@ -61,7 +54,6 @@ git worktree repair
 ### Directory Names
 
 Pattern: ../spec-kit-<type>-<id>-<description>
-
 Types:
 
 - feature: New functionality
@@ -89,10 +81,8 @@ Types:
 ```bash
 # From main repository
 cd ~/projects/spec-kit
-
 # Create worktree for new task
 git worktree add ../spec-kit-task-001-api origin/main -b task/001-api
-
 # Navigate to worktree
 cd ../spec-kit-task-001-api
 ```
@@ -104,10 +94,8 @@ cd ../spec-kit-task-001-api
 python -m venv venv
 source venv/bin/activate
 pip install -e .
-
 # Node project
 npm install
-
 # Go project
 go mod download
 ```
@@ -117,7 +105,6 @@ go mod download
 ```bash
 # Claude Code
 code .  # Opens in VS Code with Claude
-
 # Warp Agent
 warp-preview agent run --profile dev \
   -C . \
@@ -150,17 +137,14 @@ git worktree remove ../spec-kit-task-001-api
 git worktree add ../spec-kit-frontend origin/main -b feature/ui
 cd ../spec-kit-frontend
 # Human develops...
-
 # AI Agent 1 works on API
 git worktree add ../spec-kit-api origin/main -b feature/api
 cd ../spec-kit-api
 claude-code implement specs/002-api/
-
 # AI Agent 2 works on database
 git worktree add ../spec-kit-database origin/main -b feature/db
 cd ../spec-kit-database
 warp-preview agent run --prompt "Implement database schema"
-
 # AI Agent 3 runs tests
 git worktree add ../spec-kit-testing origin/main -b feature/tests
 cd ../spec-kit-testing
@@ -177,7 +161,6 @@ git worktree list
 # /Users/dev/spec-kit-api      ghi789 [feature/api]
 # /Users/dev/spec-kit-database jkl012 [feature/db]
 # /Users/dev/spec-kit-testing  mno345 [feature/tests]
-
 # Merge completed work
 cd ~/projects/spec-kit
 git merge feature/api
@@ -192,7 +175,6 @@ git merge feature/db
 # Each worktree needs its own dependencies
 # Bad: Sharing virtual environment
 ../spec-kit/venv/
-
 # Good: Separate environments
 ../spec-kit/venv/
 ../spec-kit-feature/venv/
@@ -214,7 +196,6 @@ git stash   # Save work if needed
 # Avoid same branch in multiple worktrees
 # This will fail:
 git worktree add ../spec-kit-dup -b main  # Error: branch already checked out
-
 # Use different branches
 git worktree add ../spec-kit-exp -b experiment/test
 ```
@@ -227,7 +208,6 @@ git worktree add ../spec-kit-exp -b experiment/test
 # Each worktree gets its own Claude session
 cd ../spec-kit-feature-auth
 code .  # New VS Code window with Claude
-
 # Claude uses worktree's git context
 # Branch: feature/001-auth
 # No interference with other worktrees
@@ -249,11 +229,9 @@ warp-preview agent run \
 # Agent 1 in worktree 1
 cd ../spec-kit-task-001
 claude-code implement
-
 # Agent 2 in worktree 2  
 cd ../spec-kit-task-002
 warp-preview agent run
-
 # No conflicts or confusion
 ```
 
@@ -282,7 +260,6 @@ warp-preview agent run
 ```bash
 # If worktree is locked
 git worktree unlock ../spec-kit-feature
-
 # Force unlock if needed
 rm ../spec-kit-feature/.git/worktree.lock
 ```
@@ -292,7 +269,6 @@ rm ../spec-kit-feature/.git/worktree.lock
 ```bash
 # If directory was deleted
 git worktree prune
-
 # Repair references
 git worktree repair
 ```
@@ -302,7 +278,6 @@ git worktree repair
 ```bash
 # Check what's using branch
 git worktree list | grep feature/auth
-
 # Remove conflicting worktree
 git worktree remove ../old-worktree
 ```
@@ -314,20 +289,16 @@ git worktree remove ../old-worktree
 ```bash
 #!/bin/bash
 # create-feature-worktree.sh
-
 FEATURE_NAME=$1
 FEATURE_BRANCH="feature/$FEATURE_NAME"
 WORKTREE_DIR="../spec-kit-$FEATURE_NAME"
-
 # Create worktree
 git worktree add "$WORKTREE_DIR" -b "$FEATURE_BRANCH"
-
 # Setup environment
 cd "$WORKTREE_DIR"
 python -m venv venv
 source venv/bin/activate
 pip install -e .
-
 # Start development
 code .
 ```
@@ -337,17 +308,14 @@ code .
 ```bash
 #!/bin/bash  
 # parallel-test.sh
-
 # Create test worktrees
 git worktree add ../spec-kit-test-unit HEAD
 git worktree add ../spec-kit-test-integration HEAD
 git worktree add ../spec-kit-test-e2e HEAD
-
 # Run tests in parallel
 (cd ../spec-kit-test-unit && pytest tests/unit/) &
 (cd ../spec-kit-test-integration && pytest tests/integration/) &
 (cd ../spec-kit-test-e2e && pytest tests/e2e/) &
-
 # Wait for completion
 wait
 ```
@@ -357,16 +325,12 @@ wait
 ```bash
 #!/bin/bash
 # review-pr.sh
-
 PR_NUMBER=$1
 WORKTREE_DIR="../spec-kit-review-pr-$PR_NUMBER"
-
 # Fetch PR branch
 gh pr checkout $PR_NUMBER --detach
-
 # Create review worktree
 git worktree add "$WORKTREE_DIR" HEAD
-
 # Run review
 cd "$WORKTREE_DIR"
 warp-preview agent run --profile review \
@@ -394,6 +358,20 @@ warp-preview agent run --profile review \
 - Coordinate push timing if needed
 - Use different remotes if necessary
 
----
-
-specification_version: 1.0.3 | sdd-rules-worktrees.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "worktrees"
+    category: "git"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/git/worktree/sdd-rules-worktrees.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - "sdd-rules/rules/git/comments/sdd-rules-comments.md"
+        - "sdd-rules/rules/git/issues/sdd-rules-issues.md"
+        - "sdd-rules/rules/git/pr/sdd-rules-pr.md"
+```

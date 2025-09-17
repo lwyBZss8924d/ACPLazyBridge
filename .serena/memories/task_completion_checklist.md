@@ -96,4 +96,15 @@ cargo fmt --all -- --check && cargo clippy --workspace --all-targets --all-featu
 
 ---
 
-Specification Version: 1.0.3 | task_completion_checklist.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "serena-memories"
+    memories: "task_completion_checklist"
+    status: "expired"
+    path: ".serena/memories/task_completion_checklist.md"
+    version: "1.0.1"
+    last_updated: "2025-09-14T08:26:00Z"
+```

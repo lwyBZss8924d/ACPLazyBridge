@@ -164,12 +164,11 @@ Heading 1
 #### MD013 - Line length
 
 - **Configuration**:
-    `{ "line_length": 80, "code_blocks": false, "tables": false }`
-- **Description**: Enforces an 80-character line length for prose.
-- **Rationale**: This directly implements the Google guide's 80-character
-  limit, which improves readability in code-centric tools. The configuration
-  correctly excludes code blocks and tables from this limit, as specified in
-  the guide.
+    `{ "line_length": 120, "code_blocks": false, "tables": false }`
+- **Description**: Enforces a 120-character line length for prose.
+- **Rationale**: While the Google guide references an 80-character limit,
+  this repository standardizes on 120 characters for practicality in
+  code-centric tools. Code blocks and tables are excluded from this limit.
 
 #### MD035 - Horizontal rule style
 
@@ -233,11 +232,11 @@ Use sequential numbers unless intentionally different:
 
 ## MD013: Line length exceeded
 
-Wrap prose at 80 characters. Code blocks and tables are automatically excluded:
+Wrap prose at 120 characters. Code blocks and tables are automatically excluded:
 
 ```markdown
-# Prose should wrap at 80 characters
-This is a long line that should be wrapped to stay within the 80 character
+# Prose should wrap at 120 characters
+This is a long line that should be wrapped to stay within the 120 character
 limit for better readability.
 
 # Tables are excluded from line length limits
@@ -263,5 +262,19 @@ Use 4 spaces for nested lists:
 
 ---
 
-specification_version: 1.0.2 | sdd-rules-documentation-markdownlint.md
-Format: 1.1 | Last Updated: 2025-09-12
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "markdownlint"
+    category: "documentation-style"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - "sdd-rules/rules/documentation-style/sdd-rules-documentation-style.md"
+        - "sdd-rules/rules/documentation-style/google-markdown-style-guide.md"
+```

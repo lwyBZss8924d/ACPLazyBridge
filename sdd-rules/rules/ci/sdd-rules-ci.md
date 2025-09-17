@@ -3,9 +3,8 @@
 [TODO: Add SDD Rules - CI rules]
 
 ## Claude Code GitHub Actions
-
+>
 > Learn about integrating Claude Code into your development workflow with Claude Code GitHub Actions
-
 Claude Code GitHub Actions brings AI-powered automation to your GitHub workflow. With a simple `@claude` mention in any PR or issue, Claude can analyze your code, create pull requests, implement features, and fix bugs - all while following your project's standards.
 
 <Note>
@@ -30,7 +29,6 @@ Claude Code provides a powerful GitHub Action that transforms how you work with 
 #### Claude Code Action
 
 This GitHub Action allows you to run Claude Code within your GitHub Actions workflows. You can use this to build any custom workflow on top of Claude Code.
-
 [View repository →](https://github.com/anthropics/claude-code-action)
 
 ### Setup
@@ -38,7 +36,6 @@ This GitHub Action allows you to run Claude Code within your GitHub Actions work
 ### Quick setup
 
 The easiest way to set up this action is through Claude Code in the terminal. Just open claude and run `/install-github-app`.
-
 This command will guide you through setting up the GitHub app and required secrets.
 
 <Note>
@@ -65,7 +62,7 @@ If the `/install-github-app` command fails or you prefer manual setup, please fo
 ### Upgrading from Beta
 
 <Warning>
-  Claude Code GitHub Actions v1.0 introduces breaking changes that require updating your workflow files in order to upgrade to v1.0 from the beta version.
+Claude Code GitHub Actions v1.0 introduces breaking changes that require updating your workflow files in order to upgrade to v1.0 from the beta version.
 </Warning>
 
 If you're currently using the beta version of Claude Code GitHub Actions, we recommend that you update your workflows to use the GA version. The new version simplifies configuration while adding powerful new features like automatic mode detection.
@@ -212,7 +209,6 @@ Always use GitHub Secrets for API keys:
 - Reference it in workflows: `anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}`
 - Limit action permissions to only what's necessary
 - Review Claude's suggestions before merging
-
 Always use GitHub Secrets (e.g., `${{ secrets.ANTHROPIC_API_KEY }}`) rather than hardcoding API keys directly in your workflow files.
 
 #### Optimizing performance
@@ -222,20 +218,15 @@ Use issue templates to provide context, keep your `CLAUDE.md` concise and focuse
 #### CI costs
 
 When using Claude Code GitHub Actions, be aware of the associated costs:
-
 **GitHub Actions costs:**
 
 - Claude Code runs on GitHub-hosted runners, which consume your GitHub Actions minutes
 - See [GitHub's billing documentation](https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-actions/about-billing-for-github-actions) for detailed pricing and minute limits
-
 **API costs:**
-
 - Each Claude interaction consumes API tokens based on the length of prompts and responses
 - Token usage varies by task complexity and codebase size
 - See [Claude's pricing page](https://www.anthropic.com/api) for current token rates
-
 **Cost optimization tips:**
-
 - Use specific `@claude` commands to reduce unnecessary API calls
 - Configure appropriate `--max-turns` in `claude_args` to prevent excessive iterations
 - Set workflow-level timeouts to avoid runaway jobs
@@ -259,7 +250,6 @@ Key features:
 - **Slash commands** - Pre-built prompts like `/review` or `/fix`
 - **CLI passthrough** - Any Claude Code CLI argument via `claude_args`
 - **Flexible triggers** - Works with any GitHub event
-
 Visit the [examples directory](https://github.com/anthropics/claude-code-action/tree/main/examples) for complete workflow files.
 
 <Tip>
@@ -337,7 +327,6 @@ While the `/install-github-app` command is the recommended approach, you can als
 - **Custom GitHub App**: For organizations needing branded usernames or custom authentication flows. Create your own GitHub App with required permissions (contents, issues, pull requests) and use the actions/create-github-app-token action to generate tokens in your workflows.
 - **Manual GitHub Actions**: Direct workflow configuration for maximum flexibility
 - **MCP Configuration**: Dynamic loading of Model Context Protocol servers
-
 See the [Claude Code Action repository](https://github.com/anthropics/claude-code-action) for detailed documentation.
 
 #### Customizing Claude's behavior
@@ -346,9 +335,23 @@ You can configure Claude's behavior in two ways:
 
 1. **CLAUDE.md**: Define coding standards, review criteria, and project-specific rules in a `CLAUDE.md` file at the root of your repository. Claude will follow these guidelines when creating PRs and responding to requests. Check out our [Memory documentation](/en/docs/claude-code/memory) for more details.
 2. **Custom prompts**: Use the `prompt` parameter in the workflow file to provide workflow-specific instructions. This allows you to customize Claude's behavior for different workflows or tasks.
-
 Claude will follow these guidelines when creating PRs and responding to requests.
 
 ---
 
-specification_version: 1.0.3 | sdd-rules-ci.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "claude-code-github-actions"
+    category: "ci"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/ci/sdd-rules-ci.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - ".github/workflows/claude.yml"
+        - ".github/workflows/claude-code-review.yml"
+```

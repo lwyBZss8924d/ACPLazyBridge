@@ -15,6 +15,9 @@ venv/
 
 # External/canonical specifications (preserve original formatting)
 sdd-rules/rules/changelog/semver.md
+sdd-rules/rules/documentation-style/google-markdown-style-guide.md
+sdd-rules/rules/documentation-style/Google-developer-documentation-style-guide.md
+**/google-markdown-style-guide.md
 
 # Generated documentation
 docs/api/
@@ -33,3 +36,7 @@ temp/
 # Archive directories
 archive/
 deprecated/
+
+# CLAUDE agent guide files (skip line-length checks and others)
+**/CLAUDE.md
+CLAUDE.md

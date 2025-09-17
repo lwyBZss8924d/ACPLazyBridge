@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.go"
+  - "!**/*_test.go"
+id: go-no-fmt-println
+language: Go
+message: Avoid fmt.Println in non-test code; prefer logger
+rule:
+  pattern: fmt.Println($$$_)
+severity: warning

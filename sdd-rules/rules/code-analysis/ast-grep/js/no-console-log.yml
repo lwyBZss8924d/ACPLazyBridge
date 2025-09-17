@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.{js,jsx,ts,tsx}"
+id: js-no-console-log
+language: TypeScript
+message: Avoid console.log in committed code
+rule:
+  pattern: console.log($$$ARGS)
+severity: warning

@@ -13,7 +13,7 @@
 **Status**: ✅ Completed
 **Deliverables**:
 
-- `dev-docs/sdd/constitution.md`
+- `.specify/memory/constitution.md`
 - `dev-docs/sdd/constitution_update_checklist.md`
 - `dev-docs/sdd/lifecycle.md`
 

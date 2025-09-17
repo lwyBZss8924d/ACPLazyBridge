@@ -14,6 +14,7 @@ Cargo.lock
 *~
 .DS_Store
 .editorconfig
+.code-workspace
 
 # Local environment
 .env
@@ -21,12 +22,11 @@ Cargo.lock
 
 # Logs
 *.log
+_artifacts/logs/*.log
+dev-docs/review/_artifacts/logs
+_artifacts/logs/*
 dev-docs/review/_artifacts/logs/*.log
 dev-docs/review/_artifacts/parsed/
-
-# Local references (vendored documentation)
-/local_refs/
-ACP-DocsAndSourceCodeReference.md
 
 # Testing
 /test/
@@ -76,6 +76,9 @@ coverage/
 *.code-workspace
 
 # CodeQL
-dev-docs/review/_artifacts/
+.codeql
 .codeql-db/
 .codeql-results/
+
+# Dev tools Cache
+.serena/cache/

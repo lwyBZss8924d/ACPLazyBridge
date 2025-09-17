@@ -260,4 +260,15 @@ scripts/ci/run-local-ci.sh && echo "✅ Ready for PR!" || echo "❌ Fix issues f
 
 ---
 
-Specification Version: 1.0.3 | suggested_commands.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "serena-memories"
+    memories: "suggested_commands"
+    status: "expired"
+    path: ".serena/memories/suggested_commands.md"
+    version: "1.0.1"
+    last_updated: "2025-09-14T08:26:00Z"
+```

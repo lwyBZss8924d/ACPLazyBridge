@@ -1,152 +1,198 @@
 # CLAUDE.md (Authoritative)
 
-This document defines Claude Code–specific rules in ACPLazyBridge. It inherits the global rules from CONTRIBUTING.md and sdd-rules/AGENTS.md. and defines the Developer Team's AI Engineers-"claude" roles, responsibilities, and coordination model for AI Engineers ("agents") working within our Specification‑Driven Development (SDD) team. It follows the SDD principles in spec-driven.md: specifications are the primary artifacts; plans and code serve the spec. and AI Engineers development rules for human engineers and outher AI Engineers team members (Claude Code, WARP, Gemini, Codex, etc.). It complements CONTRIBUTING.md and sdd-rules/lifecycle.md.
+```text
+This document defines Claude Code–specific rules in ACPLazyBridge. It inherits the global rules from CONTRIBUTING.md and sdd-rules/AGENTS.md, and defines the Developer Team's AI Engineers-"claude" roles, responsibilities, and coordination model for AI Engineers ("agents") working within our Specification‑Driven Development (SDD) team. It follows the SDD principles in .specify/spec-driven.md: specifications are the primary artifacts; plans and code serve the spec. AI Engineers development rules apply to human engineers and other AI Engineers team members (Claude Code, WARP, Gemini, Codex, etc.). It complements CONTRIBUTING.md and .specify/memory/lifecycle.md.
+```
 
-Authority and scope
+## Authority and Scope
 
-- Normative authority: CONTRIBUTING.md, sdd-rules/lifecycle.md, sdd-rules/AGENTS.md
-- This file provides Claude-specific clarifications and must remain consistent with the above.
+- **Normative authority**: CONTRIBUTING.md, .specify/memory/lifecycle.md, sdd-rules/AGENTS.md
+- **Constitutional authority**: .specify/memory/constitution.md (v1.0.1)
+- This file provides Claude-specific clarifications and must remain consistent with the above
 
-Key rules (Claude Code)
+## Key Rules (Claude Code)
 
-- Worktree-first; branch categories: feature | fix | perf | chore | docs
-- Stdout strictly JSONL; logs to stderr only
-- Evidence stored under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/
-- Non-interactive permission mapping (typical defaults): approval_policy=never; sandbox_mode per task; network access only when explicitly required
-- Protocol examples MUST use ACP v1: "protocolVersion": 1
+- **Development approach**: Worktree-first; branch categories: feature | fix | perf | chore | docs
+- **Protocol compliance**: Stdout strictly JSONL; logs to stderr only
+- **Evidence paths**:
+    - Primary: `_artifacts/{tests,logs,jq,reports}/<task>/`
+    - Legacy: `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`
+- **Permission mapping**: Non-interactive defaults: approval_policy=never; sandbox_mode per task; network access only when explicitly required
+- **Protocol version**: Examples MUST use ACP v1: "protocolVersion": 1 (integer, not string)
 
-Submission checklist (Claude PRs)
+## Submission Checklist (Claude PRs)
 
-- Links to Spec/Plan/Tasks (specs/<NNN>-<slug>/)
-- Evidence links (tests/logs/jq/reports)
+- Links to Spec/Plan/Tasks (`specs/<NNN>-<slug>/`)
+- Evidence links (tests/logs/jq/reports) from both primary and legacy paths
 - Risks/rollback section
 - CI summary (fmt/clippy/test/replay)
+- Constitutional gate verification (Articles I, II, III, VII, VIII, IX)
 
-References
+## References
 
-- CONTRIBUTING.md
-- sdd-rules/AGENTS.md
-- sdd-rules/lifecycle.md
+- [CONTRIBUTING.md](../CONTRIBUTING.md)
+- [sdd-rules/AGENTS.md](./AGENTS.md)
+- [.specify/memory/lifecycle.md](../.specify/memory/lifecycle.md)
+- [.specify/memory/constitution.md](../.specify/memory/constitution.md)
 
 ---
 
 ## About SDD
 
-- [SDD Principles](./spec-driven.md)
+- [SDD Principles](../.specify/spec-driven.md)
+
+### Current SDD Rules Structure
 
 ```bash
-ACPLazyBridge/sdd-rules
-❯ ls
-AGENTS.md                   agent-file-template.md      commands/                   plan-template.md            sdd-documentation-style.md  spec-template.md            templates/
-CLAUDE.md                   ai-engineers/               lifecycle.md                rules/                      spec-driven.md              tasks-template.md
+ACPLazyBridge/sdd-rules/
+├── AGENTS.md                   # Team AI engineer profiles
+├── CLAUDE.md                   # Claude-specific rules (this file)
+├── commands/                   # SDD command documentation
+│   └── README.md              # Command workflow reference
+├── rule-tests/                 # AST-grep rule tests
+│   ├── rust-mutex-lock-test.yml
+│   └── rust-no-unwrap-test.yml
+└── rules/                      # All SDD rule categories
+    ├── README.md              # Rules index
+    ├── changelog/             # Version and change management
+    ├── ci/                    # Continuous integration rules
+    ├── code-analysis/         # Code quality and AST-grep rules
+    ├── documentation-style/   # Documentation standards
+    ├── git/                   # Git workflow rules
+    ├── research/              # Research methodology
+    ├── tests/                 # Testing standards
+    ├── tools-cli/             # CLI tool documentation
+    └── tools-mcp/             # MCP server configuration
 ```
 
-Base SDD documentation:
+### Base SDD Documentation
 
-- [AGENTS.md](./sdd-rules/AGENTS.md) link with WARP.md
-- [CLAUDE.md](./sdd-rules/CLAUDE.md)
-- [spec-driven.md](./spec-driven.md)
-- [spec-template.md](./sdd-rules/spec-template.md)
-- [tasks-template.md](./sdd-rules/tasks-template.md)
-- [plan-template.md](./sdd-rules/plan-template.md)
-- [agent-file-template.md](./agent-file-template.md)
+- [AGENTS.md](./AGENTS.md) - Team coordination and roles
+- [CLAUDE.md](./CLAUDE.md) - Claude-specific rules (this file)
+- [.specify/spec-driven.md](../.specify/spec-driven.md) - Core SDD principles
+- [.specify/templates/spec-template.md](../.specify/templates/spec-template.md) - Specification template
+- [.specify/templates/plan-template.md](../.specify/templates/plan-template.md) - Plan template
+- [.specify/templates/tasks-template.md](../.specify/templates/tasks-template.md) - Tasks template
 
 ## SDD Constitution
 
-- [SDD Constitution](./memory/constitution.md)
-- [SDD Constitution Update Checklist](./memory/constitution_update_checklist.md)
+- [SDD Constitution](../.specify/memory/constitution.md) - v1.0.1 with 9 core articles
+- [SDD Constitution Update Checklist](../.specify/memory/constitution_update_checklist.md)
 
 ## SDD - (/specs)
 
 Work in `./specs/`
 
-## SDD - Scripts & CI/CD (Templates)
+## SDD - Scripts & CI/CD
 
 ```bash
-ACPLazyBridge/scripts
-❯ tree
-.
-├── check-task-prerequisites.sh
-├── ci
-│   ├── check-language-policy.sh
-│   ├── run-local-ci.sh
-│   └── run-sdd-structure-lint.sh
-├── common.sh
-├── create-new-feature.sh
-├── get-feature-paths.sh
-├── sdd
-│   ├── check_language.sh
-│   ├── lint_docs.sh
-│   ├── run_semantic_checks.sh
-│   └── validate_structure.py
-├── setup-plan.sh
-└── update-agent-context.sh
+ACPLazyBridge/scripts/
+├── sdd/                        # SDD workflow automation (12 scripts)
+│   ├── create-new-feature.sh   # Initialize features
+│   ├── setup-plan.sh           # Create plans
+│   ├── check-task-prerequisites.sh  # Validate tasks
+│   ├── validate_structure.py   # Structure validation
+│   ├── check_language.sh       # Language policy
+│   ├── run_semantic_checks.sh  # Link validation
+│   ├── check-markdown.sh       # Markdown checks
+│   ├── fix-markdown.sh         # Auto-fix markdown
+│   ├── lint_docs.sh            # Doc linting
+│   ├── get-feature-paths.sh    # Path utilities
+│   ├── update-agent-context.sh # Memory sync
+│   └── common.sh               # Shared functions
+├── ci/                         # CI/CD automation (4 scripts)
+│   ├── run-local-ci.sh        # Main CI orchestrator
+│   ├── run-sdd-structure-lint.sh  # SDD validation
+│   ├── check-language-policy.sh   # English enforcement
+│   └── run-markdown-style.sh  # Markdown linting
+└── ast-grep/                   # Code analysis (6 scripts)
+    ├── sg-scan.sh              # Full codebase scan
+    ├── sg-scan-file.sh         # Single file scan
+    ├── sg-baseline-acp-rust-dbg.sh     # Find dbg! macros
+    ├── sg-baseline-acp-rust-no-unwrap.sh  # Find unwrap()
+    ├── sg-baseline-acp-rust-todo.sh    # Find TODOs
+    └── sg-fix.sh               # Apply auto-fixes
 ```
 
-## SDD Rules
+## SDD Rules Categories
 
 ```bash
-ACPLazyBridge/sdd-rules/rules
-❯ tree
-.
-├── changelog
-│   ├── keep-a-changelog-index.html.haml
+ACPLazyBridge/sdd-rules/rules/
+├── README.md                   # Rules index
+├── changelog/                  # Version management
+│   ├── sdd-rules-changelog.md
 │   └── semver.md
-├── code-analysis
-├── documentation-style
+├── ci/                         # CI/CD rules
+│   └── sdd-rules-ci.md
+├── code-analysis/              # Code quality rules
+│   ├── sdd-rules-code-analysis.md
+│   └── ast-grep/               # AST-grep rule definitions
+│       ├── go/no-fmt-println.yml
+│       ├── js/
+│       │   ├── no-console-log.yml
+│       │   └── no-only-in-tests.yml
+│       ├── python/
+│       │   ├── no-pdb.yml
+│       │   └── no-print.yml
+│       └── rust/
+│           ├── no-dbg.yml
+│           ├── no-unwrap.yml
+│           ├── rust-mutex-lock.yml
+│           └── todo-comment.yml
+├── documentation-style/        # Documentation standards
 │   ├── Google-developer-documentation-style-guide.md
-│   └── markdownlint-config.md
-├── git
-│   ├── comments
-│   ├── issues
-│   ├── pr
-│   └── worktree
-│       └── worktrees.md
-├── plan
-├── research
-├── spec
-├── tasks
-├── test
-├── tools-cli
-└── tools-mcp
+│   ├── sdd-rules-documentation-markdownlint.md
+│   └── sdd-rules-documentation-style.md
+├── git/                        # Git workflow
+│   ├── comments/sdd-rules-comments.md
+│   ├── issues/sdd-rules-issues.md
+│   ├── pr/sdd-rules-pr.md
+│   └── worktree/sdd-rules-worktrees.md
+├── research/                   # Research methodology
+│   └── sdd-rules-research.md
+├── tests/                      # Testing standards
+│   └── sdd-rules-tests.md
+├── tools-cli/                  # CLI tool documentation
+│   ├── sdd-rules-tools-cli-list.md
+│   ├── sdd-rules-tools-cli-astgrep.md
+│   ├── sdd-rules-tools-cli-document-search-and-parsing.md
+│   └── ast-grep.llms.txt
+└── tools-mcp/                  # MCP server rules
+    └── sdd-rules-tools-mcp.md
 ```
 
-## SDD Templates
+## SDD Templates Location
+
+The actual SDD templates are located in `.specify/templates/`, not under sdd-rules:
 
 ```bash
-ACPLazyBridge/sdd-rules/templates
-❯ tree
-.
-├── AGENTS.md
-├── CLAUDE.md
-├── agent-file-template.md
-├── ai-engineers
-│   ├── cli-tools.md
-│   └── mcp.md
-├── commands
-│   ├── plan.md
-│   ├── specify.md
-│   └── tasks.md
-├── git
-│   └── worktrees.md
-├── plan-template.md
-├── sdd
-│   ├── constitution.md
-│   ├── constitution_update_checklist.md
-│   └── lifecycle.md
-├── skeleton
-│   ├── CLAUDE.md.tmpl
-│   ├── README.md.tmpl
-│   ├── WARP.md.tmpl
-│   ├── claude
-│   │   └── CLAUDE.subdir.md.tmpl
-│   ├── dev-docs
-│   │   └── sdd
-│   │       └── AGENTS.md.tmpl
-│   └── scripts
-│       └── create-new-feature.sh
-├── spec-template.md
-└── tasks-template.md
+ACPLazyBridge/.specify/templates/
+├── agent-file-template.md      # Agent documentation template
+├── plan-template.md            # Implementation plan template
+├── spec-template.md            # Specification template
+└── tasks-template.md           # Task list template
+```
+
+## AST-grep Configuration
+
+```yaml
+# sgconfig.yml at repository root
+ignores:
+  - node_modules/**
+  - target/**
+  - dist/**
+  - build/**
+  - .git/**
+  - .venv/**
+  - .cache/**
+  - coverage/**
+  - tmp/**
+
+ruleDirs:
+  - sdd-rules/rules/code-analysis/ast-grep/go
+  - sdd-rules/rules/code-analysis/ast-grep/js
+  - sdd-rules/rules/code-analysis/ast-grep/python
+  - sdd-rules/rules/code-analysis/ast-grep/rust
 ```
 
 ## Team AI Engineer Profiles
@@ -284,10 +330,15 @@ Outcome: documentation, plans, tasks, and CI checks remain a living, executable 
 **Access Level**: Read/write within defined scopes
 **Primary Tools**: Bash / Task / TodoWrite / Read / Write / Edit / Glob / Grep / MultiEdit / WebSearch / WebFetch / Bash(ast-grep) and (/allowed-tools) all local CLI tools
 **MCP Servers**: All available `--scope user` with config MCP tools `claude mcp list` ( serena / context7 / jina-mcp / deepwiki / github-mcp / e.g. ) <https://docs.anthropic.com/en/docs/claude-code/mcp>
-**sub-agents**: "Claude-Code" developer team's sub-agents config (`~/.claude/agents/`) <https://docs.anthropic.com/en/docs/claude-code/sub-agents>
-**settings**: config (`~/.claude/settings.json`) <https://docs.anthropic.com/en/docs/claude-code/settings>
-**hooks**: <https://docs.anthropic.com/en/docs/claude-code/hooks>
-**CLAUDE.md**: All Claude Code’s AI-Engineer memory and SDD rules files
+**Sub-agents**: "Claude-Code" developer team's sub-agents config (`~/.claude/agents/`) <https://docs.anthropic.com/en/docs/claude-code/sub-agents>
+
+- `document-retriever` - High-signal document retrieval using SemTools
+- `code-retriever` - Precise code retrieval using AST-aware patterns
+- `code-analyzer` - Repository analysis via ast-grep scan
+
+**Settings**: config (`~/.claude/settings.json`) <https://docs.anthropic.com/en/docs/claude-code/settings>
+**Hooks**: <https://docs.anthropic.com/en/docs/claude-code/hooks>
+**CLAUDE.md**: All Claude Code's AI-Engineer memory and SDD rules files
 **Github Actions**: <https://docs.anthropic.com/en/docs/claude-code/github-actions>
 
 #### CLAUDE.md
@@ -318,7 +369,8 @@ See @README for project overview and @package.json for available npm commands fo
 - git workflow @docs/git-instructions.md
 ```
 
-Both relative and absolute paths are allowed. In particular, importing files in user's home dir is a convenient way for your team members to provide individual instructions that are not checked into the repository. Previously CLAUDE.local.md served a similar purpose, but is now deprecated in favor of imports since they work better across multiple git worktrees.
+Both relative and absolute paths are allowed. In particular, importing files in user's home dir is a convenient way for your team members to provide individual instructions that are not checked into the repository.
+Previously CLAUDE.local.md served a similar purpose, but is now deprecated in favor of imports since they work better across multiple git worktrees.
 
 ```bash
 # Individual Preferences
@@ -335,7 +387,8 @@ Imported files can recursively import additional files, with a max-depth of 5 ho
 
 ##### How Claude looks up memories
 
-Claude Code reads memories recursively: starting in the cwd, Claude Code recurses up to (but not including) the root directory **/** and reads any CLAUDE.md or CLAUDE.local.md files it finds. This is especially convenient when working in large repositories where you run Claude Code in **foo/bar/**, and have memories in both **foo/CLAUDE.md** and **foo/bar/CLAUDE.md**.
+Claude Code reads memories recursively: starting in the cwd, Claude Code recurses up to (but not including) the root directory **/** and reads any CLAUDE.md or CLAUDE.local.md files it finds.
+This is especially convenient when working in large repositories where you run Claude Code in **foo/bar/**, and have memories in both **foo/CLAUDE.md** and **foo/bar/CLAUDE.md**.
 
 Claude will also discover CLAUDE.md nested in subtrees under your current working directory. Instead of loading them at launch, they are only included when Claude reads files in those subtrees.
 
@@ -441,12 +494,15 @@ For detailed information about print mode (`-p`) including output formats,
 streaming, verbose logging, and programmatic usage, see the
 [SDK documentation](/en/docs/claude-code/sdk).
 
+#### "Claude-Code" developer team's sub-agents
+
 ### "Warp" Terminal & CLI Agents
 
 **Role**: Project Manager, Issues Planner, and task‑artifact Reviewer
 **Capabilities**: Command execution, log analysis, debugging
 **Access Level**: All Permissions Always allow with selective execution (Apply code diffs / Read files / Create plans / Execute commands)
-**Command allowlist**: Always allow `which .*` `ls(\s.*)?` `grep(\s.*)?` `ast-grep(\s.*)?` `find .*` `echo(\s.*)?` `bash(\s.*)?` `zsh(\s.*)?` `fish(\s.*)?` `wget(\s.*)?` `rm(\s.*)?` `source(\s.*)?` `eval(\s.*)?` `curl(\s.*)?` `sh(\s.*)?` `pwsh(\s.*)?` e.g.
+**Command allowlist**: Always allow
+`which .*` `ls(\s.*)?` `grep(\s.*)?` `ast-grep(\s.*)?` `find .*` `echo(\s.*)?` `bash(\s.*)?` `zsh(\s.*)?` `fish(\s.*)?` `wget(\s.*)?` `rm(\s.*)?` `source(\s.*)?` `eval(\s.*)?` `curl(\s.*)?` `sh(\s.*)?` `pwsh(\s.*)?` e.g. all config allowed CLI tools
 **MCP Servers**: Always allow All available with config MCP tools ( github-mcp / serena / context7 / jina-mcp / deepwiki / e.g. )
 
 ```bash
@@ -536,10 +592,10 @@ validation_phase:
 - Commit messages MUST include the task reference: `[TASK-NNN]` or `[BUG-NNN]`.
 - Conventional commit style is encouraged: `feat:`, `fix:`, `docs:`, `chore:`, etc.
 - PR template MUST answer:
-  - Does this change affect a library interface? (Article I) [yes/no]
-  - Does this change affect a CLI surface? (Article II) [yes/no]
-  - Contracts updated? (paths)
-  - Tests updated? (contract/integration/e2e/unit)
+    - Does this change affect a library interface? (Article I) [yes/no]
+    - Does this change affect a CLI surface? (Article II) [yes/no]
+    - Contracts updated? (paths)
+    - Tests updated? (contract/integration/e2e/unit)
 - Link the PR to the corresponding Issue and the `specs/NNN-*/` folder.
 
 ## MCP Servers Configuration
@@ -696,12 +752,29 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena 
 
 | Agent | Min Version | Recommended | Notes |
 |-------|------------|-------------|-------|
-| Claude Code | 1.0.111 | Latest | Primary agent |
-| warp-preview | v0.2025.09.03.08.11.preview_01 | Latest | CLI required |
-| codex-cli | 0.33.0 | Latest | Optional |
-| gemini-cli | 0.4.0 | Latest | Research focus |
-| cursor-agent | 2025.09.04-fc40cd1 | Latest | Cursor IDE's CLI agent |
+| Claude Code | 1.0.117 | Latest | Primary agent |
+| warp-preview | v0.2025.09.10.08.11.preview_01 | Latest | CLI required |
+| codex-cli | 0.36.0 | Latest | Optional |
+| gemini-cli | 0.4.1 | Latest | Research focus |
+| cursor-agent | 2025.09.12-4852336 | Latest | Cursor IDE's CLI agent |
 
 ---
 
-Specification Version: 1.0.3 | agents.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"
+    path: "./sdd-rules/CLAUDE.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - ".specify/memory/lifecycle.md"
+        - "sdd-rules/rules/README.md"
+        - ".specify/templates/spec-template.md"
+        - ".specify/templates/plan-template.md"
+        - ".specify/templates/tasks-template.md"
+        - "./CLAUDE.md"
+```

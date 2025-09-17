@@ -33,14 +33,14 @@ from the Google Developer Documentation Style Guide:
 - **Person**: Use second person ("you") rather than "we" or "I".
 - **Active Voice**: Use active voice to make it clear who is performing
     the action.
-  - ✅ Correct: "Run the command to start the server."
-  - ❌ Incorrect: "The server is started by running the command."
+    - ✅ Correct: "Run the command to start the server."
+    - ❌ Incorrect: "The server is started by running the command."
 - **Headings**: Use sentence case for all titles and headings.
-  - ✅ Correct: "Create a new virtual machine"
-  - ❌ Incorrect: "Create a New Virtual Machine"
+    - ✅ Correct: "Create a new virtual machine"
+    - ❌ Incorrect: "Create a New Virtual Machine"
 - **Imperative Mood**: Use imperative mood (command form) for instructions
     and short headings.
-  - Examples: "Download the data", "Call the API", "Process the results"
+    - Examples: "Download the data", "Call the API", "Process the results"
 - **Links**: Use descriptive link text that clearly indicates the
     destination. When linking between documents within this repository, use
     relative paths.
@@ -58,13 +58,13 @@ Guide:
 - **Line Length**: Currently disabled for existing content. Target: 80
   characters for prose (excludes code blocks and tables).
 - **Lists**:
-  - Use a dash (`-`) for unordered lists
-  - Indent nested lists with 2 spaces (current) or 4 spaces (target)
-  - Number ordered lists sequentially (`1.`, `2.`, `3.`)
+    - Use a dash (`-`) for unordered lists
+    - Indent nested lists with 2 spaces (current) or 4 spaces (target)
+    - Number ordered lists sequentially (`1.`, `2.`, `3.`)
 - **Code Blocks**:
-  - Use fenced code blocks (` ``` `) and always specify a language
-    identifier (e.g., `bash`, `yaml`, `json`)
-  - Do not use indented code blocks
+    - Use fenced code blocks (` ``` `) and always specify a language
+      identifier (e.g., `bash`, `yaml`, `json`)
+    - Do not use indented code blocks
 - **Spacing**: Do not use hard tabs or trailing whitespace. Add blank lines
   around headings for readability.
 
@@ -139,5 +139,20 @@ original formatting of a canonical specification.
 
 ---
 
-specification_version: 1.0.6 | sdd-rules-documentation-style.md Format: 1.3
-| Last Updated: 2025-09-12
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "documentation-style"
+    category: "documentation-style"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/documentation-style/sdd-rules-documentation-style.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - "sdd-rules/rules/documentation-style/google-developer-documentation-style-guide.md"
+        - "sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md"
+        - "sdd-rules/rules/documentation-style/google-markdown-style-guide.md"
+```

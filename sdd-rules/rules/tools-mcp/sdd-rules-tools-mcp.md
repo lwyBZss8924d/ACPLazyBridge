@@ -12,7 +12,6 @@ export ANTHROPIC_API_KEY=$(security find-generic-password -s anthropic)
 ### "github-mcp"
 
 - [MCP] <https://github.com/github/github-mcp-server>
-
 **Purpose**: Repository operations
 **install**: remote HTTP server
 **Agents**: All
@@ -40,7 +39,6 @@ claude mcp add --transport http github https://api.githubcopilot.com/mcp -H "Aut
 ### "jina-mcp"
 
 - [MCP] <https://github.com/jina-ai/MCP>
-
 **Purpose**: Web research and extraction
 **install**: remote HTTP server
 **Agents**: All
@@ -69,7 +67,6 @@ claude mcp add --transport sse jina-mcp https://mcp.jina.ai/sse \
 ### "context7"
 
 - [MCP] <https://github.com/upstash/context7>
-
 **Purpose**: Library documentation
 **install**: remote HTTP server
 **Agents**: All
@@ -97,7 +94,6 @@ claude mcp add --transport http context7 https://mcp.context7.com/mcp --header "
 ### "deepwiki"
 
 - [MCP] <https://mcp.deepwiki.com>
-
 **Purpose**: any Github Repository research
 **install**: remote HTTP server
 **Agents**: All
@@ -122,7 +118,6 @@ claude mcp add -s user -t http deepwiki https://mcp.deepwiki.com/mcp
 ### "serena"
 
 - [MCP] <https://github.com/oraios/serena>
-
 **Purpose**: Semantic code analysis
 **install**: local stdio macp server
 
@@ -152,4 +147,18 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena 
 
 ---
 
-specification_version: 1.0.3 | sdd-rules-tools-mcp.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "tools-mcp-list"
+    category: "tools-mcp"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/tools-mcp/sdd-rules-tools-mcp.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - "sdd-rules/AGENTS.md"
+```

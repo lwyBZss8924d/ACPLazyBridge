@@ -43,8 +43,8 @@ Every feature or change follows the SDD workflow:
 ### Normative Documents (Authoritative)
 
 - **Engineering Ground Rules**: [CONTRIBUTING.md](CONTRIBUTING.md)
-- **SDD Principles & Workflow**: [sdd-rules/spec-driven.md](sdd-rules/spec-driven.md)
-- **SDD Lifecycle**: [sdd-rules/lifecycle.md](sdd-rules/lifecycle.md)
+- **SDD Principles & Workflow**: [.specify/spec-driven.md](.specify/spec-driven.md)
+- **SDD Lifecycle**: [.specify/memory/lifecycle.md](.specify/memory/lifecycle.md)
 - **Team Rules**: [sdd-rules/AGENTS.md](sdd-rules/AGENTS.md)
 - **Rules Index**: [sdd-rules/rules/README.md](sdd-rules/rules/README.md)
 
@@ -57,16 +57,16 @@ Every feature or change follows the SDD workflow:
 
 - **M0**: ✅ Completed - Basic workspace setup, SDD rules integrated
 - **M1**: 🚧 In Progress - Codex Native Adapter implementation
-  - stdio loop implementation
-  - Streaming support
-  - Tool call mapping
-  - Permission system
-  - Smoke testing
+    - stdio loop implementation
+    - Streaming support
+    - Tool call mapping
+    - Permission system
+    - Smoke testing
 - **M2-M5**: 📋 Planned
-  - Proxy adapters (Claude, Gemini)
-  - Plugin system v0
-  - Native adapters
-  - HTTP/SSE bridge
+    - Proxy adapters (Claude, Gemini)
+    - Plugin system v0
+    - Native adapters
+    - HTTP/SSE bridge
 
 ## Repository Structure
 
@@ -127,4 +127,15 @@ All AI Developers coding agent's client rules in this codebase ~/ root file are 
 
 ---
 
-Specification Version: 1.0.3 | project_overview.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "serena-memories"
+    memories: "project_overview"
+    status: "expired"
+    path: ".serena/memories/project_overview.md"
+    version: "1.0.1"
+    last_updated: "2025-09-14T08:26:00Z"
+```

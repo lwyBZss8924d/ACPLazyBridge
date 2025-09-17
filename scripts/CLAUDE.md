@@ -2,23 +2,37 @@
 
 ## Authority
 
+- Constitution: ../.specify/memory/constitution.md (Articles III, VII, IX)
+- SDD Integration: ../.specify/CLAUDE.md (operational context)
 - See ../sdd-rules/CLAUDE.md and ../sdd-rules/AGENTS.md
-- SDD Commands: ../sdd-rules/commands/{specify,plan,tasks}.md
+- SDD Commands: ../.specify/commands/{specify,plan,tasks}.md
 
 ## Purpose
 
 Automation scripts for SDD workflow, CI/CD, and development tasks. These scripts implement the core SDD automation that drives the specification-driven development process.
 
+## SDD Integration
+
+For comprehensive SDD workflow details, see **[../.specify/CLAUDE.md](../.specify/CLAUDE.md)**
+
+### Constitutional Requirements for Scripts
+
+- **Article III (Test-First)**: Scripts support RED→GREEN→REFACTOR workflow
+- **Article VII (Simplicity)**: Scripts are simple, single-purpose tools
+- **Article IX (Integration-First)**: Scripts validate contracts before implementation
+
 ## Scripts Overview
 
-### Core SDD Scripts
+### Core SDD Scripts (sdd/)
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
 | `create-new-feature.sh` | Initialize new feature with spec | Called by `/specify` |
 | `setup-plan.sh` | Bootstrap implementation plan | Called by `/plan` |
-| `check-task-prerequisites.sh` | Validate task readiness | Pre-execution checks |
+| `check-task-prerequisites.sh` | Validate task readiness | Called by `/tasks` |
+| `get-feature-paths.sh` | Resolve feature directory paths | Helper utility |
 | `update-agent-context.sh` | Sync agent memory files | Memory management |
+| `common.sh` | Shared utilities and functions | Sourced by other scripts |
 
 ### CI/CD Scripts (ci/)
 
@@ -34,9 +48,32 @@ Automation scripts for SDD workflow, CI/CD, and development tasks. These scripts
 | Script | Purpose | Validates |
 |--------|---------|-----------|
 | `validate_structure.py` | Check spec/plan/tasks structure | Directory layout |
-| `check_language.sh` | Language policy enforcement | Normative artifacts |
-| `lint_docs.sh` | Documentation quality | Markdown format |
+| `check_language.sh` | Language policy enforcement | English-only normative |
+| `check-markdown.sh` | Markdown quality check | MD format compliance |
+| `fix-markdown.sh` | Auto-fix markdown issues | Linting corrections |
+| `lint_docs.sh` | Documentation quality | Overall doc standards |
 | `run_semantic_checks.sh` | Cross-reference validation | Links and references |
+
+### Metadata Management Scripts (sdd/)
+
+| Script | Purpose | Capabilities |
+|--------|---------|-----------|
+| `validate-metadata.sh` | Validate YAML metadata | Syntax, structure, required fields |
+| `query-metadata.sh` | Query documents by metadata | Filter by type, version, date |
+| `check-sdd-consistency.sh` | Check global consistency | Constitution versions, dependencies |
+| `migrate-to-yaml-metadata.sh` | Migrate metadata format | Convert to unified YAML format |
+| `lib/metadata-utils.sh` | Shared utilities | YAML/JSON parsing functions |
+
+### AST-grep Scripts (ast-grep/)
+
+| Script | Purpose | Analyzes |
+|--------|---------|-----------|
+| `sg-scan.sh` | Run full codebase scan | All configured rules |
+| `sg-scan-file.sh` | Scan specific file | Single file analysis |
+| `sg-baseline-acp-rust-dbg.sh` | Check for dbg! macros | Rust debug code |
+| `sg-baseline-acp-rust-no-unwrap.sh` | Find unwrap() usage | Rust error handling |
+| `sg-baseline-acp-rust-todo.sh` | Find TODO comments | Code debt markers |
+| `sg-fix.sh` | Apply auto-fixes | Correctable issues |
 
 ## Usage Guidelines
 
@@ -84,7 +121,7 @@ fi
 ### Feature Creation Flow
 
 ```bash
-# 1. create-new-feature.sh
+# 1. scripts/sdd/create-new-feature.sh
 # - Determines next feature number (NNN)
 # - Creates branch from origin/main
 # - Initializes specs/NNN-<slug>/ directory
@@ -102,7 +139,7 @@ fi
 ### Plan Setup Flow
 
 ```bash
-# 2. setup-plan.sh
+# 2. scripts/sdd/setup-plan.sh
 # - Validates spec exists
 # - Copies plan template
 # - Creates supporting directories
@@ -120,7 +157,7 @@ fi
 ### CI Validation Flow
 
 ```bash
-# 3. run-local-ci.sh
+# 3. scripts/ci/run-local-ci.sh
 # Executes in order:
 1. Rust formatting check
 2. Clippy linting
@@ -175,25 +212,176 @@ sed -e "s/\[FEATURE_NAME\]/$FEATURE_NAME/g" \
 ### /specify Command Integration
 
 ```bash
-# Called by: /specify "feature description"
-scripts/create-new-feature.sh --json "$FEATURE_DESC"
+# Called by: /specify "feature description" (see ../.specify/commands/specify.md)
+scripts/sdd/create-new-feature.sh --json "$FEATURE_DESC"
 # Creates: Branch, spec directory, initial spec.md
 ```
 
 ### /plan Command Integration
 
 ```bash
-# Called by: /plan "technical approach"
-scripts/setup-plan.sh --json
-# Creates: plan.md, data-model.md, contracts/, research.md
+# Called by: /plan "technical approach" (see ../.specify/commands/plan.md)
+scripts/sdd/setup-plan.sh --json
+# Creates: plan.md, data-model.md, contracts/, research.md, quickstart.md
 ```
 
 ### /tasks Command Integration
 
 ```bash
-# Called after plan exists
-# Derives tasks from plan and contracts
-# Creates: tasks.md with executable task list
+# Called by: /tasks "context" (see ../.specify/commands/tasks.md)
+scripts/sdd/check-task-prerequisites.sh --json
+# Validates prerequisites, then tasks.md is generated
+# Creates: tasks.md with executable, ordered task list
+```
+
+## Metadata Management
+
+### YAML Metadata Format
+
+All SDD documents use embedded YAML metadata at the document footer:
+
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"  # or sdd-rule, sdd-command, etc.
+    path: "./path/to/doc.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+```
+
+### Validation Workflows
+
+```bash
+# Validate single file metadata
+./scripts/sdd/validate-metadata.sh --file CLAUDE.md --verbose
+
+# Validate all SDD documents
+./scripts/sdd/validate-metadata.sh
+
+# Generate JSON validation report
+./scripts/sdd/validate-metadata.sh --format json > validation-report.json
+
+# Check constitution version consistency
+./scripts/sdd/validate-metadata.sh --check-consistency --strict
+```
+
+### Querying Documents
+
+```bash
+# Find all Claude memory files
+./scripts/sdd/query-metadata.sh --type claude-memory
+
+# Find outdated documents (not updated in 30 days)
+./scripts/sdd/query-metadata.sh --outdated 30
+
+# Find documents with old constitution version
+./scripts/sdd/query-metadata.sh --constitution-version 1.0.0
+
+# Get all documents sorted by date in JSON format
+./scripts/sdd/query-metadata.sh --all --sort date --format json
+```
+
+### Consistency Checking
+
+```bash
+# Full consistency check with details
+./scripts/sdd/check-sdd-consistency.sh --verbose
+
+# Generate JSON consistency report
+./scripts/sdd/check-sdd-consistency.sh --format json > consistency-report.json
+
+# Check without dependency validation (faster)
+./scripts/sdd/check-sdd-consistency.sh --no-dependencies
+```
+
+### Metadata Migration
+
+```bash
+# Dry run to preview changes
+./scripts/sdd/migrate-to-yaml-metadata.sh --dry-run
+
+# Migrate all files
+./scripts/sdd/migrate-to-yaml-metadata.sh
+
+# Migrate specific file
+./scripts/sdd/migrate-to-yaml-metadata.sh --file sdd-rules/AGENTS.md
+```
+
+### Integration with CI
+
+The metadata validation is integrated into the CI pipeline:
+
+```bash
+# Run as part of local CI
+./scripts/ci/run-local-ci.sh
+
+# Or run metadata checks standalone
+./scripts/sdd/validate-metadata.sh && \
+./scripts/sdd/check-sdd-consistency.sh
+```
+
+### Common Use Cases
+
+1. **Before PR submission**: Validate all metadata
+
+   ```bash
+   ./scripts/sdd/check-sdd-consistency.sh --verbose
+   ```
+
+2. **Find specific document types**: Query by type
+
+   ```bash
+   ./scripts/sdd/query-metadata.sh --type sdd-rule --format paths
+   ```
+
+3. **Update constitution version globally**: After constitution update
+
+   ```bash
+   # First validate current state
+   ./scripts/sdd/validate-metadata.sh --check-consistency
+   # Then migrate if needed
+   ./scripts/sdd/migrate-to-yaml-metadata.sh
+   ```
+
+4. **Track document freshness**: Find stale documents
+
+   ```bash
+   ./scripts/sdd/query-metadata.sh --outdated 7 --format json | \
+     jq '.results[] | {path: .path, last_updated: .last_updated}'
+   ```
+
+## AST-grep Integration
+
+### Code Analysis with sgconfig.yml
+
+```bash
+# Run full scan with all rules
+./scripts/ast-grep/sg-scan.sh
+
+# Check specific issues
+./scripts/ast-grep/sg-baseline-acp-rust-no-unwrap.sh  # Find unwrap() calls
+./scripts/ast-grep/sg-baseline-acp-rust-dbg.sh        # Find dbg! macros
+./scripts/ast-grep/sg-baseline-acp-rust-todo.sh       # Find TODO comments
+
+# Scan individual file
+./scripts/ast-grep/sg-scan-file.sh src/main.rs
+
+# Apply automatic fixes
+./scripts/ast-grep/sg-fix.sh
+```
+
+### Evidence Collection
+
+```bash
+# Collect AST-grep evidence (primary location)
+ast-grep scan -c sgconfig.yml . 2>&1 | tee _artifacts/reports/<task>/ast_grep_$(date +%Y%m%d_%H%M%S).log
+
+# Legacy location
+ast-grep scan -c sgconfig.yml . 2>&1 | tee dev-docs/review/_artifacts/reports/<task>/ast_grep_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ## Quick Reference
@@ -202,9 +390,9 @@ scripts/setup-plan.sh --json
 
 ```bash
 # From repo root
-./scripts/create-new-feature.sh "Chat system"
+./scripts/sdd/create-new-feature.sh "Chat system"
 ./scripts/ci/run-local-ci.sh
-./scripts/sdd/validate_structure.py
+python scripts/sdd/validate_structure.py
 
 # With environment variables
 SKIP_TESTS=1 ./scripts/ci/run-local-ci.sh
@@ -255,8 +443,27 @@ SKIP_TESTS=1 ./scripts/ci/run-local-ci.sh
    # Check required tools
    command -v cargo || echo "Install Rust"
    command -v jq || echo "Install jq"
+   command -v yq || echo "Install yq (for metadata tools)"
+   command -v ast-grep || echo "Install ast-grep"
    ```
 
 ---
 
-Specification Version: 1.0.3 | scripts/CLAUDE.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"
+    path: "./scripts/CLAUDE.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - ".specify/memory/lifecycle.md"
+        - "sdd-rules/rules/README.md"
+        - ".specify/templates/spec-template.md"
+        - ".specify/templates/plan-template.md"
+        - ".specify/templates/tasks-template.md"
+        - "./CLAUDE.md"
+```

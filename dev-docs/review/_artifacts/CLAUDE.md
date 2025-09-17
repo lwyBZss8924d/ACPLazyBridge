@@ -236,4 +236,11 @@ EOF
 
 ---
 
-Specification Version: 1.0.3 | _artifacts/CLAUDE.md Format: 1.0 | Last Updated: 2025-09-11
+---
+
+```yaml
+Constitution version: 1.0.1
+Document: Last Updated
+Document version: 2025
+Last Updated: 2025-09-17
+```

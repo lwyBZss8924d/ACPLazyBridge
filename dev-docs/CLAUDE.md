@@ -2,12 +2,42 @@
 
 ## Authority
 
+- Constitution: ../.specify/memory/constitution.md (Articles III, VII, IX)
+- SDD Integration: ../.specify/CLAUDE.md (operational context)
 - See ../sdd-rules/CLAUDE.md and ../sdd-rules/AGENTS.md
-- Normative docs: ../CONTRIBUTING.md, ../sdd-rules/lifecycle.md
+- Normative docs: ../CONTRIBUTING.md, ../.specify/memory/lifecycle.md
+
+## agent-client-protocol (ACP) protocol
+
+- MUST SEE: (~/dev-space/agent-client-protocol)
 
 ## Purpose
 
 Development documentation and evidence collection for the ACPLazyBridge project. This directory supports the SDD workflow through evidence management and technical documentation.
+
+**IMPORTANT**: Evidence collection is transitioning:
+
+- **New location**: `_artifacts/` at repository root (primary)
+- **Legacy location**: `dev-docs/review/_artifacts/` (maintained for compatibility)
+
+## SDD Integration
+
+For comprehensive SDD workflow details, see **[../.specify/CLAUDE.md](../.specify/CLAUDE.md)**
+
+### Constitutional Requirements for Documentation
+
+- **Article III (Test-First)**: All evidence must show RED→GREEN→REFACTOR cycle
+- **Article VII (Simplicity)**: Documentation should be clear and concise
+- **Article IX (Integration-First)**: Document contracts before implementation
+
+### Evidence Requirements
+
+Every SDD task requires:
+
+1. Test evidence showing initial failure (RED)
+2. Implementation evidence showing success (GREEN)
+3. Links to specs/<NNN>-<slug>/ artifacts
+4. Traceability to constitutional articles
 
 ## What to do here
 
@@ -25,26 +55,39 @@ dev-docs/
 ├── references/         # External references
 ├── requirements/       # Requirements documentation
 ├── review/             # Code review artifacts
-│   ├── changes/        # Change logs
-│   └── _artifacts/     # Evidence collection
-└── sdd/                # SDD methodology docs
+    ├── changes/        # Change logs
+    └── _artifacts/     # Evidence collection
 ```
 
-## Evidence Collection (_artifacts/)
+## Evidence Collection
 
-### Directory Structure
+### Dual Path Structure (Transition Period)
+
+#### Primary (New) Location: `_artifacts/`
 
 ```bash
-dev-docs/review/_artifacts/
-├── tests/              # Test results
-│   └── <task>/        # Per-task test evidence
-├── logs/              # Execution logs
-│   └── <task>/        # Per-task logs
-├── jq/                # JSON query results
-│   └── <task>/        # Per-task JSON analysis
-└── reports/           # Analysis reports
-    └── <task>/        # Per-task reports
+_artifacts/                    # Repository root
+├── tests/<task>/              # Test results
+├── logs/<task>/               # Execution logs
+├── reports/<task>/            # Analysis reports
+└── jq/<task>/                 # JSON analysis
 ```
+
+#### Legacy Location: `dev-docs/review/_artifacts/`
+
+```bash
+dev-docs/review/_artifacts/    # Legacy path
+├── tests/<task>/              # Test results
+├── logs/<task>/               # Execution logs
+├── jq/<task>/                 # JSON query results
+└── reports/<task>/            # Analysis reports
+```
+
+### Migration Guidance
+
+- **New tasks**: Use `_artifacts/` at root
+- **Existing tasks**: May continue using legacy path
+- **PRs**: Should reference both paths during transition
 
 ### Evidence Naming Conventions
 
@@ -65,27 +108,30 @@ performance_<YYYYMMDD>.md
 ### Collecting Evidence
 
 ```bash
-# Run tests with evidence capture
+# PRIMARY: Run tests with evidence capture (new location)
+cargo test --workspace 2>&1 | tee _artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
+
+# LEGACY: Alternative for existing workflows
 cargo test --workspace 2>&1 | tee dev-docs/review/_artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
 
-# Capture ACP protocol testing
+# Capture ACP protocol testing (primary)
 echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | \
   cargo run -p codex-cli-acp 2>&1 | \
-  tee dev-docs/review/_artifacts/logs/<task>/acp_$(date +%Y%m%d_%H%M%S).log
+  tee _artifacts/logs/<task>/acp_$(date +%Y%m%d_%H%M%S).log
 
-# Generate coverage report
-cargo tarpaulin --out Html --output-dir dev-docs/review/_artifacts/reports/<task>/
+# Generate coverage report (primary)
+cargo tarpaulin --out Html --output-dir _artifacts/reports/<task>/
 ```
 
 ## Issue Management (plan/issues/)
 
-### Issue States
+### Issue States (SDD Workflow)
 
-- **open/**: Active issues being worked on
+- **open/**: Active issues being worked on (linked to specs/<NNN>/)
 - **waiting/**: Blocked on dependencies or decisions
-- **closed/**: Completed and archived
+- **closed/**: Completed and archived (evidence in _artifacts/)
 
-### Issue Template
+### Issue Template (SDD-Aligned)
 
 ```markdown
 # Issue: <Title>
@@ -108,29 +154,30 @@ What needs to be done
 - Blocks: #<issue>
 
 ## Evidence
-- Tests: dev-docs/review/_artifacts/tests/<task>/
-- Logs: dev-docs/review/_artifacts/logs/<task>/
+- Tests: _artifacts/tests/<task>/ (or dev-docs/review/_artifacts/tests/<task>/)
+- Logs: _artifacts/logs/<task>/ (or dev-docs/review/_artifacts/logs/<task>/)
 ```
 
 ## Requirements Documentation
 
-### Requirements Traceability
+### Requirements Traceability (SDD)
 
 Link requirements to:
 
-1. **Specifications**: specs/<NNN>/spec.md
-2. **Implementation**: crates/*/src/
-3. **Tests**: crates/*/tests/
-4. **Evidence**: dev-docs/review/_artifacts/
+1. **Specifications**: specs/<NNN>/spec.md (source of truth)
+2. **Implementation**: crates/*/src/ (follows spec)
+3. **Tests**: crates/*/tests/ (written first per Article III)
+4. **Evidence**: _artifacts/ or dev-docs/review/_artifacts/
 
 ### Requirement Format
 
 ```markdown
 REQ-<NNN>: <Description>
-- Source: <spec reference>
+- Source: specs/<NNN>/spec.md
+- Constitutional: Article <X> compliance
 - Implementation: <file:line>
-- Test: <test file>
-- Evidence: <artifact path>
+- Test: <test file> (must fail first)
+- Evidence: _artifacts/<task>/ or dev-docs/review/_artifacts/<task>/
 ```
 
 ## Design Documentation
@@ -196,10 +243,12 @@ Practical examples
 
 For each PR, collect:
 
-- [ ] Test results in _artifacts/tests/
-- [ ] Execution logs in _artifacts/logs/
-- [ ] Performance metrics in _artifacts/reports/
-- [ ] Coverage reports in _artifacts/reports/
+- [ ] Test results showing RED→GREEN cycle
+- [ ] Evidence in _artifacts/<task>/ (primary) or dev-docs/review/_artifacts/<task>/ (legacy)
+- [ ] Links to specs/<NNN>-<slug>/ artifacts
+- [ ] Constitutional compliance verified
+- [ ] Performance metrics if applicable
+- [ ] Coverage reports if required
 
 ### Change Documentation
 
@@ -218,35 +267,46 @@ What changed and why
 - test2: Purpose
 
 ## Evidence
-- Before: _artifacts/logs/before_<date>.log
-- After: _artifacts/logs/after_<date>.log
+- Before: _artifacts/logs/<task>/before_<date>.log
+- After: _artifacts/logs/<task>/after_<date>.log
+- Specs: Link to specs/<NNN>-<slug>/
 ```
 
 ## SDD Documentation
 
 ### Maintaining SDD Docs
 
-- Keep synchronized with implementation
-- Update when specs change
-- Link to current artifacts
-- Version appropriately
+- Keep synchronized with specs/<NNN>-<slug>/
+- Update when specifications change
+- Link to current artifacts in both paths
+- Follow Constitution version (currently 1.0.1)
 
 ### SDD References
 
-- Principles: ../sdd-rules/spec-driven.md
-- Lifecycle: ../sdd-rules/lifecycle.md
-- Templates: ../sdd-rules/*-template.md
+- Constitution: ../.specify/memory/constitution.md
+- Lifecycle: ../.specify/memory/lifecycle.md
+- Principles: ../.specify/spec-driven.md
+- Templates: ../.specify/templates/*-template.md
+- Commands: ../.specify/commands/{specify,plan,tasks}.md
 
 ## Quick Commands
 
 ### Evidence Collection
 
 ```bash
-# Create task evidence directory
+# PRIMARY: Create task evidence directory (new location)
+mkdir -p _artifacts/<task>/{tests,logs,reports,jq}
+
+# LEGACY: Alternative for existing workflows
 mkdir -p dev-docs/review/_artifacts/<task>/{tests,logs,jq,reports}
 
-# Run with evidence capture
-<command> 2>&1 | tee dev-docs/review/_artifacts/<type>/<task>/<name>_$(date +%Y%m%d_%H%M%S).log
+# Run with evidence capture (primary)
+<command> 2>&1 | tee _artifacts/<type>/<task>/<name>_$(date +%Y%m%d_%H%M%S).log
+
+# Test-First Development (Article III)
+cargo test <new_test> 2>&1 | tee _artifacts/tests/<task>/red_$(date +%Y%m%d_%H%M%S).log
+# ... implement feature ...
+cargo test <new_test> 2>&1 | tee _artifacts/tests/<task>/green_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ### Issue Management
@@ -259,4 +319,21 @@ mv dev-docs/plan/issues/waiting/issue.md dev-docs/plan/issues/closed/
 
 ---
 
-Specification Version: 1.0.3 | dev-docs/CLAUDE.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"
+    path: "./dev-docs/CLAUDE.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - ".specify/memory/lifecycle.md"
+        - "sdd-rules/rules/README.md"
+        - ".specify/templates/spec-template.md"
+        - ".specify/templates/plan-template.md"
+        - ".specify/templates/tasks-template.md"
+        - "./CLAUDE.md"
+```

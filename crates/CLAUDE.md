@@ -2,12 +2,53 @@
 
 ## Authority
 
+- Constitution: ../.specify/memory/constitution.md (Articles I, III, VII, VIII, IX)
+- SDD Integration: ../.specify/CLAUDE.md (operational context)
 - See ../sdd-rules/CLAUDE.md and ../sdd-rules/AGENTS.md
 - ACP Protocol Spec: ../dev-docs/references/acp.md
 
 ## Purpose
 
 Rust workspace containing the ACP protocol implementation. This workspace manages multiple crates that together form the ACPLazyBridge system.
+
+## SDD Integration
+
+For comprehensive SDD workflow details, see **[../.specify/CLAUDE.md](../.specify/CLAUDE.md)**
+
+Key SDD principles for Rust crates:
+
+- **Library-First (Article I)**: All crates are libraries with optional CLI interfaces
+- **Test-First (Article III)**: Write failing tests before implementation (RED→GREEN→REFACTOR)
+- **Simplicity (Article VII)**: No unnecessary abstractions or future-proofing
+- **Anti-Abstraction (Article VIII)**: Use framework features directly
+- **Integration-First (Article IX)**: Define contracts before implementation
+
+### Constitutional Gates for Crates
+
+Every crate must:
+
+1. Be a library first (`lib.rs` required, `main.rs` optional)
+2. Have tests that fail before implementation exists
+3. Use direct framework features (no wrapper traits unless justified)
+4. Maintain evidence in `_artifacts/<task>/` or `dev-docs/review/_artifacts/<task>/`
+5. Follow the SDD workflow: spec → plan → tasks → implementation
+
+### TDD Workflow
+
+```bash
+# 1. RED: Write failing test
+cargo test --lib test_new_feature
+# ✗ test fails (expected)
+
+# 2. GREEN: Implement minimal code to pass
+# ... write implementation ...
+cargo test --lib test_new_feature
+# ✓ test passes
+
+# 3. REFACTOR: Improve without breaking tests
+cargo test --workspace
+# ✓ all tests pass
+```
 
 ## Workspace Structure
 
@@ -108,6 +149,22 @@ const INTERNAL_ERROR: i32 = -32603;
 
 ## Testing Patterns
 
+### Test-First Development (Article III - NON-NEGOTIABLE)
+
+**CRITICAL**: Tests MUST be written and MUST fail before ANY implementation.
+
+```rust
+// 1. RED: Write test that fails
+#[test]
+fn test_new_protocol_method() {
+    let result = handle_new_method(params);
+    assert_eq!(result, expected); // This MUST fail first
+}
+
+// 2. GREEN: Implement minimal code to pass
+// 3. REFACTOR: Improve without breaking tests
+```
+
 ### Protocol Testing
 
 ```bash
@@ -125,13 +182,17 @@ RUST_LOG=debug cargo run -p codex-cli-acp < test/input.jsonl 2>debug.log
 ### Evidence Collection
 
 ```bash
-# Run tests with evidence capture
+# Run tests with evidence capture (primary location)
+cargo test --workspace 2>&1 | \
+  tee ../_artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
+
+# Alternative: legacy location
 cargo test --workspace 2>&1 | \
   tee ../dev-docs/review/_artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
 
 # Generate test coverage
 cargo tarpaulin --workspace --out Html \
-  --output-dir ../dev-docs/review/_artifacts/reports/<task>/
+  --output-dir ../_artifacts/reports/<task>/
 ```
 
 ## Crate-Specific Guidance
@@ -158,10 +219,11 @@ Focus areas:
 
 ### Adding New Protocol Methods
 
-1. Define in `acp-lazy-core/src/protocol.rs`
-2. Implement handler in `codex-cli-acp/src/codex_proto.rs`
-3. Add tests in `codex-cli-acp/tests/`
-4. Update evidence in `dev-docs/review/_artifacts/`
+1. Write failing test first (TDD - Article III)
+2. Define in `acp-lazy-core/src/protocol.rs`
+3. Implement handler in `codex-cli-acp/src/codex_proto.rs`
+4. Verify tests pass (RED→GREEN→REFACTOR)
+5. Update evidence in `_artifacts/<task>/` or `dev-docs/review/_artifacts/<task>/`
 
 ### Tool Call Implementation
 
@@ -195,6 +257,30 @@ Reference workspace versions:
 serde = { workspace = true }
 serde_json = { workspace = true }
 ```
+
+## Constitutional Compliance
+
+### Required for Every Change
+
+- [ ] **Article I (Library-First)**: Changes in `lib.rs`, not just `main.rs`
+- [ ] **Article III (Test-First)**: Tests written and failed before implementation
+- [ ] **Article VII (Simplicity)**: No unnecessary abstractions or patterns
+- [ ] **Article VIII (Anti-Abstraction)**: Using framework features directly
+- [ ] **Article IX (Integration-First)**: Contracts defined before implementation
+
+### Anti-patterns to Avoid
+
+❌ **Wrapper traits** around framework types (unless absolutely necessary)
+❌ **Future-proofing** for unspecified requirements
+❌ **Implementation before tests** (violates Article III)
+❌ **More than 3 sub-crates** without justification (violates Article VII)
+
+### Good Patterns
+
+✅ Direct use of `serde`, `tokio`, etc. without wrappers
+✅ Tests that demonstrate the bug/feature before fixing/implementing
+✅ Simple, concrete implementations over abstract ones
+✅ Evidence collected for every change
 
 ## Publishing
 
@@ -284,4 +370,16 @@ echo '{"jsonrpc":"2.0","id":1,"method":"test"}' | cargo run -p codex-cli-acp
 
 ---
 
-Specification Version: 1.0.3 | crates/CLAUDE.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"
+    path: "./crates/CLAUDE.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - "./CLAUDE.md"
+```

@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.py"
+  - "!**/scripts/**"
+id: py-no-print
+language: Python
+message: Avoid print() in modules; prefer logging
+rule:
+  pattern: print($$$_)
+severity: warning

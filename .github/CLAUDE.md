@@ -2,13 +2,39 @@
 
 ## Authority
 
-- See ../sdd-rules/CLAUDE.md and ../sdd-rules/AGENTS.md
+- See ../.specify/memory/constitution.md (project Constitution), ../sdd-rules/CLAUDE.md and ../sdd-rules/AGENTS.md
+- SDD Integration: ../.specify/CLAUDE.md (Claude Code operational context)
 - PR Template: PULL_REQUEST_TEMPLATE.md
 - Issue Templates: ISSUE_TEMPLATE/
 
 ## Purpose
 
 GitHub-specific configuration and automation for the ACPLazyBridge project. This directory contains workflows, templates, and policies that integrate with the SDD workflow.
+
+## SDD Integration
+
+For comprehensive SDD workflow execution details, see **[../.specify/CLAUDE.md](../.specify/CLAUDE.md)**
+
+Key GitHub-specific SDD integration points:
+
+- **PR Creation**: Must link to specs/<NNN>-<slug>/ artifacts (spec.md, plan.md, tasks.md)
+- **Evidence Collection**: Store in both `_artifacts/` (new) and `dev-docs/review/_artifacts/` (legacy)
+- **Constitutional Gates**: Enforce via PR template checkboxes and CI checks
+- **Branch Strategy**: Always use worktrees from origin/main, never develop on main
+- **Commit Format**: Include [TASK-NNN] or [BUG-NNN] references
+
+SDD Workflow for GitHub:
+
+```text
+Feature Request (Issue) → /specify → spec.md → /plan → plan.md → /tasks → tasks.md → PR → Review → Merge
+```
+
+All PRs must pass:
+
+- Constitutional gates (Articles I, III, VII, VIII, IX)
+- Quality gates (fmt, clippy, test)
+- SDD structure validation
+- Evidence documentation
 
 ## What to do here
 
@@ -61,7 +87,7 @@ Implements [feature] as specified in specs/<NNN>-<slug>/
 - [ ] Specification: specs/<NNN>-<slug>/spec.md
 - [ ] Plan: specs/<NNN>-<slug>/plan.md
 - [ ] Tasks: specs/<NNN>-<slug>/tasks.md
-- [ ] Evidence: dev-docs/review/_artifacts/<task>/
+- [ ] Evidence: _artifacts/<task>/ (primary) or dev-docs/review/_artifacts/<task>/ (legacy)
 
 ## Testing
 - [ ] All quality gates pass
@@ -145,10 +171,10 @@ gh issue develop <issue-number> --branch feature/<NNN>-<slug>
 
 - Require PR reviews
 - Require status checks:
-  - SDD structure validation
-  - Language policy check
-  - Quality gates (fmt, clippy, test)
-  - CI passing
+    - SDD structure validation
+    - Language policy check
+    - Quality gates (fmt, clippy, test)
+    - CI passing
 - Require up-to-date branches
 - Include administrators
 
@@ -203,11 +229,13 @@ evidence-collection:
 ### Artifact Management
 
 ```bash
-# Upload evidence artifacts
+# Upload evidence artifacts (check both locations)
 - uses: actions/upload-artifact@v3
   with:
     name: evidence-<task>
-    path: dev-docs/review/_artifacts/<task>/
+    path: |
+      _artifacts/<task>/
+      dev-docs/review/_artifacts/<task>/
 ```
 
 ## GitHub Actions Secrets
@@ -281,4 +309,16 @@ Based on:
 
 ---
 
-Specification Version: 1.0.3 | .github/CLAUDE.md Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "claude-memory"
+    path: ".github/CLAUDE.md"
+    version: "1.0.1"
+    last_updated: "2025-09-17T08:26:00Z"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - "./CLAUDE.md"
+```

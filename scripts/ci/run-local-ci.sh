@@ -15,6 +15,8 @@ STEPS=(
   scripts/ci/check-language-policy.sh
   scripts/ci/run-markdown-style.sh
   scripts/sdd/run_semantic_checks.sh
+  scripts/sdd/validate-metadata.sh
+  scripts/sdd/check-sdd-consistency.sh
 )
 
 for step in "${STEPS[@]}"; do

@@ -39,3 +39,7 @@
 - [ ] ACP examples (if any) use protocolVersion: 1
 - [ ] Risks & rollback section completed
 - [ ] Docs updated (CONTRIBUTING.md/CLAUDE.md/WARP.md/dev-docs)
+
+---
+
+Based on Constitution: 1.0.1 | (.github/PULL_REQUEST_TEMPLATE.md) : 1.0.1 | Last Updated: 2025-09-16

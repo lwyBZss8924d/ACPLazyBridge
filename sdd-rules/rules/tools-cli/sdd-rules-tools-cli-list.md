@@ -13,25 +13,25 @@ includes usage patterns optimized for non-interactive execution.
 - **Purpose**: AST-based structural code search and transformation
 - **Documentation**: [sdd-rules-tools-cli-astgrep.md](./sdd-rules-tools-cli-astgrep.md)
 - **Key Commands**:
-  - `ast-grep --pattern '$FUNC($$$ARGS)' --lang python`
-  - `ast-grep run --rule rule.yml --json`
-  - `ast-grep scan --format sarif`
+    - `ast-grep --pattern '$FUNC($$$ARGS)' --lang python`
+    - `ast-grep run --rule rule.yml --json`
+    - `ast-grep scan --format sarif`
 - **Use Cases**: Pattern matching, refactoring, security scanning
 
 #### ripgrep (rg)
 
 - **Purpose**: Fast text-based recursive search
 - **Key Commands**:
-  - `rg -t py "def.*test" --json`
-  - `rg -l "TODO" --glob "!node_modules"`
+    - `rg -t py "def.*test" --json`
+    - `rg -l "TODO" --glob "!node_modules"`
 - **Use Cases**: Text search, TODO tracking, quick grepping
 
 #### fd
 
 - **Purpose**: Fast file and directory finder
 - **Key Commands**:
-  - `fd -e py -x ast-grep --pattern '$_' --lang python {}`
-  - `fd -t f -0 | xargs -0 wc -l`
+    - `fd -e py -x ast-grep --pattern '$_' --lang python {}`
+    - `fd -t f -0 | xargs -0 wc -l`
 - **Use Cases**: File discovery, batch operations
 
 ### Code Quality & Linting
@@ -42,16 +42,16 @@ includes usage patterns optimized for non-interactive execution.
 - **Documentation**:
   [sdd-rules-documentation-markdownlint.md](../documentation-style/sdd-rules-documentation-markdownlint.md)
 - **Key Commands**:
-  - `markdownlint-cli2 "**/*.md" --config .markdownlint.json`
-  - `markdownlint-cli2-fix "**/*.md"`
+    - `markdownlint-cli2 "**/*.md" --config .markdownlint.json`
+    - `markdownlint-cli2-fix "**/*.md"`
 - **Use Cases**: Documentation quality, style consistency
 
 #### shellcheck
 
 - **Purpose**: Shell script analysis
 - **Key Commands**:
-  - `shellcheck -f json scripts/*.sh`
-  - `shellcheck -S error -e SC2086`
+    - `shellcheck -f json scripts/*.sh`
+    - `shellcheck -S error -e SC2086`
 - **Use Cases**: Script validation, security checks
 
 ### Testing & Validation
@@ -60,17 +60,17 @@ includes usage patterns optimized for non-interactive execution.
 
 - **Purpose**: Rust build and test orchestration
 - **Key Commands**:
-  - `cargo test --workspace --all-features --locked`
-  - `cargo clippy -- -D warnings`
-  - `cargo fmt --all -- --check`
+    - `cargo test --workspace --all-features --locked`
+    - `cargo clippy -- -D warnings`
+    - `cargo fmt --all -- --check`
 - **Use Cases**: Build validation, test execution
 
 #### pytest
 
 - **Purpose**: Python testing framework
 - **Key Commands**:
-  - `pytest -v --json-report --json-report-file=report.json`
-  - `pytest --cov=src --cov-report=json`
+    - `pytest -v --json-report --json-report-file=report.json`
+    - `pytest --cov=src --cov-report=json`
 - **Use Cases**: Unit testing, coverage analysis
 
 ### Version Control
@@ -79,16 +79,16 @@ includes usage patterns optimized for non-interactive execution.
 
 - **Purpose**: Source control management
 - **Key Commands**:
-  - `git log --oneline --format=json`
-  - `git diff --staged --stat`
+    - `git log --oneline --format=json`
+    - `git diff --staged --stat`
 - **Use Cases**: History analysis, change tracking
 
 #### gh (GitHub CLI)
 
 - **Purpose**: GitHub operations
 - **Key Commands**:
-  - `gh pr list --json number,title,state`
-  - `gh issue create --title "$TITLE" --body-file spec.md`
+    - `gh pr list --json number,title,state`
+    - `gh issue create --title "$TITLE" --body-file spec.md`
 - **Use Cases**: PR management, issue tracking
 
 ### Data Processing
@@ -97,19 +97,33 @@ includes usage patterns optimized for non-interactive execution.
 
 - **Purpose**: JSON processor
 - **Key Commands**:
-  - `cat results.json | jq '.matches[] | .file'`
-  - `jq -s 'group_by(.severity) | map({severity: .[0].severity, count: length})'`
+    - `cat results.json | jq '.matches[] | .file'`
+    - `jq -s 'group_by(.severity) | map({severity: .[0].severity, count: length})'`
 - **Use Cases**: Result parsing, data transformation
 
 #### yq
 
 - **Purpose**: YAML processor
 - **Key Commands**:
-  - `yq eval '.rules[] | select(.severity == "error")' rules.yml`
-  - `yq -o json config.yml`
+    - `yq eval '.rules[] | select(.severity == "error")' rules.yml`
+    - `yq -o json config.yml`
 - **Use Cases**: Config processing, YAML to JSON conversion
 
-## Integration Patterns
+### Integration Patterns
+
+#### ast-grep utility scripts (suggested)
+
+Place helper scripts under `scripts/ast-grep/`:
+
+- `sg-scan.sh`: project summary or scoped scans
+- `sg-scan-file.sh`: scan a single file
+- `sg-fix.sh`: apply safe fixes when rules define `fix:` (use with care)
+Example usage:
+
+```bash
+scripts/ast-grep/sg-scan.sh
+scripts/ast-grep/sg-scan-file.sh crates/foo/src/lib.rs
+```
 
 ### Pipeline Composition
 
@@ -117,7 +131,6 @@ includes usage patterns optimized for non-interactive execution.
 # Find Python files → Extract functions → Count complexity
 fd -e py | xargs -I{} ast-grep --pattern 'def $FUNC($$$):' --lang python {} \
   | jq -s 'length'
-
 # Search patterns → Filter results → Generate report
 ast-grep scan --format json | jq '.results[] | select(.severity == "error")' \
   | tee errors.json
@@ -129,7 +142,6 @@ ast-grep scan --format json | jq '.results[] | select(.severity == "error")' \
 # Capture analysis with timestamps
 ast-grep scan --format sarif 2>&1 \
   | tee "dev-docs/review/_artifacts/$(date +%Y%m%d_%H%M%S)_scan.sarif"
-
 # Aggregate multiple tool outputs
 {
   echo '{"timestamp": "'$(date -Iseconds)'",'
@@ -145,7 +157,6 @@ ast-grep scan --format sarif 2>&1 \
 # Apply transformation to all matching files
 ast-grep --pattern '$OLD' --rewrite '$NEW' --lang python \
   $(fd -e py)
-
 # Validate all shell scripts
 fd -e sh -x shellcheck -f json {} \; \
   | jq -s 'flatten | group_by(.file)'
@@ -156,28 +167,26 @@ fd -e sh -x shellcheck -f json {} \; \
 ### When to Use ast-grep vs ripgrep
 
 - **Use ast-grep when**:
-  - Searching for code structures (functions, classes, patterns)
-  - Performing safe refactoring
-  - Analyzing code semantics
-  - Need language-aware matching
-
+    - Searching for code structures (functions, classes, patterns)
+    - Performing safe refactoring
+    - Analyzing code semantics
+    - Need language-aware matching
 - **Use ripgrep when**:
-  - Searching for text literals
-  - Quick file content scanning
-  - Cross-language text search
-  - Performance is critical
+    - Searching for text literals
+    - Quick file content scanning
+    - Cross-language text search
+    - Performance is critical
 
 ### When to Use Native vs Wrapped Commands
 
 - **Use native commands when**:
-  - Tool has built-in JSON output
-  - Need specific tool features
-  - Performance matters
-
+    - Tool has built-in JSON output
+    - Need specific tool features
+    - Performance matters
 - **Use wrapped/piped commands when**:
-  - Combining multiple tools
-  - Transforming output format
-  - Creating evidence trails
+    - Combining multiple tools
+    - Transforming output format
+    - Creating evidence trails
 
 ## Performance Considerations
 
@@ -186,7 +195,6 @@ fd -e sh -x shellcheck -f json {} \; \
 ```bash
 # Use GNU parallel for CPU-bound operations
 fd -e py | parallel -j+0 'ast-grep --pattern "TODO" --lang python {}'
-
 # Use xargs for I/O-bound operations
 fd -e md -0 | xargs -0 -n100 markdownlint-cli2
 ```
@@ -196,7 +204,6 @@ fd -e md -0 | xargs -0 -n100 markdownlint-cli2
 ```bash
 # Limit output size for large codebases
 ast-grep scan --max-results 1000 --format json
-
 # Stream processing for memory efficiency
 ast-grep scan --format jsonl | head -n 1000 | jq -c '.'
 ```
@@ -217,15 +224,28 @@ Most tools follow standard conventions:
 ```bash
 # Verbose output
 ast-grep --debug-query --pattern '$_'
-
 # Dry run
 ast-grep --pattern '$OLD' --rewrite '$NEW' --dry-run
-
 # Version check
 ast-grep --version && rg --version && fd --version
 ```
 
 ---
 
-specification_version: 1.0.5 | sdd-rules-tools-cli-list.md Format: 1.1 |
-Last Updated: 2025-09-12
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "tools-cli-list"
+    category: "tools-cli"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-list.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - "sdd-rules/rules/code-analysis/sdd-rules-code-analysis.md"
+        - "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-astgrep.md"
+        - "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-document-search-and-parsing.md"
+```

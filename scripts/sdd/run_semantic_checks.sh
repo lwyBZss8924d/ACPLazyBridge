@@ -62,7 +62,7 @@ check_doc_references() {
     echo "Checking Documentation Cross-References..."
     
     # Check if constitution references are valid
-    if [ -f "dev-docs/sdd/constitution.md" ]; then
+    if [ -f ".specify/memory/constitution.md" ]; then
         echo "  Validating constitution references..."
         
         # Check for broken internal links

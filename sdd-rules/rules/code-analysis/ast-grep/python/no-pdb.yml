@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.py"
+id: py-no-pdb
+language: Python
+message: Remove debug statements (pdb.set_trace)
+rule:
+  any:
+    - pattern: import pdb
+    - pattern: pdb.set_trace($$$_)
+severity: error

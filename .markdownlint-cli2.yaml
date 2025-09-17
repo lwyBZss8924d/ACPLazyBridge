@@ -1,0 +1,41 @@
+# Markdownlint-cli2 Configuration
+# https://github.com/DavidAnson/markdownlint-cli2
+
+# Use the JSON config file
+config: .markdownlint.json
+
+# Globs to include
+globs:
+  - "**/*.md"
+
+# Globs to ignore
+ignores:
+  - node_modules/**
+  - target/**
+  - dist/**
+  - build/**
+  - .venv/**
+  - venv/**
+  - .git/**
+  - .worktrees/**
+  - .codeql-db/**
+  - docs/api/**
+  - coverage/**
+  - tmp/**
+  - temp/**
+  - .cache/**
+  - "**/*.tmp"
+  - .vscode/**
+  - .idea/**
+  - archive/**
+  - deprecated/**
+  # External/canonical specifications (preserve original formatting)
+  - sdd-rules/rules/changelog/semver.md
+  - sdd-rules/rules/documentation-style/google-markdown-style-guide.md
+  - sdd-rules/rules/documentation-style/Google-developer-documentation-style-guide.md
+
+# Don't show progress
+showFound: false
+
+# Fix errors if running with --fix
+fix: false

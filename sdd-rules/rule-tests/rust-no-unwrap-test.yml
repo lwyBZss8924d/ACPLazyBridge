@@ -1,0 +1,23 @@
+id: rust-no-unwrap-test
+language: Rust
+rule:
+  any:
+    - pattern: $EXPR.unwrap()
+    - pattern: $EXPR.expect($MSG)
+files:
+  - "**/*.rs"
+  - "!**/*_test.rs"
+  - "!**/*tests.rs"
+  - "!**/tests/**"
+  - "!**/benches/**"
+
+valid:
+  - |
+    // expect with context is allowed in tests but excluded by files globs
+    fn t() { let _ = Ok::<i32,()> (1).expect("ok"); }
+
+invalid:
+  - |
+    fn a() { let _ = Ok::<i32,()> (1).unwrap(); }
+  - |
+    fn b() { let _ = Ok::<i32,()> (1).expect("ok"); }

@@ -5,41 +5,27 @@ the SDD workflow. ast-grep is a powerful AST-based structural code search and
 transformation tool that enables language-aware pattern matching, refactoring,
 and code analysis.
 
-## Installation and Setup
-
-### Installation Methods
+## ast-grep CLI Help
 
 ```bash
-# Cargo (Rust) - Recommended
-cargo install ast-grep --locked
-
-# Homebrew (macOS/Linux)
-brew install ast-grep
-
-# npm (Node.js)
-npm install -g @ast-grep/cli
-
-# pip (Python)
-pip install ast-grep-cli
-
-# MacPorts
-sudo port install ast-grep
-
-# Nix
-nix-shell -p ast-grep
-
-# Pre-built binaries
-curl -fsSL https://get.ast-grep.com | sh
-```
-
-### Version Verification
-
-```bash
-# Check installation
-ast-grep --version
-
-# Note: For supported languages, see:
-# https://ast-grep.github.io/reference/languages.html
+ast-grep --help
+Search and Rewrite code at large scale using AST pattern.
+Usage: ast-grep [OPTIONS] <COMMAND>
+Commands:
+  run          Run one time search or rewrite in command line. (default command)
+  scan         Scan and rewrite code by configuration
+  test         Test ast-grep rules
+  new          Create new ast-grep project or items like rules/tests
+  lsp          Start language server
+  completions  Generate shell completion script
+  help         Print this message or the help of the given subcommand(s)
+Options:
+  -c, --config <CONFIG_FILE>
+          Path to ast-grep root config, default is sgconfig.yml
+  -h, --help
+          Print help (see a summary with '-h')
+  -V, --version
+          Print version
 ```
 
 ## Core Concepts
@@ -60,10 +46,8 @@ ast-grep operates on Abstract Syntax Trees (ASTs) rather than text, providing:
 ```bash
 # Literal match
 ast-grep --pattern 'console.log("debug")' --lang js
-
 # Single wildcard ($_)
 ast-grep --pattern 'console.log($_)' --lang js
-
 # Multiple wildcards ($$$)
 ast-grep --pattern 'function $FUNC($$$ARGS) { $$$BODY }' --lang js
 ```
@@ -88,16 +72,12 @@ ast-grep --pattern 'function $FUNC($$$ARGS) { $$$BODY }' --lang js
 # These are equivalent:
 ast-grep run --pattern 'print($_)' --lang python
 ast-grep --pattern 'print($_)' --lang python
-
 # Short flags are also available
 ast-grep -p 'console.log($_)' -l js
-
 # Search with pattern (Python)
 ast-grep -p 'def $FUNC($$$PARAMS):' -l python scripts/
-
 # Search specific files
 ast-grep -p 'async function $NAME' -l ts src/**/*.ts
-
 # Output formats
 ast-grep -p 'println!($$$)' -l rust --json
 ast-grep -p 'fmt.Println($_)' -l go --format compact
@@ -109,25 +89,28 @@ ast-grep -p 'fmt.Println($_)' -l go --format compact
 # Context lines
 ast-grep -p 'throw $_' -l js \
   --before 2 --after 2
-
 # Limit results
 ast-grep -p 'console.log' -l js \
   --max-results 10
-
 # Interactive mode for selective changes
 ast-grep -p 'print($_)' -r 'logger.info($_)' -l python \
   --interactive
-
 # Debug query (shows AST structure)
 ast-grep -p 'class $NAME' -l python \
   --debug-query=ast  # or 'pattern' or 'cst'
-
 # Use selector for sub-pattern matching
 ast-grep -p 'if ($COND) { $$$BODY }' \
   --selector 'binary_expression' -l js
 ```
 
 ## Rule Configuration
+
+### Files globs precedence (important)
+
+- In rule YAML, `files:` should include at least one positive include (e.g. `"**/*.rs"`) before any negative excludes (e.g. `"!**/tests/**"`).
+- Negative-only lists may result in zero matches.
+- Prefer scoping at rule-level over global ignores when you want per-rule precision.
+- For “non-test only” Rust rules, prefer scoping to `src/**/*.rs` in typical crates. For repos that keep Rust files at the package root (no src/), use `**/*.rs` with excludes like `*_test.rs`, `*tests.rs`, `tests/**`, and `benches/**`.
 
 ### YAML Rule Format
 
@@ -137,12 +120,9 @@ id: no-console-log
 language: javascript
 severity: warning
 message: Remove console.log statements
-
 rule:
   pattern: console.log($$$ARGS)
-
 fix: ''
-
 metadata:
   category: cleanup
   tags:
@@ -158,10 +138,8 @@ metadata:
 id: find-hooks
 language: javascript
 message: Found React Hook
-
 rule:
   pattern: $HOOK($$$ARGS)
-  
 constraints:
   HOOK:
     regex: '^use[A-Z]'
@@ -174,7 +152,6 @@ id: sql-injection-risk
 language: python
 severity: error
 message: Potential SQL injection vulnerability
-
 rule:
   all:
     - pattern: cursor.execute($QUERY)
@@ -189,7 +166,6 @@ rule:
           has:
             field: name
             regex: '^test_'
-
 fix: |
   # Use parameterized query
   cursor.execute($QUERY, params)
@@ -201,12 +177,9 @@ fix: |
 id: use-optional-chaining
 language: typescript
 message: Use optional chaining operator
-
 rule:
   pattern: $OBJ && $OBJ.$PROP
-
 fix: '$OBJ?.$PROP'
-
 constraints:
   OBJ:
     regex: '^[a-zA-Z_][a-zA-Z0-9_]*$'
@@ -218,7 +191,6 @@ constraints:
 id: find-test-functions
 language: go
 message: Found test function
-
 rule:
   kind: function_declaration
   has:
@@ -232,12 +204,10 @@ rule:
 id: optimize-array-includes
 language: javascript
 message: Use Set for better performance
-
 rule:
   inside:
     pattern: for ($_ of $ARRAY) { $$$BODY }
   pattern: $ARRAY.includes($_)
-
 fix: |
   // Consider using Set for O(1) lookup:
   // const set = new Set($ARRAY);
@@ -254,19 +224,16 @@ fix: |
 ast-grep -p 'var $NAME = $_' \
   -r 'const $NAME = $_' \
   -l js
-
 # Interactive mode for selective changes
 ast-grep -p 'print($MSG)' \
   -r 'logger.info($MSG)' \
   -l python \
   --interactive
-
 # Apply to specific files
 ast-grep -p 'assertEquals' \
   -r 'assert.equal' \
   -l js \
   test/**/*.js
-
 # Using stdin/stdout
 echo 'console.log("test")' | \
   ast-grep -p 'console.log($_)' -r 'debug($_)' -l js --stdin
@@ -279,12 +246,10 @@ echo 'console.log("test")' | \
 ast-grep --pattern 'function $NAME($$$PARAMS) { return $EXPR }' \
   --rewrite 'const $NAME = ($$$PARAMS) => $EXPR' \
   --lang js
-
 # Add type annotations
 ast-grep --pattern 'def $FUNC($PARAM):' \
   --rewrite 'def $FUNC($PARAM: Any) -> None:' \
   --lang python
-
 # Extract to variable
 ast-grep --pattern 'if ($COND) { $$$BODY }' \
   --rewrite 'const condition = $COND;\nif (condition) { $$$BODY }' \
@@ -310,12 +275,9 @@ my-project/
 # rule-tests/test-rule.yml
 id: test-rule
 language: python
-
 rule:
   pattern: assert $ACTUAL == $EXPECTED
-
 fix: assert_equal($ACTUAL, $EXPECTED)
-
 tests:
   - name: basic assertion
     valid:
@@ -331,19 +293,14 @@ tests:
 ```bash
 # Test all rules in test directory (default: rule-tests/)
 ast-grep test
-
 # Test specific directory
 ast-grep test -t tests/
-
 # Filter tests by regex
 ast-grep test -f 'console'
-
 # Interactive snapshot update
 ast-grep test -i
-
 # Update all snapshots
 ast-grep test -U
-
 # Skip snapshot validation
 ast-grep test --skip-snapshot-tests
 ```
@@ -357,30 +314,24 @@ ast-grep test --skip-snapshot-tests
 ruleDirs:
   - rules
   - security-rules
-
 testDirs:
   - tests
-
 files:
   - "src/**/*.ts"
   - "!src/**/*.test.ts"
   - "!node_modules"
-
 language:
   ts: typescript
   tsx: tsx
   js: javascript
   jsx: jsx
-
 ruleConfig:
   severity:
     default: warning
     security: error
-  
   ignoreRules:
     - no-console-log
     - prefer-const
-
 output:
   format: github  # github, sarif, json, compact
   reportFile: ast-grep-report.json
@@ -405,24 +356,19 @@ languages:
 
 ```yaml
 name: AST-Grep Analysis
-
 on: [push, pull_request]
-
 jobs:
   ast-grep:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
       - name: Install ast-grep
         run: npm install -g @ast-grep/cli
-      
       - name: Run security scan
         run: |
           ast-grep scan --rule-dir security-rules \
             --format sarif \
             --output results.sarif
-      
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
         with:
@@ -450,14 +396,11 @@ repos:
 
 ```javascript
 import { parse, findAll } from '@ast-grep/napi';
-
 const code = 'console.log("hello"); console.error("error")';
 const ast = parse('javascript', code);
-
 const matches = findAll(ast, {
   pattern: 'console.$METHOD($_)'
 });
-
 matches.forEach(match => {
   console.log(`Found: ${match.text()}`);
   console.log(`Method: ${match.getMatch('METHOD').text()}`);
@@ -468,13 +411,10 @@ matches.forEach(match => {
 
 ```python
 from ast_grep_py import SgRoot, Pattern
-
 code = """def hello(): print("world")"""
 root = SgRoot(code, "python")
-
 pattern = Pattern('print($_)')
 matches = root.find_all(pattern)
-
 for match in matches:
     print(f"Found print at: {match.range()}")
     print(f"Content: {match.text()}")
@@ -515,10 +455,8 @@ require('ast-grep').setup({
 ```bash
 # Use multiple threads
 ast-grep --pattern '$_' --lang python -j 8
-
 # Process large codebases
 fd -e py -x ast-grep --pattern 'import $_' --lang python {} \;
-
 # Batch processing
 find . -name "*.js" -print0 | \
   xargs -0 -P 4 -n 50 ast-grep --pattern 'await $_'
@@ -529,10 +467,8 @@ find . -name "*.js" -print0 | \
 ```bash
 # Process files in parallel
 ast-grep -p '$_' -l python -j 8
-
 # Batch processing with fd
 fd -e py -x ast-grep -p 'import $_' -l python {} \;
-
 # Note: Incremental analysis is planned but not yet available
 # Future: ast-grep scan --incremental --since HEAD~1
 ```
@@ -545,7 +481,6 @@ fd -e py -x ast-grep -p 'import $_' -l python {} \;
 # Catch empty catch blocks (JavaScript)
 rule:
   pattern: try { $$$TRY } catch($_) {}
-
 # Find unhandled promises (JavaScript)
 rule:
   all:
@@ -563,7 +498,6 @@ constraints:
 ```yaml
 # Detect eval usage
 pattern: eval($_)
-
 # Find hardcoded secrets
 pattern: |
   $KEY = "$SECRET"
@@ -582,12 +516,27 @@ pattern: |
   for $ITEM in $COLLECTION:
     $$$
     $ITEM.$RELATION.all()
-
 # Inefficient list comprehension
 pattern: |
   [x for x in $LIST if $COND][0]
 fix: next((x for x in $LIST if $COND), None)
 ```
+
+## Rule Development Checklist (CLI-only)
+
+1) Clarify intent and scope; break down complex queries into sub-rules
+2) Author minimal examples (match / non-match)
+3) Start atomic (kind or pattern), then add relational rules with `stopBy: end`
+4) Inspect AST/pattern with `--debug-query` for ambiguous cases
+5) Add constraints and composite rules incrementally
+6) Validate with rule-tests/ (valid/invalid)
+7) Produce streaming JSON evidence grouped by file; declare scope explicitly
+
+### CLI mapping for development
+
+- AST dump: `--debug-query=ast` (or `pattern`/`cst`)
+- Rule unit tests: `ast-grep test` (rule-tests/*)
+- Iterative scans: rules/<lang>/…, then `scan -c sgconfig.yml --filter ... --globs ...`
 
 ## Quick Reference
 
@@ -596,19 +545,14 @@ fix: next((x for x in $LIST if $COND), None)
 ```bash
 # Search patterns
 ast-grep -p 'pattern' -l lang [files]
-
 # Replace patterns
 ast-grep -p 'old' -r 'new' -l lang
-
 # Run rules from YAML
 ast-grep scan --rule rule.yml
-
 # Test rules
 ast-grep test -t test-dir/
-
 # Create new project
 ast-grep new project
-
 # Start LSP server
 ast-grep lsp
 ```
@@ -635,7 +579,6 @@ ast-grep lsp
    ```bash
    # Too broad
    ast-grep --pattern '$_'
-   
    # Better
    ast-grep --pattern 'console.$METHOD($$$)'
    ```
@@ -680,10 +623,8 @@ ast-grep lsp
 # Migrate from v0 to v1
 id: migrate-openai-client
 language: python
-
 rule:
   pattern: openai.api_key = $KEY
-  
 fix: |
   from openai import Client
   client = Client($KEY)
@@ -694,13 +635,11 @@ fix: |
 ```yaml
 id: detect-hooks
 language: typescript
-
 rule:
   all:
     - pattern: $FUNC($$$)
     - inside:
         kind: function_declaration
-
 constraints:
   FUNC:
     regex: '^use[A-Z]'
@@ -713,7 +652,6 @@ constraints:
 ast-grep -p 'Machine($CONFIG)' \
   -r 'createMachine($CONFIG)' \
   -l typescript --interactive
-
 # Update imports
 ast-grep -p "import { Machine } from 'xstate'" \
   -r "import { createMachine } from 'xstate'" \
@@ -727,10 +665,8 @@ ast-grep -p "import { Machine } from 'xstate'" \
 ```bash
 # Debug pattern matching
 ast-grep -p 'class $_' -l python --debug-query=ast
-
 # Show pattern structure
 ast-grep -p 'def $F(): $$$' -l python --debug-query=pattern
-
 # Show CST (concrete syntax tree) with all tokens
 ast-grep -p 'if True: pass' -l python --debug-query=cst
 ```
@@ -748,5 +684,20 @@ ast-grep -p 'if True: pass' -l python --debug-query=cst
 
 ---
 
-specification_version: 1.0.6 | sdd-rules-tools-cli-astgrep.md Format: 2.1 |
-Last Updated: 2025-09-12
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+rules:
+    name: "tools-cli-astgrep"
+    category: "tools-cli"
+    version: "1.0.1"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-astgrep.md"
+    last_updated: "2025-09-17T08:26:00Z"
+    related:
+        - "sdd-rules/rules/code-analysis/sdd-rules-code-analysis.md"
+        - "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-list.md"
+        - "sdd-rules/rules/tools-cli/ast-grep.llms.txt"
+```

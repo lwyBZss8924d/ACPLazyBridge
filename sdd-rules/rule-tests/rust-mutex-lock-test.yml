@@ -1,0 +1,28 @@
+id: rust-mutex-lock-test
+language: Rust
+rule:
+  any:
+    - pattern: $MUT.lock().unwrap()
+    - pattern: $MUT.lock().expect($MSG)
+files:
+  - "**/*.rs"
+  - "!**/*_test.rs"
+  - "!**/*tests.rs"
+  - "!**/tests/**"
+  - "!**/benches/**"
+
+valid:
+  - |
+    use std::sync::Mutex;
+    fn ok() {
+      let m = Mutex::new(1);
+      let _ = m.lock().expect("mutex");
+    }
+
+invalid:
+  - |
+    use std::sync::Mutex;
+    fn bad() {
+      let m = Mutex::new(1);
+      let _ = m.lock().unwrap();
+    }

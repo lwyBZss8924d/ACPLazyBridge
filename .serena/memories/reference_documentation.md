@@ -30,16 +30,16 @@ dev-docs/references/
 ### CLI Agents
 
 - **Claude Code**: https://github.com/anthropics/claude-code
-  - Local ref: dev-docs/references/cli_agents/claude_code.md
+    - Local ref: dev-docs/references/cli_agents/claude_code.md
 - **Codex**: https://github.com/openai/codex
-  - Local ref: dev-docs/references/cli_agents/codex.md
+    - Local ref: dev-docs/references/cli_agents/codex.md
 - **Gemini CLI**: https://github.com/google-gemini/gemini-cli
-  - Local ref: dev-docs/references/cli_agents/gemini.md
+    - Local ref: dev-docs/references/cli_agents/gemini.md
 
 ### ACP Adapters
 
 - **Claude Code ACP**: https://github.com/zed-industries/claude-code-acp
-  - Local ref: dev-docs/references/acp_adapters/claude_code_acp.md
+    - Local ref: dev-docs/references/acp_adapters/claude_code_acp.md
 
 ### Zed IDE Integration
 
@@ -60,4 +60,15 @@ See `dev-docs/engineering/workflow.md` for guidelines on maintaining and updatin
 
 ---
 
-Specification Version: 1.0.3 | reference_documentation.md ("serena" MCP's memories) Format: 1.0 | Last Updated: 2025-09-11
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-17T04:32:00Z"
+document:
+    type: "serena-memories"
+    memories: "reference_documentation"
+    status: "expired"
+    path: ".serena/memories/reference_documentation.md"
+    version: "1.0.1"
+    last_updated: "2025-09-14T08:26:00Z"
+```

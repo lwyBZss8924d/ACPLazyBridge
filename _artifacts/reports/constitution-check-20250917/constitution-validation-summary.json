@@ -1,0 +1,109 @@
+{
+  "validation_run": {
+    "timestamp": "2025-09-17T11:05:00Z",
+    "constitution_version": "1.0.1",
+    "constitution_amended": "2025-09-15",
+    "repository": "/Users/arthur/dev-space/ACPLazyBridge"
+  },
+  "tool_versions": {
+    "git": "2.51.0",
+    "ripgrep": "14.1.1",
+    "jq": "1.8.1",
+    "yq": "4.47.2",
+    "ast-grep": "0.39.5"
+  },
+  "file_counts": {
+    "claude_md_files": 12,
+    "templates": 4,
+    "commands": 3
+  },
+  "validation_results": {
+    "claude_md_inventory": {
+      "status": "PASS",
+      "expected": 12,
+      "actual": 12,
+      "files": [
+        "./.github/CLAUDE.md",
+        "./.specify/CLAUDE.md",
+        "./CLAUDE.md",
+        "./crates/acp-lazy-core/CLAUDE.md",
+        "./crates/CLAUDE.md",
+        "./crates/codex-cli-acp/CLAUDE.md",
+        "./dev-docs/CLAUDE.md",
+        "./dev-docs/review/_artifacts/CLAUDE.md",
+        "./queries/CLAUDE.md",
+        "./scripts/CLAUDE.md",
+        "./sdd-rules/CLAUDE.md",
+        "./specs/CLAUDE.md"
+      ]
+    },
+    "claude_md_version_check": {
+      "status": "PASS",
+      "target_version": "1.0.1",
+      "files_with_version": 12,
+      "files_missing_version": 0
+    },
+    "claude_md_date_check": {
+      "status": "FAIL",
+      "target_date": "2025-09-15",
+      "files_with_date": 0,
+      "files_missing_date": 12,
+      "actual_dates_found": ["2025-09-17"]
+    },
+    "validation_script": {
+      "status": "PASS",
+      "script": "./scripts/sdd/validate-claude-md.sh",
+      "exit_code": 0
+    },
+    "template_alignment": {
+      "status": "FAIL",
+      "templates_checked": [
+        ".specify/templates/agent-file-template.md",
+        ".specify/templates/plan-template.md",
+        ".specify/templates/spec-template.md",
+        ".specify/templates/tasks-template.md"
+      ],
+      "templates_with_version": 0,
+      "templates_with_date": 0
+    },
+    "command_files": {
+      "status": "FAIL",
+      "commands_checked": [
+        ".specify/commands/plan.md",
+        ".specify/commands/specify.md",
+        ".specify/commands/tasks.md"
+      ],
+      "commands_with_version": 0,
+      "commands_with_date": 0
+    }
+  },
+  "issues_found": [
+    {
+      "severity": "HIGH",
+      "category": "CLAUDE.md",
+      "issue": "All CLAUDE.md files have date 2025-09-17 instead of Constitution amended date 2025-09-15",
+      "affected_files": "all 12 CLAUDE.md files"
+    },
+    {
+      "severity": "MEDIUM",
+      "category": "Templates",
+      "issue": "Templates missing Constitution version 1.0.1 and amended date references",
+      "affected_files": "all 4 templates in .specify/templates/"
+    },
+    {
+      "severity": "MEDIUM",
+      "category": "Commands",
+      "issue": "Command files missing Constitution version 1.0.1 and amended date references",
+      "affected_files": "all 3 commands in .specify/commands/"
+    }
+  ],
+  "remediation_needed": true,
+  "overall_status": "PARTIAL_PASS",
+  "pass_percentage": 42.86,
+  "checklist_items": {
+    "total": 7,
+    "passed": 3,
+    "failed": 3,
+    "warning": 1
+  }
+}

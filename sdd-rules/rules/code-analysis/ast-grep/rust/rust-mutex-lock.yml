@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+files:
+  - "**/*.rs"
+  - "!**/*_test.rs"
+  - "!**/*tests.rs"
+  - "!**/tests/**"
+  - "!**/benches/**"
+id: rust-mutex-lock
+language: Rust
+message: Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context
+rule:
+  any:
+    - pattern: $MUT.lock().unwrap()
+    - pattern: $MUT.lock().expect($MSG)
+severity: warning
