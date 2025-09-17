@@ -2,9 +2,9 @@
 
 ```yaml
 Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/29
-Spec-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/tree/docs/issue-templates-align-sdd-29/specs/002-issue-templates-align-sdd/spec.md
-Plan-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/tree/docs/issue-templates-align-sdd-29/specs/002-issue-templates-align-sdd/plan.md
-Tasks-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/tree/docs/issue-templates-align-sdd-29/specs/002-issue-templates-align-sdd/tasks.md
+Spec-URI: specs/002-issue-templates-align-sdd/spec.md
+Plan-URI: specs/002-issue-templates-align-sdd/plan.md
+Tasks-URI: specs/002-issue-templates-align-sdd/tasks.md
 Evidence-URIs: _artifacts/issue-templates-sdd-29/
 ```
 
