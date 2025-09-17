@@ -1,15 +1,26 @@
 name: Feature request
 
-description: Suggest an idea for this project
+description: Suggest an idea for this project (SDD v1.0.1 compliant)
+
+title: "[FEATURE] "
 
 labels: [enhancement]
 
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
+
+        Thank you for suggesting a feature. Please provide detailed information to help us evaluate and plan the implementation.
+        All normative artifacts must be written in English per SDD policy.
+
   - type: input
     id: summary
     attributes:
       label: Summary
       description: A clear and concise description of the feature
+      placeholder: Brief description of the proposed feature
     validations:
       required: true
 
@@ -17,19 +28,99 @@ body:
     id: motivation
     attributes:
       label: Motivation / Use case
-      description: What problem does this solve?
+      description: What problem does this solve? Who will benefit?
+      placeholder: |
+        Describe the problem or need this feature addresses.
+        Include specific use cases or scenarios.
     validations:
       required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Define specific, measurable criteria for feature completion
+      placeholder: |
+        - [ ] User can perform action X
+        - [ ] System responds with Y when Z occurs
+        - [ ] Performance meets threshold of N ms
+        - [ ] Documentation updated with examples
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-Goals
+      description: What is explicitly OUT of scope for this feature?
+      placeholder: |
+        List what this feature will NOT do to set clear boundaries.
+        Example: "This will not change existing API contracts"
 
   - type: textarea
     id: proposal
     attributes:
       label: Proposal / High-level design
-      description: Outline the approach and acceptance criteria
+      description: Outline the technical approach and implementation strategy
+      placeholder: |
+        Describe how you envision this feature being implemented.
+        Include architecture considerations if applicable.
+
+  - type: dropdown
+    id: sdd_impact
+    attributes:
+      label: SDD Impact
+      description: Does this feature require full SDD workflow (Spec/Plan/Tasks)?
+      options:
+        - "Yes - requires full SDD workflow (significant feature)"
+        - "No - minor change only (can be done directly)"
+        - "TBD - needs assessment by maintainers"
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List any dependencies or prerequisites for this feature
+      placeholder: |
+        - Depends on Issue #X
+        - Requires library Y version Z
+        - Blocked by upstream change
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches have you considered?
+      placeholder: Describe alternative solutions and why this approach is preferred
 
   - type: textarea
     id: references
     attributes:
       label: References
-      description: Link to dev-docs/plan/issues, REQ/ARC/SPEC, dev-docs/references/ where applicable
+      description: Link to related documentation, issues, or external resources
+      placeholder: |
+        - Related Issue: #123
+        - Dev docs: dev-docs/plan/issues/...
+        - Spec: specs/XXX-feature/spec.md
+        - External: https://...
 
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance Confirmation
+      description: Please confirm the following before submitting
+      options:
+        - label: This feature request is written in English (SDD normative artifacts requirement)
+          required: true
+        - label: I have not included any secrets, tokens, passwords, or sensitive data
+          required: true
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I understand this may require a full SDD workflow if accepted
+          required: true

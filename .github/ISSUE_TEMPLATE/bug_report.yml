@@ -1,15 +1,52 @@
 name: Bug report
 
-description: Create a report to help us improve
+description: Create a report to help us improve (SDD v1.0.1 compliant)
+
+title: "[BUG] "
 
 labels: [bug]
 
 body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
+
+        Thank you for reporting a bug. Please fill out the form below to help us reproduce and fix the issue.
+        All normative artifacts must be written in English per SDD policy.
+
   - type: input
     id: summary
     attributes:
       label: Summary
       description: A clear and concise description of the bug
+      placeholder: Brief description of what went wrong
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - critical (production blocker)
+        - high (major functionality broken)
+        - medium (minor functionality affected)
+        - low (cosmetic/edge case)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproducibility
+      description: How often can you reproduce this bug?
+      options:
+        - always (100%)
+        - sometimes (>50%)
+        - rarely (<50%)
+        - unable to reproduce
     validations:
       required: true
 
@@ -17,11 +54,13 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
-      description: Provide steps and any JSONL inputs used
+      description: Provide detailed steps and any JSONL inputs used
       placeholder: |
-        1. ...
-        2. ...
-        3. ...
+        1. Run command X with parameters Y
+        2. Provide input Z
+        3. Observe error
+
+        Include any JSONL test scenarios if applicable
     validations:
       required: true
 
@@ -29,6 +68,7 @@ body:
     id: expected
     attributes:
       label: Expected behavior
+      description: What should have happened?
     validations:
       required: true
 
@@ -36,13 +76,85 @@ body:
     id: actual
     attributes:
       label: Actual behavior / logs
-      description: Attach logs (stderr) and, if applicable, scenario outputs
+      description: What actually happened? Include relevant logs (stderr) and scenario outputs
+      placeholder: |
+        Paste error messages, stack traces, or unexpected output here.
+        Remember: stdout for protocol, stderr for logs.
+
+  - type: input
+    id: version
+    attributes:
+      label: Affected Version/Commit
+      description: Which version or commit SHA exhibits this bug?
+      placeholder: e.g., v1.0.0 or commit SHA like abc123def
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component/Area
+      description: Which component is affected?
+      options:
+        - acp-lazy-core (protocol library)
+        - codex-cli-acp (Codex adapter)
+        - protocol/transport
+        - streaming
+        - tool-calls
+        - permissions
+        - documentation
+        - CI/CD
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: protocol_version
+    attributes:
+      label: Protocol Version (if applicable)
+      description: For protocol-related bugs, specify the ACP protocol version
+      placeholder: e.g., 1 (integer, not string)
+
+  - type: textarea
+    id: sdd_links
+    attributes:
+      label: SDD Links (optional)
+      description: Link to any related specs, plans, or tasks
+      placeholder: |
+        - Spec: specs/XXX-feature/spec.md
+        - Plan: specs/XXX-feature/plan.md
+        - Tasks: specs/XXX-feature/tasks.md
 
   - type: textarea
     id: env
     attributes:
       label: Environment
-      placeholder: |
+      description: Provide details about your environment
+      value: |
         OS:
-        Rust:
-        Commit SHA:
+        Rust version:
+        Cargo version:
+        Other relevant tools:
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Any other information that might be helpful
+
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance Confirmation
+      description: Please confirm the following before submitting
+      options:
+        - label: This issue is written in English (SDD normative artifacts requirement)
+          required: true
+        - label: I have not included any secrets, tokens, passwords, or sensitive data
+          required: true
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have included all relevant information to reproduce the bug
+          required: true
