@@ -101,7 +101,11 @@ impl FileNotifySource {
             }
         }
 
-        let reader = self.file.as_mut().unwrap();
+        // SAFETY: We checked self.file.is_none() above and returned if still None after open_or_reopen()
+        let reader = self
+            .file
+            .as_mut()
+            .expect("file handle exists after open_or_reopen check");
         let mut line = String::new();
         let mut had_activity = false;
 

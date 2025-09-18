@@ -1,0 +1,4 @@
+=== Warning Summary ===
+rust-no-unwrap: 82
+rust-mutex-lock: 6
+Total warnings: 104
