@@ -1,7 +1,7 @@
 # SDD Rules - Tools - CLI - SemTools
 
 SemTools: Semantic search and document parsing tools for the command line
-Last Version: 1.3.0-beta.2
+Last Version: 1.3.0
 
 ## Augmented CLI Tooling
 
@@ -10,14 +10,19 @@ SemTools provides two core CLI utilities:
 - `parse`: converts non-grepable formats to Markdown and prints the generated file paths (one per input) to stdout
 - `search`: performs semantic keyword search over text/markdown/code files. It accepts file path arguments or stdin (stdin is discouraged since it loses real filenames, showing <stdin> instead).
 
+## CLI Help
+
 ### Parse CLI Help
 
 ```bash
-parse --help
+$ parse --help
 A CLI tool for parsing documents using various backends
+
 Usage: parse [OPTIONS] <FILES>...
+
 Arguments:
   <FILES>...  Files to parse
+
 Options:
   -c, --parse-config <PARSE_CONFIG>  Path to the config file. Defaults to ~/.parse_config.json
   -b, --backend <BACKEND>            The backend type to use for parsing. Defaults to `llama-parse` [default: llama-parse]
@@ -29,12 +34,15 @@ Options:
 ### Search CLI Help
 
 ```bash
-search --help
+$ search --help
 A CLI tool for fast semantic keyword search
+
 Usage: search [OPTIONS] <QUERY> [FILES]...
+
 Arguments:
   <QUERY>     Query to search for (positional argument)
-  [FILES]...  Files to search (optional if using stdin)
+  [FILES]...  Files or directories to search
+
 Options:
   -n, --n-lines <N_LINES>            How many lines before/after to return as context [default: 3]
       --top-k <TOP_K>                The top-k files or texts to return (ignored if max_distance is set) [default: 3]
@@ -44,7 +52,26 @@ Options:
   -V, --version                      Print version
 ```
 
-### Common Usage Patterns
+### Workspace CLI Help
+
+```bash
+$ workspace --help
+Manage semtools workspaces
+
+Usage: workspace <COMMAND>
+
+Commands:
+  use     Use or create a workspace (prints export command to run)
+  status  Show active workspace and basic stats
+  prune   Remove stale or missing files from store
+  help    Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```
+
+## Common Usage Patterns
 
 - Parse non-text → semantic search (avoid stdin to preserve filenames)
 
@@ -52,19 +79,19 @@ Options:
   # zsh
   typeset -a PARSED
   while IFS= read -r line; do PARSED+=("$line"); done < <(parse reports/**/*.pdf)
-  search "quarterly revenue, growth" -i --n-lines 4 --top-k 8 "${PARSED[@]}"
+  search "quarterly revenue, growth" -i --n-lines 4 --max-distance 0.35 "${PARSED[@]}"
   # Bash
   mapfile -t PARSED < <(parse reports/**/*.pdf)
-  search "quarterly revenue, growth" -i --n-lines 4 --top-k 8 "${PARSED[@]}"
+  search "quarterly revenue, growth" -i --n-lines 4 --max-distance 0.35 "${PARSED[@]}"
   # fish
   set -l PARSED (parse reports/**/*.pdf)
-  search "quarterly revenue, growth" -i --n-lines 4 --top-k 8 $PARSED
+  search "quarterly revenue, growth" -i --n-lines 4 --max-distance 0.35 $PARSED
   ```
 
 - Direct search on text/Markdown (using globs to expand directories)
 
   ```bash
-  search "error handling" -i --n-lines 4 --top-k 8 docs/**/*.md src/**/*.md
+  search "error handling" -i --n-lines 4 --max-distance 0.35 docs/**/*.md src/**/*.md
   ```
 
 - Directory expansion example (zsh):
@@ -72,7 +99,7 @@ Options:
   ```bash
   typeset -a FILES
   while IFS= read -r f; do FILES+=("$f"); done < <(find docs -type f -name "*.md")
-  search "error handling" -i --n-lines 4 --top-k 8 "${FILES[@]}"
+  search "error handling" -i --n-lines 4 --max-distance 0.35 "${FILES[@]}"
   ```
 
 - Pre-filter (precise) → semantic re-rank
@@ -98,7 +125,7 @@ Options:
   search "payment, checkout, refund" -i --n-lines 4 --top-k 8 "${PARSED[@]}"
   ```
 
-### Tips
+## Tips
 
 - parse prints one output path per input file. Pass these paths to search (avoid stdin) so filenames remain available for citation.
 - search only operates on text; parse converts non-text to Markdown first.
@@ -108,7 +135,7 @@ Options:
 - For huge scopes: pre-filter with grep, then semantic re-rank; or process in batches (xargs/arrays).
 - Never expose secrets from configuration files (e.g., ~/.parse_config.json).
 
-### Examples
+## Examples
 
 - Installation-focused retrieval with citations preserved:
 
@@ -120,7 +147,7 @@ Options:
 - Error handling across Markdown:
 
   ```bash
-  search "network error, timeout" -i --n-lines 4 --top-k 8 src/**/*.md
+  search "network error, timeout" -i --n-lines 4 --max-distance 0.35 src/**/*.md
   ```
 
 - Strict threshold (high precision):
@@ -138,17 +165,12 @@ Options:
 - Do not scan $HOME or external mounts by default; confirm first for very large or remote paths.
 - Ignore by default: .DS_Store, coverage, pycache, .pytest_cache, .mypy_cache, .ruff_cache, node_modules, .git, .venv, dist, build, target, .cache, tmp, logs, binaries/archives (e.g., `.zip`, `.tar`, `.gz`) unless explicitly requested.
 - Soft limits: ≤ 5,000 files or ≤ 500MB per run. If exceeding limits, summarize candidates and ask to narrow scope before proceeding.
-SemTools workspaces (v1.3.0-beta.2):
+SemTools workspaces (v1.3.0):
 - Use a dedicated SemTools workspace per project or task to keep caches/stores organized and avoid cross-project bleed.
 - Typical flow:
-    - Check current workspace: `workspace status`
-    - Select or create a workspace: `workspace select <name-or-path>`
-        - This prints an `export` command. Run it to activate, for example:
-
-      ```bash
-      eval "$(workspace select project-XYZ)"
-      ```
-
+    - Configure or create a workspace: `workspace use acplb`
+    - Activate the workspace: `export SEMTOOLS_WORKSPACE=acplb`
+    - Check current status: `workspace status`
     - Periodically prune stale or missing files from the store: `workspace prune`
 - Include the active workspace name in your run logs and artifacts for traceability.
 
@@ -183,7 +205,7 @@ SemTools workspaces (v1.3.0-beta.2):
      else
        echo "  * Parse step can be skipped (no non-text candidates)"
      fi
-     echo "  * Default search: -i --n-lines 4 --top-k 8"
+     echo "  * Default search: -i --n-lines 4 --max-distance 0.35"
      echo "  * Large sets: consider --max-distance 0.35–0.38 instead of top-k"
      echo "  * Optional pre-filter: grep -ril '<anchor>' ..."
      # In team workflows, proceed after explicit confirmation
@@ -232,7 +254,7 @@ SemTools workspaces (v1.3.0-beta.2):
 ## Default parameters and adaptive tuning ladder
 
 - Defaults (robust starting point):
-    - search: -i --n-lines 4 --top-k 8
+    - search: -i --n-lines 4 --max-distance 0.35
     - parse: use default backend (llama-parse); if ~/.parse_config.json exists, add -c; avoid -v unless troubleshooting
     - Passing files: prefer passing file paths to search (avoid stdin) to preserve filenames in results
 - Stage 2 (weak signal or large corpora):
@@ -249,27 +271,28 @@ SemTools workspaces (v1.3.0-beta.2):
 
 - zsh (macOS default):
 
-  ```zsh
-  # Parse PDFs and store output paths in an array (preserves spaces)
-  typeset -a PARSED
-  while IFS= read -r line; do PARSED+=("$line"); done < <(parse docs/**/*.pdf)
-  search "installation, setup" -i --n-lines 4 --top-k 8 "${PARSED[@]}"
-  ```
+```zsh
+# Parse PDFs and store output paths in an array (preserves spaces)
+typeset -a PARSED
+while IFS= read -r line; do PARSED+=("$line"); done < <(parse docs/**/*.pdf)
+search "installation, setup" -i --n-lines 4 --max-distance 0.35 "${PARSED[@]}"
+```
 
 - Bash:
 
-  ```bash
-  # Parse PDFs and store output paths in an array (preserves spaces)
-  mapfile -t PARSED < <(parse docs/**/*.pdf)
-  search "installation, setup" -i --n-lines 4 --top-k 8 "${PARSED[@]}"
-  ```
+```bash
+# Parse PDFs and store output paths in an array (preserves spaces)
+mapfile -t PARSED < <(parse docs/**/*.pdf)
+search "installation, setup" -i --n-lines 4 --max-distance 0.35 "${PARSED[@]}"
+RSED[@]}"
+```
 
 - fish:
 
-  ```fish
-  set -l PARSED (parse docs/**/*.pdf)
-  search "installation, setup" -i --n-lines 4 --top-k 8 $PARSED
-  ```
+```fish
+set -l PARSED (parse docs/**/*.pdf)
+search "installation, setup" -i --n-lines 4 --max-distance 0.35 $PARSED
+```
 
 ---
 

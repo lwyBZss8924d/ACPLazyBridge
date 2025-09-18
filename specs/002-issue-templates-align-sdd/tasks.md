@@ -1,20 +1,30 @@
 # Tasks: Align Issue Templates with SDD Constitution v1.0.1
 
 ```yaml
-Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/29
-Spec-URI: specs/002-issue-templates-align-sdd/spec.md
-Plan-URI: specs/002-issue-templates-align-sdd/plan.md
-Tasks-URI: specs/002-issue-templates-align-sdd/tasks.md
-Evidence-URIs: _artifacts/issue-templates-sdd-29/
+worktree: specs/002-issue-templates-align-sdd
+feature_branch: 002-issue-templates-align-sdd
+created: 2025-09-17
+last_updated: 2025-09-18
+status: completed
+input: Design documents from `/specs/[###-feature-name]/`
+spec_uri: specs/002-issue-templates-align-sdd/spec.md
+plan_uri: specs/002-issue-templates-align-sdd/plan.md
+tasks_uri: specs/002-issue-templates-align-sdd/tasks.md
+evidence_uris: _artifacts/issue-templates-sdd-29/
+specs:
+    constitution: 1.0.1
+    type: tasks
+    feature_number: 002
+commits:
+    last_commit: "49c59fa599f80af64cc5340d383ac7fd09da45b3" # Last PR merge commit hash
 ```
-
-Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 
 ## Task List
 
 ### Setup Tasks
 
 #### T001: Create evidence directory structure
+
 - [ ] Create `_artifacts/issue-templates-sdd-29/` directory
 - [ ] Create subdirectories: `tests/`, `logs/`, `screenshots/`
 - **Status**: Pending
@@ -22,6 +32,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Priority**: High
 
 #### T002: Validate current templates syntax
+
 - [ ] Check YAML validity of existing templates
 - [ ] Document current field structure
 - [ ] Capture baseline screenshots
@@ -32,6 +43,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 ### Implementation Tasks
 
 #### T003: Update bug_report.yml
+
 - [ ] Add Constitution banner at top
 - [ ] Add severity dropdown field
 - [ ] Add reproducibility dropdown field
@@ -47,6 +59,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Evidence**: `_artifacts/issue-templates-sdd-29/logs/bug_report_update.log`
 
 #### T004: Update feature_request.yml
+
 - [ ] Add Constitution banner at top
 - [ ] Convert to formal acceptance criteria field (required)
 - [ ] Add non-goals textarea field
@@ -59,6 +72,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Evidence**: `_artifacts/issue-templates-sdd-29/logs/feature_request_update.log`
 
 #### T005: Update engineering_task.yml
+
 - [ ] Add Constitution banner at top
 - [ ] Add category dropdown (feature/fix/perf/chore/docs)
 - [ ] Replace issue_ref with Spec-URI field
@@ -76,6 +90,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Evidence**: `_artifacts/issue-templates-sdd-29/logs/engineering_task_update.log`
 
 #### T006: Update config.yml
+
 - [ ] Add Security Advisories link
 - [ ] Add Contributing Guide link
 - [ ] Add SDD Documentation link
@@ -88,6 +103,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 ### Validation Tasks
 
 #### T007: Validate YAML syntax [P]
+
 - [ ] Run Python YAML validator on all templates
 - [ ] Check for syntax errors
 - [ ] Verify field structure
@@ -97,6 +113,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Evidence**: `_artifacts/issue-templates-sdd-29/tests/yaml_validation.log`
 
 #### T008: Test GitHub rendering [P]
+
 - [ ] Push templates to feature branch
 - [ ] Create draft issues with each template
 - [ ] Capture screenshots of rendered forms
@@ -107,6 +124,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Evidence**: `_artifacts/issue-templates-sdd-29/screenshots/`
 
 #### T009: Run local CI checks
+
 - [ ] Execute `scripts/ci/run-local-ci.sh`
 - [ ] Verify SDD structure validation passes
 - [ ] Verify language policy check passes
@@ -120,6 +138,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 ### Documentation Tasks
 
 #### T010: Update evidence documentation
+
 - [ ] Document all changes made
 - [ ] Link evidence files to tasks
 - [ ] Create change summary
@@ -128,6 +147,7 @@ Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 - **Priority**: Medium
 
 #### T011: Prepare PR description
+
 - [ ] Write comprehensive PR description
 - [ ] Link to Issue #29
 - [ ] Link to all SDD artifacts (spec/plan/tasks)
@@ -160,6 +180,7 @@ graph TD
 ## Quality Gates
 
 Before marking complete:
+
 - [ ] All YAML files valid
 - [ ] All required fields present
 - [ ] Constitution banner visible
@@ -170,17 +191,20 @@ Before marking complete:
 ## Test Plan
 
 ### Unit Testing
+
 1. Validate each YAML file independently
 2. Check field types and validations
 3. Verify required vs optional fields
 
 ### Integration Testing
+
 1. Create issues using each template
 2. Verify data collection
 3. Test checkbox functionality
 4. Validate dropdown options
 
 ### Acceptance Testing
+
 1. User can create bug report with SDD fields
 2. User can create feature request with acceptance criteria
 3. User can create engineering task with quality gates
@@ -189,14 +213,17 @@ Before marking complete:
 ## Risk Mitigation
 
 ### Risk: Template Complexity
+
 - **Mitigation**: Progressive disclosure, clear field descriptions
 - **Test**: User feedback on draft templates
 
 ### Risk: Breaking Changes
+
 - **Mitigation**: Additive changes only, maintain backward compatibility
 - **Test**: Existing issues remain unaffected
 
 ### Risk: Rendering Issues
+
 - **Mitigation**: Test on GitHub before merge
 - **Test**: Preview all templates in browser
 
@@ -205,6 +232,7 @@ Before marking complete:
 All evidence stored in: `_artifacts/issue-templates-sdd-29/`
 
 ### Required Evidence
+
 - YAML validation logs
 - Template update logs
 - CI execution logs
@@ -219,16 +247,3 @@ All evidence stored in: `_artifacts/issue-templates-sdd-29/`
 - [ ] Local CI checks pass
 - [ ] Evidence documented
 - [ ] PR approved and merged
-
----
-
-```yaml
-metadata:
-    constitution: "1.0.1"
-    document_type: "tasks"
-    feature_number: "002"
-    created: "2025-09-17"
-    status: "in-progress"
-    total_tasks: 11
-    completed_tasks: 0
-```

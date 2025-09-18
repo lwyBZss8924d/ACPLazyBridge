@@ -81,9 +81,20 @@
       "Bash(./scripts/sdd/query-metadata.sh:*)",
       "Bash(./scripts/sdd/check-sdd-consistency.sh:*)",
       "Bash(for:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(gh issue view:*)",
+      "Read(//Users/arthur/dev-space/acplb-worktrees/issue-templates-sdd-29/**)",
+      "Bash(tee:*)",
+      "Bash(ruby:*)",
+      "Bash(./scripts/sdd/validate_structure.py)",
+      "Bash(gh pr view:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "context7",
+    "deepwiki"
+  ]
 }

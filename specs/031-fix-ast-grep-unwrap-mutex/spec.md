@@ -4,8 +4,8 @@
 worktree: /Users/arthur/dev-space/acplb-worktrees/fix-ast-grep-unwrap-mutex
 feature_branch: fix/ast-grep-unwrap-mutex
 created: 2025-09-19
-last_updated: 2025-09-19
-status: in_progress
+last_updated: 2025-09-18
+status: done
 input: GitHub Issue #31
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/31
 specs:

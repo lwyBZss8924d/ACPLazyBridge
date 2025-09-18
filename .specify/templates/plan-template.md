@@ -1,8 +1,21 @@
 # Implementation Plan: [FEATURE]
 
-
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+```yaml
+worktree: [WORKTREE-PATH]
+feature_branch: [###-feature-name]
+created: [DATE]
+last_updated: [DATE]
+status: [STATUS]
+input: Feature specification from `/specs/[###-feature-name]/spec.md`
+spec_uri: [SPEC-URI] # specs/[###-feature-name]/spec.md
+plan_uri: [PLAN-URI] # specs/[###-feature-name]/plan.md
+tasks_uri: [TASKS-URI] # specs/[###-feature-name]/tasks.md
+evidence_uris: [EVIDENCE-URIS] # _artifacts/[###-feature-name]/
+specs:
+    constitution: [CONSTITUTION-VERSION]
+    type: plan
+    feature_number: [FEATURE-NUMBER]
+```
 
 ## Execution Flow (/plan command scope)
 
@@ -19,7 +32,7 @@
    → Update Progress Tracking: Initial Constitution Check
 5. Execute Phase 0 → research.md
    → If NEEDS CLARIFICATION remain: ERROR "Resolve unknowns"
-6. Execute Phase 1 → contracts, data-model.md, quickstart.md, agent-specific template file (e.g., `CLAUDE.md` for Claude Code, `.github/copilot-instructions.md` for GitHub Copilot, or `GEMINI.md` for Gemini CLI).
+6. Execute Phase 1 → contracts, data-model.md, quickstart.md, agent-specific template file (e.g., `CLAUDE.md` for Claude Code, `WARP.md` for Warp Agent, or `GEMINI.md` for Gemini CLI, etc.).
 7. Re-evaluate Constitution Check section
    → If new violations: Refactor design, return to Phase 1
    → Update Progress Tracking: Post-Design Constitution Check
@@ -188,7 +201,7 @@ _Prerequisites: research.md complete_
    - Quickstart test = story validation steps
 
 5. **Update agent file incrementally** (O(1) operation):
-   - Run `scripts/sdd/update-agent-context.sh claude` for your AI assistant
+   - Run `scripts/sdd/update-agent-context.sh claude` for AI Engineer
    - If exists: Add only NEW tech from current plan
    - Preserve manual additions between markers
    - Update recent changes (keep last 3)

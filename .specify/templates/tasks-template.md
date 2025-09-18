@@ -1,5 +1,30 @@
 # Tasks: [FEATURE NAME]
 
+```yaml
+worktree: [WORKTREE-PATH]
+feature_branch: [###-feature-name]
+created: [DATE]
+last_updated: [DATE]
+status: [STATUS]
+input: Design documents from `/specs/[###-feature-name]/`
+spec_uri: [SPEC-URI] # specs/[###-feature-name]/spec.md
+plan_uri: [PLAN-URI] # specs/[###-feature-name]/plan.md
+tasks_uri: [TASKS-URI] # specs/[###-feature-name]/tasks.md
+evidence_uris: [EVIDENCE-URIS] # _artifacts/[###-feature-name]/
+prerequisites:
+    plan: plan.md (required),
+    research: research.md # specs/[###-feature-name]/research.md 
+    data-model: data-model.md # specs/[###-feature-name]/data-model.md
+    contracts: contracts/
+specs:
+    constitution: [CONSTITUTION-VERSION]
+    type: tasks
+    feature_number: [FEATURE-NUMBER]
+commits:
+    commit: [COMMIT-HASH] # all gh commits
+    last_commit: [LAST-COMMIT-HASH] # Last PR commit hash
+```
+
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), research.md, data-model.md, contracts/
 

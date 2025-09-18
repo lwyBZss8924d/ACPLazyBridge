@@ -1,0 +1,63 @@
+chore(sdd): bootstrap SDD Constitution v1.0.1; migrate docs/templates; add SDD scripts; add ast-grep rules; upgrade markdownlint
+
+Context
+- One-time direct commit to main to finalize the global SDD governance initialization for ACPLazyBridge.
+- From now on, worktree-first policy applies (no direct edits on main). See WARP.md Branch & Worktrees.
+
+Motivation
+- Adopt SDD Constitution v1.0.1, centralize SDD artifacts under .specify/, and strengthen documentation, templates, and CI support tooling.
+- Establish consistent code/documentation quality gates and code analysis baselines.
+
+Highlights
+- Constitution & Memory
+  - Add .specify/memory/constitution.md (Version: 1.0.1; Ratified/Amended: 2025-09-15)
+  - Add .specify/memory/constitution_update_checklist.md and lifecycle.md
+  - Migrate spec-driven to .specify/spec-driven.md; remove outdated duplicates
+
+- Templates & Commands
+  - Add .specify/templates/{agent-file,plan,spec,tasks}-template.md
+  - Add .specify/commands/{plan,specify,tasks}.md and commands-template
+  - Update .github/PULL_REQUEST_TEMPLATE.md
+  - Unify CLAUDE.md guidance across directories to Constitution 1.0.1
+
+- Rules & Code Analysis
+  - Add ast-grep rules for go/js/python/rust and baseline scripts (sg-scan, no-unwrap, dbg!, TODO, etc.)
+  - Add sgconfig.yml for project scanning
+
+- CI & Documentation Style
+  - Upgrade to markdownlint-cli2 (.markdownlint-cli2.yaml); update markdownlint config and ignores
+  - Refresh sdd-rules documentation; add google-markdown-style-guide.md
+
+- SDD Scripts (scripts/sdd/)
+  - check-sdd-consistency.sh, validate-claude-md.sh, validate-metadata.sh
+  - migrate-to-yaml-metadata.sh, query-metadata.sh, lint_docs.sh
+  - move create-new-feature.sh, setup-plan.sh, get-feature-paths.sh, check-task-prerequisites.sh
+  - add upstream common.sh under scripts/sdd/upstream/lib/common.sh
+
+- Evidence & Reports
+  - Add _artifacts/reports/constitution-check-20250917/{constitution-validation-report.md, constitution-validation-summary.json}
+  - Add sdd-alignment and implementation summary reports
+
+Breaking changes (paths)
+- Move multiple SDD docs from sdd-rules/* and dev-docs/sdd/* to .specify/*
+- Rename/move scripts into scripts/sdd/*; update references accordingly
+- Remove legacy files superseded by .specify/* and updated sdd-rules content
+
+Validation
+- Captured diffs vs origin/main under _artifacts/logs/sdd-init-constitution-101/
+  - diff-stat.txt, name-status.txt, summary.txt, range-log.txt
+- validate-claude-md.sh passes for current CLAUDE.md set
+
+Follow-ups (tracked as upcoming issues/tasks per SDD)
+- Correct CLAUDE.md footers to reference Last Amended: 2025-09-15 (currently dated 2025-09-17)
+- Align .github/ISSUE_TEMPLATE/* with SDD Constitution (forms for bug/feature/task with SDD fields)
+- Add Constitution footer/version into .specify/templates and .specify/commands
+- Run full local CI (structure/language/markdown/semantic) and address any findings
+
+Scope of change
+- Docs, scripts, rules, CI configuration, and SDD scaffolding; no crate source code behavior changes intended.
+
+References
+- .specify/memory/constitution.md, .specify/memory/constitution_update_checklist.md
+- WARP.md: SDD procedure and quality gates
+- sdd-rules/rules/*, scripts/sdd/*

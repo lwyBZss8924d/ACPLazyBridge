@@ -1,14 +1,22 @@
 # Implementation Plan: Align Issue Templates with SDD Constitution v1.0.1
 
 ```yaml
-Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/29
-Spec-URI: specs/002-issue-templates-align-sdd/spec.md
-Plan-URI: specs/002-issue-templates-align-sdd/plan.md
-Tasks-URI: specs/002-issue-templates-align-sdd/tasks.md
-Evidence-URIs: _artifacts/issue-templates-sdd-29/
+worktree: specs/002-issue-templates-align-sdd
+feature_branch: 002-issue-templates-align-sdd
+created: 2025-09-17
+last_updated: 2025-09-18
+status: completed
+input: Feature specification from `/specs/[###-feature-name]/spec.md`
+spec_uri: specs/002-issue-templates-align-sdd/spec.md
+plan_uri: specs/002-issue-templates-align-sdd/plan.md
+tasks_uri: specs/002-issue-templates-align-sdd/tasks.md
+evidence_uris: _artifacts/issue-templates-sdd-29/
+specs:
+    constitution: 1.0.1
+    type: plan
+    feature_number: 002
+last_commit_hash: "49c59fa599f80af64cc5340d383ac7fd09da45b3"
 ```
-
-Based on Constitution: 1.0.1 | Last Amended: 2025-09-15
 
 ## Overview
 
@@ -18,7 +26,7 @@ This plan details the technical approach for aligning GitHub Issue Templates wit
 
 ### Template Structure
 
-```
+```tree
 .github/
 └── ISSUE_TEMPLATE/
     ├── bug_report.yml       # Bug reporting with SDD compliance
@@ -206,20 +214,24 @@ contact_links:
 ## Implementation Strategy
 
 ### Phase 1: Template Updates
+
 1. Add constitutional banner to all templates
 2. Implement compliance checkboxes
 3. Add SDD-specific fields
 
 ### Phase 2: Field Enhancements
+
 1. Bug report: severity, reproducibility, version tracking
 2. Feature request: acceptance criteria, non-goals, SDD impact
 3. Engineering task: complete restructure with quality gates
 
 ### Phase 3: Configuration
+
 1. Update config.yml with new contact links
 2. Ensure blank issues remain disabled
 
 ### Phase 4: Validation
+
 1. YAML syntax validation
 2. GitHub rendering preview
 3. Local CI checks
@@ -227,6 +239,7 @@ contact_links:
 ## Validation Approach
 
 ### YAML Validation
+
 ```bash
 # Validate YAML syntax
 for file in .github/ISSUE_TEMPLATE/*.yml; do
@@ -235,11 +248,13 @@ done
 ```
 
 ### GitHub Preview
+
 - Push to feature branch
 - Create draft issue to test each template
 - Verify all fields render correctly
 
 ### CI Integration
+
 ```bash
 # Run full local CI suite
 scripts/ci/run-local-ci.sh
@@ -248,6 +263,7 @@ scripts/ci/run-local-ci.sh
 ## Rollback Strategy
 
 If issues arise:
+
 1. Revert to previous templates via git
 2. Templates are backward compatible (additive changes only)
 3. Existing issues unaffected
@@ -267,12 +283,3 @@ If issues arise:
 - [SDD Constitution](.specify/memory/constitution.md)
 
 ---
-
-```yaml
-metadata:
-    constitution: "1.0.1"
-    document_type: "plan"
-    feature_number: "002"
-    created: "2025-09-17"
-    status: "draft"
-```

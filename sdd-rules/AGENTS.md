@@ -384,6 +384,13 @@ Options:
   -V, --version                      Print version
 ```
 
+#### SemTools workspace (v1.3.0)
+
+- Configure or create: `workspace use acplb`
+- Activate: `export SEMTOOLS_WORKSPACE=acplb`
+- Status / prune: `workspace status`; `workspace prune`
+- Note: `search` expects file paths, not directories. Expand directories into files (e.g., `find -type f`) and pass arrays; avoid stdin to preserve filenames.
+
 ### AI Engineers Roles
 
 All AI Engineer MUST Flow Project's SDD - CONSTITUTION and SDD Rules.

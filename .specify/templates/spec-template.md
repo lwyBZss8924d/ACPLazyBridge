@@ -1,9 +1,18 @@
 # Feature Specification: [FEATURE NAME]
 
-**Feature Branch**: `[###-feature-name]`
-**Created**: [DATE]
-**Status**: Draft
-**Input**: User description: "$ARGUMENTS"
+```yaml
+worktree: [WORKTREE-PATH]
+feature_branch: [###-feature-name]
+created: [DATE]
+last_updated: [DATE]
+status: [STATUS]
+input: User description: "$ARGUMENTS"
+issue_uri: [ISSUE-LINK]
+specs:
+    constitution: [CONSTITUTION-VERSION]
+    type: spec
+    feature_number: [FEATURE-NUMBER]
+```
 
 ## Execution Flow (main)
 
@@ -139,3 +148,5 @@ _Updated by main() during processing_
 ⚠️ _Based on SDD CONSTITUTION: `.specify/memory/constitution.md`_
 ⚠️ _Fllow the SDD workflow implementation: `.specify/memory/lifecycle.md`_
 ⚠️ _Follow the SDD rules: `sdd-rules/rules/README.md`_
+
+---
