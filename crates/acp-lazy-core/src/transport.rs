@@ -129,7 +129,9 @@ impl ProcessTransport {
 
     /// Get mutable reference to stdin for writing.
     pub fn stdin(&mut self) -> &mut ChildStdin {
-        self.stdin.as_mut().expect("stdin already taken")
+        self.stdin
+            .as_mut()
+            .expect("stdin handle was already taken; this is a bug in ProcessTransport usage")
     }
 
     /// Get mutable reference to stdout for reading.

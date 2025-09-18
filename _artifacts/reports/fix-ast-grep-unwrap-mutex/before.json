@@ -1,0 +1,7304 @@
+[
+{
+  "text": "print(\"🔍 Starting SDD Structure Validation...\\n\")",
+  "range": {
+    "byteOffset": {
+      "start": 624,
+      "end": 676
+    },
+    "start": {
+      "line": 26,
+      "column": 8
+    },
+    "end": {
+      "line": 26,
+      "column": 57
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "        print(\"🔍 Starting SDD Structure Validation...\\n\")",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"🔍 Starting SDD Structure Validation...\\n\")",
+      "range": {
+        "byteOffset": {
+          "start": 624,
+          "end": 676
+        },
+        "start": {
+          "line": 26,
+          "column": 8
+        },
+        "end": {
+          "line": 26,
+          "column": 57
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"Checking {check_name}...\")",
+  "range": {
+    "byteOffset": {
+      "start": 1263,
+      "end": 1297
+    },
+    "start": {
+      "line": 41,
+      "column": 12
+    },
+    "end": {
+      "line": 41,
+      "column": 46
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(f\"Checking {check_name}...\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"Checking {check_name}...\")",
+      "range": {
+        "byteOffset": {
+          "start": 1263,
+          "end": 1297
+        },
+        "start": {
+          "line": 41,
+          "column": 12
+        },
+        "end": {
+          "line": 41,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"  {status}\\n\")",
+  "range": {
+    "byteOffset": {
+      "start": 1402,
+      "end": 1424
+    },
+    "start": {
+      "line": 44,
+      "column": 12
+    },
+    "end": {
+      "line": 44,
+      "column": 34
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(f\"  {status}\\n\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"  {status}\\n\")",
+      "range": {
+        "byteOffset": {
+          "start": 1402,
+          "end": 1424
+        },
+        "start": {
+          "line": 44,
+          "column": 12
+        },
+        "end": {
+          "line": 44,
+          "column": 34
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"=\" * 60)",
+  "range": {
+    "byteOffset": {
+      "start": 9487,
+      "end": 9502
+    },
+    "start": {
+      "line": 251,
+      "column": 8
+    },
+    "end": {
+      "line": 251,
+      "column": 23
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "        print(\"=\" * 60)",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"=\" * 60)",
+      "range": {
+        "byteOffset": {
+          "start": 9487,
+          "end": 9502
+        },
+        "start": {
+          "line": 251,
+          "column": 8
+        },
+        "end": {
+          "line": 251,
+          "column": 23
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"VALIDATION SUMMARY\")",
+  "range": {
+    "byteOffset": {
+      "start": 9511,
+      "end": 9538
+    },
+    "start": {
+      "line": 252,
+      "column": 8
+    },
+    "end": {
+      "line": 252,
+      "column": 35
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "        print(\"VALIDATION SUMMARY\")",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"VALIDATION SUMMARY\")",
+      "range": {
+        "byteOffset": {
+          "start": 9511,
+          "end": 9538
+        },
+        "start": {
+          "line": 252,
+          "column": 8
+        },
+        "end": {
+          "line": 252,
+          "column": 35
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"=\" * 60)",
+  "range": {
+    "byteOffset": {
+      "start": 9547,
+      "end": 9562
+    },
+    "start": {
+      "line": 253,
+      "column": 8
+    },
+    "end": {
+      "line": 253,
+      "column": 23
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "        print(\"=\" * 60)",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"=\" * 60)",
+      "range": {
+        "byteOffset": {
+          "start": 9547,
+          "end": 9562
+        },
+        "start": {
+          "line": 253,
+          "column": 8
+        },
+        "end": {
+          "line": 253,
+          "column": 23
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"\\n❌ ERRORS ({len(self.errors)}):\")",
+  "range": {
+    "byteOffset": {
+      "start": 9608,
+      "end": 9652
+    },
+    "start": {
+      "line": 256,
+      "column": 12
+    },
+    "end": {
+      "line": 256,
+      "column": 54
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(f\"\\n❌ ERRORS ({len(self.errors)}):\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"\\n❌ ERRORS ({len(self.errors)}):\")",
+      "range": {
+        "byteOffset": {
+          "start": 9608,
+          "end": 9652
+        },
+        "start": {
+          "line": 256,
+          "column": 12
+        },
+        "end": {
+          "line": 256,
+          "column": 54
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"  - {error}\")",
+  "range": {
+    "byteOffset": {
+      "start": 9707,
+      "end": 9728
+    },
+    "start": {
+      "line": 258,
+      "column": 16
+    },
+    "end": {
+      "line": 258,
+      "column": 37
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "                print(f\"  - {error}\")",
+  "charCount": {
+    "leading": 16,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"  - {error}\")",
+      "range": {
+        "byteOffset": {
+          "start": 9707,
+          "end": 9728
+        },
+        "start": {
+          "line": 258,
+          "column": 16
+        },
+        "end": {
+          "line": 258,
+          "column": 37
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"\\n⚠️  WARNINGS ({len(self.warnings)}):\")",
+  "range": {
+    "byteOffset": {
+      "start": 9776,
+      "end": 9828
+    },
+    "start": {
+      "line": 261,
+      "column": 12
+    },
+    "end": {
+      "line": 261,
+      "column": 60
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(f\"\\n⚠️  WARNINGS ({len(self.warnings)}):\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"\\n⚠️  WARNINGS ({len(self.warnings)}):\")",
+      "range": {
+        "byteOffset": {
+          "start": 9776,
+          "end": 9828
+        },
+        "start": {
+          "line": 261,
+          "column": 12
+        },
+        "end": {
+          "line": 261,
+          "column": 60
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"  - {warning}\")",
+  "range": {
+    "byteOffset": {
+      "start": 9887,
+      "end": 9910
+    },
+    "start": {
+      "line": 263,
+      "column": 16
+    },
+    "end": {
+      "line": 263,
+      "column": 39
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "                print(f\"  - {warning}\")",
+  "charCount": {
+    "leading": 16,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"  - {warning}\")",
+      "range": {
+        "byteOffset": {
+          "start": 9887,
+          "end": 9910
+        },
+        "start": {
+          "line": 263,
+          "column": 16
+        },
+        "end": {
+          "line": 263,
+          "column": 39
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"\\nℹ️  INFO ({len(self.info)}):\")",
+  "range": {
+    "byteOffset": {
+      "start": 9954,
+      "end": 9998
+    },
+    "start": {
+      "line": 266,
+      "column": 12
+    },
+    "end": {
+      "line": 266,
+      "column": 52
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(f\"\\nℹ️  INFO ({len(self.info)}):\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"\\nℹ️  INFO ({len(self.info)}):\")",
+      "range": {
+        "byteOffset": {
+          "start": 9954,
+          "end": 9998
+        },
+        "start": {
+          "line": 266,
+          "column": 12
+        },
+        "end": {
+          "line": 266,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(f\"  - {info}\")",
+  "range": {
+    "byteOffset": {
+      "start": 10050,
+      "end": 10070
+    },
+    "start": {
+      "line": 268,
+      "column": 16
+    },
+    "end": {
+      "line": 268,
+      "column": 36
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "                print(f\"  - {info}\")",
+  "charCount": {
+    "leading": 16,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(f\"  - {info}\")",
+      "range": {
+        "byteOffset": {
+          "start": 10050,
+          "end": 10070
+        },
+        "start": {
+          "line": 268,
+          "column": 16
+        },
+        "end": {
+          "line": 268,
+          "column": 36
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"\\n✅ All SDD structure validations passed!\")",
+  "range": {
+    "byteOffset": {
+      "start": 10142,
+      "end": 10194
+    },
+    "start": {
+      "line": 271,
+      "column": 12
+    },
+    "end": {
+      "line": 271,
+      "column": 62
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(\"\\n✅ All SDD structure validations passed!\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"\\n✅ All SDD structure validations passed!\")",
+      "range": {
+        "byteOffset": {
+          "start": 10142,
+          "end": 10194
+        },
+        "start": {
+          "line": 271,
+          "column": 12
+        },
+        "end": {
+          "line": 271,
+          "column": 62
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"\\n⚠️  Validation passed with warnings\")",
+  "range": {
+    "byteOffset": {
+      "start": 10237,
+      "end": 10287
+    },
+    "start": {
+      "line": 273,
+      "column": 12
+    },
+    "end": {
+      "line": 273,
+      "column": 58
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(\"\\n⚠️  Validation passed with warnings\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"\\n⚠️  Validation passed with warnings\")",
+      "range": {
+        "byteOffset": {
+          "start": 10237,
+          "end": 10287
+        },
+        "start": {
+          "line": 273,
+          "column": 12
+        },
+        "end": {
+          "line": 273,
+          "column": 58
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"\\n❌ Validation failed - please fix errors\")",
+  "range": {
+    "byteOffset": {
+      "start": 10314,
+      "end": 10366
+    },
+    "start": {
+      "line": 275,
+      "column": 12
+    },
+    "end": {
+      "line": 275,
+      "column": 62
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "            print(\"\\n❌ Validation failed - please fix errors\")",
+  "charCount": {
+    "leading": 12,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"\\n❌ Validation failed - please fix errors\")",
+      "range": {
+        "byteOffset": {
+          "start": 10314,
+          "end": 10366
+        },
+        "start": {
+          "line": 275,
+          "column": 12
+        },
+        "end": {
+          "line": 275,
+          "column": 62
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "print(\"=\" * 60)",
+  "range": {
+    "byteOffset": {
+      "start": 10384,
+      "end": 10399
+    },
+    "start": {
+      "line": 277,
+      "column": 8
+    },
+    "end": {
+      "line": 277,
+      "column": 23
+    }
+  },
+  "file": "scripts/sdd/validate_structure.py",
+  "lines": "        print(\"=\" * 60)",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Python",
+  "ruleId": "py-no-print",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid print() in modules; prefer logging",
+  "labels": [
+    {
+      "text": "print(\"=\" * 60)",
+      "range": {
+        "byteOffset": {
+          "start": 10384,
+          "end": 10399
+        },
+        "start": {
+          "line": 277,
+          "column": 8
+        },
+        "end": {
+          "line": 277,
+          "column": 23
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "child.stdin.take().expect(\"Failed to get stdin\")",
+  "range": {
+    "byteOffset": {
+      "start": 1048,
+      "end": 1096
+    },
+    "start": {
+      "line": 35,
+      "column": 27
+    },
+    "end": {
+      "line": 35,
+      "column": 75
+    }
+  },
+  "file": "crates/codex-cli-acp/src/bin/playback.rs",
+  "lines": "    let mut stdin_writer = child.stdin.take().expect(\"Failed to get stdin\");",
+  "charCount": {
+    "leading": 27,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Failed to get stdin\"",
+        "range": {
+          "byteOffset": {
+            "start": 1074,
+            "end": 1095
+          },
+          "start": {
+            "line": 35,
+            "column": 53
+          },
+          "end": {
+            "line": 35,
+            "column": 74
+          }
+        }
+      },
+      "EXPR": {
+        "text": "child.stdin.take()",
+        "range": {
+          "byteOffset": {
+            "start": 1048,
+            "end": 1066
+          },
+          "start": {
+            "line": 35,
+            "column": 27
+          },
+          "end": {
+            "line": 35,
+            "column": 45
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "child.stdin.take().expect(\"Failed to get stdin\")",
+      "range": {
+        "byteOffset": {
+          "start": 1048,
+          "end": 1096
+        },
+        "start": {
+          "line": 35,
+          "column": 27
+        },
+        "end": {
+          "line": 35,
+          "column": 75
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "child.stdout.take().expect(\"Failed to get stdout\")",
+  "range": {
+    "byteOffset": {
+      "start": 1115,
+      "end": 1165
+    },
+    "start": {
+      "line": 36,
+      "column": 17
+    },
+    "end": {
+      "line": 36,
+      "column": 67
+    }
+  },
+  "file": "crates/codex-cli-acp/src/bin/playback.rs",
+  "lines": "    let stdout = child.stdout.take().expect(\"Failed to get stdout\");",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Failed to get stdout\"",
+        "range": {
+          "byteOffset": {
+            "start": 1142,
+            "end": 1164
+          },
+          "start": {
+            "line": 36,
+            "column": 44
+          },
+          "end": {
+            "line": 36,
+            "column": 66
+          }
+        }
+      },
+      "EXPR": {
+        "text": "child.stdout.take()",
+        "range": {
+          "byteOffset": {
+            "start": 1115,
+            "end": 1134
+          },
+          "start": {
+            "line": 36,
+            "column": 17
+          },
+          "end": {
+            "line": 36,
+            "column": 36
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "child.stdout.take().expect(\"Failed to get stdout\")",
+      "range": {
+        "byteOffset": {
+          "start": 1115,
+          "end": 1165
+        },
+        "start": {
+          "line": 36,
+          "column": 17
+        },
+        "end": {
+          "line": 36,
+          "column": 67
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "child.stderr.take().expect(\"Failed to get stderr\")",
+  "range": {
+    "byteOffset": {
+      "start": 1184,
+      "end": 1234
+    },
+    "start": {
+      "line": 37,
+      "column": 17
+    },
+    "end": {
+      "line": 37,
+      "column": 67
+    }
+  },
+  "file": "crates/codex-cli-acp/src/bin/playback.rs",
+  "lines": "    let stderr = child.stderr.take().expect(\"Failed to get stderr\");",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Failed to get stderr\"",
+        "range": {
+          "byteOffset": {
+            "start": 1211,
+            "end": 1233
+          },
+          "start": {
+            "line": 37,
+            "column": 44
+          },
+          "end": {
+            "line": 37,
+            "column": 66
+          }
+        }
+      },
+      "EXPR": {
+        "text": "child.stderr.take()",
+        "range": {
+          "byteOffset": {
+            "start": 1184,
+            "end": 1203
+          },
+          "start": {
+            "line": 37,
+            "column": 17
+          },
+          "end": {
+            "line": 37,
+            "column": 36
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "child.stderr.take().expect(\"Failed to get stderr\")",
+      "range": {
+        "byteOffset": {
+          "start": 1184,
+          "end": 1234
+        },
+        "start": {
+          "line": 37,
+          "column": 17
+        },
+        "end": {
+          "line": 37,
+          "column": 67
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&request).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 9737,
+      "end": 9777
+    },
+    "start": {
+      "line": 326,
+      "column": 19
+    },
+    "end": {
+      "line": 326,
+      "column": 59
+    }
+  },
+  "file": "crates/acp-lazy-core/src/protocol.rs",
+  "lines": "        let json = serde_json::to_string(&request).unwrap();",
+  "charCount": {
+    "leading": 19,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&request)",
+        "range": {
+          "byteOffset": {
+            "start": 9737,
+            "end": 9768
+          },
+          "start": {
+            "line": 326,
+            "column": 19
+          },
+          "end": {
+            "line": 326,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&request).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 9737,
+          "end": 9777
+        },
+        "start": {
+          "line": 326,
+          "column": 19
+        },
+        "end": {
+          "line": 326,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&notification).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 10093,
+      "end": 10138
+    },
+    "start": {
+      "line": 335,
+      "column": 19
+    },
+    "end": {
+      "line": 335,
+      "column": 64
+    }
+  },
+  "file": "crates/acp-lazy-core/src/protocol.rs",
+  "lines": "        let json = serde_json::to_string(&notification).unwrap();",
+  "charCount": {
+    "leading": 19,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&notification)",
+        "range": {
+          "byteOffset": {
+            "start": 10093,
+            "end": 10129
+          },
+          "start": {
+            "line": 335,
+            "column": 19
+          },
+          "end": {
+            "line": 335,
+            "column": 55
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&notification).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 10093,
+          "end": 10138
+        },
+        "start": {
+          "line": 335,
+          "column": 19
+        },
+        "end": {
+          "line": 335,
+          "column": 64
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&response).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 10465,
+      "end": 10506
+    },
+    "start": {
+      "line": 344,
+      "column": 19
+    },
+    "end": {
+      "line": 344,
+      "column": 60
+    }
+  },
+  "file": "crates/acp-lazy-core/src/protocol.rs",
+  "lines": "        let json = serde_json::to_string(&response).unwrap();",
+  "charCount": {
+    "leading": 19,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&response)",
+        "range": {
+          "byteOffset": {
+            "start": 10465,
+            "end": 10497
+          },
+          "start": {
+            "line": 344,
+            "column": 19
+          },
+          "end": {
+            "line": 344,
+            "column": 51
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&response).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 10465,
+          "end": 10506
+        },
+        "start": {
+          "line": 344,
+          "column": 19
+        },
+        "end": {
+          "line": 344,
+          "column": 60
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&response).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 10798,
+      "end": 10839
+    },
+    "start": {
+      "line": 353,
+      "column": 19
+    },
+    "end": {
+      "line": 353,
+      "column": 60
+    }
+  },
+  "file": "crates/acp-lazy-core/src/protocol.rs",
+  "lines": "        let json = serde_json::to_string(&response).unwrap();",
+  "charCount": {
+    "leading": 19,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&response)",
+        "range": {
+          "byteOffset": {
+            "start": 10798,
+            "end": 10830
+          },
+          "start": {
+            "line": 353,
+            "column": 19
+          },
+          "end": {
+            "line": 353,
+            "column": 51
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&response).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 10798,
+          "end": 10839
+        },
+        "start": {
+          "line": 353,
+          "column": 19
+        },
+        "end": {
+          "line": 353,
+          "column": 60
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "msg.classify().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 11303,
+      "end": 11326
+    },
+    "start": {
+      "line": 369,
+      "column": 14
+    },
+    "end": {
+      "line": 369,
+      "column": 37
+    }
+  },
+  "file": "crates/acp-lazy-core/src/protocol.rs",
+  "lines": "        match msg.classify().unwrap() {",
+  "charCount": {
+    "leading": 14,
+    "trailing": 2
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "msg.classify()",
+        "range": {
+          "byteOffset": {
+            "start": 11303,
+            "end": 11317
+          },
+          "start": {
+            "line": 369,
+            "column": 14
+          },
+          "end": {
+            "line": 369,
+            "column": 28
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "msg.classify().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 11303,
+          "end": 11326
+        },
+        "start": {
+          "line": 369,
+          "column": 14
+        },
+        "end": {
+          "line": 369,
+          "column": 37
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "msg.classify().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 11751,
+      "end": 11774
+    },
+    "start": {
+      "line": 383,
+      "column": 14
+    },
+    "end": {
+      "line": 383,
+      "column": 37
+    }
+  },
+  "file": "crates/acp-lazy-core/src/protocol.rs",
+  "lines": "        match msg.classify().unwrap() {",
+  "charCount": {
+    "leading": 14,
+    "trailing": 2
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "msg.classify()",
+        "range": {
+          "byteOffset": {
+            "start": 11751,
+            "end": 11765
+          },
+          "start": {
+            "line": 383,
+            "column": 14
+          },
+          "end": {
+            "line": 383,
+            "column": 28
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "msg.classify().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 11751,
+          "end": 11774
+        },
+        "start": {
+          "line": 383,
+          "column": 14
+        },
+        "end": {
+          "line": 383,
+          "column": 37
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "notify_path.to_str().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 478,
+      "end": 507
+    },
+    "start": {
+      "line": 17,
+      "column": 43
+    },
+    "end": {
+      "line": 17,
+      "column": 72
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/notify_test.rs",
+  "lines": "    std::env::set_var(\"ACPLB_NOTIFY_PATH\", notify_path.to_str().unwrap());",
+  "charCount": {
+    "leading": 43,
+    "trailing": 2
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "notify_path.to_str()",
+        "range": {
+          "byteOffset": {
+            "start": 478,
+            "end": 498
+          },
+          "start": {
+            "line": 17,
+            "column": 43
+          },
+          "end": {
+            "line": 17,
+            "column": 63
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "notify_path.to_str().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 478,
+          "end": 507
+        },
+        "start": {
+          "line": 17,
+          "column": 43
+        },
+        "end": {
+          "line": 17,
+          "column": 72
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "notify_path.to_str().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 1750,
+      "end": 1779
+    },
+    "start": {
+      "line": 55,
+      "column": 34
+    },
+    "end": {
+      "line": 55,
+      "column": 63
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/notify_test.rs",
+  "lines": "        .env(\"ACPLB_NOTIFY_PATH\", notify_path.to_str().unwrap())",
+  "charCount": {
+    "leading": 34,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "notify_path.to_str()",
+        "range": {
+          "byteOffset": {
+            "start": 1750,
+            "end": 1770
+          },
+          "start": {
+            "line": 55,
+            "column": 34
+          },
+          "end": {
+            "line": 55,
+            "column": 54
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "notify_path.to_str().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 1750,
+          "end": 1779
+        },
+        "start": {
+          "line": 55,
+          "column": 34
+        },
+        "end": {
+          "line": 55,
+          "column": 63
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "notify_path.to_str().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 3464,
+      "end": 3493
+    },
+    "start": {
+      "line": 111,
+      "column": 34
+    },
+    "end": {
+      "line": 111,
+      "column": 63
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/notify_test.rs",
+  "lines": "        .env(\"ACPLB_NOTIFY_PATH\", notify_path.to_str().unwrap())",
+  "charCount": {
+    "leading": 34,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "notify_path.to_str()",
+        "range": {
+          "byteOffset": {
+            "start": 3464,
+            "end": 3484
+          },
+          "start": {
+            "line": 111,
+            "column": 34
+          },
+          "end": {
+            "line": 111,
+            "column": 54
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "notify_path.to_str().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 3464,
+          "end": 3493
+        },
+        "start": {
+          "line": 111,
+          "column": 34
+        },
+        "end": {
+          "line": 111,
+          "column": 63
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "self.file.as_mut().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 3539,
+      "end": 3566
+    },
+    "start": {
+      "line": 103,
+      "column": 21
+    },
+    "end": {
+      "line": 103,
+      "column": 48
+    }
+  },
+  "file": "crates/codex-cli-acp/src/notify_source.rs",
+  "lines": "        let reader = self.file.as_mut().unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "self.file.as_mut()",
+        "range": {
+          "byteOffset": {
+            "start": 3539,
+            "end": 3557
+          },
+          "start": {
+            "line": 103,
+            "column": 21
+          },
+          "end": {
+            "line": 103,
+            "column": 39
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "self.file.as_mut().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 3539,
+          "end": 3566
+        },
+        "start": {
+          "line": 103,
+          "column": 21
+        },
+        "end": {
+          "line": 103,
+          "column": 48
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "child.stdin.take().expect(\"Failed to get stdin\")",
+  "range": {
+    "byteOffset": {
+      "start": 1035,
+      "end": 1083
+    },
+    "start": {
+      "line": 32,
+      "column": 20
+    },
+    "end": {
+      "line": 32,
+      "column": 68
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let mut stdin = child.stdin.take().expect(\"Failed to get stdin\");",
+  "charCount": {
+    "leading": 20,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Failed to get stdin\"",
+        "range": {
+          "byteOffset": {
+            "start": 1061,
+            "end": 1082
+          },
+          "start": {
+            "line": 32,
+            "column": 46
+          },
+          "end": {
+            "line": 32,
+            "column": 67
+          }
+        }
+      },
+      "EXPR": {
+        "text": "child.stdin.take()",
+        "range": {
+          "byteOffset": {
+            "start": 1035,
+            "end": 1053
+          },
+          "start": {
+            "line": 32,
+            "column": 20
+          },
+          "end": {
+            "line": 32,
+            "column": 38
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "child.stdin.take().expect(\"Failed to get stdin\")",
+      "range": {
+        "byteOffset": {
+          "start": 1035,
+          "end": 1083
+        },
+        "start": {
+          "line": 32,
+          "column": 20
+        },
+        "end": {
+          "line": 32,
+          "column": 68
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "child.stdout.take().expect(\"Failed to get stdout\")",
+  "range": {
+    "byteOffset": {
+      "start": 1102,
+      "end": 1152
+    },
+    "start": {
+      "line": 33,
+      "column": 17
+    },
+    "end": {
+      "line": 33,
+      "column": 67
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let stdout = child.stdout.take().expect(\"Failed to get stdout\");",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Failed to get stdout\"",
+        "range": {
+          "byteOffset": {
+            "start": 1129,
+            "end": 1151
+          },
+          "start": {
+            "line": 33,
+            "column": 44
+          },
+          "end": {
+            "line": 33,
+            "column": 66
+          }
+        }
+      },
+      "EXPR": {
+        "text": "child.stdout.take()",
+        "range": {
+          "byteOffset": {
+            "start": 1102,
+            "end": 1121
+          },
+          "start": {
+            "line": 33,
+            "column": 17
+          },
+          "end": {
+            "line": 33,
+            "column": 36
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "child.stdout.take().expect(\"Failed to get stdout\")",
+      "range": {
+        "byteOffset": {
+          "start": 1102,
+          "end": 1152
+        },
+        "start": {
+          "line": 33,
+          "column": 17
+        },
+        "end": {
+          "line": 33,
+          "column": 67
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "child.stderr.take().expect(\"Failed to get stderr\")",
+  "range": {
+    "byteOffset": {
+      "start": 1171,
+      "end": 1221
+    },
+    "start": {
+      "line": 34,
+      "column": 17
+    },
+    "end": {
+      "line": 34,
+      "column": 67
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let stderr = child.stderr.take().expect(\"Failed to get stderr\");",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "child.stderr.take()",
+        "range": {
+          "byteOffset": {
+            "start": 1171,
+            "end": 1190
+          },
+          "start": {
+            "line": 34,
+            "column": 17
+          },
+          "end": {
+            "line": 34,
+            "column": 36
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"Failed to get stderr\"",
+        "range": {
+          "byteOffset": {
+            "start": 1198,
+            "end": 1220
+          },
+          "start": {
+            "line": 34,
+            "column": 44
+          },
+          "end": {
+            "line": 34,
+            "column": 66
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "child.stderr.take().expect(\"Failed to get stderr\")",
+      "range": {
+        "byteOffset": {
+          "start": 1171,
+          "end": 1221
+        },
+        "start": {
+          "line": 34,
+          "column": 17
+        },
+        "end": {
+          "line": 34,
+          "column": 67
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+  "range": {
+    "byteOffset": {
+      "start": 3580,
+      "end": 3634
+    },
+    "start": {
+      "line": 113,
+      "column": 18
+    },
+    "end": {
+      "line": 113,
+      "column": 72
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let results = run_playback_test(test_file).expect(\"Playback failed\");",
+  "charCount": {
+    "leading": 18,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "run_playback_test(test_file)",
+        "range": {
+          "byteOffset": {
+            "start": 3580,
+            "end": 3608
+          },
+          "start": {
+            "line": 113,
+            "column": 18
+          },
+          "end": {
+            "line": 113,
+            "column": 46
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"Playback failed\"",
+        "range": {
+          "byteOffset": {
+            "start": 3616,
+            "end": 3633
+          },
+          "start": {
+            "line": 113,
+            "column": 54
+          },
+          "end": {
+            "line": 113,
+            "column": 71
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+      "range": {
+        "byteOffset": {
+          "start": 3580,
+          "end": 3634
+        },
+        "start": {
+          "line": 113,
+          "column": 18
+        },
+        "end": {
+          "line": 113,
+          "column": 72
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+  "range": {
+    "byteOffset": {
+      "start": 4601,
+      "end": 4655
+    },
+    "start": {
+      "line": 140,
+      "column": 18
+    },
+    "end": {
+      "line": 140,
+      "column": 72
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let results = run_playback_test(test_file).expect(\"Playback failed\");",
+  "charCount": {
+    "leading": 18,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Playback failed\"",
+        "range": {
+          "byteOffset": {
+            "start": 4637,
+            "end": 4654
+          },
+          "start": {
+            "line": 140,
+            "column": 54
+          },
+          "end": {
+            "line": 140,
+            "column": 71
+          }
+        }
+      },
+      "EXPR": {
+        "text": "run_playback_test(test_file)",
+        "range": {
+          "byteOffset": {
+            "start": 4601,
+            "end": 4629
+          },
+          "start": {
+            "line": 140,
+            "column": 18
+          },
+          "end": {
+            "line": 140,
+            "column": 46
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+      "range": {
+        "byteOffset": {
+          "start": 4601,
+          "end": 4655
+        },
+        "start": {
+          "line": 140,
+          "column": 18
+        },
+        "end": {
+          "line": 140,
+          "column": 72
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "resp.as_ref().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 5042,
+      "end": 5064
+    },
+    "start": {
+      "line": 154,
+      "column": 15
+    },
+    "end": {
+      "line": 154,
+      "column": 37
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let resp = resp.as_ref().unwrap();",
+  "charCount": {
+    "leading": 15,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "resp.as_ref()",
+        "range": {
+          "byteOffset": {
+            "start": 5042,
+            "end": 5055
+          },
+          "start": {
+            "line": 154,
+            "column": 15
+          },
+          "end": {
+            "line": 154,
+            "column": 28
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "resp.as_ref().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 5042,
+          "end": 5064
+        },
+        "start": {
+          "line": 154,
+          "column": 15
+        },
+        "end": {
+          "line": 154,
+          "column": 37
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+  "range": {
+    "byteOffset": {
+      "start": 5315,
+      "end": 5369
+    },
+    "start": {
+      "line": 162,
+      "column": 18
+    },
+    "end": {
+      "line": 162,
+      "column": 72
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let results = run_playback_test(test_file).expect(\"Playback failed\");",
+  "charCount": {
+    "leading": 18,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "run_playback_test(test_file)",
+        "range": {
+          "byteOffset": {
+            "start": 5315,
+            "end": 5343
+          },
+          "start": {
+            "line": 162,
+            "column": 18
+          },
+          "end": {
+            "line": 162,
+            "column": 46
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"Playback failed\"",
+        "range": {
+          "byteOffset": {
+            "start": 5351,
+            "end": 5368
+          },
+          "start": {
+            "line": 162,
+            "column": 54
+          },
+          "end": {
+            "line": 162,
+            "column": 71
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+      "range": {
+        "byteOffset": {
+          "start": 5315,
+          "end": 5369
+        },
+        "start": {
+          "line": 162,
+          "column": 18
+        },
+        "end": {
+          "line": 162,
+          "column": 72
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "resp.as_ref().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 5529,
+      "end": 5551
+    },
+    "start": {
+      "line": 170,
+      "column": 15
+    },
+    "end": {
+      "line": 170,
+      "column": 37
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let resp = resp.as_ref().unwrap();",
+  "charCount": {
+    "leading": 15,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "resp.as_ref()",
+        "range": {
+          "byteOffset": {
+            "start": 5529,
+            "end": 5542
+          },
+          "start": {
+            "line": 170,
+            "column": 15
+          },
+          "end": {
+            "line": 170,
+            "column": 28
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "resp.as_ref().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 5529,
+          "end": 5551
+        },
+        "start": {
+          "line": 170,
+          "column": 15
+        },
+        "end": {
+          "line": 170,
+          "column": 37
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+  "range": {
+    "byteOffset": {
+      "start": 5812,
+      "end": 5866
+    },
+    "start": {
+      "line": 178,
+      "column": 18
+    },
+    "end": {
+      "line": 178,
+      "column": 72
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let results = run_playback_test(test_file).expect(\"Playback failed\");",
+  "charCount": {
+    "leading": 18,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "run_playback_test(test_file)",
+        "range": {
+          "byteOffset": {
+            "start": 5812,
+            "end": 5840
+          },
+          "start": {
+            "line": 178,
+            "column": 18
+          },
+          "end": {
+            "line": 178,
+            "column": 46
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"Playback failed\"",
+        "range": {
+          "byteOffset": {
+            "start": 5848,
+            "end": 5865
+          },
+          "start": {
+            "line": 178,
+            "column": 54
+          },
+          "end": {
+            "line": 178,
+            "column": 71
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+      "range": {
+        "byteOffset": {
+          "start": 5812,
+          "end": 5866
+        },
+        "start": {
+          "line": 178,
+          "column": 18
+        },
+        "end": {
+          "line": 178,
+          "column": 72
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+  "range": {
+    "byteOffset": {
+      "start": 6334,
+      "end": 6388
+    },
+    "start": {
+      "line": 195,
+      "column": 18
+    },
+    "end": {
+      "line": 195,
+      "column": 72
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/playback.rs",
+  "lines": "    let results = run_playback_test(test_file).expect(\"Playback failed\");",
+  "charCount": {
+    "leading": 18,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MSG": {
+        "text": "\"Playback failed\"",
+        "range": {
+          "byteOffset": {
+            "start": 6370,
+            "end": 6387
+          },
+          "start": {
+            "line": 195,
+            "column": 54
+          },
+          "end": {
+            "line": 195,
+            "column": 71
+          }
+        }
+      },
+      "EXPR": {
+        "text": "run_playback_test(test_file)",
+        "range": {
+          "byteOffset": {
+            "start": 6334,
+            "end": 6362
+          },
+          "start": {
+            "line": 195,
+            "column": 18
+          },
+          "end": {
+            "line": 195,
+            "column": 46
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "run_playback_test(test_file).expect(\"Playback failed\")",
+      "range": {
+        "byteOffset": {
+          "start": 6334,
+          "end": 6388
+        },
+        "start": {
+          "line": 195,
+          "column": 18
+        },
+        "end": {
+          "line": 195,
+          "column": 72
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_value(&update).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 718,
+      "end": 756
+    },
+    "start": {
+      "line": 22,
+      "column": 15
+    },
+    "end": {
+      "line": 22,
+      "column": 53
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let json = serde_json::to_value(&update).unwrap();",
+  "charCount": {
+    "leading": 15,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_value(&update)",
+        "range": {
+          "byteOffset": {
+            "start": 718,
+            "end": 747
+          },
+          "start": {
+            "line": 22,
+            "column": 15
+          },
+          "end": {
+            "line": 22,
+            "column": 44
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_value(&update).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 718,
+          "end": 756
+        },
+        "start": {
+          "line": 22,
+          "column": 15
+        },
+        "end": {
+          "line": 22,
+          "column": 53
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_value(&update).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 1974,
+      "end": 2012
+    },
+    "start": {
+      "line": 58,
+      "column": 15
+    },
+    "end": {
+      "line": 58,
+      "column": 53
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let json = serde_json::to_value(&update).unwrap();",
+  "charCount": {
+    "leading": 15,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_value(&update)",
+        "range": {
+          "byteOffset": {
+            "start": 1974,
+            "end": 2003
+          },
+          "start": {
+            "line": 58,
+            "column": 15
+          },
+          "end": {
+            "line": 58,
+            "column": 44
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_value(&update).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 1974,
+          "end": 2012
+        },
+        "start": {
+          "line": 58,
+          "column": 15
+        },
+        "end": {
+          "line": 58,
+          "column": 53
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "codex_cli_acp::codex_proto::serialize_update(&update).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 3167,
+      "end": 3229
+    },
+    "start": {
+      "line": 92,
+      "column": 21
+    },
+    "end": {
+      "line": 92,
+      "column": 83
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let serialized = codex_cli_acp::codex_proto::serialize_update(&update).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "codex_cli_acp::codex_proto::serialize_update(&update)",
+        "range": {
+          "byteOffset": {
+            "start": 3167,
+            "end": 3220
+          },
+          "start": {
+            "line": 92,
+            "column": 21
+          },
+          "end": {
+            "line": 92,
+            "column": 74
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "codex_cli_acp::codex_proto::serialize_update(&update).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 3167,
+          "end": 3229
+        },
+        "start": {
+          "line": 92,
+          "column": 21
+        },
+        "end": {
+          "line": 92,
+          "column": 83
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::from_str(&serialized).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 3255,
+      "end": 3297
+    },
+    "start": {
+      "line": 93,
+      "column": 24
+    },
+    "end": {
+      "line": 93,
+      "column": 66
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let parsed: Value = serde_json::from_str(&serialized).unwrap();",
+  "charCount": {
+    "leading": 24,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::from_str(&serialized)",
+        "range": {
+          "byteOffset": {
+            "start": 3255,
+            "end": 3288
+          },
+          "start": {
+            "line": 93,
+            "column": 24
+          },
+          "end": {
+            "line": 93,
+            "column": 57
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::from_str(&serialized).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 3255,
+          "end": 3297
+        },
+        "start": {
+          "line": 93,
+          "column": 24
+        },
+        "end": {
+          "line": 93,
+          "column": 66
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_value(&update).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 4520,
+      "end": 4558
+    },
+    "start": {
+      "line": 126,
+      "column": 15
+    },
+    "end": {
+      "line": 126,
+      "column": 53
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let json = serde_json::to_value(&update).unwrap();",
+  "charCount": {
+    "leading": 15,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_value(&update)",
+        "range": {
+          "byteOffset": {
+            "start": 4520,
+            "end": 4549
+          },
+          "start": {
+            "line": 126,
+            "column": 15
+          },
+          "end": {
+            "line": 126,
+            "column": 44
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_value(&update).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 4520,
+          "end": 4558
+        },
+        "start": {
+          "line": 126,
+          "column": 15
+        },
+        "end": {
+          "line": 126,
+          "column": 53
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "json[\"params\"][\"update\"][\"content\"].as_array().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 4707,
+      "end": 4762
+    },
+    "start": {
+      "line": 130,
+      "column": 25
+    },
+    "end": {
+      "line": 130,
+      "column": 80
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let content_array = &json[\"params\"][\"update\"][\"content\"].as_array().unwrap();",
+  "charCount": {
+    "leading": 25,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "json[\"params\"][\"update\"][\"content\"].as_array()",
+        "range": {
+          "byteOffset": {
+            "start": 4707,
+            "end": 4753
+          },
+          "start": {
+            "line": 130,
+            "column": 25
+          },
+          "end": {
+            "line": 130,
+            "column": 71
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "json[\"params\"][\"update\"][\"content\"].as_array().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 4707,
+          "end": 4762
+        },
+        "start": {
+          "line": 130,
+          "column": 25
+        },
+        "end": {
+          "line": 130,
+          "column": 80
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_value(&update).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 5915,
+      "end": 5953
+    },
+    "start": {
+      "line": 166,
+      "column": 15
+    },
+    "end": {
+      "line": 166,
+      "column": 53
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/session_update_format.rs",
+  "lines": "    let json = serde_json::to_value(&update).unwrap();",
+  "charCount": {
+    "leading": 15,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_value(&update)",
+        "range": {
+          "byteOffset": {
+            "start": 5915,
+            "end": 5944
+          },
+          "start": {
+            "line": 166,
+            "column": 15
+          },
+          "end": {
+            "line": 166,
+            "column": 44
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_value(&update).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 5915,
+          "end": 5953
+        },
+        "start": {
+          "line": 166,
+          "column": 15
+        },
+        "end": {
+          "line": 166,
+          "column": 53
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 940,
+      "end": 978
+    },
+    "start": {
+      "line": 28,
+      "column": 21
+    },
+    "end": {
+      "line": 28,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 940,
+            "end": 969
+          },
+          "start": {
+            "line": 28,
+            "column": 21
+          },
+          "end": {
+            "line": 28,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 940,
+          "end": 978
+        },
+        "start": {
+          "line": 28,
+          "column": 21
+        },
+        "end": {
+          "line": 28,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 984,
+      "end": 1032
+    },
+    "start": {
+      "line": 29,
+      "column": 4
+    },
+    "end": {
+      "line": 29,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 984,
+            "end": 1023
+          },
+          "start": {
+            "line": 29,
+            "column": 4
+          },
+          "end": {
+            "line": 29,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 984,
+          "end": 1032
+        },
+        "start": {
+          "line": 29,
+          "column": 4
+        },
+        "end": {
+          "line": 29,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 1103,
+      "end": 1127
+    },
+    "start": {
+      "line": 32,
+      "column": 17
+    },
+    "end": {
+      "line": 32,
+      "column": 41
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 1103,
+            "end": 1118
+          },
+          "start": {
+            "line": 32,
+            "column": 17
+          },
+          "end": {
+            "line": 32,
+            "column": 32
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 1103,
+          "end": 1127
+        },
+        "start": {
+          "line": 32,
+          "column": 17
+        },
+        "end": {
+          "line": 32,
+          "column": 41
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 1913,
+      "end": 1951
+    },
+    "start": {
+      "line": 59,
+      "column": 21
+    },
+    "end": {
+      "line": 59,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 1913,
+            "end": 1942
+          },
+          "start": {
+            "line": 59,
+            "column": 21
+          },
+          "end": {
+            "line": 59,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 1913,
+          "end": 1951
+        },
+        "start": {
+          "line": 59,
+          "column": 21
+        },
+        "end": {
+          "line": 59,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 1957,
+      "end": 2005
+    },
+    "start": {
+      "line": 60,
+      "column": 4
+    },
+    "end": {
+      "line": 60,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 1957,
+            "end": 1996
+          },
+          "start": {
+            "line": 60,
+            "column": 4
+          },
+          "end": {
+            "line": 60,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 1957,
+          "end": 2005
+        },
+        "start": {
+          "line": 60,
+          "column": 4
+        },
+        "end": {
+          "line": 60,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 2086,
+      "end": 2110
+    },
+    "start": {
+      "line": 63,
+      "column": 17
+    },
+    "end": {
+      "line": 63,
+      "column": 41
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 2086,
+            "end": 2101
+          },
+          "start": {
+            "line": 63,
+            "column": 17
+          },
+          "end": {
+            "line": 63,
+            "column": 32
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 2086,
+          "end": 2110
+        },
+        "start": {
+          "line": 63,
+          "column": 17
+        },
+        "end": {
+          "line": 63,
+          "column": 41
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 2825,
+      "end": 2863
+    },
+    "start": {
+      "line": 86,
+      "column": 21
+    },
+    "end": {
+      "line": 86,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 2825,
+            "end": 2854
+          },
+          "start": {
+            "line": 86,
+            "column": 21
+          },
+          "end": {
+            "line": 86,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 2825,
+          "end": 2863
+        },
+        "start": {
+          "line": 86,
+          "column": 21
+        },
+        "end": {
+          "line": 86,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 2869,
+      "end": 2917
+    },
+    "start": {
+      "line": 87,
+      "column": 4
+    },
+    "end": {
+      "line": 87,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 2869,
+            "end": 2908
+          },
+          "start": {
+            "line": 87,
+            "column": 4
+          },
+          "end": {
+            "line": 87,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 2869,
+          "end": 2917
+        },
+        "start": {
+          "line": 87,
+          "column": 4
+        },
+        "end": {
+          "line": 87,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 3007,
+      "end": 3031
+    },
+    "start": {
+      "line": 90,
+      "column": 17
+    },
+    "end": {
+      "line": 90,
+      "column": 41
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 3007,
+            "end": 3022
+          },
+          "start": {
+            "line": 90,
+            "column": 17
+          },
+          "end": {
+            "line": 90,
+            "column": 32
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 3007,
+          "end": 3031
+        },
+        "start": {
+          "line": 90,
+          "column": 17
+        },
+        "end": {
+          "line": 90,
+          "column": 41
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 4762,
+      "end": 4800
+    },
+    "start": {
+      "line": 143,
+      "column": 21
+    },
+    "end": {
+      "line": 143,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 4762,
+            "end": 4791
+          },
+          "start": {
+            "line": 143,
+            "column": 21
+          },
+          "end": {
+            "line": 143,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 4762,
+          "end": 4800
+        },
+        "start": {
+          "line": 143,
+          "column": 21
+        },
+        "end": {
+          "line": 143,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 4806,
+      "end": 4854
+    },
+    "start": {
+      "line": 144,
+      "column": 4
+    },
+    "end": {
+      "line": 144,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 4806,
+            "end": 4845
+          },
+          "start": {
+            "line": 144,
+            "column": 4
+          },
+          "end": {
+            "line": 144,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 4806,
+          "end": 4854
+        },
+        "start": {
+          "line": 144,
+          "column": 4
+        },
+        "end": {
+          "line": 144,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 4936,
+      "end": 4960
+    },
+    "start": {
+      "line": 148,
+      "column": 21
+    },
+    "end": {
+      "line": 148,
+      "column": 45
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "        let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 4936,
+            "end": 4951
+          },
+          "start": {
+            "line": 148,
+            "column": 21
+          },
+          "end": {
+            "line": 148,
+            "column": 36
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 4936,
+          "end": 4960
+        },
+        "start": {
+          "line": 148,
+          "column": 21
+        },
+        "end": {
+          "line": 148,
+          "column": 45
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 6253,
+      "end": 6291
+    },
+    "start": {
+      "line": 188,
+      "column": 21
+    },
+    "end": {
+      "line": 188,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 6253,
+            "end": 6282
+          },
+          "start": {
+            "line": 188,
+            "column": 21
+          },
+          "end": {
+            "line": 188,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 6253,
+          "end": 6291
+        },
+        "start": {
+          "line": 188,
+          "column": 21
+        },
+        "end": {
+          "line": 188,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 6297,
+      "end": 6345
+    },
+    "start": {
+      "line": 189,
+      "column": 4
+    },
+    "end": {
+      "line": 189,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 6297,
+            "end": 6336
+          },
+          "start": {
+            "line": 189,
+            "column": 4
+          },
+          "end": {
+            "line": 189,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 6297,
+          "end": 6345
+        },
+        "start": {
+          "line": 189,
+          "column": 4
+        },
+        "end": {
+          "line": 189,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 6409,
+      "end": 6433
+    },
+    "start": {
+      "line": 192,
+      "column": 17
+    },
+    "end": {
+      "line": 192,
+      "column": 41
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 6409,
+            "end": 6424
+          },
+          "start": {
+            "line": 192,
+            "column": 17
+          },
+          "end": {
+            "line": 192,
+            "column": 32
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 6409,
+          "end": 6433
+        },
+        "start": {
+          "line": 192,
+          "column": 17
+        },
+        "end": {
+          "line": 192,
+          "column": 41
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 7446,
+      "end": 7484
+    },
+    "start": {
+      "line": 223,
+      "column": 21
+    },
+    "end": {
+      "line": 223,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 7446,
+            "end": 7475
+          },
+          "start": {
+            "line": 223,
+            "column": 21
+          },
+          "end": {
+            "line": 223,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 7446,
+          "end": 7484
+        },
+        "start": {
+          "line": 223,
+          "column": 21
+        },
+        "end": {
+          "line": 223,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 7490,
+      "end": 7538
+    },
+    "start": {
+      "line": 224,
+      "column": 4
+    },
+    "end": {
+      "line": 224,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 7490,
+            "end": 7529
+          },
+          "start": {
+            "line": 224,
+            "column": 4
+          },
+          "end": {
+            "line": 224,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 7490,
+          "end": 7538
+        },
+        "start": {
+          "line": 224,
+          "column": 4
+        },
+        "end": {
+          "line": 224,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 7629,
+      "end": 7653
+    },
+    "start": {
+      "line": 227,
+      "column": 17
+    },
+    "end": {
+      "line": 227,
+      "column": 41
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 7629,
+            "end": 7644
+          },
+          "start": {
+            "line": 227,
+            "column": 17
+          },
+          "end": {
+            "line": 227,
+            "column": 32
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 7629,
+          "end": 7653
+        },
+        "start": {
+          "line": 227,
+          "column": 17
+        },
+        "end": {
+          "line": 227,
+          "column": 41
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "content.as_ref().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 7880,
+      "end": 7905
+    },
+    "start": {
+      "line": 235,
+      "column": 32
+    },
+    "end": {
+      "line": 235,
+      "column": 57
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "            let content_text = &content.as_ref().unwrap()[0];",
+  "charCount": {
+    "leading": 32,
+    "trailing": 4
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "content.as_ref()",
+        "range": {
+          "byteOffset": {
+            "start": 7880,
+            "end": 7896
+          },
+          "start": {
+            "line": 235,
+            "column": 32
+          },
+          "end": {
+            "line": 235,
+            "column": 48
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "content.as_ref().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 7880,
+          "end": 7905
+        },
+        "start": {
+          "line": 235,
+          "column": 32
+        },
+        "end": {
+          "line": 235,
+          "column": 57
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "raw_output.as_ref().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 8345,
+      "end": 8373
+    },
+    "start": {
+      "line": 243,
+      "column": 22
+    },
+    "end": {
+      "line": 243,
+      "column": 50
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "            let raw = raw_output.as_ref().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "raw_output.as_ref()",
+        "range": {
+          "byteOffset": {
+            "start": 8345,
+            "end": 8364
+          },
+          "start": {
+            "line": 243,
+            "column": 22
+          },
+          "end": {
+            "line": 243,
+            "column": 41
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "raw_output.as_ref().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 8345,
+          "end": 8373
+        },
+        "start": {
+          "line": 243,
+          "column": 22
+        },
+        "end": {
+          "line": 243,
+          "column": 50
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::to_string(&event).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 9112,
+      "end": 9150
+    },
+    "start": {
+      "line": 265,
+      "column": 21
+    },
+    "end": {
+      "line": 265,
+      "column": 59
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let event_json = serde_json::to_string(&event).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::to_string(&event)",
+        "range": {
+          "byteOffset": {
+            "start": 9112,
+            "end": 9141
+          },
+          "start": {
+            "line": 265,
+            "column": 21
+          },
+          "end": {
+            "line": 265,
+            "column": 50
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::to_string(&event).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 9112,
+          "end": 9150
+        },
+        "start": {
+          "line": 265,
+          "column": 21
+        },
+        "end": {
+          "line": 265,
+          "column": 59
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "manager.process_line(&event_json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 9156,
+      "end": 9204
+    },
+    "start": {
+      "line": 266,
+      "column": 4
+    },
+    "end": {
+      "line": 266,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    manager.process_line(&event_json).await.unwrap();",
+  "charCount": {
+    "leading": 4,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "manager.process_line(&event_json).await",
+        "range": {
+          "byteOffset": {
+            "start": 9156,
+            "end": 9195
+          },
+          "start": {
+            "line": 266,
+            "column": 4
+          },
+          "end": {
+            "line": 266,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "manager.process_line(&event_json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 9156,
+          "end": 9204
+        },
+        "start": {
+          "line": 266,
+          "column": 4
+        },
+        "end": {
+          "line": 266,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.recv().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 9266,
+      "end": 9290
+    },
+    "start": {
+      "line": 269,
+      "column": 17
+    },
+    "end": {
+      "line": 269,
+      "column": 41
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "    let update = rx.recv().await.unwrap();",
+  "charCount": {
+    "leading": 17,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.recv().await",
+        "range": {
+          "byteOffset": {
+            "start": 9266,
+            "end": 9281
+          },
+          "start": {
+            "line": 269,
+            "column": 17
+          },
+          "end": {
+            "line": 269,
+            "column": 32
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.recv().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 9266,
+          "end": 9290
+        },
+        "start": {
+          "line": 269,
+          "column": 17
+        },
+        "end": {
+          "line": 269,
+          "column": 41
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "content.as_ref().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 9610,
+      "end": 9635
+    },
+    "start": {
+      "line": 280,
+      "column": 32
+    },
+    "end": {
+      "line": 280,
+      "column": 57
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "            let content_text = &content.as_ref().unwrap()[0];",
+  "charCount": {
+    "leading": 32,
+    "trailing": 4
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "content.as_ref()",
+        "range": {
+          "byteOffset": {
+            "start": 9610,
+            "end": 9626
+          },
+          "start": {
+            "line": 280,
+            "column": 32
+          },
+          "end": {
+            "line": 280,
+            "column": 48
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "content.as_ref().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 9610,
+          "end": 9635
+        },
+        "start": {
+          "line": 280,
+          "column": 32
+        },
+        "end": {
+          "line": 280,
+          "column": 57
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "raw_output.as_ref().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 9858,
+      "end": 9886
+    },
+    "start": {
+      "line": 285,
+      "column": 22
+    },
+    "end": {
+      "line": 285,
+      "column": 50
+    }
+  },
+  "file": "crates/codex-cli-acp/tests/tool_calls_test.rs",
+  "lines": "            let raw = raw_output.as_ref().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "raw_output.as_ref()",
+        "range": {
+          "byteOffset": {
+            "start": 9858,
+            "end": 9877
+          },
+          "start": {
+            "line": 285,
+            "column": 22
+          },
+          "end": {
+            "line": 285,
+            "column": 41
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "raw_output.as_ref().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 9858,
+          "end": 9886
+        },
+        "start": {
+          "line": 285,
+          "column": 22
+        },
+        "end": {
+          "line": 285,
+          "column": 50
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "server\n            .process_message(&req.to_string())\n            .await\n            .expect(\"rpc ok\")",
+  "range": {
+    "byteOffset": {
+      "start": 22032,
+      "end": 22134
+    },
+    "start": {
+      "line": 566,
+      "column": 18
+    },
+    "end": {
+      "line": 569,
+      "column": 29
+    }
+  },
+  "file": "crates/codex-cli-acp/src/main.rs",
+  "lines": "        let out = server\n            .process_message(&req.to_string())\n            .await\n            .expect(\"rpc ok\");",
+  "charCount": {
+    "leading": 18,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "server\n            .process_message(&req.to_string())\n            .await",
+        "range": {
+          "byteOffset": {
+            "start": 22032,
+            "end": 22104
+          },
+          "start": {
+            "line": 566,
+            "column": 18
+          },
+          "end": {
+            "line": 568,
+            "column": 18
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"rpc ok\"",
+        "range": {
+          "byteOffset": {
+            "start": 22125,
+            "end": 22133
+          },
+          "start": {
+            "line": 569,
+            "column": 20
+          },
+          "end": {
+            "line": 569,
+            "column": 28
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "server\n            .process_message(&req.to_string())\n            .await\n            .expect(\"rpc ok\")",
+      "range": {
+        "byteOffset": {
+          "start": 22032,
+          "end": 22134
+        },
+        "start": {
+          "line": 566,
+          "column": 18
+        },
+        "end": {
+          "line": 569,
+          "column": 29
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "serde_json::from_str(&out).expect(\"json ok\")",
+  "range": {
+    "byteOffset": {
+      "start": 22144,
+      "end": 22188
+    },
+    "start": {
+      "line": 570,
+      "column": 8
+    },
+    "end": {
+      "line": 570,
+      "column": 52
+    }
+  },
+  "file": "crates/codex-cli-acp/src/main.rs",
+  "lines": "        serde_json::from_str(&out).expect(\"json ok\")",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "serde_json::from_str(&out)",
+        "range": {
+          "byteOffset": {
+            "start": 22144,
+            "end": 22170
+          },
+          "start": {
+            "line": 570,
+            "column": 8
+          },
+          "end": {
+            "line": 570,
+            "column": 34
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"json ok\"",
+        "range": {
+          "byteOffset": {
+            "start": 22178,
+            "end": 22187
+          },
+          "start": {
+            "line": 570,
+            "column": 42
+          },
+          "end": {
+            "line": 570,
+            "column": 51
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "serde_json::from_str(&out).expect(\"json ok\")",
+      "range": {
+        "byteOffset": {
+          "start": 22144,
+          "end": 22188
+        },
+        "start": {
+          "line": 570,
+          "column": 8
+        },
+        "end": {
+          "line": 570,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "// TODO: Consider sending an error update to the client",
+  "range": {
+    "byteOffset": {
+      "start": 13110,
+      "end": 13165
+    },
+    "start": {
+      "line": 350,
+      "column": 20
+    },
+    "end": {
+      "line": 350,
+      "column": 75
+    }
+  },
+  "file": "crates/codex-cli-acp/src/main.rs",
+  "lines": "                    // TODO: Consider sending an error update to the client",
+  "charCount": {
+    "leading": 20,
+    "trailing": 0
+  },
+  "language": "Rust",
+  "ruleId": "rust-todo-comment",
+  "severity": "info",
+  "note": null,
+  "message": "TODO/FIXME comments found; ensure tracking issue exists",
+  "labels": [
+    {
+      "text": "// TODO: Consider sending an error update to the client",
+      "range": {
+        "byteOffset": {
+          "start": 13110,
+          "end": 13165
+        },
+        "start": {
+          "line": 350,
+          "column": 20
+        },
+        "end": {
+          "line": 350,
+          "column": 75
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "self.stdin.as_mut().expect(\"stdin already taken\")",
+  "range": {
+    "byteOffset": {
+      "start": 4572,
+      "end": 4621
+    },
+    "start": {
+      "line": 131,
+      "column": 8
+    },
+    "end": {
+      "line": 131,
+      "column": 57
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        self.stdin.as_mut().expect(\"stdin already taken\")",
+  "charCount": {
+    "leading": 8,
+    "trailing": 0
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "self.stdin.as_mut()",
+        "range": {
+          "byteOffset": {
+            "start": 4572,
+            "end": 4591
+          },
+          "start": {
+            "line": 131,
+            "column": 8
+          },
+          "end": {
+            "line": 131,
+            "column": 27
+          }
+        }
+      },
+      "MSG": {
+        "text": "\"stdin already taken\"",
+        "range": {
+          "byteOffset": {
+            "start": 4599,
+            "end": 4620
+          },
+          "start": {
+            "line": 131,
+            "column": 35
+          },
+          "end": {
+            "line": 131,
+            "column": 56
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "self.stdin.as_mut().expect(\"stdin already taken\")",
+      "range": {
+        "byteOffset": {
+          "start": 4572,
+          "end": 4621
+        },
+        "start": {
+          "line": 131,
+          "column": 8
+        },
+        "end": {
+          "line": 131,
+          "column": 57
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "write_line(&mut buffer, json).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 11976,
+      "end": 12020
+    },
+    "start": {
+      "line": 384,
+      "column": 8
+    },
+    "end": {
+      "line": 384,
+      "column": 52
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        write_line(&mut buffer, json).await.unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "write_line(&mut buffer, json).await",
+        "range": {
+          "byteOffset": {
+            "start": 11976,
+            "end": 12011
+          },
+          "start": {
+            "line": 384,
+            "column": 8
+          },
+          "end": {
+            "line": 384,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "write_line(&mut buffer, json).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 11976,
+          "end": 12020
+        },
+        "start": {
+          "line": 384,
+          "column": 8
+        },
+        "end": {
+          "line": 384,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "String::from_utf8(buffer).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 12044,
+      "end": 12078
+    },
+    "start": {
+      "line": 386,
+      "column": 21
+    },
+    "end": {
+      "line": 386,
+      "column": 55
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let result = String::from_utf8(buffer).unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "String::from_utf8(buffer)",
+        "range": {
+          "byteOffset": {
+            "start": 12044,
+            "end": 12069
+          },
+          "start": {
+            "line": 386,
+            "column": 21
+          },
+          "end": {
+            "line": 386,
+            "column": 46
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "String::from_utf8(buffer).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 12044,
+          "end": 12078
+        },
+        "start": {
+          "line": 386,
+          "column": 21
+        },
+        "end": {
+          "line": 386,
+          "column": 55
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await\n        .unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 12435,
+      "end": 12677
+    },
+    "start": {
+      "line": 398,
+      "column": 8
+    },
+    "end": {
+      "line": 406,
+      "column": 17
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await\n        .unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await",
+        "range": {
+          "byteOffset": {
+            "start": 12435,
+            "end": 12659
+          },
+          "start": {
+            "line": 398,
+            "column": 8
+          },
+          "end": {
+            "line": 405,
+            "column": 14
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await\n        .unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 12435,
+          "end": 12677
+        },
+        "start": {
+          "line": 398,
+          "column": 8
+        },
+        "end": {
+          "line": 406,
+          "column": 17
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 12560,
+      "end": 12584
+    },
+    "start": {
+      "line": 401,
+      "column": 16
+    },
+    "end": {
+      "line": 401,
+      "column": 40
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "                received.lock().unwrap().push(line);",
+  "charCount": {
+    "leading": 16,
+    "trailing": 12
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "received.lock()",
+        "range": {
+          "byteOffset": {
+            "start": 12560,
+            "end": 12575
+          },
+          "start": {
+            "line": 401,
+            "column": 16
+          },
+          "end": {
+            "line": 401,
+            "column": 31
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 12560,
+          "end": 12584
+        },
+        "start": {
+          "line": 401,
+          "column": 16
+        },
+        "end": {
+          "line": 401,
+          "column": 40
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 12702,
+      "end": 12726
+    },
+    "start": {
+      "line": 408,
+      "column": 22
+    },
+    "end": {
+      "line": 408,
+      "column": 46
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let results = received.lock().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "received.lock()",
+        "range": {
+          "byteOffset": {
+            "start": 12702,
+            "end": 12717
+          },
+          "start": {
+            "line": 408,
+            "column": 22
+          },
+          "end": {
+            "line": 408,
+            "column": 37
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 12702,
+          "end": 12726
+        },
+        "start": {
+          "line": 408,
+          "column": 22
+        },
+        "end": {
+          "line": 408,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await\n        .unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13179,
+      "end": 13421
+    },
+    "start": {
+      "line": 422,
+      "column": 8
+    },
+    "end": {
+      "line": 430,
+      "column": 17
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await\n        .unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await",
+        "range": {
+          "byteOffset": {
+            "start": 13179,
+            "end": 13403
+          },
+          "start": {
+            "line": 422,
+            "column": 8
+          },
+          "end": {
+            "line": 429,
+            "column": 14
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "read_lines(cursor, move |line| {\n            let received = received_clone.clone();\n            async move {\n                received.lock().unwrap().push(line);\n                Ok(())\n            }\n        })\n        .await\n        .unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13179,
+          "end": 13421
+        },
+        "start": {
+          "line": 422,
+          "column": 8
+        },
+        "end": {
+          "line": 430,
+          "column": 17
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13304,
+      "end": 13328
+    },
+    "start": {
+      "line": 425,
+      "column": 16
+    },
+    "end": {
+      "line": 425,
+      "column": 40
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "                received.lock().unwrap().push(line);",
+  "charCount": {
+    "leading": 16,
+    "trailing": 12
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "received.lock()",
+        "range": {
+          "byteOffset": {
+            "start": 13304,
+            "end": 13319
+          },
+          "start": {
+            "line": 425,
+            "column": 16
+          },
+          "end": {
+            "line": 425,
+            "column": 31
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13304,
+          "end": 13328
+        },
+        "start": {
+          "line": 425,
+          "column": 16
+        },
+        "end": {
+          "line": 425,
+          "column": 40
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13446,
+      "end": 13470
+    },
+    "start": {
+      "line": 432,
+      "column": 22
+    },
+    "end": {
+      "line": 432,
+      "column": 46
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let results = received.lock().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "received.lock()",
+        "range": {
+          "byteOffset": {
+            "start": 13446,
+            "end": 13461
+          },
+          "start": {
+            "line": 432,
+            "column": 22
+          },
+          "end": {
+            "line": 432,
+            "column": 37
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13446,
+          "end": 13470
+        },
+        "start": {
+          "line": 432,
+          "column": 22
+        },
+        "end": {
+          "line": 432,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "queue.take_receiver().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13783,
+      "end": 13813
+    },
+    "start": {
+      "line": 442,
+      "column": 27
+    },
+    "end": {
+      "line": 442,
+      "column": 57
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let mut receiver = queue.take_receiver().unwrap();",
+  "charCount": {
+    "leading": 27,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "queue.take_receiver()",
+        "range": {
+          "byteOffset": {
+            "start": 13783,
+            "end": 13804
+          },
+          "start": {
+            "line": 442,
+            "column": 27
+          },
+          "end": {
+            "line": 442,
+            "column": 48
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "queue.take_receiver().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13783,
+          "end": 13813
+        },
+        "start": {
+          "line": 442,
+          "column": 27
+        },
+        "end": {
+          "line": 442,
+          "column": 57
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "sender.unbounded_send(\"message1\".to_string()).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13824,
+      "end": 13878
+    },
+    "start": {
+      "line": 444,
+      "column": 8
+    },
+    "end": {
+      "line": 444,
+      "column": 62
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        sender.unbounded_send(\"message1\".to_string()).unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "sender.unbounded_send(\"message1\".to_string())",
+        "range": {
+          "byteOffset": {
+            "start": 13824,
+            "end": 13869
+          },
+          "start": {
+            "line": 444,
+            "column": 8
+          },
+          "end": {
+            "line": 444,
+            "column": 53
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "sender.unbounded_send(\"message1\".to_string()).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13824,
+          "end": 13878
+        },
+        "start": {
+          "line": 444,
+          "column": 8
+        },
+        "end": {
+          "line": 444,
+          "column": 62
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "sender.unbounded_send(\"message2\".to_string()).unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13888,
+      "end": 13942
+    },
+    "start": {
+      "line": 445,
+      "column": 8
+    },
+    "end": {
+      "line": 445,
+      "column": 62
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        sender.unbounded_send(\"message2\".to_string()).unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "sender.unbounded_send(\"message2\".to_string())",
+        "range": {
+          "byteOffset": {
+            "start": 13888,
+            "end": 13933
+          },
+          "start": {
+            "line": 445,
+            "column": 8
+          },
+          "end": {
+            "line": 445,
+            "column": 53
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "sender.unbounded_send(\"message2\".to_string()).unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13888,
+          "end": 13942
+        },
+        "start": {
+          "line": 445,
+          "column": 8
+        },
+        "end": {
+          "line": 445,
+          "column": 62
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "ProcessTransport::spawn(\n            \"sh\",\n            &[\n                \"-c\".to_string(),\n                \"echo 'early stderr' >&2; sleep 0.01; echo 'final stderr' >&2\".to_string(),\n            ],\n            None,\n            None,\n        )\n        .await\n        .unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 14360,
+      "end": 14637
+    },
+    "start": {
+      "line": 457,
+      "column": 28
+    },
+    "end": {
+      "line": 467,
+      "column": 17
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let mut transport = ProcessTransport::spawn(\n            \"sh\",\n            &[\n                \"-c\".to_string(),\n                \"echo 'early stderr' >&2; sleep 0.01; echo 'final stderr' >&2\".to_string(),\n            ],\n            None,\n            None,\n        )\n        .await\n        .unwrap();",
+  "charCount": {
+    "leading": 28,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "ProcessTransport::spawn(\n            \"sh\",\n            &[\n                \"-c\".to_string(),\n                \"echo 'early stderr' >&2; sleep 0.01; echo 'final stderr' >&2\".to_string(),\n            ],\n            None,\n            None,\n        )\n        .await",
+        "range": {
+          "byteOffset": {
+            "start": 14360,
+            "end": 14619
+          },
+          "start": {
+            "line": 457,
+            "column": 28
+          },
+          "end": {
+            "line": 466,
+            "column": 14
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "ProcessTransport::spawn(\n            \"sh\",\n            &[\n                \"-c\".to_string(),\n                \"echo 'early stderr' >&2; sleep 0.01; echo 'final stderr' >&2\".to_string(),\n            ],\n            None,\n            None,\n        )\n        .await\n        .unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 14360,
+          "end": 14637
+        },
+        "start": {
+          "line": 457,
+          "column": 28
+        },
+        "end": {
+          "line": 467,
+          "column": 17
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "transport.monitor_stderr().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 14683,
+      "end": 14718
+    },
+    "start": {
+      "line": 470,
+      "column": 8
+    },
+    "end": {
+      "line": 470,
+      "column": 43
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        transport.monitor_stderr().unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "transport.monitor_stderr()",
+        "range": {
+          "byteOffset": {
+            "start": 14683,
+            "end": 14709
+          },
+          "start": {
+            "line": 470,
+            "column": 8
+          },
+          "end": {
+            "line": 470,
+            "column": 34
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "transport.monitor_stderr().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 14683,
+          "end": 14718
+        },
+        "start": {
+          "line": 470,
+          "column": 8
+        },
+        "end": {
+          "line": 470,
+          "column": 43
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "transport.wait().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 14810,
+      "end": 14841
+    },
+    "start": {
+      "line": 473,
+      "column": 21
+    },
+    "end": {
+      "line": 473,
+      "column": 52
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let status = transport.wait().await.unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "transport.wait().await",
+        "range": {
+          "byteOffset": {
+            "start": 14810,
+            "end": 14832
+          },
+          "start": {
+            "line": 473,
+            "column": 21
+          },
+          "end": {
+            "line": 473,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "transport.wait().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 14810,
+          "end": 14841
+        },
+        "start": {
+          "line": 473,
+          "column": 21
+        },
+        "end": {
+          "line": 473,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "ProcessTransport::spawn(\n            \"sh\",\n            &[\"-c\".to_string(), \n             \"echo 'normal output' >&2; echo 'WARNING: deprecated' >&2; echo 'ERROR: failed' >&2\".to_string()],\n            None,\n            None\n        ).await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 15434,
+      "end": 15681
+    },
+    "start": {
+      "line": 489,
+      "column": 28
+    },
+    "end": {
+      "line": 495,
+      "column": 24
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let mut transport = ProcessTransport::spawn(\n            \"sh\",\n            &[\"-c\".to_string(), \n             \"echo 'normal output' >&2; echo 'WARNING: deprecated' >&2; echo 'ERROR: failed' >&2\".to_string()],\n            None,\n            None\n        ).await.unwrap();",
+  "charCount": {
+    "leading": 28,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "ProcessTransport::spawn(\n            \"sh\",\n            &[\"-c\".to_string(), \n             \"echo 'normal output' >&2; echo 'WARNING: deprecated' >&2; echo 'ERROR: failed' >&2\".to_string()],\n            None,\n            None\n        ).await",
+        "range": {
+          "byteOffset": {
+            "start": 15434,
+            "end": 15672
+          },
+          "start": {
+            "line": 489,
+            "column": 28
+          },
+          "end": {
+            "line": 495,
+            "column": 15
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "ProcessTransport::spawn(\n            \"sh\",\n            &[\"-c\".to_string(), \n             \"echo 'normal output' >&2; echo 'WARNING: deprecated' >&2; echo 'ERROR: failed' >&2\".to_string()],\n            None,\n            None\n        ).await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 15434,
+          "end": 15681
+        },
+        "start": {
+          "line": 489,
+          "column": 28
+        },
+        "end": {
+          "line": 495,
+          "column": 24
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "transport.monitor_stderr().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 15756,
+      "end": 15791
+    },
+    "start": {
+      "line": 498,
+      "column": 8
+    },
+    "end": {
+      "line": 498,
+      "column": 43
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        transport.monitor_stderr().unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "transport.monitor_stderr()",
+        "range": {
+          "byteOffset": {
+            "start": 15756,
+            "end": 15782
+          },
+          "start": {
+            "line": 498,
+            "column": 8
+          },
+          "end": {
+            "line": 498,
+            "column": 34
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "transport.monitor_stderr().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 15756,
+          "end": 15791
+        },
+        "start": {
+          "line": 498,
+          "column": 8
+        },
+        "end": {
+          "line": 498,
+          "column": 43
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "transport.wait().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 15855,
+      "end": 15886
+    },
+    "start": {
+      "line": 501,
+      "column": 21
+    },
+    "end": {
+      "line": 501,
+      "column": 52
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let status = transport.wait().await.unwrap();",
+  "charCount": {
+    "leading": 21,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "transport.wait().await",
+        "range": {
+          "byteOffset": {
+            "start": 15855,
+            "end": 15877
+          },
+          "start": {
+            "line": 501,
+            "column": 21
+          },
+          "end": {
+            "line": 501,
+            "column": 43
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "transport.wait().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 15855,
+          "end": 15886
+        },
+        "start": {
+          "line": 501,
+          "column": 21
+        },
+        "end": {
+          "line": 501,
+          "column": 52
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "read_values(cursor, move |value| {\n            let received = received_clone.clone();\n            async move {\n                // Verify we received a parsed Value, not a string\n                if let Some(id) = value.get(\"id\").and_then(|v| v.as_i64()) {\n                    received.lock().unwrap().push(id);\n                }\n                Ok(())\n            }\n        })\n        .await\n        .unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 16573,
+      "end": 16981
+    },
+    "start": {
+      "line": 523,
+      "column": 8
+    },
+    "end": {
+      "line": 534,
+      "column": 17
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        read_values(cursor, move |value| {\n            let received = received_clone.clone();\n            async move {\n                // Verify we received a parsed Value, not a string\n                if let Some(id) = value.get(\"id\").and_then(|v| v.as_i64()) {\n                    received.lock().unwrap().push(id);\n                }\n                Ok(())\n            }\n        })\n        .await\n        .unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "read_values(cursor, move |value| {\n            let received = received_clone.clone();\n            async move {\n                // Verify we received a parsed Value, not a string\n                if let Some(id) = value.get(\"id\").and_then(|v| v.as_i64()) {\n                    received.lock().unwrap().push(id);\n                }\n                Ok(())\n            }\n        })\n        .await",
+        "range": {
+          "byteOffset": {
+            "start": 16573,
+            "end": 16963
+          },
+          "start": {
+            "line": 523,
+            "column": 8
+          },
+          "end": {
+            "line": 533,
+            "column": 14
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "read_values(cursor, move |value| {\n            let received = received_clone.clone();\n            async move {\n                // Verify we received a parsed Value, not a string\n                if let Some(id) = value.get(\"id\").and_then(|v| v.as_i64()) {\n                    received.lock().unwrap().push(id);\n                }\n                Ok(())\n            }\n        })\n        .await\n        .unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 16573,
+          "end": 16981
+        },
+        "start": {
+          "line": 523,
+          "column": 8
+        },
+        "end": {
+          "line": 534,
+          "column": 17
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 16848,
+      "end": 16872
+    },
+    "start": {
+      "line": 528,
+      "column": 20
+    },
+    "end": {
+      "line": 528,
+      "column": 44
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "                    received.lock().unwrap().push(id);",
+  "charCount": {
+    "leading": 20,
+    "trailing": 10
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "received.lock()",
+        "range": {
+          "byteOffset": {
+            "start": 16848,
+            "end": 16863
+          },
+          "start": {
+            "line": 528,
+            "column": 20
+          },
+          "end": {
+            "line": 528,
+            "column": 35
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 16848,
+          "end": 16872
+        },
+        "start": {
+          "line": 528,
+          "column": 20
+        },
+        "end": {
+          "line": 528,
+          "column": 44
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 17006,
+      "end": 17030
+    },
+    "start": {
+      "line": 536,
+      "column": 22
+    },
+    "end": {
+      "line": 536,
+      "column": 46
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let results = received.lock().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "received.lock()",
+        "range": {
+          "byteOffset": {
+            "start": 17006,
+            "end": 17021
+          },
+          "start": {
+            "line": 536,
+            "column": 22
+          },
+          "end": {
+            "line": 536,
+            "column": 37
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 17006,
+          "end": 17030
+        },
+        "start": {
+          "line": 536,
+          "column": 22
+        },
+        "end": {
+          "line": 536,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "task.await.unwrap().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 17524,
+      "end": 17552
+    },
+    "start": {
+      "line": 552,
+      "column": 8
+    },
+    "end": {
+      "line": 552,
+      "column": 36
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        task.await.unwrap().unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "task.await.unwrap()",
+        "range": {
+          "byteOffset": {
+            "start": 17524,
+            "end": 17543
+          },
+          "start": {
+            "line": 552,
+            "column": 8
+          },
+          "end": {
+            "line": 552,
+            "column": 27
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "task.await.unwrap().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 17524,
+          "end": 17552
+        },
+        "start": {
+          "line": 552,
+          "column": 8
+        },
+        "end": {
+          "line": 552,
+          "column": 36
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "task.await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 17524,
+      "end": 17543
+    },
+    "start": {
+      "line": 552,
+      "column": 8
+    },
+    "end": {
+      "line": 552,
+      "column": 27
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        task.await.unwrap().unwrap();",
+  "charCount": {
+    "leading": 8,
+    "trailing": 10
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "task.await",
+        "range": {
+          "byteOffset": {
+            "start": 17524,
+            "end": 17534
+          },
+          "start": {
+            "line": 552,
+            "column": 8
+          },
+          "end": {
+            "line": 552,
+            "column": 18
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "task.await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 17524,
+          "end": 17543
+        },
+        "start": {
+          "line": 552,
+          "column": 8
+        },
+        "end": {
+          "line": 552,
+          "column": 27
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.next().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 17618,
+      "end": 17642
+    },
+    "start": {
+      "line": 555,
+      "column": 19
+    },
+    "end": {
+      "line": 555,
+      "column": 43
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let val1 = rx.next().await.unwrap();",
+  "charCount": {
+    "leading": 19,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.next().await",
+        "range": {
+          "byteOffset": {
+            "start": 17618,
+            "end": 17633
+          },
+          "start": {
+            "line": 555,
+            "column": 19
+          },
+          "end": {
+            "line": 555,
+            "column": 34
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.next().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 17618,
+          "end": 17642
+        },
+        "start": {
+          "line": 555,
+          "column": 19
+        },
+        "end": {
+          "line": 555,
+          "column": 43
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "rx.next().await.unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 17755,
+      "end": 17779
+    },
+    "start": {
+      "line": 559,
+      "column": 19
+    },
+    "end": {
+      "line": 559,
+      "column": 43
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let val2 = rx.next().await.unwrap();",
+  "charCount": {
+    "leading": 19,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "EXPR": {
+        "text": "rx.next().await",
+        "range": {
+          "byteOffset": {
+            "start": 17755,
+            "end": 17770
+          },
+          "start": {
+            "line": 559,
+            "column": 19
+          },
+          "end": {
+            "line": 559,
+            "column": 34
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-no-unwrap",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid unwrap()/expect() in non-test code; handle errors explicitly",
+  "labels": [
+    {
+      "text": "rx.next().await.unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 17755,
+          "end": 17779
+        },
+        "start": {
+          "line": 559,
+          "column": 19
+        },
+        "end": {
+          "line": 559,
+          "column": 43
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 12560,
+      "end": 12584
+    },
+    "start": {
+      "line": 401,
+      "column": 16
+    },
+    "end": {
+      "line": 401,
+      "column": 40
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "                received.lock().unwrap().push(line);",
+  "charCount": {
+    "leading": 16,
+    "trailing": 12
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MUT": {
+        "text": "received",
+        "range": {
+          "byteOffset": {
+            "start": 12560,
+            "end": 12568
+          },
+          "start": {
+            "line": 401,
+            "column": 16
+          },
+          "end": {
+            "line": 401,
+            "column": 24
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-mutex-lock",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 12560,
+          "end": 12584
+        },
+        "start": {
+          "line": 401,
+          "column": 16
+        },
+        "end": {
+          "line": 401,
+          "column": 40
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 12702,
+      "end": 12726
+    },
+    "start": {
+      "line": 408,
+      "column": 22
+    },
+    "end": {
+      "line": 408,
+      "column": 46
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let results = received.lock().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MUT": {
+        "text": "received",
+        "range": {
+          "byteOffset": {
+            "start": 12702,
+            "end": 12710
+          },
+          "start": {
+            "line": 408,
+            "column": 22
+          },
+          "end": {
+            "line": 408,
+            "column": 30
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-mutex-lock",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 12702,
+          "end": 12726
+        },
+        "start": {
+          "line": 408,
+          "column": 22
+        },
+        "end": {
+          "line": 408,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13304,
+      "end": 13328
+    },
+    "start": {
+      "line": 425,
+      "column": 16
+    },
+    "end": {
+      "line": 425,
+      "column": 40
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "                received.lock().unwrap().push(line);",
+  "charCount": {
+    "leading": 16,
+    "trailing": 12
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MUT": {
+        "text": "received",
+        "range": {
+          "byteOffset": {
+            "start": 13304,
+            "end": 13312
+          },
+          "start": {
+            "line": 425,
+            "column": 16
+          },
+          "end": {
+            "line": 425,
+            "column": 24
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-mutex-lock",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13304,
+          "end": 13328
+        },
+        "start": {
+          "line": 425,
+          "column": 16
+        },
+        "end": {
+          "line": 425,
+          "column": 40
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 13446,
+      "end": 13470
+    },
+    "start": {
+      "line": 432,
+      "column": 22
+    },
+    "end": {
+      "line": 432,
+      "column": 46
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let results = received.lock().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MUT": {
+        "text": "received",
+        "range": {
+          "byteOffset": {
+            "start": 13446,
+            "end": 13454
+          },
+          "start": {
+            "line": 432,
+            "column": 22
+          },
+          "end": {
+            "line": 432,
+            "column": 30
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-mutex-lock",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 13446,
+          "end": 13470
+        },
+        "start": {
+          "line": 432,
+          "column": 22
+        },
+        "end": {
+          "line": 432,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 16848,
+      "end": 16872
+    },
+    "start": {
+      "line": 528,
+      "column": 20
+    },
+    "end": {
+      "line": 528,
+      "column": 44
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "                    received.lock().unwrap().push(id);",
+  "charCount": {
+    "leading": 20,
+    "trailing": 10
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MUT": {
+        "text": "received",
+        "range": {
+          "byteOffset": {
+            "start": 16848,
+            "end": 16856
+          },
+          "start": {
+            "line": 528,
+            "column": 20
+          },
+          "end": {
+            "line": 528,
+            "column": 28
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-mutex-lock",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 16848,
+          "end": 16872
+        },
+        "start": {
+          "line": 528,
+          "column": 20
+        },
+        "end": {
+          "line": 528,
+          "column": 44
+        }
+      },
+      "style": "primary"
+    }
+  ]
+},
+{
+  "text": "received.lock().unwrap()",
+  "range": {
+    "byteOffset": {
+      "start": 17006,
+      "end": 17030
+    },
+    "start": {
+      "line": 536,
+      "column": 22
+    },
+    "end": {
+      "line": 536,
+      "column": 46
+    }
+  },
+  "file": "crates/acp-lazy-core/src/transport.rs",
+  "lines": "        let results = received.lock().unwrap();",
+  "charCount": {
+    "leading": 22,
+    "trailing": 1
+  },
+  "language": "Rust",
+  "metaVariables": {
+    "single": {
+      "MUT": {
+        "text": "received",
+        "range": {
+          "byteOffset": {
+            "start": 17006,
+            "end": 17014
+          },
+          "start": {
+            "line": 536,
+            "column": 22
+          },
+          "end": {
+            "line": 536,
+            "column": 30
+          }
+        }
+      }
+    },
+    "multi": {},
+    "transformed": {}
+  },
+  "ruleId": "rust-mutex-lock",
+  "severity": "warning",
+  "note": null,
+  "message": "Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context",
+  "labels": [
+    {
+      "text": "received.lock().unwrap()",
+      "range": {
+        "byteOffset": {
+          "start": 17006,
+          "end": 17030
+        },
+        "start": {
+          "line": 536,
+          "column": 22
+        },
+        "end": {
+          "line": 536,
+          "column": 46
+        }
+      },
+      "style": "primary"
+    }
+  ]
+}
+]

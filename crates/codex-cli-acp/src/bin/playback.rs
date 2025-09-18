@@ -33,9 +33,18 @@ fn main() -> Result<()> {
         .spawn()
         .context("Failed to spawn codex-cli-acp")?;
 
-    let mut stdin_writer = child.stdin.take().expect("Failed to get stdin");
-    let stdout = child.stdout.take().expect("Failed to get stdout");
-    let stderr = child.stderr.take().expect("Failed to get stderr");
+    let mut stdin_writer = child
+        .stdin
+        .take()
+        .ok_or_else(|| anyhow::anyhow!("Failed to get stdin handle from child process"))?;
+    let stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| anyhow::anyhow!("Failed to get stdout handle from child process"))?;
+    let stderr = child
+        .stderr
+        .take()
+        .ok_or_else(|| anyhow::anyhow!("Failed to get stderr handle from child process"))?;
 
     // Channel for collecting responses
     let (tx, rx) = mpsc::channel();
