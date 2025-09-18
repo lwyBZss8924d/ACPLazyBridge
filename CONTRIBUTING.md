@@ -45,6 +45,60 @@ This repository follows a worktree-first, trunk-based development workflow with 
 - Lint: cargo clippy --workspace --all-targets --all-features -- -D warnings
 - Tests: cargo test --workspace --all-features --locked
 - Protocol scenarios (JSONL) should run cleanly and log to stderr only; stdout must be valid JSONL.
+- Static Analysis: ast-grep scan -c sgconfig.yml (see AST-grep section below)
+
+## AST-grep Static Analysis
+
+The project uses ast-grep for static code analysis to catch common issues:
+
+### Running ast-grep
+
+```bash
+# Run full scan
+ast-grep scan -c sgconfig.yml .
+
+# Check specific rule
+ast-grep scan -c sgconfig.yml --filter '^rust-no-unwrap$' .
+
+# Run with summary
+ast-grep scan -c sgconfig.yml --inspect summary .
+```
+
+### Handling Test Code
+
+Test code can use `unwrap()` and `expect()` freely. The rules automatically exclude:
+
+- Files in `tests/` directories
+- Files ending with `_test.rs` or `_tests.rs`
+- Files in `benches/` and `examples/` directories
+
+For inline tests in src files, use suppression comments:
+
+```rust
+#[cfg(test)]
+mod tests {
+    // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+    use super::*;
+
+    #[test]
+    fn test_something() {
+        // unwrap() is OK in tests
+        let result = Some(42).unwrap();
+    }
+}
+```
+
+### Suppression Comments
+
+When you need to suppress warnings in non-test code (use sparingly):
+
+```rust
+// ast-grep-ignore: rust-no-unwrap
+let value = must_succeed.unwrap(); // Document why this is safe
+
+// Suppress multiple rules
+// ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+```
 
 ## Security & Logging
 

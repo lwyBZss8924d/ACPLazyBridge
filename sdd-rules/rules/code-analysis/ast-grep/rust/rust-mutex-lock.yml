@@ -1,13 +1,20 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 files:
   - "**/*.rs"
-  - "!**/*_test.rs"
-  - "!**/*tests.rs"
-  - "!**/tests/**"
-  - "!**/benches/**"
+  - "!**/tests/**"       # Exclude test directories
+  - "!**/*_test.rs"      # Exclude test files ending with _test.rs
+  - "!**/*_tests.rs"     # Exclude test files ending with _tests.rs
+  - "!**/test_*.rs"      # Exclude test files starting with test_
+  - "!**/benches/**"     # Exclude benchmark directories
+  - "!**/examples/**"    # Exclude examples directories
 id: rust-mutex-lock
 language: Rust
 message: Avoid Mutex lock().unwrap()/expect(); handle poisoning or use expect with context
+note: |
+  For inline tests in src files, use suppression comments:
+  // ast-grep-ignore: rust-mutex-lock
+  #[test]
+  fn test_function() { ... }
 rule:
   any:
     - pattern: $MUT.lock().unwrap()

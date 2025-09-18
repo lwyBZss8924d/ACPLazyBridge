@@ -1,13 +1,20 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
 files:
   - "**/*.rs"
-  - "!**/*_test.rs"
-  - "!**/*tests.rs"
-  - "!**/tests/**"
-  - "!**/benches/**"
+  - "!**/tests/**"       # Exclude test directories
+  - "!**/*_test.rs"      # Exclude test files ending with _test.rs
+  - "!**/*_tests.rs"     # Exclude test files ending with _tests.rs
+  - "!**/test_*.rs"      # Exclude test files starting with test_
+  - "!**/benches/**"     # Exclude benchmark directories
+  - "!**/examples/**"    # Exclude examples directories
 id: rust-no-unwrap
 language: Rust
 message: Avoid unwrap()/expect() in non-test code; handle errors explicitly
+note: |
+  For inline tests in src files, use suppression comments:
+  // ast-grep-ignore: rust-no-unwrap
+  #[test]
+  fn test_function() { ... }
 rule:
   any:
     - pattern: $EXPR.unwrap()

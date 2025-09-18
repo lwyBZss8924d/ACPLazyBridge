@@ -309,6 +309,7 @@ pub enum MessageType {
 
 #[cfg(test)]
 mod tests {
+    // ast-grep-ignore: rust-no-unwrap
     use super::*;
     use serde_json::json;
 

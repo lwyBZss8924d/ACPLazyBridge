@@ -375,6 +375,7 @@ where
 
 #[cfg(test)]
 mod tests {
+    // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
     use super::*;
     use futures::StreamExt;
     use std::sync::{Arc, Mutex};
