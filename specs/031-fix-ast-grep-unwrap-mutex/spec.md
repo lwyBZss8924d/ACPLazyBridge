@@ -1,10 +1,10 @@
 # Feature Specification: Fix ast-grep Rust Warnings
 
 ```yaml
-worktree: /Users/arthur/dev-space/acplb-worktrees/fix-ast-grep-unwrap-mutex
+worktree: /acplb-worktrees/fix-ast-grep-unwrap-mutex
 feature_branch: fix/ast-grep-unwrap-mutex
-created: 2025-09-19
-last_updated: 2025-09-18
+created: 2025-09-18
+last_updated: 2025-09-19
 status: done
 input: GitHub Issue #31
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/31
@@ -38,12 +38,31 @@ specs:
 
 As a developer working on ACPLazyBridge, I want ast-grep to only report legitimate code issues and not flag test code that appropriately uses `unwrap()`, so that I can focus on real problems that need fixing.
 
-### Acceptance Scenarios
+### Acceptance Criteria
 
-1. **Given** ast-grep rules are configured, **When** I run `ast-grep scan`, **Then** no warnings appear for code inside `#[cfg(test)]` modules
-2. **Given** ast-grep rules are configured, **When** I run `ast-grep scan`, **Then** no warnings appear for functions marked with `#[test]` attribute
-3. **Given** production code with unwrap(), **When** I run `ast-grep scan`, **Then** warnings are shown for legitimate issues
-4. **Given** refactored production code, **When** I run quality gates, **Then** all checks pass (fmt, clippy, tests)
+- [x] **AC-001**: `ast-grep scan` produces zero warnings for code inside `#[cfg(test)]` modules
+    - Command: `ast-grep scan -c ./sgconfig.yml --filter "rust-no-unwrap"`
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/after-rules.log`
+- [x] **AC-002**: `ast-grep scan` produces zero warnings for functions with `#[test]` attribute
+    - Command: `ast-grep scan -c ./sgconfig.yml --filter "rust-no-unwrap"`
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/after-rules.log`
+- [x] **AC-003**: All production `unwrap()` calls replaced with explicit error handling
+    - Command: `grep -r "unwrap()" crates/*/src --exclude-dir=tests`
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/after-final.log`
+- [x] **AC-004**: Required `expect()` calls include descriptive context messages
+    - Command: `ast-grep scan -c ./sgconfig.yml --filter "rust-mutex-lock"`
+    - Evidence: Code review of `transport.rs` line 132
+- [x] **AC-005**: Quality gates pass: cargo fmt
+    - Command: `cargo fmt --all -- --check`
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/clippy.log`
+- [x] **AC-006**: Quality gates pass: cargo clippy
+    - Command: `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/clippy.log`
+- [x] **AC-007**: Quality gates pass: cargo test
+    - Command: `cargo test --workspace --all-features --locked`
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/test.log`
+- [x] **AC-008**: Before/after comparison shows warning reduction
+    - Evidence: `_artifacts/reports/fix-ast-grep-unwrap-mutex/before-summary.txt` vs `after-summary.txt`
 
 ### Edge Cases
 
@@ -58,9 +77,10 @@ As a developer working on ACPLazyBridge, I want ast-grep to only report legitima
 - **FR-001**: System MUST exclude inline test code (`#[cfg(test)]` modules) from rust-no-unwrap rule
 - **FR-002**: System MUST exclude test functions (`#[test]` attribute) from rust-no-unwrap rule
 - **FR-003**: System MUST exclude inline test code from rust-mutex-lock rule
-- **FR-004**: System MUST continue to flag unwrap()/expect() in production code
+- **FR-004**: System MUST continue to flag `unwrap()` in production code
+- **FR-004a**: System MUST flag `expect()` without descriptive context in production code
 - **FR-005**: System MUST handle errors explicitly in production code using `?` operator or proper error handling
-- **FR-006**: System MUST provide meaningful context for expect() calls where they remain necessary
+- **FR-006**: System MUST provide meaningful context for `expect()` calls where they remain necessary (e.g., Mutex poisoning)
 - **FR-007**: System MUST pass all quality gates (cargo fmt, clippy, test)
 - **FR-008**: System MUST generate evidence of before/after ast-grep scan results
 
@@ -84,9 +104,20 @@ As a developer working on ACPLazyBridge, I want ast-grep to only report legitima
 
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
-- [x] Success criteria are measurable
+- [x] Success criteria are measurable with checkboxes
 - [x] Scope is clearly bounded
 - [x] Dependencies and assumptions identified
+
+### Acceptance Criteria Validation
+
+- [x] AC-001: Test module exclusion verified
+- [x] AC-002: Test function exclusion verified
+- [x] AC-003: Production unwrap() fixed (3 files)
+- [x] AC-004: Expect messages added where needed
+- [x] AC-005: cargo fmt passed
+- [x] AC-006: cargo clippy passed
+- [x] AC-007: cargo test passed (57 tests)
+- [x] AC-008: Warnings reduced from 104 to 51
 
 ## Execution Status
 

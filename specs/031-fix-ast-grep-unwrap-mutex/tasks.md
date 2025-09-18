@@ -1,10 +1,10 @@
 # Tasks: Fix ast-grep Rust Warnings
 
 ```yaml
-worktree: /Users/arthur/dev-space/acplb-worktrees/fix-ast-grep-unwrap-mutex
+worktree: /acplb-worktrees/fix-ast-grep-unwrap-mutex
 feature_branch: fix/ast-grep-unwrap-mutex
-created: 2025-09-19
-last_updated: 2025-09-18
+created: 2025-09-18
+last_updated: 2025-09-19
 status: done
 input: Design documents from `/specs/031-fix-ast-grep-unwrap-mutex/`
 spec_uri: specs/031-fix-ast-grep-unwrap-mutex/spec.md
@@ -20,8 +20,8 @@ specs:
     type: tasks
     feature_number: 031
 commits:
-    commit: pending
-    last_commit: pending
+    commit: pr-committed
+    last_commit: f36ba1c17d3a3298fba33c23bf0c490276ed38e1
 ```
 
 ## Execution Flow (main)
