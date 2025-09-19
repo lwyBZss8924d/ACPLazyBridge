@@ -88,7 +88,13 @@
       "Bash(ruby:*)",
       "Bash(./scripts/sdd/validate_structure.py)",
       "Bash(gh pr view:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(.specify/scripts/bash/create-new-feature.sh:*)",
+      "Bash(scripts/sdd/setup-plan.sh:*)",
+      "Bash(scripts/sdd/validate_structure.py specs/035-ci-add-sdd/)",
+      "Bash(scripts/sdd/validate_structure.py:*)",
+      "Bash(cp:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

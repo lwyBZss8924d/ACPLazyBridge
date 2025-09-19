@@ -11,12 +11,19 @@ on:
       - chore/**
       - docs/**
 
+# Required for security-events write permission
+permissions:
+  contents: read
+  pull-requests: read
+  security-events: write
+
 jobs:
+  # Cross-platform build and test matrix
   build-test:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: read
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,6 +46,13 @@ jobs:
 
       - name: Tests
         run: cargo test --workspace --all-features --locked
+
+  # SDD validation checks
+  sdd-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: SDD structure lint
         run: bash scripts/ci/run-sdd-structure-lint.sh
@@ -72,3 +86,96 @@ jobs:
           name: protocol-outputs
           path: _ci_artifacts/protocol
 
+  # ast-grep code scanning with SARIF upload
+  # Report-only mode: continues even if violations found
+  ast-grep-scan:
+    runs-on: ubuntu-latest
+    continue-on-error: true  # Report-only mode - won't block PR
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ast-grep
+        uses: taiki-e/install-action@v2
+        with:
+          tool: ast-grep
+
+      - name: Run ast-grep scan
+        id: ast-grep
+        run: |
+          echo "Running ast-grep scan..."
+          ast-grep scan -c sgconfig.yml --json > ast-grep-results.json || true
+
+          # Show summary in logs
+          if [ -s ast-grep-results.json ]; then
+            echo "Found $(jq '. | length' ast-grep-results.json) issues"
+            jq -r '.[] | "\(.severity): \(.rule_id) at \(.file):\(.start_line)"' ast-grep-results.json || true
+          else
+            echo "No issues found"
+            echo "[]" > ast-grep-results.json
+          fi
+
+      - name: Convert to SARIF format
+        if: always()
+        run: |
+          echo "Converting ast-grep results to SARIF..."
+          jq -f scripts/ci/json-to-sarif.jq ast-grep-results.json > results.sarif
+
+          # Validate SARIF output
+          if jq -e '.version == "2.1.0"' results.sarif > /dev/null 2>&1; then
+            echo "✓ Valid SARIF generated"
+          else
+            echo "⚠ SARIF validation failed, creating minimal valid SARIF"
+            cat > results.sarif <<'EOF'
+          {
+            "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+            "version": "2.1.0",
+            "runs": [{
+              "tool": {
+                "driver": {
+                  "name": "ast-grep",
+                  "version": "0.x.x"
+                }
+              },
+              "results": []
+            }]
+          }
+          EOF
+          fi
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+          category: ast-grep
+
+      - name: Upload ast-grep artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ast-grep-results
+          path: |
+            ast-grep-results.json
+            results.sarif
+
+  # Typos checking for documentation and code
+  typos-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install typos
+        uses: taiki-e/install-action@v2
+        with:
+          tool: typos-cli
+
+      - name: Run typos check
+        run: |
+          echo "Checking for typos..."
+          typos || {
+            echo "::warning::Typos found. Please review and fix."
+            # Don't fail the job for typos
+            exit 0
+          }
