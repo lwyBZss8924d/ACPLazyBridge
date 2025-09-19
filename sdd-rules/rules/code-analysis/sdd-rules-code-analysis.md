@@ -9,6 +9,26 @@ You run in an environment where `ast-grep` is available; whenever a search requi
 - Prefer project-local `sgconfig.yml` at repo root (committed). Tools and editors discover it automatically.
 - For rule-level `files:` globs, include at least one positive pattern (e.g. `"**/*.rs"`) before negative excludes. Negative-only lists may match nothing.
 
+### Important Limitations Discovered (Issue #34)
+
+**File exclusion patterns don't work with ruleDirs:**
+
+- When rules are loaded via `ruleDirs` in sgconfig.yml, the `files:` field in individual rule YAML files is ignored
+- This is an undocumented limitation of ast-grep's configuration system
+- The `ignores` section in sgconfig.yml only affects file traversal, not rule application
+
+**Suppression comment requirements:**
+
+- Suppression comments must be on the line immediately before the code to suppress
+- Module-level or file-level suppressions don't cascade to nested functions
+- Use `// ast-grep-ignore` or `// ast-grep-ignore: rule-id` format
+
+**Workaround for test code:**
+
+- Add individual suppression comments before each `unwrap()`/`expect()` in test files
+- Cannot rely on file patterns to exclude test directories when using `ruleDirs`
+- See CONTRIBUTING.md for detailed suppression examples
+
 ### Recommended CLI flows
 
 ### Rule Development Checklist (CLI-only, inspired by ast-grep guidance)
@@ -50,20 +70,31 @@ You run in an environment where `ast-grep` is available; whenever a search requi
   ast-grep -p 'dbg!($$$ARGS)' -l rust crates/
   ```
 
+- Verify suppression effectiveness:
+
+  ```bash
+  # Count warnings for specific rule
+  ast-grep scan -c sgconfig.yml --filter '^rust-no-unwrap$' . | grep -c warning
+
+  # Test rule file directly (bypasses ruleDirs limitation)
+  ast-grep scan --rule-file sdd-rules/rules/code-analysis/ast-grep/rust/no-unwrap.yml .
+  ```
+
 ---
 
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-19T04:32:00Z"
 rules:
     name: "code-analysis"
     category: "code-analysis"
-    version: "1.0.1"
+    version: "1.0.2"
 document:
     type: "sdd-rule"
     path: "sdd-rules/rules/code-analysis/sdd-rules-code-analysis.md"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-19T12:00:00Z"
+    changelog: "Added ast-grep limitations discovered in Issue #34"
     related:
         - "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-list.md"
         - "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-astgrep.md"

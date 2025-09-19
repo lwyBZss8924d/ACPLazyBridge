@@ -1,5 +1,8 @@
 //! Integration tests for tool call functionality
 
+// ast-grep-ignore: rust-no-unwrap
+// Test files can use unwrap() freely
+
 use codex_cli_acp::codex_proto::{
     CodexEvent, CodexStreamManager, SessionUpdate, SessionUpdateContent, ToolCallItem,
     ToolCallStatus,
@@ -26,10 +29,13 @@ async fn test_single_tool_call_progression() {
     };
 
     // Process the pending event
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check we got a ToolCall with pending status
+    // ast-grep-ignore
     let update = rx.recv().await.unwrap();
     match &update.params.update {
         SessionUpdateContent::ToolCall {
@@ -57,10 +63,13 @@ async fn test_single_tool_call_progression() {
         error: None,
     };
 
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check we got a ToolCallUpdate with in_progress status
+    // ast-grep-ignore
     let update = rx.recv().await.unwrap();
     match &update.params.update {
         SessionUpdateContent::ToolCallUpdate {
@@ -84,10 +93,13 @@ async fn test_single_tool_call_progression() {
         error: None,
     };
 
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check we got a ToolCallUpdate with completed status and output
+    // ast-grep-ignore
     let update = rx.recv().await.unwrap();
     match &update.params.update {
         SessionUpdateContent::ToolCallUpdate {
@@ -141,11 +153,14 @@ async fn test_batch_tool_calls() {
         ],
     };
 
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check we got 3 ToolCall events
     for i in 0..3 {
+        // ast-grep-ignore
         let update = rx.recv().await.unwrap();
         match &update.params.update {
             SessionUpdateContent::ToolCall {
@@ -186,10 +201,13 @@ async fn test_shell_command_title() {
         error: None,
     };
 
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check the title includes the command
+    // ast-grep-ignore
     let update = rx.recv().await.unwrap();
     match &update.params.update {
         SessionUpdateContent::ToolCall { title, kind, .. } => {
@@ -221,10 +239,13 @@ async fn test_tool_output_truncation() {
         error: None,
     };
 
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check the output is truncated in content but full in raw_output
+    // ast-grep-ignore
     let update = rx.recv().await.unwrap();
     match &update.params.update {
         SessionUpdateContent::ToolCall {
@@ -233,6 +254,7 @@ async fn test_tool_output_truncation() {
             ..
         } => {
             // Content should be truncated
+            // ast-grep-ignore
             let content_text = &content.as_ref().unwrap()[0];
             let codex_cli_acp::codex_proto::ContentBlock::Text { text } = content_text;
             assert!(text.len() <= MAX_OUTPUT_PREVIEW_BYTES + 100); // Allow for truncation marker
@@ -241,6 +263,7 @@ async fn test_tool_output_truncation() {
             assert!(text.ends_with("[exit code: 0]") || text.contains("aaa"));
 
             // Raw output should have full content
+            // ast-grep-ignore
             let raw = raw_output.as_ref().unwrap();
             assert_eq!(raw["stdout"], large_output);
         }
@@ -263,10 +286,13 @@ async fn test_tool_error_handling() {
         error: Some("Permission denied: cannot write to /readonly/file.txt".to_string()),
     };
 
+    // ast-grep-ignore
     let event_json = serde_json::to_string(&event).unwrap();
+    // ast-grep-ignore
     manager.process_line(&event_json).await.unwrap();
 
     // Check error is included in content
+    // ast-grep-ignore
     let update = rx.recv().await.unwrap();
     match &update.params.update {
         SessionUpdateContent::ToolCall {
@@ -278,13 +304,16 @@ async fn test_tool_error_handling() {
             assert_eq!(*status, Some(ToolCallStatus::Failed));
 
             // Content should include error message
+            // ast-grep-ignore
             let content_text = &content.as_ref().unwrap()[0];
             let codex_cli_acp::codex_proto::ContentBlock::Text { text } = content_text;
             assert!(text.contains("Permission denied"));
 
             // Raw output should indicate failure
+            // ast-grep-ignore
             let raw = raw_output.as_ref().unwrap();
             assert_eq!(raw["status"], "failed");
+            // ast-grep-ignore
             assert!(raw["error"].as_str().unwrap().contains("Permission denied"));
         }
         _ => panic!("Expected ToolCall"),

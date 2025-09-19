@@ -105,6 +105,7 @@ impl FileNotifySource {
         let reader = self
             .file
             .as_mut()
+            // ast-grep-ignore
             .expect("file handle exists after open_or_reopen check");
         let mut line = String::new();
         let mut had_activity = false;

@@ -3,6 +3,9 @@
 //! This test module allows replaying JSONL test files through the ACP server
 //! to verify protocol compliance and response correctness.
 
+// ast-grep-ignore: rust-no-unwrap
+// Test files can use unwrap() freely
+
 use anyhow::{Context, Result};
 use serde_json::Value;
 use std::io::{BufRead, BufReader, Write};
@@ -30,8 +33,11 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
         .spawn()
         .context("Failed to spawn codex-cli-acp")?;
 
+    // ast-grep-ignore
     let mut stdin = child.stdin.take().expect("Failed to get stdin");
+    // ast-grep-ignore
     let stdout = child.stdout.take().expect("Failed to get stdout");
+    // ast-grep-ignore
     let stderr = child.stderr.take().expect("Failed to get stderr");
 
     // Channel for collecting responses
@@ -111,6 +117,7 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
 #[test]
 fn test_handshake() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/handshake.jsonl");
+    // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(!results.is_empty(), "No results from playback");
@@ -138,6 +145,7 @@ fn test_handshake() {
 #[test]
 fn test_basic_session() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/basic_session.jsonl");
+    // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(results.len() >= 2, "Expected at least 2 interactions");
@@ -145,6 +153,7 @@ fn test_basic_session() {
     // Check initialize
     let (_, init_resp) = &results[0];
     assert!(init_resp.is_some());
+    // ast-grep-ignore
     assert!(init_resp.as_ref().unwrap().get("result").is_some());
 
     // Check session/new
@@ -152,6 +161,7 @@ fn test_basic_session() {
     assert_eq!(req["method"], "session/new");
     assert!(resp.is_some());
 
+    // ast-grep-ignore
     let resp = resp.as_ref().unwrap();
     assert!(resp.get("result").is_some());
     assert!(resp["result"].get("sessionId").is_some());
@@ -160,6 +170,7 @@ fn test_basic_session() {
 #[test]
 fn test_unknown_method() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/unknown_method.jsonl");
+    // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(!results.is_empty());
@@ -168,6 +179,7 @@ fn test_unknown_method() {
     assert_eq!(req["method"], "unknown");
     assert!(resp.is_some());
 
+    // ast-grep-ignore
     let resp = resp.as_ref().unwrap();
     assert!(resp.get("error").is_some());
     assert_eq!(resp["error"]["code"], -32601); // Method not found
@@ -176,6 +188,7 @@ fn test_unknown_method() {
 #[test]
 fn test_invalid_params() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/invalid_params.jsonl");
+    // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(!results.is_empty());
@@ -193,6 +206,7 @@ fn test_invalid_params() {
 #[test]
 fn test_cancel_notification() {
     let test_file = Path::new("../../dev-docs/review/_artifacts/tests/cancel.jsonl");
+    // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
     // Cancel is a notification, should not get a response

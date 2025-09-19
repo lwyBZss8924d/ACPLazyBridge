@@ -1,8 +1,27 @@
 # Implementation Plan: Fix ast-grep Inline Test False Positives
 
+```yaml
+worktree: /acplb-worktrees/fix-ast-grep-inline-tests
+feature_branch: fix/ast-grep-inline-tests
+created: 2025-09-19
+last_updated: 2025-09-19T04:32:00Z
+status: processing
+input: GitHub Issue #34
+issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/34
+spec_uri: specs/034-fix-ast-grep-inline-tests/spec.md
+plan_uri: specs/034-fix-ast-grep-inline-tests/plan.md
+tasks_uri: specs/034-fix-ast-grep-inline-tests/tasks.md
+evidence_uris: _artifacts/reports/ast-grep-inline-tests/
+specs:
+    constitution: 1.0.1
+    type: plan
+    feature_number: 034
+```
+
 ## Phase -1: Pre-Implementation Gates
 
 ### Constitutional Compliance
+
 - [ ] Library-First (Article I): N/A - Configuration changes only
 - [ ] Test-First (Article III): Testing configuration effectiveness
 - [ ] Simplicity (Article VII): Using built-in ast-grep features
@@ -22,6 +41,7 @@ After extensive research and testing, we've identified that:
 ### Solution Architecture
 
 Two-pronged approach:
+
 1. **File-based exclusion**: Comprehensive patterns in rule YAML files
 2. **Suppression comments**: For inline tests in src files
 
@@ -140,16 +160,6 @@ ast-grep scan -c sgconfig.yml . | grep -c "warning"
 
 ---
 
-```yaml
-constitution:
-    version: "1.0.1"
-    last_checked: "2025-09-19T04:32:00Z"
-document:
-    type: "sdd-plan"
-    path: "specs/034-fix-ast-grep-inline-tests/plan.md"
-    version: "1.0.0"
-    last_updated: "2025-09-19T04:32:00Z"
-    dependencies:
-        - ".specify/memory/constitution.md"
-        - "specs/034-fix-ast-grep-inline-tests/spec.md"
-```
+⚠️ _Based on SDD CONSTITUTION: `.specify/memory/constitution.md`_
+⚠️ _Follow the SDD workflow implementation: `.specify/memory/lifecycle.md`_
+⚠️ _Follow the SDD rules: `sdd-rules/rules/README.md`_

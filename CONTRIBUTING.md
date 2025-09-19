@@ -20,10 +20,10 @@ This repository follows a worktree-first, trunk-based development workflow with 
 
 - Naming: feature|fix|perf|chore|docs/&lt;kebab-slug&gt;
 - Create from origin/main:
-  - Container path (required): /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt;
-  - Command:
+    - Container path (required): /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt;
+    - Command:
     git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt; origin/main -b feature/&lt;slug&gt;
-  - Optional symlink (for IDE navigation under repo root):
+    - Optional symlink (for IDE navigation under repo root):
     ln -sfn /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt; /Users/arthur/dev-space/ACPLazyBridge/.worktrees/&lt;task-dir&gt;
 - One worktree per feature branch. Do not checkout the same branch in multiple worktrees.
 - After PR merge, remove the worktree and delete the local branch if desired.
@@ -33,10 +33,10 @@ This repository follows a worktree-first, trunk-based development workflow with 
 - Conventional Commits: feat, fix, perf, chore, docs, test, refactor, build, ci
 - Keep commits focused and small; split logically distinct changes into separate PRs.
 - PR description must include:
-  - Motivation and design summary
-  - Acceptance criteria and risk/rollback plan
-  - Links to dev-docs/plan/issues and references
-  - Evidence: test commands, JSONL inputs/outputs locations, logs, and jq filters
+    - Motivation and design summary
+    - Acceptance criteria and risk/rollback plan
+    - Links to dev-docs/plan/issues and references
+    - Evidence: test commands, JSONL inputs/outputs locations, logs, and jq filters
 - Default merge method: Squash and merge into main
 
 ## Code Quality Gates
@@ -66,23 +66,27 @@ ast-grep scan -c sgconfig.yml --inspect summary .
 
 ### Handling Test Code
 
-Test code can use `unwrap()` and `expect()` freely. The rules automatically exclude:
+Test code can use `unwrap()` and `expect()` freely. Due to ast-grep limitations, suppression comments are required:
 
-- Files in `tests/` directories
-- Files ending with `_test.rs` or `_tests.rs`
-- Files in `benches/` and `examples/` directories
+**Important:** File exclusion patterns in rule YAML files are ignored when rules are loaded via `ruleDirs` in sgconfig.yml. All test code needs explicit suppression comments.
 
-For inline tests in src files, use suppression comments:
+For test files, add at the top of the file:
+
+```rust
+// ast-grep-ignore: rust-no-unwrap
+// Test files can use unwrap() freely
+```
+
+For inline tests in src files, add suppression before each unwrap:
 
 ```rust
 #[cfg(test)]
 mod tests {
-    // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
     use super::*;
 
     #[test]
     fn test_something() {
-        // unwrap() is OK in tests
+        // ast-grep-ignore
         let result = Some(42).unwrap();
     }
 }
@@ -93,12 +97,16 @@ mod tests {
 When you need to suppress warnings in non-test code (use sparingly):
 
 ```rust
-// ast-grep-ignore: rust-no-unwrap
+// ast-grep-ignore must be on the line immediately before the code
+// ast-grep-ignore
 let value = must_succeed.unwrap(); // Document why this is safe
 
-// Suppress multiple rules
-// ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+// Or suppress specific rules
+// ast-grep-ignore: rust-no-unwrap
+let value = must_succeed.unwrap();
 ```
+
+**Note:** Module-level or file-level suppressions don't cascade. Each warning needs its own suppression comment on the preceding line.
 
 ## Security & Logging
 
@@ -145,12 +153,12 @@ let value = must_succeed.unwrap(); // Document why this is safe
 ## Non-mock testing prerequisites
 
 - Provider CLI installation and configuration:
-  - Codex CLI installed and configured (global config: ~/.codex/config.toml).
-  - Zed installed; user config: ~/.config/zed/settings.json.
-  - Claude Code (future): ~/.claude/settings.json; ANTHROPIC_API_KEY via environment variable or login flow.
-  - Gemini (future): GEMINI_API_KEY via environment variable.
+    - Codex CLI installed and configured (global config: ~/.codex/config.toml).
+    - Zed installed; user config: ~/.config/zed/settings.json.
+    - Claude Code (future): ~/.claude/settings.json; ANTHROPIC_API_KEY via environment variable or login flow.
+    - Gemini (future): GEMINI_API_KEY via environment variable.
 - Build adapter binaries:
-  - cargo build --release -p codex-cli-acp
+    - cargo build --release -p codex-cli-acp
 
 ## Secrets
 
@@ -161,25 +169,25 @@ let value = must_succeed.unwrap(); // Document why this is safe
 
 - JSONL scenario location: dev-docs/review/_artifacts/tests/
 - Run example:
-  - target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log
+    - target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log
 - Notify integration test:
-  - ACPLB_NOTIFY_PATH=/tmp/notify.jsonl target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/notify_idle.jsonl | tee dev-docs/review/_artifacts/logs/notify_$(date +%Y%m%d_%H%M%S).log
-  - Verify immediate completion on notify signal vs idle timeout fallback
+    - ACPLB_NOTIFY_PATH=/tmp/notify.jsonl target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/notify_idle.jsonl | tee dev-docs/review/_artifacts/logs/notify_$(date +%Y%m%d_%H%M%S).log
+    - Verify immediate completion on notify signal vs idle timeout fallback
 - Optional validation:
-  - Use jq filters from dev-docs/review/_artifacts/jq/filters.md to generate review snapshots (error and result.stopReason).
+    - Use jq filters from dev-docs/review/_artifacts/jq/filters.md to generate review snapshots (error and result.stopReason).
 - Acceptance criteria:
-  - initialize returns protocolVersion, and agentCapabilities.promptCapabilities.image=false
-  - session/new returns non-empty sessionId
-  - session/prompt shows multiple session/update(type=agent_message_chunk) messages and finally returns result.stopReason
-  - session/cancel produces stopReason=Cancelled
-  - With notify: immediate completion on agent-turn-complete signal
-  - Without notify: completion after idle timeout (default 1200ms)
+    - initialize returns protocolVersion, and agentCapabilities.promptCapabilities.image=false
+    - session/new returns non-empty sessionId
+    - session/prompt shows multiple session/update(type=agent_message_chunk) messages and finally returns result.stopReason
+    - session/cancel produces stopReason=Cancelled
+    - With notify: immediate completion on agent-turn-complete signal
+    - Without notify: completion after idle timeout (default 1200ms)
 
 ## Zed manual smoke (manual smoke testing)
 
 - Configure `~/.config/zed/settings.json`:
-  - Current: ACPLazyBridge (Codex) → points to absolute path of target/release/codex-cli-acp
-  - Claude/Gemini entries will be enabled later when corresponding ACPLazyBridge binaries are available
+    - Current: ACPLazyBridge (Codex) → points to absolute path of target/release/codex-cli-acp
+    - Claude/Gemini entries will be enabled later when corresponding ACPLazyBridge binaries are available
 - IDE side ensures adapter stdout only outputs JSONL; logs written to `stderr` and archived per specification.
 - After running, save complete output to dev-docs/review/_artifacts/logs/ (see dev-docs/review/_artifacts/logs/README.md).
 

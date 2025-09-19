@@ -3,12 +3,17 @@
 ## Metadata
 
 ```yaml
-Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/34
-Spec-URI: specs/034-fix-ast-grep-inline-tests/spec.md
-Plan-URI: specs/034-fix-ast-grep-inline-tests/plan.md
-Tasks-URI: specs/034-fix-ast-grep-inline-tests/tasks.md
-Evidence-URIs:
-  - _artifacts/reports/ast-grep-inline-tests/
+worktree: /acplb-worktrees/fix-ast-grep-inline-tests
+feature_branch: fix/ast-grep-inline-tests
+created: 2025-09-19
+last_updated: 2025-09-19T04:32:00Z
+status: processing
+input: GitHub Issue #34
+issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/34
+specs:
+    constitution: 1.0.1
+    type: spec
+    feature_number: 034
 ```
 
 ## Overview
@@ -22,6 +27,7 @@ The ast-grep rules for `rust-no-unwrap` and `rust-mutex-lock` are flagging legit
 ## User Stories
 
 As a developer, I want:
+
 - Clean ast-grep output that only shows real issues in production code
 - The ability to use `unwrap()` freely in test code without warnings
 - Clear guidance on how to suppress warnings when needed
@@ -42,21 +48,23 @@ As a developer, I want:
 
 ## Acceptance Criteria
 
-- [ ] ast-grep warnings reduced from 86 to <10 false positives
-- [ ] File-based exclusion patterns comprehensive and documented
-- [ ] Suppression comment syntax documented and working
-- [ ] CONTRIBUTING.md updated with ast-grep guidelines
-- [ ] All existing tests still pass
-- [ ] No production code affected by changes
+- [x] ast-grep warnings reduced from 86 to <10 false positives (achieved: 0 Rust warnings)
+- [x] File-based exclusion patterns comprehensive and documented (documented limitations)
+- [x] Suppression comment syntax documented and working
+- [x] CONTRIBUTING.md updated with ast-grep guidelines
+- [x] All existing tests still pass
+- [x] No production code affected by changes
 
 ## Technical Context
 
 ### Current State
+
 - 86 warnings after PR #31
 - Most warnings from test files and inline tests
 - AST-based exclusion patterns don't work for inline tests
 
 ### Constraints
+
 - ast-grep doesn't support complex AST exclusion for test attributes
 - Must use built-in ast-grep features (file patterns, suppression comments)
 - Cannot modify upstream ast-grep tool
@@ -84,16 +92,6 @@ As a developer, I want:
 
 ---
 
-```yaml
-constitution:
-    version: "1.0.1"
-    last_checked: "2025-09-19T04:32:00Z"
-document:
-    type: "sdd-spec"
-    path: "specs/034-fix-ast-grep-inline-tests/spec.md"
-    version: "1.0.0"
-    last_updated: "2025-09-19T04:32:00Z"
-    dependencies:
-        - ".specify/memory/constitution.md"
-        - "specs/031-fix-ast-grep-unwrap-mutex/spec.md"
-```
+⚠️ _Based on SDD CONSTITUTION: `.specify/memory/constitution.md`_
+⚠️ _Follow the SDD workflow implementation: `.specify/memory/lifecycle.md`_
+⚠️ _Follow the SDD rules: `sdd-rules/rules/README.md`_

@@ -106,6 +106,25 @@ Outputs (caller‑facing)
 - Inline: brief, capped highlights; include rule IDs where available.
 - Artifacts: full engine output and summaries; human log in $HOME/.claude/runs/.
 
+Important Limitations (Issue #34)
+
+- **Rule-level file exclusions DO NOT WORK when using sgconfig.yml with ruleDirs**
+- The `files:` patterns in individual rule YAML files are completely ignored
+- This means test files WILL show warnings even if rules have `"!**/tests/**"` exclusions
+- Suppression comments (`// ast-grep-ignore`) are the only reliable way to exclude test code
+- To verify suppressions are working: `ast-grep scan -c sgconfig.yml --filter '^rust-no-unwrap$' . | grep -c warning`
+
+Example of the limitation:
+
+```yaml
+# This exclusion pattern is IGNORED when rule is loaded via ruleDirs:
+files:
+  - "**/*.rs"
+  - "!**/tests/**"  # ❌ Does not work!
+```
+
 Notes
 
 - This sub‑agent does not run scripts/ast-grep/sg-fix.sh.
+- When analyzing repos with many test files, expect higher warning counts unless suppressions are in place.
+- Recommend documenting the need for suppression comments in the analysis report.
