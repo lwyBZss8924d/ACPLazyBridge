@@ -88,9 +88,11 @@ jobs:
 
   # ast-grep code scanning with SARIF upload
   # Report-only mode: continues even if violations found
+  # TO ENABLE ENFORCEMENT: Remove the continue-on-error line below
+  # This should be done after Issue #31 is resolved (see transition.md)
   ast-grep-scan:
     runs-on: ubuntu-latest
-    continue-on-error: true  # Report-only mode - won't block PR
+    continue-on-error: true  # Report-only mode - won't block PR (remove to enforce)
     steps:
       - name: Checkout
         uses: actions/checkout@v4
