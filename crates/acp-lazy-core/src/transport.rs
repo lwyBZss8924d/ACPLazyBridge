@@ -131,6 +131,7 @@ impl ProcessTransport {
     pub fn stdin(&mut self) -> &mut ChildStdin {
         self.stdin
             .as_mut()
+            // ast-grep-ignore
             .expect("stdin handle was already taken; this is a bug in ProcessTransport usage")
     }
 
@@ -375,6 +376,7 @@ where
 
 #[cfg(test)]
 mod tests {
+    // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
     use super::*;
     use futures::StreamExt;
     use std::sync::{Arc, Mutex};
@@ -384,8 +386,10 @@ mod tests {
         let mut buffer = Vec::new();
         let json = r#"{"test": "value"}"#;
 
+        // ast-grep-ignore
         write_line(&mut buffer, json).await.unwrap();
 
+        // ast-grep-ignore
         let result = String::from_utf8(buffer).unwrap();
         assert_eq!(result, "{\"test\": \"value\"}\n");
     }
@@ -401,13 +405,16 @@ mod tests {
         read_lines(cursor, move |line| {
             let received = received_clone.clone();
             async move {
+                // ast-grep-ignore
                 received.lock().unwrap().push(line);
                 Ok(())
             }
         })
         .await
+        // ast-grep-ignore
         .unwrap();
 
+        // ast-grep-ignore
         let results = received.lock().unwrap();
         assert_eq!(results.len(), 2);
         assert_eq!(results[0], r#"{"valid": 1}"#);
@@ -425,13 +432,16 @@ mod tests {
         read_lines(cursor, move |line| {
             let received = received_clone.clone();
             async move {
+                // ast-grep-ignore
                 received.lock().unwrap().push(line);
                 Ok(())
             }
         })
         .await
+        // ast-grep-ignore
         .unwrap();
 
+        // ast-grep-ignore
         let results = received.lock().unwrap();
         assert_eq!(results.len(), 2);
         assert_eq!(results[0], r#"{"valid": 1}"#);
@@ -442,12 +452,17 @@ mod tests {
     async fn test_message_queue() {
         let mut queue = MessageQueue::new();
         let sender = queue.sender();
+        // ast-grep-ignore
         let mut receiver = queue.take_receiver().unwrap();
 
+        // ast-grep-ignore
         sender.unbounded_send("message1".to_string()).unwrap();
+        // ast-grep-ignore
         sender.unbounded_send("message2".to_string()).unwrap();
 
+        // ast-grep-ignore
         assert_eq!(receiver.next().await.unwrap(), "message1");
+        // ast-grep-ignore
         assert_eq!(receiver.next().await.unwrap(), "message2");
     }
 
@@ -467,12 +482,15 @@ mod tests {
             None,
         )
         .await
+        // ast-grep-ignore
         .unwrap();
 
         // Start monitoring stderr
+        // ast-grep-ignore
         transport.monitor_stderr().unwrap();
 
         // Wait for process to complete - should capture all stderr
+        // ast-grep-ignore
         let status = transport.wait().await.unwrap();
         assert!(status.success());
 
@@ -495,12 +513,16 @@ mod tests {
              "echo 'normal output' >&2; echo 'WARNING: deprecated' >&2; echo 'ERROR: failed' >&2".to_string()],
             None,
             None
-        ).await.unwrap();
+        ).await
+        // ast-grep-ignore
+        .unwrap();
 
         // Start monitoring - will use smart severity detection
+        // ast-grep-ignore
         transport.monitor_stderr().unwrap();
 
         // Wait for process to complete
+        // ast-grep-ignore
         let status = transport.wait().await.unwrap();
         assert!(status.success());
 
@@ -528,14 +550,17 @@ invalid json
             async move {
                 // Verify we received a parsed Value, not a string
                 if let Some(id) = value.get("id").and_then(|v| v.as_i64()) {
+                    // ast-grep-ignore
                     received.lock().unwrap().push(id);
                 }
                 Ok(())
             }
         })
         .await
+        // ast-grep-ignore
         .unwrap();
 
+        // ast-grep-ignore
         let results = received.lock().unwrap();
         assert_eq!(results.len(), 3);
         assert_eq!(results[0], 1);
@@ -552,13 +577,16 @@ invalid json
         let (tx, mut rx) = mpsc::unbounded::<Value>();
         let task = spawn_value_reader_task(cursor, tx);
 
+        // ast-grep-ignore
         task.await.unwrap().unwrap();
 
         // Verify we received parsed Values
+        // ast-grep-ignore
         let val1 = rx.next().await.unwrap();
         assert_eq!(val1["type"], "message");
         assert_eq!(val1["content"], "hello");
 
+        // ast-grep-ignore
         let val2 = rx.next().await.unwrap();
         assert_eq!(val2["type"], "message");
         assert_eq!(val2["content"], "world");

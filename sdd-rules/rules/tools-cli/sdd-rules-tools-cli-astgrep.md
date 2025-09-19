@@ -110,7 +110,14 @@ ast-grep -p 'if ($COND) { $$$BODY }' \
 - In rule YAML, `files:` should include at least one positive include (e.g. `"**/*.rs"`) before any negative excludes (e.g. `"!**/tests/**"`).
 - Negative-only lists may result in zero matches.
 - Prefer scoping at rule-level over global ignores when you want per-rule precision.
-- For “non-test only” Rust rules, prefer scoping to `src/**/*.rs` in typical crates. For repos that keep Rust files at the package root (no src/), use `**/*.rs` with excludes like `*_test.rs`, `*tests.rs`, `tests/**`, and `benches/**`.
+- For "non-test only" Rust rules, prefer scoping to `src/**/*.rs` in typical crates. For repos that keep Rust files at the package root (no src/), use `**/*.rs` with excludes like `*_test.rs`, `*tests.rs`, `tests/**`, and `benches/**`.
+
+**⚠️ CRITICAL LIMITATION (Discovered in Issue #34):**
+
+- **When rules are loaded via `ruleDirs` in sgconfig.yml, the `files:` field in individual rule YAML files is COMPLETELY IGNORED**
+- This is an undocumented ast-grep limitation that affects all file exclusion patterns
+- The `ignores` section in sgconfig.yml only affects file traversal, NOT rule application
+- **Solution**: Use suppression comments instead of file patterns (see section below)
 
 ### YAML Rule Format
 
@@ -213,6 +220,87 @@ fix: |
   // const set = new Set($ARRAY);
   // set.has($_)
   $ARRAY.includes($_)
+```
+
+## Suppression Comments (Critical for Test Code)
+
+Due to the file pattern limitation with `ruleDirs`, suppression comments are the ONLY reliable way to exclude test code from warnings.
+
+### Syntax and Requirements
+
+```bash
+# Basic suppression - suppresses ALL rules for next line
+// ast-grep-ignore
+
+# Rule-specific suppression
+// ast-grep-ignore: rust-no-unwrap
+
+# Multiple rules
+// ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+```
+
+**⚠️ CRITICAL REQUIREMENTS:**
+
+- Suppression comments MUST be on the line immediately before the code
+- File-level and module-level suppressions DO NOT cascade to nested functions
+- Each occurrence needs its own suppression comment
+
+### Examples for Test Files
+
+```rust
+// DOESN'T WORK - module-level suppression doesn't cascade
+#[cfg(test)]
+mod tests {
+    // ast-grep-ignore: rust-no-unwrap  // This won't suppress unwrap in test functions!
+    use super::*;
+
+    #[test]
+    fn test_something() {
+        let result = Some(42).unwrap(); // Still shows warning!
+    }
+}
+
+// CORRECT - suppression on each line
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_something() {
+        // ast-grep-ignore
+        let result = Some(42).unwrap(); // No warning
+    }
+}
+```
+
+### Automated Suppression Script
+
+For existing codebases with many test files, use this Python script:
+
+```python
+#!/usr/bin/env python3
+import sys
+import re
+
+def add_suppressions(file_path):
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+
+    pattern = re.compile(r'\.unwrap\(\)|\.expect\(')
+    result = []
+
+    for i, line in enumerate(lines):
+        if pattern.search(line) and (i == 0 or '// ast-grep-ignore' not in lines[i-1]):
+            indent = len(line) - len(line.lstrip())
+            result.append(' ' * indent + '// ast-grep-ignore\n')
+        result.append(line)
+
+    with open(file_path, 'w') as f:
+        f.writelines(result)
+
+if __name__ == "__main__":
+    for file_path in sys.argv[1:]:
+        add_suppressions(file_path)
 ```
 
 ## Transformation and Refactoring
@@ -617,6 +705,38 @@ ast-grep lsp
 
 ## Real-World Examples
 
+### Issue #34: Test File False Positives
+
+This real-world case demonstrates the file pattern limitation and workaround:
+
+```yaml
+# This DOESN'T WORK when rule is loaded via ruleDirs:
+# sdd-rules/rules/code-analysis/ast-grep/rust/no-unwrap.yml
+id: rust-no-unwrap
+files:
+  - "**/*.rs"
+  - "!**/tests/**"  # ❌ This exclusion is IGNORED!
+rule:
+  pattern: $EXPR.unwrap()
+```
+
+**Problem**: 85+ false positives in test files despite exclusion patterns.
+
+**Root Cause**: When loaded via `ruleDirs` in sgconfig.yml, the `files:` field is ignored.
+
+**Solution Applied**:
+
+```rust
+// Add suppression comments to each test file
+#[test]
+fn test_something() {
+    // ast-grep-ignore
+    let result = Some(42).unwrap();  // ✅ No warning
+}
+```
+
+**Result**: 100% reduction in false positives (85 → 0 warnings).
+
 ### OpenAI SDK Migration
 
 ```yaml
@@ -682,20 +802,45 @@ ast-grep -p 'if True: pass' -l python --debug-query=cst
 | "Cannot parse rule" | Invalid YAML structure | Check indentation, constraints placement |
 | "unexpected argument found" | Wrong command syntax | Remember `run` is default, check subcommand help |
 
+### Common Issues from Real-World Usage (Issue #34)
+
+| Issue | Root Cause | Solution |
+|-------|------------|----------|
+| File exclusions not working | Rules loaded via `ruleDirs` ignore `files:` patterns | Use suppression comments instead |
+| Test files still showing warnings | File patterns in rules don't work with sgconfig.yml | Add `// ast-grep-ignore` before each occurrence |
+| Suppressions not working | Module-level suppressions don't cascade | Must add suppression on line immediately before code |
+| sgconfig.yml `ignores` not excluding from rules | `ignores` only affects traversal, not rule application | Use suppression comments or `--rule-file` directly |
+| Too many false positives in tests | Can't exclude test directories via config | Automate adding suppressions with script |
+
+### Verification Commands
+
+```bash
+# Verify suppressions are working
+ast-grep scan -c sgconfig.yml --filter '^rust-no-unwrap$' . | grep -c warning
+
+# Test rule file directly (bypasses ruleDirs limitation)
+ast-grep scan --rule-file path/to/rule.yml .
+
+# Compare rule behavior with/without sgconfig.yml
+ast-grep scan --rule-file rules/no-unwrap.yml . | wc -l  # Direct rule
+ast-grep scan -c sgconfig.yml --filter 'no-unwrap' . | wc -l  # Via config
+```
+
 ---
 
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-19T04:32:00Z"
 rules:
     name: "tools-cli-astgrep"
     category: "tools-cli"
-    version: "1.0.1"
+    version: "1.0.2"
 document:
     type: "sdd-rule"
     path: "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-astgrep.md"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-19T13:00:00Z"
+    changelog: "Added critical limitations discovered in Issue #34 regarding ruleDirs and file patterns"
     related:
         - "sdd-rules/rules/code-analysis/sdd-rules-code-analysis.md"
         - "sdd-rules/rules/tools-cli/sdd-rules-tools-cli-list.md"

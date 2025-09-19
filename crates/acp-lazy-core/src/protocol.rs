@@ -309,6 +309,7 @@ pub enum MessageType {
 
 #[cfg(test)]
 mod tests {
+    // ast-grep-ignore: rust-no-unwrap
     use super::*;
     use serde_json::json;
 
@@ -324,6 +325,7 @@ mod tests {
     #[test]
     fn test_request_serialization() {
         let request = Request::new(1, "test_method", Some(json!({"key": "value"})));
+        // ast-grep-ignore
         let json = serde_json::to_string(&request).unwrap();
         assert!(json.contains(r#""jsonrpc":"2.0""#));
         assert!(json.contains(r#""id":1"#));
@@ -333,6 +335,7 @@ mod tests {
     #[test]
     fn test_notification_serialization() {
         let notification = Notification::new("test_notification", None);
+        // ast-grep-ignore
         let json = serde_json::to_string(&notification).unwrap();
         assert!(json.contains(r#""jsonrpc":"2.0""#));
         assert!(!json.contains(r#""id""#));
@@ -342,6 +345,7 @@ mod tests {
     #[test]
     fn test_response_success() {
         let response = Response::success(RequestId::Number(1), json!({"result": "ok"}));
+        // ast-grep-ignore
         let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains(r#""result":"#));
         assert!(!json.contains(r#""error":"#));
@@ -351,6 +355,7 @@ mod tests {
     fn test_response_error() {
         let error = Error::method_not_found("unknown");
         let response = Response::error(RequestId::Number(1), error);
+        // ast-grep-ignore
         let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains(r#""error":"#));
         assert!(!json.contains(r#""result":"#));
@@ -367,6 +372,7 @@ mod tests {
             result: None,
             error: None,
         };
+        // ast-grep-ignore
         match msg.classify().unwrap() {
             MessageType::Request(req) => assert_eq!(req.method, "test"),
             _ => panic!("Expected request"),
@@ -381,6 +387,7 @@ mod tests {
             result: None,
             error: None,
         };
+        // ast-grep-ignore
         match msg.classify().unwrap() {
             MessageType::Notification(notif) => assert_eq!(notif.method, "notify"),
             _ => panic!("Expected notification"),

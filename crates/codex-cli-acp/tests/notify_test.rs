@@ -15,6 +15,7 @@ fn test_notify_forwarder_writes_to_file() -> Result<()> {
     let notify_path = temp_dir.path().join("notify.jsonl");
 
     // Set environment variables
+    // ast-grep-ignore
     std::env::set_var("ACPLB_NOTIFY_PATH", notify_path.to_str().unwrap());
     std::env::set_var("ACPLB_NOTIFY_KIND", "file");
 
@@ -53,6 +54,7 @@ fn test_notify_forwarder_writes_to_file() -> Result<()> {
     // Run forwarder
     let output = Command::new(forwarder_path)
         .arg(test_json.to_string())
+        // ast-grep-ignore
         .env("ACPLB_NOTIFY_PATH", notify_path.to_str().unwrap())
         .env("ACPLB_NOTIFY_KIND", "file")
         .output()?;
@@ -109,6 +111,7 @@ fn test_notify_forwarder_appends_to_existing_file() -> Result<()> {
 
     let output = Command::new(forwarder_path)
         .arg(test_json.to_string())
+        // ast-grep-ignore
         .env("ACPLB_NOTIFY_PATH", notify_path.to_str().unwrap())
         .env("ACPLB_NOTIFY_KIND", "file")
         .output()?;

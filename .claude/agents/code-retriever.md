@@ -117,7 +117,15 @@ Outputs (caller‑facing)
 - Inline: up to HEADLESS_DISPLAY_CAP findings with file:line and short snippet.
 - Artifacts: full JSON/JSONL/compact outputs saved; human run log in $HOME/.claude/runs/.
 
+Important Limitations (Issue #34)
+
+- **File patterns in rule YAML files are IGNORED when rules are loaded via ruleDirs in sgconfig.yml**
+- The `files:` field exclusions (e.g., `"!**/tests/**"`) DO NOT WORK with sgconfig.yml
+- To test rules with file patterns, use `--rule-file` directly: `ast-grep scan --rule-file path/to/rule.yml`
+- For excluding test code, suppression comments are required: `// ast-grep-ignore`
+
 Notes
 
 - Honors repo sgconfig.yml only when explicitly requested for AST rule IDs; default mode uses ad‑hoc patterns.
 - This sub‑agent never edits code and never runs scripts that apply fixes (e.g., sg-fix.sh).
+- When encountering many warnings in test files, recommend using suppression comments rather than trying to configure file exclusions.

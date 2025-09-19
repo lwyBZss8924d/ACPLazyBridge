@@ -567,7 +567,9 @@ mod tests {
         let out = server
             .process_message(&req.to_string())
             .await
+            // ast-grep-ignore
             .expect("rpc ok");
+        // ast-grep-ignore
         serde_json::from_str(&out).expect("json ok")
     }
 
