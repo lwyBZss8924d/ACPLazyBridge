@@ -2,6 +2,10 @@
 # Convert ast-grep JSON output to SARIF format
 # Usage: ast-grep scan --json | jq -f scripts/ci/json-to-sarif.jq > results.sarif
 
+# First, collect unique rules and create a mapping
+. as $input |
+($input | [.[] | .rule_id] | unique) as $rule_ids |
+
 {
   "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
   "version": "2.1.0",
@@ -13,31 +17,34 @@
           "version": "0.x.x",
           "informationUri": "https://ast-grep.github.io/",
           "rules": (
-            # Extract unique rules from all results
-            [.[] | {
-              id: .rule_id,
-              name: .rule_id,
+            # Create rules array with proper indices
+            $rule_ids | to_entries | map({
+              id: .value,
+              name: .value,
               shortDescription: {
-                text: .message
+                text: "ast-grep rule: \(.value)"
               },
               fullDescription: {
-                text: .message
+                text: "ast-grep rule: \(.value)"
               },
               help: {
-                text: "ast-grep rule: \(.rule_id)",
-                markdown: "**ast-grep rule**: `\(.rule_id)`"
+                text: "ast-grep rule: \(.value)",
+                markdown: "**ast-grep rule**: `\(.value)`"
               },
               properties: {
-                tags: ["ast-grep", .severity // "warning"]
+                tags: ["ast-grep", "warning"]
               }
-            }] | unique_by(.id)
+            })
           )
         }
       },
       "results": [
-        .[] | {
+        $input[] | . as $item | {
           ruleId: .rule_id,
-          ruleIndex: 0,
+          ruleIndex: (
+            # Find the index of this rule_id in the $rule_ids array
+            $rule_ids | to_entries | map(select(.value == $item.rule_id)) | .[0].key
+          ),
           level: (
             if .severity == "error" then "error"
             elif .severity == "warning" then "warning"
@@ -45,7 +52,7 @@
             end
           ),
           message: {
-            text: .message
+            text: (.message // "ast-grep violation")
           },
           locations: [
             {
@@ -55,16 +62,16 @@
                   uriBaseId: "%SRCROOT%"
                 },
                 region: {
-                  startLine: .start_line,
-                  startColumn: .start_column,
-                  endLine: .end_line,
-                  endColumn: .end_column
+                  startLine: (.start_line // .line // 1),
+                  startColumn: (.start_column // .column // 1),
+                  endLine: (.end_line // .start_line // .line // 1),
+                  endColumn: (.end_column // .start_column // .column // 1)
                 }
               }
             }
           ],
           partialFingerprints: {
-            primaryLocationLineHash: "\(.file):\(.start_line):\(.rule_id)"
+            primaryLocationLineHash: "\(.file):\(.start_line // .line // 1):\(.rule_id)"
           }
         }
       ],

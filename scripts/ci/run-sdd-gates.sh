@@ -170,7 +170,7 @@ main() {
     section "7. SPECIFICATION DIRECTORY CHECK"
     if [ -d "specs" ]; then
         info "✓ specs directory exists"
-        spec_count=$(find specs -maxdepth 1 -type d -name "[0-9]*" 2>/dev/null | wc -l | tr -d ' ')
+        spec_count=$(find "specs" -maxdepth 1 -type d -name "[0-9]*" 2>/dev/null | wc -l | tr -d ' ')
         if [ "$spec_count" -gt 0 ]; then
             info "✓ Found $spec_count specification(s)"
         else
@@ -190,7 +190,7 @@ main() {
 
     # 9. Check for NEEDS CLARIFICATION markers
     section "9. CHECKING FOR UNRESOLVED CLARIFICATIONS"
-    if grep -r "\[NEEDS CLARIFICATION\]" specs/ --include="*.md" 2>/dev/null; then
+    if grep -r "\[NEEDS CLARIFICATION\]" "specs/" --include="*.md" 2>/dev/null; then
         warn "Found [NEEDS CLARIFICATION] markers in specifications"
     else
         info "✓ No unresolved clarification markers"

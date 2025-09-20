@@ -94,7 +94,9 @@
       "Bash(scripts/sdd/validate_structure.py specs/035-ci-add-sdd/)",
       "Bash(scripts/sdd/validate_structure.py:*)",
       "Bash(cp:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh issue comment:*)"
     ],
     "deny": [],
     "ask": []

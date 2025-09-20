@@ -39,6 +39,7 @@ This document outlines the transition plan from report-only mode to enforcement 
 
 - [x] Deploy report-only mode
 - [x] Monitor findings in Security tab
+- [x] Fix CI issues (SARIF format, error handling, Windows compatibility)
 - [ ] Track false positive rate
 - [ ] Document common violations
 

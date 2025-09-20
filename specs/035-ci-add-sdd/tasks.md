@@ -94,7 +94,7 @@ commits:
 - [x] T011 Add SARIF conversion step using jq script in ast-grep-scan job
 - [x] T012 Add SARIF upload step using `github/codeql-action/upload-sarif@v3`
 - [x] T013 Add typos-check job with typos-cli installation via `taiki-e/install-action@v2`
-- [x] T014 Update test-matrix job to include Windows and macOS runners
+- [x] T014 Update test-matrix job to include ~~Windows and~~ macOS runners (Windows temporarily excluded)
 - [x] T015 Add permissions block for security-events: write to workflow
 
 ### Script Integration
