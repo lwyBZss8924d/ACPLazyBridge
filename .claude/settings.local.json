@@ -103,7 +103,10 @@
       "Read(///**)",
       "Bash(./scripts/ci/run-sdd-gates.sh:*)",
       "Bash(jq:*)",
-      "Bash(./scripts/sdd/check-markdown.sh:*)"
+      "Bash(./scripts/sdd/check-markdown.sh:*)",
+      "Bash(./scripts/sdd/fix-markdown.sh:*)",
+      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json --fix --dry-run)",
+      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json --fix)"
     ],
     "deny": [],
     "ask": []
