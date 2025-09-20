@@ -7,6 +7,7 @@ created: 2025-09-19
 last_updated: 2025-09-19
 status: planning
 input: Feature specification from `/specs/035-ci-add-sdd/spec.md`
+issue_url: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
 spec_uri: specs/035-ci-add-sdd/spec.md
 plan_uri: specs/035-ci-add-sdd/plan.md
 tasks_uri: specs/035-ci-add-sdd/tasks.md

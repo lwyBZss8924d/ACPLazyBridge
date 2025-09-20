@@ -212,3 +212,16 @@ value.unwrap()
 ---
 
 ⚠️ _This procedure follows SDD principles from `.specify/memory/constitution.md`_
+
+```yaml
+worktree: /Users/arthur/dev-space/acplb-worktrees/ci-sdd-gates
+feature_branch: 035-ci-add-sdd
+created: 2025-09-20
+last_updated: 2025-09-20
+status: complete
+spec_uri: specs/035-ci-add-sdd/spec.md
+plan_uri: specs/035-ci-add-sdd/plan.md
+tasks_uri: specs/035-ci-add-sdd/tasks.md
+issue_url: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
+evidence_uris: _artifacts/035-ci-add-sdd/
+```

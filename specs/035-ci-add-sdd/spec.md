@@ -7,7 +7,7 @@ created: 2025-09-19
 last_updated: 2025-09-19
 status: draft
 input: User description: "CI: Add SDD gates and ast-grep scanning (report→enforce) - Integrate SDD quality gates and ast-grep into CI. This is complementary to Issue #31 and will start in report-only mode, then flip to gating after #31 lands."
-issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
+issue_url: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
 specs:
     constitution: 1.0.1
     type: spec

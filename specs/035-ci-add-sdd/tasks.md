@@ -7,14 +7,17 @@ created: 2025-09-19
 last_updated: 2025-09-19
 status: in-progress
 input: Design documents from `/specs/035-ci-add-sdd/`
+issue_url: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
 spec_uri: specs/035-ci-add-sdd/spec.md
 plan_uri: specs/035-ci-add-sdd/plan.md
 tasks_uri: specs/035-ci-add-sdd/tasks.md
 evidence_uris: _artifacts/035-ci-add-sdd/
 prerequisites:
     plan: plan.md (required)
-    research: research.md
-    quickstart: quickstart.md
+    research: specs/035-ci-add-sdd/research.md
+    quickstart: specs/035-ci-add-sdd/quickstart.md
+    transition: specs/035-ci-add-sdd/transition.md
+    enforcement: specs/035-ci-add-sdd/enforcement.md
 specs:
     constitution: 1.0.1
     type: tasks
@@ -23,9 +26,6 @@ commits:
     commit: pending
     last_commit: pending
 ```
-
-**Input**: Design documents from `/specs/035-ci-add-sdd/`
-**Prerequisites**: plan.md (required), research.md, quickstart.md
 
 ## Execution Flow (main)
 
