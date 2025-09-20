@@ -81,6 +81,7 @@ npx --yes markdownlint-cli2@latest "**/*.md" --config .markdownlint.json --fix
 ### Phase 2: High-Priority Manual Fixes (Session 1)
 
 Target: Critical path documentation
+
 - `specs/` directory (affects SDD workflow)
 - `.specify/` directory (SDD meta-documentation)
 - Root documentation files (README.md, CONTRIBUTING.md, CLAUDE.md)
@@ -91,6 +92,7 @@ Time estimate: 2-3 hours
 ### Phase 3: SDD Rules Documentation (Session 2)
 
 Target: SDD rules and guidance
+
 - `sdd-rules/` directory
 - Focus on rule documentation consistency
 
@@ -100,6 +102,7 @@ Time estimate: 3-4 hours
 ### Phase 4: Developer Documentation (Session 3)
 
 Target: Engineering and review documentation
+
 - `dev-docs/` directory
 - `_artifacts/` documentation
 
@@ -113,6 +116,7 @@ Time estimate: 2-3 hours
 The `.claude/agents/sdd-doc-validator.md` sub-agent has been created to manage this process:
 
 1. **Automatic fixing**:
+
    ```bash
    # Bypass buggy fix-markdown.sh
    npx --yes markdownlint-cli2@latest "**/*.md" --config .markdownlint.json --fix
