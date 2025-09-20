@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches:
+      - feature/**
+      - fix/**
+      - perf/**
+      - chore/**
+      - docs/**
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (deny warnings)
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+      - name: Tests
+        run: cargo test --workspace --all-features --locked
+
+      - name: SDD structure lint
+        run: bash scripts/ci/run-sdd-structure-lint.sh
+
+      - name: Language policy check (normative artifacts)
+        run: bash scripts/ci/check-language-policy.sh
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Protocol scenarios (JSONL replay)
+        id: scenarios
+        shell: bash
+        run: |
+          set -euo pipefail
+          if compgen -G "dev-docs/review/_artifacts/tests/*.jsonl" > /dev/null; then
+            mkdir -p _ci_artifacts/protocol
+            for f in dev-docs/review/_artifacts/tests/*.jsonl; do
+              out="_ci_artifacts/protocol/$(basename "$f").out.jsonl"
+              echo "Running scenario: $f"
+              RUST_LOG=info cargo run -p codex-cli-acp --bin codex-cli-acp < "$f" | tee "$out" | jq -c . >/dev/null
+            done
+          else
+            echo "No protocol scenarios found, skipping."
+          fi
+
+      - name: Upload protocol artifacts
+        if: ${{ hashFiles('dev-docs/review/_artifacts/tests/*.jsonl') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: protocol-outputs
+          path: _ci_artifacts/protocol
+
