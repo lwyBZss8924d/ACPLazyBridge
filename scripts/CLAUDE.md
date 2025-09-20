@@ -47,7 +47,7 @@ For comprehensive SDD workflow details, see **[../.specify/CLAUDE.md](../.specif
 
 | Script | Purpose | Validates |
 |--------|---------|-----------|
-| `validate_structure.py` | Check spec/plan/tasks structure | Directory layout |
+| `validate-sdd-docs.sh` | Check spec/plan/tasks structure | YAML metadata, templates |
 | `check_language.sh` | Language policy enforcement | English-only normative |
 | `check-markdown.sh` | Markdown quality check | MD format compliance |
 | `fix-markdown.sh` | Auto-fix markdown issues | Linting corrections |
@@ -234,6 +234,14 @@ scripts/sdd/check-task-prerequisites.sh --json
 # Creates: tasks.md with executable, ordered task list
 ```
 
+### /sdd-task Command Integration
+
+```bash
+# Called by: /sdd-task <issue-number> (see ../.specify/commands/sdd-task.md)
+gh issue view "$1" --json title,body,number,url,state,labels
+# Creates: Worktree, branch from issue, triggers full SDD workflow
+```
+
 ## Metadata Management
 
 ### YAML Metadata Format
@@ -248,7 +256,7 @@ document:
     type: "claude-memory"  # or sdd-rule, sdd-command, etc.
     path: "./path/to/doc.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-20T08:02:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
 ```
@@ -392,7 +400,10 @@ ast-grep scan -c sgconfig.yml . 2>&1 | tee dev-docs/review/_artifacts/reports/<t
 # From repo root
 ./scripts/sdd/create-new-feature.sh "Chat system"
 ./scripts/ci/run-local-ci.sh
-python scripts/sdd/validate_structure.py
+./scripts/sdd/validate-sdd-docs.sh
+
+# Run shell-based validation
+./scripts/sdd/validate-sdd-docs.sh
 
 # With environment variables
 SKIP_TESTS=1 ./scripts/ci/run-local-ci.sh
@@ -457,7 +468,7 @@ document:
     type: "claude-memory"
     path: "./scripts/CLAUDE.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-20T08:02:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

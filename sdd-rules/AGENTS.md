@@ -76,7 +76,7 @@ root path: (`scripts/sdd/`)
   "Fix-Markdown": "fix-markdown.sh",
   "Lint-Docs": "lint_docs.sh",
   "Setup-Plan": "setup-plan.sh",
-  "Validate-Structure": "validate_structure.py"
+  "Validate-SDD-Docs": "validate-sdd-docs.sh"
 }
 ```
 
@@ -230,6 +230,7 @@ work in: (specs/)
 - /specify — generate a new feature specification and branch/worktree; see sdd-rules/commands/specify.md
 - /plan — create implementation plan and design docs; see sdd-rules/commands/plan.md
 - /tasks — derive executable tasks from the plan; see sdd-rules/commands/tasks.md
+- /sdd-task — initialize SDD task from GitHub issue; see .specify/commands/sdd-task.md
 Notes:
 - Use these commands to maintain the spec → plan → tasks flow described in (.specify/spec-driven.md) and (.specify/memory/lifecycle.md).
 
@@ -439,7 +440,7 @@ permissions:
 ### New Feature Workflow (spec → plan → tasks → code)
 
 1. **warp**: Co‑define requirements with human devs; capture the WHAT and WHY (no HOW). If needed, open/triage a GitHub Issue.
-2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify`.
+2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify` or `/sdd-task <issue>` for issue-based initialization.
 3. **claude**: Generate implementation plan via `/plan`, producing `plan.md`, and supporting docs (`data-model.md`, `contracts/`, `research.md`, `quickstart.md`).
 4. **warp**: Validate plan against SDD gates (Simplicity, Anti‑Abstraction, Integration‑First, Test‑First). Mark ambiguities as `[NEEDS CLARIFICATION]`.
    - Library‑First Gate (Article I):
@@ -1387,7 +1388,7 @@ document:
     type: "agents-memory"
     path: "./sdd-rules/AGENTS.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-20T08:02:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

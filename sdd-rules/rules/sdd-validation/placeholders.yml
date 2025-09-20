@@ -1,0 +1,20 @@
+id: sdd-placeholders
+language: generic
+message: Unresolved placeholder found in document
+severity: warning
+note: |
+  SDD documents should not have unresolved placeholders like [PLACEHOLDER], [FEATURE NAME], [DATE], etc.
+  These should be replaced with actual values before PR submission.
+
+rule:
+  any:
+    - regex: '\[PLACEHOLDER[^\]]*\]'
+    - regex: '\[FEATURE NAME\]'
+    - regex: '\[FEATURE\]'
+    - regex: '\[DATE\]'
+    - regex: '\[STATUS\]'
+    - regex: '\[WORKTREE-PATH\]'
+    - regex: '\[###-feature-name\]'
+
+fix:
+  note: "Replace placeholder with actual value"

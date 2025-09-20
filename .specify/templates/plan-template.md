@@ -233,6 +233,27 @@ _This section describes what the /tasks command will do - DO NOT execute during 
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
+## Pre-PR Validation
+
+_Quality gates before submitting pull request_
+
+**SDD Document Validation**:
+
+- [ ] Run `scripts/sdd/validate-sdd-docs.sh` to check:
+    - YAML frontmatter syntax and required fields
+    - Document structure matches templates
+    - No unresolved [NEEDS CLARIFICATION] markers
+    - No placeholder values ([FEATURE NAME], [DATE], etc.)
+- [ ] Run `scripts/sdd/validate-metadata.sh` for metadata consistency
+- [ ] Run `scripts/sdd/check-sdd-consistency.sh` for global consistency
+
+**Code Quality Gates**:
+
+- [ ] All tests pass (`cargo test --workspace`)
+- [ ] Format check (`cargo fmt --all -- --check`)
+- [ ] Lint check (`cargo clippy --workspace --all-targets`)
+- [ ] AST-grep scan (`ast-grep scan -c sgconfig.yml`)
+
 ## Phase 3+: Future Implementation
 
 _These phases are beyond the scope of the /plan command_
@@ -240,6 +261,7 @@ _These phases are beyond the scope of the /plan command_
 **Phase 3**: Task execution (/tasks command creates tasks.md)
 **Phase 4**: Implementation (execute tasks.md following constitutional principles)
 **Phase 5**: Validation (run tests, execute quickstart.md, performance validation)
+**Phase 6**: Pre-PR validation (run all checks above)
 
 ## Complexity Tracking
 

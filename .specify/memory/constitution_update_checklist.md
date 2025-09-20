@@ -12,6 +12,7 @@ dependent documents are updated to maintain consistency.
 - [ ] `.specify/templates/tasks-template.md` - Update if new task types needed
 - [ ] `/.claude/commands/plan.md` - Update if planning process changes
 - [ ] `/.claude/commands/tasks.md` - Update if task generation affected
+- [ ] `/.claude/commands/sdd-task.md` - Update if issue initialization changes
 - [ ] `/CLAUDE.md` - Update runtime development guidelines
 - [ ] `/WARP.md` - Update runtime development guidelines
 - [ ] `/AGENTS.md` - Update runtime development guidelines (if have any)
@@ -184,7 +185,7 @@ The validation script is automatically run in CI:
 - Markdown lint issues: multiple H1s, missing blank lines, long lines without breaks
 - Inconsistent CLAUDE.md metadata formats across directories
 - Missing Constitution version updates in CLAUDE.md files
-- Command documentation (`/commands/*.md`)
+- Command documentation (`.specify/commands/*.md`, including new `/sdd-task` command)
 - Checklist items in templates
 - Example code/commands
 - Domain-specific variations (web vs mobile vs CLI)
@@ -192,15 +193,16 @@ The validation script is automatically run in CI:
 
 ## Template Sync Status
 
-Last sync check: 2025-09-17
+Last sync check: 2025-09-20
 
 - Constitution version: 1.0.1
 - Templates aligned: ✓ All templates updated to Constitution 1.0.1
-- Commands aligned: ✓ All .specify/commands updated with frontmatter
+- Commands aligned: ✓ All .specify/commands updated with frontmatter (including /sdd-task)
 - Claude commands enabled: ✓ Available in .claude/commands
 - Scripts vendored: ✓ upstream/lib/common.sh from spec-kit
 - Language check coverage: ✓ Extended to all normative directories
 - CLAUDE.md files synchronized: ✓ All 12 files synchronized with Constitution 1.0.1
+- New /sdd-task command: ✓ Integrated into all SDD documentation
 
 ---
 
@@ -217,8 +219,8 @@ document:
     type: "constitution-checklist"
     path: ".specify/memory/constitution_update_checklist.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T12:00:00Z"
-    last_sync_check: "2025-09-17"
+    last_updated: "2025-09-20T07:58:23Z"
+    last_sync_check: "2025-09-20"
     dependencies:
         - ".specify/memory/constitution.md"
 ```

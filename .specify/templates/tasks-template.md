@@ -165,6 +165,54 @@ _GATE: Checked by main() before returning_
 - [ ] Each task specifies exact file path
 - [ ] No task modifies same file as another [P] task
 
+## Pre-PR Quality Gates
+
+_Add these tasks at the end of your task list_
+
+```markdown
+### T900-T999: Pre-PR Validation [P]
+
+- [ ] T900: Run SDD document validation [P]
+  ```bash
+  ./scripts/sdd/validate-sdd-docs.sh
+  ```
+
+  Evidence: _artifacts/<feature>/validation/sdd_docs_$(date +%Y%m%d_%H%M%S).log
+
+- [ ] T901: Validate metadata consistency [P]
+
+  ```bash
+  ./scripts/sdd/validate-metadata.sh --check-consistency
+  ```
+
+  Evidence: _artifacts/<feature>/validation/metadata_$(date +%Y%m%d_%H%M%S).log
+
+- [ ] T902: Run Rust quality gates [P]
+
+  ```bash
+  cargo fmt --all -- --check && \
+  cargo clippy --workspace --all-targets --all-features -- -D warnings && \
+  cargo test --workspace --all-features --locked
+  ```
+
+  Evidence: _artifacts/<feature>/tests/quality_gates_$(date +%Y%m%d_%H%M%S).log
+
+- [ ] T903: Run AST-grep code scan [P]
+
+  ```bash
+  ast-grep scan -c sgconfig.yml --json > _artifacts/<feature>/reports/ast_grep_$(date +%Y%m%d_%H%M%S).json
+  ```
+
+  Evidence: _artifacts/<feature>/reports/
+
+- [ ] T904: Verify no unresolved markers
+
+  ```bash
+  ! grep -r "NEEDS CLARIFICATION\|PLACEHOLDER\|TODO\|FIXME" specs/<feature>/ --include="*.md"
+  ```
+
+  Evidence: Clean scan required
+
 ## IMPORTANT TECHNICAL STANDARDS
 
 - [ACP](https://github.com/zed-industries/agent-client-protocol) - "ACPLazyBridge" follow `ACP` Protocol

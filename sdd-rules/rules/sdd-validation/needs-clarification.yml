@@ -1,0 +1,13 @@
+id: sdd-needs-clarification
+language: generic
+message: Unresolved clarification marker found
+severity: warning
+note: |
+  SDD documents should not have unresolved [NEEDS CLARIFICATION] markers.
+  These indicate incomplete specifications that need to be resolved before implementation.
+
+rule:
+  regex: '\[NEEDS CLARIFICATION[^\]]*\]'
+
+fix:
+  note: "Resolve the clarification and remove the marker"

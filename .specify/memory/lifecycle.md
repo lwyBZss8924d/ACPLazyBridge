@@ -28,9 +28,12 @@ Nodes and expected artifacts
    - PR description links Spec/Plan/Tasks and evidence; includes risks/rollback and CI summary
 
 7) CI (GitHub Actions + Code Scanning)
-   - Rust gates (fmt/clippy/test)
-   - JSONL replay (if scenarios exist)
-   - SDD structure + language checks
+   - Rust quality gates (fmt/clippy/test) across platforms (Ubuntu/macOS)
+   - JSONL replay validation (protocol scenarios)
+   - SDD validation gates (structure/language/semantic checks)
+   - AST-grep code scanning with SARIF upload to GitHub Security
+   - Report-only mode (current) → Enforcement mode (after Issue #31)
+   - Evidence collection and artifact upload
 
 8) PR review & merge
    - CODEOWNERS review; squash merge into main
@@ -77,6 +80,7 @@ work in: (specs/)
 - /specify — generate a new feature specification and branch/worktree; see sdd-rules/commands/specify.md
 - /plan — create implementation plan and design docs; see sdd-rules/commands/plan.md
 - /tasks — derive executable tasks from the plan; see sdd-rules/commands/tasks.md
+- /sdd-task — initialize SDD task from GitHub issue; see .specify/commands/sdd-task.md
 
 Notes:
 
@@ -134,9 +138,10 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 
 - scripts/ci/run-local-ci.sh — runs structure, language, markdown, semantic, and metadata checks
 - Or on macOS, run individually:
-    - scripts/sdd/check_language.sh
-    - scripts/sdd/lint_docs.sh
-    - scripts/sdd/run_semantic_checks.sh
+    - scripts/sdd/validate-sdd-docs.sh — comprehensive SDD document validation (templates, metadata, structure)
+    - scripts/sdd/check_language.sh — English-only policy enforcement
+    - scripts/sdd/lint_docs.sh — markdown linting
+    - scripts/sdd/run_semantic_checks.sh — cross-reference validation
     - scripts/sdd/validate-metadata.sh — validate YAML metadata format
     - scripts/sdd/check-sdd-consistency.sh — check global consistency
 
@@ -159,7 +164,7 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 #### New Feature Workflow (spec → plan → tasks → code)
 
 1. **warp**: Co‑define requirements with human devs; capture the WHAT and WHY (no HOW). If needed, open/triage a GitHub Issue.
-2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify`.
+2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify` or `/sdd-task <issue>` for issue-based initialization.
 3. **claude**: Generate implementation plan via `/plan`, producing `plan.md`, and supporting docs (`data-model.md`, `contracts/`, `research.md`, `quickstart.md`).
 4. **warp**: Validate plan against SDD gates (Simplicity, Anti‑Abstraction, Integration‑First, Test‑First). Mark ambiguities as `[NEEDS CLARIFICATION]`.
    - Library‑First Gate (Article I):
@@ -230,7 +235,7 @@ Purpose: keep specifications, plans, tasks, and CI checks aligned with reality a
    - PR merged to main; upstream template changes; ecosystem/library updates; constitution amendments; recurring drift or semantic alerts.
 
 2. **Detection & Audit (local/CI)**
-   - Run `scripts/ci/run-local-ci.sh` or `specify doctor` to execute:
+   - Run `scripts/ci/run-local-ci.sh` or enhanced `scripts/ci/run-sdd-gates.sh` to execute:
      - SDD structure lint (required directories, files)
      - Language policy (English‑only for normative artifacts)
      - Markdown lint (style, links)
@@ -238,6 +243,7 @@ Purpose: keep specifications, plans, tasks, and CI checks aligned with reality a
      - Semantic checks (broken cross‑refs, placeholders, `[NEEDS CLARIFICATION]`)
      - **Metadata validation** (`scripts/sdd/validate-metadata.sh`): YAML syntax, required fields, constitution version
      - **Consistency checks** (`scripts/sdd/check-sdd-consistency.sh`): document dependencies, cross-references
+     - **AST-grep scanning** (`ast-grep scan -c sgconfig.yml`): code quality rules with SARIF reporting
      - Library‑First conformance (Article I): library modules present; packaging/build targets configured
      - CLI conformance (Article II): entrypoints exist and are executable; `--help` output matches documented usage/examples
      - Integration Testing conformance (Article IV): integration tests present and passing
@@ -329,13 +335,16 @@ constitution:
     last_amended: "2025-09-15"
 document:
     type: "constitution-lifecycle"
-    path: ".specify/memory/constitution.md"
-    version: "1.0.1"
-    last_updated: "2025-09-17T10:00:00Z"
+    path: ".specify/memory/lifecycle.md"
+    version: "1.0.3"
+    last_updated: "2025-09-20T09:30:00Z"
+    changelog: "Added validate-sdd-docs.sh for comprehensive SDD document validation"
     dependencies:
         - ".specify/memory/constitution.md"
         - "sdd-rules/rules/README.md"
         - ".specify/templates/spec-template.md"
         - ".specify/templates/plan-template.md"
         - ".specify/templates/tasks-template.md"
+        - ".github/workflows/ci.yml"
+        - "scripts/sdd/validate-sdd-docs.sh"
 ```

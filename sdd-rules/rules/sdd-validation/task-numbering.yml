@@ -1,0 +1,15 @@
+id: sdd-task-numbering
+language: generic
+message: Task should follow T### numbering format
+severity: info
+note: |
+  SDD tasks should be numbered as T001, T002, T003, etc. for clear tracking.
+  Parallel tasks should be marked with [P] suffix.
+
+rule:
+  regex: '^- \[ \] T\d{3}:'
+
+constraints:
+  - kind: markdown
+  - has:
+      kind: list_item

@@ -24,8 +24,8 @@ This directory contains all automation scripts that power the ACPLazyBridge deve
 # Check code quality with AST-grep
 ./scripts/ast-grep/sg-scan.sh
 
-# Validate SDD structure
-python scripts/sdd/validate_structure.py
+# Validate SDD documents
+./scripts/sdd/validate-sdd-docs.sh
 ```
 
 ## Directory Structure
@@ -36,7 +36,7 @@ scripts/
 │   ├── create-new-feature.sh      # Initialize features
 │   ├── setup-plan.sh              # Create plans
 │   ├── check-task-prerequisites.sh # Validate tasks
-│   ├── validate_structure.py      # Structure validation
+│   ├── validate-sdd-docs.sh      # SDD document validation
 │   ├── check_language.sh          # Language policy
 │   ├── run_semantic_checks.sh     # Link validation
 │   ├── check-markdown.sh          # Markdown checks
@@ -74,7 +74,7 @@ scripts/
 | `create-new-feature.sh` | Initialize new feature with spec, branch, and directory | `./scripts/sdd/create-new-feature.sh "feature description"` |
 | `setup-plan.sh` | Bootstrap implementation plan structure | `./scripts/sdd/setup-plan.sh [--json]` |
 | `check-task-prerequisites.sh` | Validate task prerequisites exist | `./scripts/sdd/check-task-prerequisites.sh [--json]` |
-| `validate_structure.py` | Validate SDD directory structure | `python scripts/sdd/validate_structure.py` |
+| `validate-sdd-docs.sh` | Validate SDD documents against templates | `./scripts/sdd/validate-sdd-docs.sh` |
 | `check_language.sh` | Enforce English-only in normative docs | `./scripts/sdd/check_language.sh` |
 | `run_semantic_checks.sh` | Validate cross-references and links | `./scripts/sdd/run_semantic_checks.sh` |
 | `check-markdown.sh` | Check markdown file quality | `./scripts/sdd/check-markdown.sh` |
@@ -379,7 +379,7 @@ command -v python3 || echo "Install Python 3"
 
 # Validation
 ./scripts/ci/run-local-ci.sh                  # Full CI suite
-python scripts/sdd/validate_structure.py      # SDD structure
+./scripts/sdd/validate-sdd-docs.sh            # SDD documents
 ./scripts/ast-grep/sg-scan.sh                 # Code analysis
 
 # Fixes

@@ -91,7 +91,7 @@ ACPLazyBridge/scripts/
 │   ├── create-new-feature.sh   # Initialize features
 │   ├── setup-plan.sh           # Create plans
 │   ├── check-task-prerequisites.sh  # Validate tasks
-│   ├── validate_structure.py   # Structure validation
+│   ├── validate-sdd-docs.sh    # SDD document validation
 │   ├── check_language.sh       # Language policy
 │   ├── run_semantic_checks.sh  # Link validation
 │   ├── check-markdown.sh       # Markdown checks
@@ -243,7 +243,7 @@ permissions:
 ### New Feature Workflow (spec → plan → tasks → code)
 
 1. **warp**: Co‑define requirements with human devs; capture the WHAT and WHY (no HOW). If needed, open/triage a GitHub Issue.
-2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify`.
+2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify` or `/sdd-task <issue>` for issue-based initialization.
 3. **claude**: Generate implementation plan via `/plan`, producing `plan.md`, and supporting docs (`data-model.md`, `contracts/`, `research.md`, `quickstart.md`).
 4. **warp**: Validate plan against SDD gates (Simplicity, Anti‑Abstraction, Integration‑First, Test‑First). Mark ambiguities as `[NEEDS CLARIFICATION]`.
    - Library‑First Gate (Article I):
@@ -768,7 +768,7 @@ document:
     type: "claude-memory"
     path: "./sdd-rules/CLAUDE.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-20T08:02:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

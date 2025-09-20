@@ -33,7 +33,8 @@ Templates (templates/*.md)
 ├── commands/                   # SDD command implementations
 │   ├── specify.md             # /specify command documentation
 │   ├── plan.md               # /plan command documentation
-│   └── tasks.md              # /tasks command documentation
+│   ├── tasks.md              # /tasks command documentation
+│   └── sdd-task.md           # /sdd-task command documentation
 │
 ├── templates/                  # Document templates for SDD artifacts
 │   ├── spec-template.md      # Specification template (WHAT/WHY)
@@ -91,7 +92,7 @@ The heart of SDD governance, containing:
 
 ### Command System (`commands/`)
 
-Implements the three core SDD commands:
+Implements the core SDD commands:
 
 1. **`/specify`** - Initialize new feature specifications
    - Creates branch and spec directory
@@ -107,6 +108,12 @@ Implements the three core SDD commands:
    - Derives tasks from plan
    - Orders by dependencies
    - Marks parallelizable work
+
+4. **`/sdd-task`** - Initialize from GitHub issue
+   - Fetches issue details via `gh` CLI
+   - Creates worktree and branch from issue
+   - Generates initial SDD artifacts
+   - Links to issue tracking
 
 ### Templates (`templates/`)
 
@@ -214,9 +221,10 @@ The nine articles that govern all SDD development:
 /specify "Feature description"    # Start new feature
 /plan "Technical approach"        # Create plan
 /tasks                            # Generate tasks
+/sdd-task <issue-number>          # Start from GitHub issue
 
 # Validation commands
-./scripts/sdd/validate_structure.py        # Check SDD structure
+./scripts/sdd/validate-sdd-docs.sh         # Check SDD documents
 ./scripts/sdd/validate-claude-md.sh        # Validate CLAUDE.md files
 ./scripts/ci/run-local-ci.sh              # Run all CI checks
 ```
@@ -288,6 +296,6 @@ Regular maintenance includes:
 ```yaml
 Constitution version: 1.0.1
 Document: .specify/README.md
-Document version: 1.0.1
-Last Updated: 2025-09-17
+Document version: 1.0.2
+Last Updated: 2025-09-20
 ```

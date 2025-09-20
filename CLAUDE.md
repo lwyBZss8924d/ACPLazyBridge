@@ -163,7 +163,7 @@ Options:
 scripts/ci/run-local-ci.sh
 
 # Run individual checks
-scripts/sdd/validate_structure.py
+scripts/sdd/validate-sdd-docs.sh
 scripts/sdd/run_semantic_checks.sh
 scripts/sdd/check_language.sh
 ```
@@ -275,7 +275,7 @@ root path: (`scripts/sdd/`)
   "Fix-Markdown": "fix-markdown.sh",
   "Lint-Docs": "lint_docs.sh",
   "Setup-Plan": "setup-plan.sh",
-  "Validate-Structure": "validate_structure.py"
+  "Validate-SDD-Docs": "validate-sdd-docs.sh"
 }
 ```
 
@@ -434,6 +434,7 @@ work in: (specs/)
 - `/specify` — generate a new feature specification and branch/worktree; see sdd-rules/commands/specify.md
 - `/plan` — create implementation plan and design docs; see sdd-rules/commands/plan.md
 - `/tasks` — derive executable tasks from the plan; see sdd-rules/commands/tasks.md
+- `/sdd-task` — initialize SDD task from GitHub issue; see .specify/commands/sdd-task.md
 
 > Notes:
 > Use these commands to maintain the spec → plan → tasks flow described in (.specify/spec-driven.md) and (.specify/memory/lifecycle.md).
@@ -615,8 +616,8 @@ constitution:
 document:
     type: "claude-memory"
     path: "./CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    version: "1.0.2"
+    last_updated: "2025-09-20T07:27:35Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

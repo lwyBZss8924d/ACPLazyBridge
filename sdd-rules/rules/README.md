@@ -13,6 +13,7 @@ This index links to the baseline SDD rules for the Developer Team AI Engineers.
 ### ci
 
 - sdd-rules/rules/ci/sdd-rules-ci.md
+    - sdd-rules/rules/ci/claude-code-github-actions.md
 
 ### code-analysis
 

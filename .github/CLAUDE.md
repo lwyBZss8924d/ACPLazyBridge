@@ -26,7 +26,7 @@ Key GitHub-specific SDD integration points:
 SDD Workflow for GitHub:
 
 ```text
-Feature Request (Issue) → /specify → spec.md → /plan → plan.md → /tasks → tasks.md → PR → Review → Merge
+Feature Request (Issue) → /sdd-task or /specify → spec.md → /plan → plan.md → /tasks → tasks.md → PR → Review → Merge
 ```
 
 All PRs must pass:
@@ -208,34 +208,65 @@ Define review requirements:
 ### Required Checks
 
 ```yaml
-sdd-checks:
-  - structure-lint
-  - language-policy
-  - template-validation
-  - semantic-checks
-
-quality-gates:
+# Core jobs (GitHub Actions workflow)
+build-test:
   - cargo-fmt
   - cargo-clippy
   - cargo-test
-  - coverage-threshold
+  - cross-platform (ubuntu, macos)
 
-evidence-collection:
-  - test-artifacts
-  - execution-logs
-  - performance-metrics
+sdd-checks:
+  - structure-lint
+  - language-policy
+  - protocol-scenarios
+  - semantic-checks
+
+ast-grep-scan:
+  - code-quality-scan
+  - sarif-conversion
+  - github-security-upload
+  - report-only-mode (current)
+
+typos-check:
+  - documentation-quality
 ```
+
+### AST-grep Code Scanning
+
+**Current Mode**: Report-only (continue-on-error: true)
+**Future Mode**: Enforcement (after Issue #31)
+
+Active rule categories:
+- Rust: no-unwrap, no-dbg, todo-comment, mutex-lock
+- JavaScript: no-console-log, no-only-in-tests
+- Python: no-print, no-pdb
+- Go: no-fmt-println
+
+Results uploaded to GitHub Security tab via SARIF format.
+
+### Enhanced SDD Gates
+
+`scripts/ci/run-sdd-gates.sh` orchestrates:
+1. Structure validation
+2. Language policy checks
+3. Markdown linting
+4. Semantic validation
+5. Template drift detection
+6. Error aggregation
 
 ### Artifact Management
 
-```bash
-# Upload evidence artifacts (check both locations)
-- uses: actions/upload-artifact@v3
+```yaml
+# Upload evidence artifacts
+- uses: actions/upload-artifact@v4
   with:
-    name: evidence-<task>
-    path: |
-      _artifacts/<task>/
-      dev-docs/review/_artifacts/<task>/
+    name: <category>-<timestamp>
+    path: <artifact-path>
+
+# Categories:
+# - protocol-outputs: JSONL validation results
+# - ast-grep-results: JSON findings and SARIF reports
+# - test-evidence: Execution logs and coverage
 ```
 
 ## GitHub Actions Secrets
@@ -312,13 +343,15 @@ Based on:
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-20T16:00:00Z"
 document:
     type: "claude-memory"
     path: ".github/CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    version: "1.1.0"
+    last_updated: "2025-09-20T16:00:00Z"
+    changelog: "Updated CI/CD Integration section following PR #36"
     dependencies:
         - ".specify/memory/constitution.md"
         - "./CLAUDE.md"
+        - ".github/workflows/ci.yml"
 ```

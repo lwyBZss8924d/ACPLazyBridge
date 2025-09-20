@@ -11,7 +11,6 @@
       "mcp__serena__write_memory",
       "mcp__serena__think_about_whether_you_are_done",
       "Bash(chmod:*)",
-      "Bash(python scripts/sdd/validate_structure.py:*)",
       "Bash(python -m pytest tests/ -v)",
       "Bash(python -m pytest tests/test_sdd_validation.py -v)",
       "Bash(./scripts/sdd/run_semantic_checks.sh:*)",
@@ -86,13 +85,23 @@
       "Read(//Users/arthur/dev-space/acplb-worktrees/issue-templates-sdd-29/**)",
       "Bash(tee:*)",
       "Bash(ruby:*)",
-      "Bash(./scripts/sdd/validate_structure.py)",
       "Bash(gh pr view:*)",
       "mcp__ide__getDiagnostics",
       "Bash(git pull:*)",
       "Bash(git worktree remove:*)",
       "Bash(git worktree:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(python -m flake8:*)",
+      "Bash(python3 -m flake8:*)",
+      "Bash(.claude/hooks/inject-datetime.sh:*)",
+      "Bash(.claude/hooks/validate-sdd-compliance.sh:*)",
+      "Bash(.claude/hooks/sdd-task-fetch.sh:*)",
+      "Bash(python3:*)",
+      "Bash(./scripts/sdd/validate-sdd-docs.sh:*)",
+      "Bash(yq eval:*)",
+      "Bash(timeout:*)",
+      "Read(///**)",
+      "Bash(./scripts/ci/run-sdd-gates.sh:*)"
     ],
     "deny": [],
     "ask": []
@@ -100,5 +109,41 @@
   "enabledMcpjsonServers": [
     "context7",
     "deepwiki"
-  ]
+  ],
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/inject-datetime.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/validate-sdd-compliance.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-sdd-check.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
 }

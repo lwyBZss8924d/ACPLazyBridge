@@ -1,0 +1,19 @@
+id: sdd-todo-markers
+language: generic
+message: TODO/FIXME/XXX marker found in SDD document
+severity: info
+note: |
+  SDD specification documents should be complete before implementation.
+  TODO markers indicate incomplete planning that should be resolved.
+
+rule:
+  any:
+    - regex: '\bTODO\b'
+    - regex: '\bFIXME\b'
+    - regex: '\bXXX\b'
+    - regex: '\bHACK\b'
+
+constraints:
+  - inside:
+      stopBy: end
+      kind: comment

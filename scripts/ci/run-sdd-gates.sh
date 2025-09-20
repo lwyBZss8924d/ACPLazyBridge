@@ -93,15 +93,15 @@ main() {
         fi
     fi
 
-    # 4. Python SDD Structure Validation
-    section "4. PYTHON SDD STRUCTURE VALIDATION"
-    if [ -f "scripts/sdd/validate_structure.py" ]; then
-        info "Running Python structure validation"
-        if ! python3 scripts/sdd/validate_structure.py .; then
-            err "Python structure validation failed"
+    # 4. SDD Document Validation
+    section "4. SDD DOCUMENT VALIDATION"
+    if [ -f "scripts/sdd/validate-sdd-docs.sh" ]; then
+        info "Running SDD document validation"
+        if ! scripts/sdd/validate-sdd-docs.sh; then
+            err "SDD document validation failed"
         fi
     else
-        warn "Python structure validation script not found"
+        warn "SDD document validation script not found"
     fi
 
     # 5. Semantic Checks

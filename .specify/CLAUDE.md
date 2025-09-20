@@ -24,6 +24,16 @@ Idea → /specify → spec.md → /plan → plan.md → /tasks → tasks.md → 
 
 ### Phase Responsibilities
 
+#### 0. Issue Initialization Phase (`/sdd-task`)
+
+- **Trigger**: User provides GitHub issue number or URL
+- **My Actions**:
+  1. Execute `gh issue view "$1" --json title,body,number,url,state,labels`
+  2. Analyze issue labels to determine branch type (feature/fix/docs/chore/perf)
+  3. Create worktree: `git worktree add ../acplb-worktrees/<NNN-slug> origin/main -b <branch-type>/<NNN-slug>`
+  4. Initialize SDD workflow phases (/specify → /plan → /tasks)
+  5. Link all artifacts to the GitHub issue
+
 #### 1. Specify Phase (`/specify`)
 
 - **Trigger**: User provides feature description
@@ -306,6 +316,7 @@ This document complements:
 /specify "feature description"  # Create spec
 /plan "technical context"        # Generate plan
 /tasks "additional context"      # Create tasks
+/sdd-task <issue-number>        # Initialize from GitHub issue
 ```
 
 ### Key Files
@@ -319,7 +330,7 @@ This document complements:
 ### Validation Commands
 
 ```bash
-scripts/sdd/validate_structure.py
+scripts/sdd/validate-sdd-docs.sh
 scripts/sdd/check_language.sh
 scripts/sdd/run_semantic_checks.sh
 scripts/sdd/validate-metadata.sh
@@ -336,8 +347,8 @@ constitution:
 document:
     type: "claude-memory"
     path: ".specify/CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    version: "1.0.2"
+    last_updated: "2025-09-20T07:27:35Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

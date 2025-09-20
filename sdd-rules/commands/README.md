@@ -9,12 +9,13 @@ The actual command implementations are located in `.specify/commands/`:
 - **`/specify`** - Creates feature specifications from natural language descriptions
 - **`/plan`** - Generates implementation plans from specifications
 - **`/tasks`** - Creates executable task lists from plans
+- **`/sdd-task`** - Initializes SDD task directly from GitHub issue
 
 ## Command Workflow
 
 ```mermaid
 graph TD
-    A[specify] --> B[spec.md]
+    A[specify or sdd-task] --> B[spec.md]
     B --> C[plan]
     C --> D[plan.md]
     D --> E[tasks]
@@ -63,6 +64,20 @@ Creates executable tasks by:
 3. Ordering by dependencies
 4. Marking parallelizable tasks with [P]
 
+### /sdd-task Command
+
+**Location**: `.specify/commands/sdd-task.md`
+**Script**: Uses `gh` CLI directly
+**Template**: Leverages all SDD templates
+
+Initializes SDD workflow from GitHub issue by:
+
+1. Fetching issue details via GitHub CLI
+2. Determining branch type from issue labels
+3. Creating appropriate worktree and branch
+4. Triggering full SDD workflow (/specify → /plan → /tasks)
+5. Linking all artifacts to the GitHub issue
+
 ## Constitutional Compliance
 
 All commands enforce the ACPLazyBridge SDD Constitution (v1.0.1):
@@ -85,6 +100,7 @@ Supporting scripts in `scripts/sdd/`:
 | `check-task-prerequisites.sh` | Validate prerequisites | /tasks |
 | `common.sh` | Shared utilities | All scripts |
 | `get-feature-paths.sh` | Path resolution | All scripts |
+| `gh issue view` | Fetch issue details | /sdd-task |
 
 ## Usage Examples
 
@@ -103,6 +119,17 @@ Supporting scripts in `scripts/sdd/`:
 # - specs/001-real-time-chat/spec.md
 # - specs/001-real-time-chat/plan.md
 # - specs/001-real-time-chat/tasks.md
+
+# Start from existing GitHub issue
+/sdd-task 28
+# or
+/sdd-task https://github.com/lwyBZss8924d/ACPLazyBridge/issues/28
+
+# Results in:
+# - Branch: docs/028-ci-add-docs-style
+# - specs/028-ci-add-docs-style/spec.md
+# - specs/028-ci-add-docs-style/plan.md
+# - specs/028-ci-add-docs-style/tasks.md
 ```
 
 ## Quality Gates
@@ -125,6 +152,6 @@ Commands enforce quality gates:
 ```yaml
 Constitution version: 1.0.1
 Document: sdd-rules/commands/README.md
-Document version: 1.0.1
-Last Updated: 2025-09-17
+Document version: 1.0.2
+Last Updated: 2025-09-20
 ```
