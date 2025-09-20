@@ -16,10 +16,10 @@
 ## Tests & Evidence
 
 - Commands run:
-  - cargo fmt / clippy / test results
-  - JSONL scenarios executed (list files)
+    - cargo fmt / clippy / test results
+    - JSONL scenarios executed (list files)
 - Evidence:
-  - Output logs / snapshots (link to _artifacts or CI Artifacts)
+    - Output logs / snapshots (link to _artifacts or CI Artifacts)
 
 ## Risk & Rollback
 

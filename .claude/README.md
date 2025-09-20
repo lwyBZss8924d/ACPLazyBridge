@@ -51,6 +51,7 @@ Features:
 #### `/specify` - Create Specifications
 
 Generate feature specifications from natural language:
+
 ```bash
 /specify "Real-time chat system with message history"
 ```
@@ -58,6 +59,7 @@ Generate feature specifications from natural language:
 #### `/plan` - Generate Implementation Plans
 
 Create technical plans from specifications:
+
 ```bash
 /plan "WebSocket for real-time, PostgreSQL for history"
 ```
@@ -65,6 +67,7 @@ Create technical plans from specifications:
 #### `/tasks` - Create Task Breakdowns
 
 Generate executable task lists:
+
 ```bash
 /tasks
 ```

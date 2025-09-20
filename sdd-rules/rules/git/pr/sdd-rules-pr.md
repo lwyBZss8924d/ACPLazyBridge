@@ -1,5 +1,7 @@
 # SDD Rules - Git PR
+
 [TODO: Add git PR rules]
+
 ---
 
 ---
