@@ -49,13 +49,12 @@ run_check() {
         info "Running: $description"
         if ! "$script"; then
             err "$description failed"
-            return 1
+            # Don't return early - let error counting handle failures
         fi
     else
         warn "Script not found or not executable: $script"
-        return 1
+        # Don't return early - let warning counting handle this
     fi
-    return 0
 }
 
 # Main execution

@@ -14,8 +14,8 @@
           "version": "0.x.x",
           "informationUri": "https://ast-grep.github.io/",
           "rules": (
-            # Extract unique rule IDs and create rules
-            [.[] | .ruleId // "unknown"]
+            # Extract unique rule IDs and create rules (ensure strings)
+            [.[] | (.ruleId // "unknown") | tostring]
             | unique
             | map({
               id: .,
@@ -38,17 +38,16 @@
         }
       },
       "results": [
-        # Store the rules array for indexing
-        ([.[] | .ruleId // "unknown"] | unique) as $rules |
+        # Store the rules array for indexing (ensure strings)
+        ([.[] | (.ruleId // "unknown") | tostring] | unique) as $rules |
 
         # Convert each result
-        .[] | {
-          ruleId: (.ruleId // "unknown"),
-          ruleIndex: (
-            # Find index of this rule in the rules array
-            .ruleId as $rid |
-            $rules | map(. == $rid) | index(true)
-          ),
+        .[]
+        | ((.ruleId // "unknown") | tostring) as $rid
+        | {
+          ruleId: $rid,
+          # Only include ruleIndex if found, otherwise omit the field
+          ruleIndex: ($rules | index($rid) // empty),
           level: (
             if .severity == "error" then "error"
             elif .severity == "warning" then "warning"
@@ -68,9 +67,10 @@
                 region: (
                   if .range then {
                     startLine: .range.start.line,
-                    startColumn: (if .range.start.column < 1 then 1 else .range.start.column end),
+                    # Ensure columns are >= 1 (SARIF requirement)
+                    startColumn: (if (.range.start.column // 0) < 1 then 1 else .range.start.column end),
                     endLine: .range.end.line,
-                    endColumn: (if .range.end.column < 1 then 1 else .range.end.column end)
+                    endColumn: (if (.range.end.column // 0) < 1 then 1 else .range.end.column end)
                   } else {
                     startLine: 1,
                     startColumn: 1
@@ -80,7 +80,8 @@
             }
           ],
           partialFingerprints: {
-            primaryLocationLineHash: "\(.file):\(.range.start.line // 1):\(.ruleId // "unknown")"
+            # Include column for better uniqueness
+            primaryLocationLineHash: "\(.file):\(.range.start.line // 1):\(.range.start.column // 1):\($rid)"
           }
         }
       ],

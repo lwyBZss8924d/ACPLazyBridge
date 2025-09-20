@@ -143,7 +143,7 @@ jobs:
           fi
 
       - name: Convert to SARIF format
-        if: always()
+        if: success() || failure()
         run: |
           echo "Converting ast-grep results to SARIF..."
           jq -f scripts/ci/json-to-sarif.jq ast-grep-results.json > results.sarif
@@ -152,6 +152,7 @@ jobs:
           if jq -e '.version == "2.1.0"' results.sarif > /dev/null 2>&1; then
             echo "✓ Valid SARIF generated"
           else
+            echo "::warning::SARIF validation failed - creating minimal fallback"
             echo "⚠ SARIF validation failed, creating minimal valid SARIF"
             cat > results.sarif <<'EOF'
           {
@@ -171,14 +172,15 @@ jobs:
           fi
 
       - name: Upload SARIF to GitHub Code Scanning
-        if: always()
+        if: success() || failure()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
           category: ast-grep
+          wait-for-processing: true
 
       - name: Upload ast-grep artifacts
-        if: always()
+        if: success() || failure()
         uses: actions/upload-artifact@v4
         with:
           name: ast-grep-results

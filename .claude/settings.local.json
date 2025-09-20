@@ -96,7 +96,11 @@
       "Bash(cp:*)",
       "Bash(mkdir:*)",
       "Bash(gh pr create:*)",
-      "Bash(gh issue comment:*)"
+      "Bash(gh issue comment:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh run view:*)",
+      "Bash(jq:*)",
+      "Bash(gh pr:*)"
     ],
     "deny": [],
     "ask": []

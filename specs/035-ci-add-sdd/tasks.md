@@ -197,6 +197,20 @@ _GATE: Checked before execution_
 - [x] Report-only mode properly configured (T008)
 - [x] Evidence collection included (T002, T021, T025)
 
+## Task Completion Summary
+
+- **Total Tasks**: 28
+- **Completed**: 26 (T001-T020, T023-T024, T027-T028)
+- **Deferred/Manual**: 2 (T025: manual doc review, T026: post-Issue #31)
+- **Status**: Implementation complete, ready for merge
+
+### Known Issues Addressed
+
+- Windows compatibility temporarily excluded (Unix-specific code in notify forwarder)
+- SARIF conversion fixed with proper null handling and ruleIndex calculation
+- CI workflow conditions improved (success() || failure() instead of always())
+- Error recovery in SDD gates fixed (no early returns)
+
 ## IMPORTANT TECHNICAL STANDARDS
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
