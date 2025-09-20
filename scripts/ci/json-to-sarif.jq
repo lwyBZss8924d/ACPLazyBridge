@@ -68,9 +68,9 @@
                 region: (
                   if .range then {
                     startLine: .range.start.line,
-                    startColumn: .range.start.column,
+                    startColumn: (if .range.start.column < 1 then 1 else .range.start.column end),
                     endLine: .range.end.line,
-                    endColumn: .range.end.column
+                    endColumn: (if .range.end.column < 1 then 1 else .range.end.column end)
                   } else {
                     startLine: 1,
                     startColumn: 1
