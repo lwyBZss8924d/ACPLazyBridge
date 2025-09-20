@@ -101,7 +101,9 @@
       "Bash(yq eval:*)",
       "Bash(timeout:*)",
       "Read(///**)",
-      "Bash(./scripts/ci/run-sdd-gates.sh:*)"
+      "Bash(./scripts/ci/run-sdd-gates.sh:*)",
+      "Bash(jq:*)",
+      "Bash(./scripts/sdd/check-markdown.sh:*)"
     ],
     "deny": [],
     "ask": []

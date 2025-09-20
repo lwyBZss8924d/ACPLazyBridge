@@ -14,11 +14,7 @@
   },
   "MD010": true,
   "MD012": false,
-  "MD013": {
-    "line_length": 1024,
-    "code_blocks": false,
-    "tables": false
-  },
+  "MD013": false,
   "MD022": true,
   "MD024": {
     "siblings_only": true

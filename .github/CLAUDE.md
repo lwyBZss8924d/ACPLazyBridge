@@ -229,6 +229,11 @@ ast-grep-scan:
 
 typos-check:
   - documentation-quality
+
+docs-style:
+  - markdown-style-verification
+  - report-only-mode (current)
+  - enforcement-mode (future)
 ```
 
 ### AST-grep Code Scanning
@@ -243,6 +248,24 @@ Active rule categories:
 - Go: no-fmt-println
 
 Results uploaded to GitHub Security tab via SARIF format.
+
+### Markdown Style Verification
+
+**Current Mode**: Report-only (continue-on-error: true)
+**Future Mode**: Enforcement (after team adaptation period)
+
+Configuration:
+- Workflow: `.github/workflows/docs-style.yml`
+- Script: `scripts/ci/run-markdown-style.sh`
+- Config: `.markdownlint.json` (MD013 disabled for GitHub compatibility)
+- Triggers on: Pull requests with `**/*.md` changes
+
+Local development (verification-only approach):
+- Run checks: `./scripts/ci/run-markdown-style.sh`
+- Auto-fix issues: `./scripts/sdd/fix-markdown.sh`
+- Detailed report: `./scripts/sdd/check-markdown.sh --verbose`
+
+See `specs/036-ci-markdown-style/quickstart.md` for troubleshooting guide.
 
 ### Enhanced SDD Gates
 
