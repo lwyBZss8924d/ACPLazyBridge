@@ -24,18 +24,21 @@
 ## Manual Fixes Completed
 
 ### Priority 1: specs/ directory (SDD critical)
+
 - **Files fixed**: `specs/001-claude-memory-sdd-alignment/spec.md`
 - **Violations fixed**: 2 MD007 violations
 - **Status**: ✅ COMPLETE - 0 violations remaining
 
 ### Priority 2: .github/ directory
+
 - **Files fixed**:
-  - `.github/PULL_REQUEST_TEMPLATE.md` (3 MD007 violations)
-  - `.github/CLAUDE.md` (4 MD032 violations)
+    - `.github/PULL_REQUEST_TEMPLATE.md` (3 MD007 violations)
+    - `.github/CLAUDE.md` (4 MD032 violations)
 - **Violations fixed**: 7 total
 - **Status**: ✅ COMPLETE - 0 violations remaining
 
 ### Priority 3: sdd-rules/
+
 - **Files fixed**: `sdd-rules/rules/git/pr/sdd-rules-pr.md`
 - **Violations fixed**: 3 (MD003 + 2 MD022 violations)
 - **Status**: ✅ COMPLETE for this file
@@ -48,11 +51,13 @@
 
 ## Remaining Work
 
-### High Impact Areas Still To Fix:
+### High Impact Areas Still To Fix
+
 1. **_artifacts/** directory - multiple MD022, MD031, MD032, MD047 violations
 2. **dev-docs/review/** directory - 493 MD007 violations (bulk of remaining issues)
 
-### Distribution of Remaining Violations:
+### Distribution of Remaining Violations
+
 - dev-docs/: 493 MD007 violations
 - _artifacts/: ~30 various violations (MD022, MD031, MD032, MD047)
 - Other scattered violations: ~1
