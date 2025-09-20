@@ -2,10 +2,7 @@
 # Convert ast-grep JSON output to SARIF format
 # Usage: ast-grep scan --json | jq -f scripts/ci/json-to-sarif.jq > results.sarif
 
-# First, collect unique rules and create a mapping
-. as $input |
-($input | [.[] | .rule_id] | unique) as $rule_ids |
-
+# Process the input array to generate SARIF
 {
   "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
   "version": "2.1.0",
@@ -17,33 +14,40 @@
           "version": "0.x.x",
           "informationUri": "https://ast-grep.github.io/",
           "rules": (
-            # Create rules array with proper indices
-            $rule_ids | to_entries | map({
-              id: .value,
-              name: .value,
+            # Extract unique rule IDs and create rules
+            [.[] | .ruleId // "unknown"]
+            | unique
+            | map({
+              id: .,
+              name: .,
               shortDescription: {
-                text: "ast-grep rule: \(.value)"
+                text: "ast-grep rule: \(.)"
               },
               fullDescription: {
-                text: "ast-grep rule: \(.value)"
+                text: "ast-grep rule: \(.)"
               },
               help: {
-                text: "ast-grep rule: \(.value)",
-                markdown: "**ast-grep rule**: `\(.value)`"
+                text: "Check for \(.)",
+                markdown: "**ast-grep rule**: `\(.)`"
               },
               properties: {
-                tags: ["ast-grep", "warning"]
+                tags: ["ast-grep", "code-quality"]
               }
             })
           )
         }
       },
       "results": [
-        $input[] | . as $item | {
-          ruleId: .rule_id,
+        # Store the rules array for indexing
+        ([.[] | .ruleId // "unknown"] | unique) as $rules |
+
+        # Convert each result
+        .[] | {
+          ruleId: (.ruleId // "unknown"),
           ruleIndex: (
-            # Find the index of this rule_id in the $rule_ids array
-            $rule_ids | to_entries | map(select(.value == $item.rule_id)) | .[0].key
+            # Find index of this rule in the rules array
+            .ruleId as $rid |
+            $rules | map(. == $rid) | index(true)
           ),
           level: (
             if .severity == "error" then "error"
@@ -52,7 +56,7 @@
             end
           ),
           message: {
-            text: (.message // "ast-grep violation")
+            text: (.message // "ast-grep rule violation")
           },
           locations: [
             {
@@ -61,17 +65,22 @@
                   uri: .file,
                   uriBaseId: "%SRCROOT%"
                 },
-                region: {
-                  startLine: (.start_line // .line // 1),
-                  startColumn: (.start_column // .column // 1),
-                  endLine: (.end_line // .start_line // .line // 1),
-                  endColumn: (.end_column // .start_column // .column // 1)
-                }
+                region: (
+                  if .range then {
+                    startLine: .range.start.line,
+                    startColumn: .range.start.column,
+                    endLine: .range.end.line,
+                    endColumn: .range.end.column
+                  } else {
+                    startLine: 1,
+                    startColumn: 1
+                  } end
+                )
               }
             }
           ],
           partialFingerprints: {
-            primaryLocationLineHash: "\(.file):\(.start_line // .line // 1):\(.rule_id)"
+            primaryLocationLineHash: "\(.file):\(.range.start.line // 1):\(.ruleId // "unknown")"
           }
         }
       ],
