@@ -106,7 +106,13 @@
       "Bash(./scripts/sdd/check-markdown.sh:*)",
       "Bash(./scripts/sdd/fix-markdown.sh:*)",
       "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json --fix --dry-run)",
-      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json --fix)"
+      "Bash(npx --yes markdownlint-cli2@latest \"**/*.md\" --config .markdownlint.json --fix)",
+      "Bash(mkdir:*)",
+      "Bash(npx --yes markdownlint-cli2@latest \"specs/**/*.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \".specify/**/*.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \"README.md\" \"CONTRIBUTING.md\" \"CLAUDE.md\" --config .markdownlint.json)",
+      "Bash(npx --yes markdownlint-cli2@latest \".github/**/*.md\" --config .markdownlint.json)",
+      "Bash(npx:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,6 +5,7 @@
 ## Summary
 
 Total markdown violations: 525
+
 - Auto-fixable: 26 (but automation currently not working)
 - Manual fixes required: 499
 - Primary issue: MD007 (list indentation) - 498 violations
@@ -16,6 +17,7 @@ Total markdown violations: 525
 **Issue**: The script reports "0 issues found" when auto-fixable issues exist.
 
 **Evidence**:
+
 ```bash
 $ ./scripts/sdd/fix-markdown.sh
 Checking for auto-fixable markdown issues...
@@ -25,6 +27,7 @@ Checking for auto-fixable markdown issues...
 **Actual state**: 26 auto-fixable issues exist (verified with markdownlint-cli2)
 
 **Workaround**: Use markdownlint-cli2 directly:
+
 ```bash
 npx --yes markdownlint-cli2@latest "**/*.md" --config .markdownlint.json --fix
 ```
@@ -36,11 +39,13 @@ npx --yes markdownlint-cli2@latest "**/*.md" --config .markdownlint.json --fix
 **Issue**: Running `markdownlint-cli2 --fix` reports "Linted" but doesn't actually fix violations.
 
 **Evidence**:
+
 - Before fix: 26 auto-fixable issues
 - After running --fix: Still 26 auto-fixable issues
 - Files show as "Linted" but violations remain
 
 **Investigation needed**:
+
 - Check file permissions
 - Verify markdownlint-cli2 version compatibility
 - Test with individual files vs glob patterns
@@ -53,6 +58,7 @@ npx --yes markdownlint-cli2@latest "**/*.md" --config .markdownlint.json --fix
 **Required state**: Lists must use 4-space indentation
 
 **Example**:
+
 ```markdown
 # Wrong (current)
 - Item
@@ -150,6 +156,7 @@ All testing logs stored in: `_artifacts/036-ci-markdown-style/tests/`
 - [ ] Manual fixes started
 
 ## Next Steps
+
 
 1. Create PR with current implementation (report-only mode)
 2. Debug automation issues in parallel
