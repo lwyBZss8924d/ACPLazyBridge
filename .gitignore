@@ -82,4 +82,7 @@ coverage/
 .codeql-results/
 
 # Dev tools Cache
+# MCP Servers: Serena
+.serena/
 .serena/cache/
+.serena/memories/
