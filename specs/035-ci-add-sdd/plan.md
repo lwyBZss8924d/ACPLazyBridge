@@ -4,10 +4,12 @@
 worktree: /Users/arthur/dev-space/acplb-worktrees/ci-sdd-gates
 feature_branch: 035-ci-add-sdd
 created: 2025-09-19
-last_updated: 2025-09-19
-status: planning
+last_updated: 2025-09-20
+status: completed
 input: Feature specification from `/specs/035-ci-add-sdd/spec.md`
 issue_url: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
+pr_url: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/36
+merged_commit: 7a273a2703555242d9858602a70d07298e361eca
 spec_uri: specs/035-ci-add-sdd/spec.md
 plan_uri: specs/035-ci-add-sdd/plan.md
 tasks_uri: specs/035-ci-add-sdd/tasks.md

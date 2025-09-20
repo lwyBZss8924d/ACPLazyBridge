@@ -4,10 +4,12 @@
 worktree: /Users/arthur/dev-space/acplb-worktrees/ci-sdd-gates
 feature_branch: 035-ci-add-sdd
 created: 2025-09-19
-last_updated: 2025-09-19
-status: draft
+last_updated: 2025-09-20
+status: completed
 input: User description: "CI: Add SDD gates and ast-grep scanning (report→enforce) - Integrate SDD quality gates and ast-grep into CI. This is complementary to Issue #31 and will start in report-only mode, then flip to gating after #31 lands."
 issue_url: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/32
+pr_url: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/36
+merged_commit: 7a273a2703555242d9858602a70d07298e361eca
 specs:
     constitution: 1.0.1
     type: spec
