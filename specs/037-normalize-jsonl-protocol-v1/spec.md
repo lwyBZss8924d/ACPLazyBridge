@@ -3,8 +3,8 @@
 ```yaml
 worktree: /Users/arthur/dev-space/acplb-worktrees/037-normalize-jsonl-protocol-v1
 feature_branch: chore/037-normalize-jsonl-protocol-v1
-created: 2025-09-21T%H%M%SZ
-last_updated: 2025-09-21T%H%M%SZ
+created: 2025-09-21T19:30:00Z
+last_updated: 2025-09-21T20:50:06Z
 status: in_progress
 input: GitHub Issue #14
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/14
@@ -65,6 +65,14 @@ As a developer working with the ACPLazyBridge ACP adapter, I need all JSONL test
 - What happens when a fixture has no initialize request? → Skip file, no changes needed
 - How does system handle fixtures with existing integer protocolVersion? → Leave unchanged
 - What if clientCapabilities vs capabilities naming differs? → Preserve as-is, only fix protocolVersion
+
+### Acceptance Criteria
+
+- [x] All initialize.params.protocolVersion in dev-docs/review/_artifacts/tests/*.jsonl are integer 1 (FR-001/FR-002)
+- [x] clientCapabilities/capabilities in fixtures remain unmodified (FR-003)
+- [x] test_streaming.sh outputs only integer protocol versions (FR-004)
+- [x] All JSONL files are valid JSON (FR-005)
+- [x] All replays using codex-cli-acp pass (FR-006)
 
 ## Requirements
 

@@ -4,7 +4,7 @@
 
 - **Issue**: #14
 - **Branch**: chore/037-normalize-jsonl-protocol-v1
-- **UTC-Date-Time**: 2025-09-21T%H%M%SZ
+- **Date**: 2025-09-21
 - **Specification**: specs/037-normalize-jsonl-protocol-v1/spec.md
 
 ## Changes Applied
