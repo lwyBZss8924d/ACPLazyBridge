@@ -1,0 +1,1 @@
+All dev-docs/review/_artifacts/tests/*.jsonl use integer protocolVersion 1.

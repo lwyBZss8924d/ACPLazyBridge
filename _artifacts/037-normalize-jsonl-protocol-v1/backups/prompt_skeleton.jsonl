@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":3,"method":"session/prompt","params":{"sessionId":"SESSION_ID_HERE","prompt":"测试流式输出，请逐步返回 agent_message_chunk。"}}

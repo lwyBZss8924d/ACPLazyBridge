@@ -1,0 +1,3 @@
+{"jsonrpc":"2.0","id":1,"method":"unknown_method","params":{}}
+{"jsonrpc":"2.0","id":2,"method":"session/prompt","params":{"sessionId":"invalid_session","prompt":"test"}}
+{"invalid":"json"}

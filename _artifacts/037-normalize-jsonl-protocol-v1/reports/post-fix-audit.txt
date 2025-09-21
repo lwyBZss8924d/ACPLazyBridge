@@ -1,0 +1,41 @@
+Post-Fix Audit Report: protocolVersion Normalization Complete
+Generated: 2025-09-21T19:49:08Z
+=================================================================
+
+SUMMARY
+-------
+All JSONL fixtures have been successfully normalized to use integer protocolVersion 1
+per ACP v1 specification.
+
+FILES UPDATED (12 JSONL + 1 script)
+------------------------------------
+1. test_basic_handshake.jsonl - ✓ Fixed
+2. prompt_with_mock_codex.jsonl - ✓ Fixed
+3. tool_calls_large_output.jsonl - ✓ Fixed
+4. tool_calls.jsonl - ✓ Fixed
+5. handshake.jsonl - ✓ Fixed
+6. tool_calls_batch.jsonl - ✓ Fixed
+7. basic_session.jsonl - ✓ Fixed
+8. prompt_and_cancel.jsonl - ✓ Fixed
+9. session_update_format.jsonl - ✓ Fixed
+10. test_prompt_session.jsonl - ✓ Fixed
+11. notify_idle.jsonl - ✓ Fixed (was string "1")
+12. test_streaming.sh - ✓ Fixed (2 instances)
+
+FILES ALREADY CORRECT (2)
+-------------------------
+- acp_v1_alignment.jsonl
+- vec_string_command.jsonl
+
+VALIDATION RESULTS
+------------------
+✓ All JSONL files are valid JSON
+✓ All protocolVersion values are integer 1
+✓ No string protocolVersion values remain
+✓ Adapter accepts integer protocolVersion correctly
+
+COMPATIBILITY
+-------------
+✓ Aligned with ACP v1 specification
+✓ Compatible with upstream agent-client-protocol crate
+✓ Ready for CI replay runner integration
