@@ -48,46 +48,46 @@ commits:
 
 ## Phase 3.1: Setup
 
-- [ ] T001 Create evidence directory structure _artifacts/037-normalize-jsonl-protocol-v1/{tests,logs,reports}
-- [ ] T002 [P] Backup existing JSONL fixtures to _artifacts/037-normalize-jsonl-protocol-v1/backups/
-- [ ] T003 [P] Document current protocolVersion usage in _artifacts/037-normalize-jsonl-protocol-v1/reports/pre-fix-audit.txt
+- [x] T001 Create evidence directory structure _artifacts/037-normalize-jsonl-protocol-v1/{tests,logs,reports}
+- [x] T002 [P] Backup existing JSONL fixtures to _artifacts/037-normalize-jsonl-protocol-v1/backups/
+- [x] T003 [P] Document current protocolVersion usage in _artifacts/037-normalize-jsonl-protocol-v1/reports/pre-fix-audit.txt
 
 ## Phase 3.2: Core Implementation
 
 ### Fix fixtures with "2024-11-05" string
 
-- [ ] T004 Update test_basic_handshake.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T005 Update prompt_with_mock_codex.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T006 Update tool_calls_large_output.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T007 Update tool_calls.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T008 Update handshake.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T009 Update tool_calls_batch.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T010 Update basic_session.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T011 Update prompt_and_cancel.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T012 Update session_update_format.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
-- [ ] T013 Update test_prompt_session.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T004 Update test_basic_handshake.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T005 Update prompt_with_mock_codex.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T006 Update tool_calls_large_output.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T007 Update tool_calls.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T008 Update handshake.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T009 Update tool_calls_batch.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T010 Update basic_session.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T011 Update prompt_and_cancel.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T012 Update session_update_format.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
+- [x] T013 Update test_prompt_session.jsonl: replace the legacy string protocolVersion value (2024-11-05) with integer 1
 
 ### Fix fixtures with "1" string
 
-- [ ] T014 Update notify_idle.jsonl: "protocolVersion":"1" → "protocolVersion":1
+- [x] T014 Update notify_idle.jsonl: "protocolVersion":"1" → "protocolVersion":1
 
 ### Fix test script
 
-- [ ] T015 Update test_streaming.sh: Replace both instances of the legacy protocolVersion string (2024-11-05) with the integer literal 1
+- [x] T015 Update test_streaming.sh: Replace both instances of the legacy protocolVersion string (2024-11-05) with the integer literal 1
 
 ## Phase 3.3: Validation
 
-- [ ] T016 [P] Validate all JSONL files are valid JSON using jq
-- [ ] T017 [P] Verify protocolVersion is integer 1 in all fixtures
-- [ ] T018 Run playback test with handshake.jsonl
-- [ ] T019 Run playback test with basic_session.jsonl
-- [ ] T020 Run playback test with tool_calls.jsonl
+- [x] T016 [P] Validate all JSONL files are valid JSON using jq
+- [x] T017 [P] Verify protocolVersion is integer 1 in all fixtures
+- [x] T018 Run playback test with handshake.jsonl
+- [x] T019 Run playback test with basic_session.jsonl
+- [x] T020 Run playback test with tool_calls.jsonl
 
 ## Phase 3.4: Documentation & Reporting
 
-- [ ] T021 [P] Generate post-fix audit report in _artifacts/037-normalize-jsonl-protocol-v1/reports/post-fix-audit.txt
-- [ ] T022 [P] Create validation summary in _artifacts/037-normalize-jsonl-protocol-v1/reports/validation-summary.md
-- [ ] T023 Document any issues or observations in _artifacts/037-normalize-jsonl-protocol-v1/reports/notes.md
+- [x] T021 [P] Generate post-fix audit report in _artifacts/037-normalize-jsonl-protocol-v1/reports/post-fix-audit.txt
+- [x] T022 [P] Create validation summary in _artifacts/037-normalize-jsonl-protocol-v1/reports/validation-summary.md
+- [x] T023 Document any issues or observations in _artifacts/037-normalize-jsonl-protocol-v1/reports/notes.md
 
 ## Dependencies
 
@@ -121,15 +121,15 @@ Task: "Verify protocolVersion is integer in all fixtures"
 
 _GATE: Checked before marking complete_
 
-- [ ] All fixtures use integer protocolVersion 1
-- [ ] No string protocolVersion values remain
-- [ ] All files are valid JSON
-- [ ] Playback tests pass
-- [ ] Evidence collected in _artifacts
+- [x] All fixtures use integer protocolVersion 1
+- [x] No string protocolVersion values remain
+- [x] All files are valid JSON
+- [x] Playback tests pass
+- [x] Evidence collected in _artifacts
 
 ## Pre-PR Quality Gates
 
-- [ ] T900: Run SDD document validation
+- [x] T900: Run SDD document validation
 
   ```bash
   ./scripts/sdd/validate-sdd-docs.sh
@@ -137,7 +137,7 @@ _GATE: Checked before marking complete_
 
   Evidence: _artifacts/037-normalize-jsonl-protocol-v1/validation/sdd_docs_$(date +%Y%m%d_%H%M%S).log
 
-- [ ] T901: Verify all JSONL changes
+- [x] T901: Verify all JSONL changes
 
   ```bash
   grep -r "protocolVersion" dev-docs/review/_artifacts/tests/*.jsonl | \
