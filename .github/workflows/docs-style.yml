@@ -1,0 +1,108 @@
+# Markdown Style Verification
+# Runs markdownlint-cli2 on pull requests that modify markdown files
+# Initial mode: Report-only (continue-on-error: true)
+# Future mode: Enforcement (after team adaptation period)
+
+name: Markdown Style Verification
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+
+jobs:
+  verify-markdown:
+    name: Check Markdown Style
+    runs-on: ubuntu-latest
+    # Report-only mode initially - violations won't block PR
+    continue-on-error: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run markdown style check
+        id: markdown-check
+        run: |
+          echo "::group::Markdown Style Check"
+          if ! ./scripts/ci/run-markdown-style.sh; then
+            echo "::error::Markdown style violations found. Please run './scripts/ci/run-local-ci.sh' locally to identify and fix issues."
+            echo "::notice::This check is currently in report-only mode and will not block your PR."
+            echo "markdown_failed=true" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "::endgroup::"
+          echo "markdown_failed=false" >> $GITHUB_OUTPUT
+
+      - name: Generate violation report
+        if: failure() && steps.markdown-check.outputs.markdown_failed == 'true'
+        run: |
+          # Try to generate a detailed report for artifacts
+          ./scripts/sdd/check-markdown.sh --format json > markdown-lint-report.json 2>&1 || true
+
+          # Also create a human-readable summary
+          ./scripts/sdd/check-markdown.sh --format human > markdown-style.log 2>&1 || true
+
+          # Show quick summary in the job log
+          echo "::group::Violation Summary"
+          ./scripts/sdd/check-markdown.sh --format human | head -30 || echo "Unable to generate summary"
+          echo "::endgroup::"
+
+      - name: Upload markdown check results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: markdown-lint-results-${{ github.run_id }}
+          path: |
+            markdown-lint-report.json
+            markdown-style.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Comment PR with fix instructions
+        if: failure() && steps.markdown-check.outputs.markdown_failed == 'true' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## 📝 Markdown Style Check
+
+            Markdown style violations were detected in this PR. This check is currently **non-blocking** (report-only mode).
+
+            ### To fix locally:
+
+            1. **Run automatic fixes** for spacing issues:
+               \`\`\`bash
+               ./scripts/sdd/fix-markdown.sh
+               \`\`\`
+
+            2. **Check remaining issues**:
+               \`\`\`bash
+               ./scripts/ci/run-markdown-style.sh
+               \`\`\`
+
+            3. **For detailed report**:
+               \`\`\`bash
+               ./scripts/sdd/check-markdown.sh --verbose
+               \`\`\`
+
+            See the [quickstart guide](specs/036-ci-markdown-style/quickstart.md) for more details.
+
+            *Note: We're transitioning to automated style checks. Your feedback helps us tune the rules.*`;
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

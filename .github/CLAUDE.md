@@ -229,6 +229,11 @@ ast-grep-scan:
 
 typos-check:
   - documentation-quality
+
+docs-style:
+  - markdown-style-verification
+  - report-only-mode (current)
+  - enforcement-mode (future)
 ```
 
 ### AST-grep Code Scanning
@@ -237,6 +242,7 @@ typos-check:
 **Future Mode**: Enforcement (after Issue #31)
 
 Active rule categories:
+
 - Rust: no-unwrap, no-dbg, todo-comment, mutex-lock
 - JavaScript: no-console-log, no-only-in-tests
 - Python: no-print, no-pdb
@@ -244,9 +250,30 @@ Active rule categories:
 
 Results uploaded to GitHub Security tab via SARIF format.
 
+### Markdown Style Verification
+
+**Current Mode**: Report-only (continue-on-error: true)
+**Future Mode**: Enforcement (after team adaptation period)
+
+Configuration:
+
+- Workflow: `.github/workflows/docs-style.yml`
+- Script: `scripts/ci/run-markdown-style.sh`
+- Config: `.markdownlint.json` (MD013 disabled for GitHub compatibility)
+- Triggers on: Pull requests with `**/*.md` changes
+
+Local development (verification-only approach):
+
+- Run checks: `./scripts/ci/run-markdown-style.sh`
+- Auto-fix issues: `./scripts/sdd/fix-markdown.sh`
+- Detailed report: `./scripts/sdd/check-markdown.sh --verbose`
+
+See `specs/036-ci-markdown-style/quickstart.md` for troubleshooting guide.
+
 ### Enhanced SDD Gates
 
 `scripts/ci/run-sdd-gates.sh` orchestrates:
+
 1. Structure validation
 2. Language policy checks
 3. Markdown linting

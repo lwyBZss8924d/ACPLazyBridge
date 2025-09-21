@@ -67,6 +67,6 @@ Align Claude Code memory documents (CLAUDE.md) with SDD Developer Team workflow 
 ## Risks
 
 - Risk: Inconsistent updates across distributed CLAUDE.md files
-  - Mitigation: Clear inheritance hierarchy and regular consistency checks
+    - Mitigation: Clear inheritance hierarchy and regular consistency checks
 - Risk: Rules index becoming outdated
-  - Mitigation: CI validation for broken links and missing references
+    - Mitigation: CI validation for broken links and missing references

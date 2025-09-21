@@ -285,6 +285,11 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 - `cargo test --workspace --all-features --locked`
 - Protocol JSONL scenarios (if present) replay without errors; stdout is valid JSONL.
 - Code scanning (GitHub Code Scanning) is enabled. For local custom CodeQL queries, see (dev-docs/engineering/codeql.md) .
+- **Markdown style verification** (GitHub Actions): Runs on all PRs modifying `**/*.md` files
+    - Currently in report-only mode (continue-on-error: true) for gradual adoption
+    - Uses `scripts/ci/run-markdown-style.sh` with markdownlint-cli2
+    - MD013 (line length) disabled to align with GitHub Flavored Markdown standards
+    - Transition to enforcement mode planned after team adaptation period
 
 ### Constitutional gates (must pass)
 
