@@ -196,12 +196,19 @@ Located in `~/.claude/agents/`:
 - **Usage**: Running ast-grep scan with sgconfig.yml
 - **Delegation**: Rule filter + output format
 
+#### sdd-doc-validator
+
+- **Purpose**: SDD documentation validation and fixing
+- **Usage**: Markdown validation, SDD compliance, auto-fixing
+- **Delegation**: Validation type + fix mode + scope
+
 ### Delegation Decision Tree
 
 ```text
 Need documents? → document-retriever
 Need code patterns? → code-retriever
 Need rule audit? → code-analyzer
+Need markdown validation? → sdd-doc-validator
 Need multiple? → Launch in parallel
 ```
 
@@ -343,12 +350,12 @@ scripts/ci/run-local-ci.sh
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-21T14:50:00Z"
 document:
     type: "claude-memory"
     path: ".specify/CLAUDE.md"
-    version: "1.0.2"
-    last_updated: "2025-09-20T07:27:35Z"
+    version: "1.0.3"
+    last_updated: "2025-09-21T14:50:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

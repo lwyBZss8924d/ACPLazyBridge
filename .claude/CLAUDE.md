@@ -31,6 +31,7 @@ This directory contains Claude Code's custom configuration for the ACPLazyBridge
 - `document-retriever.md` - High-signal document retrieval
 - `code-retriever.md` - AST-aware code search
 - `code-analyzer.md` - Repository-wide rule audits
+- `sdd-doc-validator.md` - SDD documentation validation and fixing
 
 ## SDD Workflow with /sdd-task
 
@@ -146,12 +147,12 @@ All hooks and scripts:
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-20T10:00:00Z"
+    last_checked: "2025-09-21T14:45:00Z"
 document:
     type: "claude-memory"
     path: ".claude/CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-20T10:00:00Z"
+    version: "1.0.2"
+    last_updated: "2025-09-21T14:45:00Z"
     dependencies:
         - "./CLAUDE.md"    
         - ".specify/memory/lifecycle.md"

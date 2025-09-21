@@ -335,6 +335,7 @@ Outcome: documentation, plans, tasks, and CI checks remain a living, executable 
 - `document-retriever` - High-signal document retrieval using SemTools
 - `code-retriever` - Precise code retrieval using AST-aware patterns
 - `code-analyzer` - Repository analysis via ast-grep scan
+- `sdd-doc-validator` - SDD documentation validation and markdown fixing
 
 **Settings**: config (`~/.claude/settings.json`) <https://docs.anthropic.com/en/docs/claude-code/settings>
 **Hooks**: <https://docs.anthropic.com/en/docs/claude-code/hooks>
@@ -763,12 +764,12 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena 
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-21T14:51:00Z"
 document:
     type: "claude-memory"
     path: "./sdd-rules/CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-20T08:02:00Z"
+    version: "1.0.2"
+    last_updated: "2025-09-21T14:51:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

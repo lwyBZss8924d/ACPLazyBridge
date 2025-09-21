@@ -655,6 +655,9 @@ Available sub‑agents (installed per‑user):
 - **code-analyzer** — ~/.claude/agents/code-analyzer.md
     - Purpose: Repository analysis via ast-grep scan using sgconfig.yml and curated rules (Rust/JS/Python/Go).
     - Best for: rule‑based audits (e.g., rust-no-unwrap, js-no-console-log) with JSON/SARIF output and summaries.
+- **sdd-doc-validator** — ~/.claude/agents/sdd-doc-validator.md
+    - Purpose: Comprehensive SDD documentation validation, markdown linting, and automated fixing.
+    - Best for: markdown style validation, SDD compliance checking, auto-fixing violations, managing long-term documentation quality improvements.
 
 Headless discipline and SDD alignment
 
@@ -674,6 +677,8 @@ When to delegate (decision guide)
   → Delegate to code-retriever with: language + AST pattern(s) + scope paths; it returns precise, cited matches (file:line), optimizing breadth/precision automatically.
 - I need a repo‑wide rule audit or security/quality sweep
   → Delegate to code-analyzer with: rule_filter (regex) + optional globs + desired format (json/jsonl/sarif/github); it uses sgconfig.yml and writes machine‑readable evidence plus summaries.
+- I need markdown validation, SDD compliance checking, or documentation quality fixes
+  → Delegate to sdd-doc-validator for: comprehensive markdown validation, auto-fixing violations, tracking long-term documentation improvements, and SDD compliance verification.
 
 Delegation contract (what you provide to the sub‑agent)
 
@@ -682,6 +687,7 @@ Delegation contract (what you provide to the sub‑agent)
     - For document-retriever: keywords (prefer comma‑separated multi‑aspect queries)
     - For code-retriever: AST pattern(s) and language (e.g., -l rust, -l ts)
     - For code-analyzer: rule_filter (e.g., '^rust-no-unwrap$') and format (json|jsonl|sarif|github)
+    - For sdd-doc-validator: validation type (markdown/sdd/both), fix mode (auto/manual/both), scope (paths)
 - outputs: optional task slug to group artifacts under _artifacts/reports/<task>/
 - anchors (optional): strong keywords to pre‑filter very large corpora
 - caps (optional): HEADLESS_MAX_FILES / HEADLESS_DISPLAY_CAP overrides if you need different limits
@@ -693,7 +699,9 @@ Examples (prompts you can give to the sub‑agents)
 - code-retriever (AST code search)
   “In crates/**.rs, find all $EXPR.unwrap() (language: rust), exclude tests/benches. Return JSON matches with file and line, and write the full list to _artifacts/reports/rust-unwrap/.”
 - code-analyzer (rule‑based audit via sgconfig.yml)
-  “Run ast-grep scan with sgconfig.yml using rule_filter '^rust-no-unwrap$', format jsonl; produce a per‑file count summary and store artifacts under_artifacts/reports/rust-unwrap-audit/.”
+  "Run ast-grep scan with sgconfig.yml using rule_filter '^rust-no-unwrap$', format jsonl; produce a per‑file count summary and store artifacts under_artifacts/reports/rust-unwrap-audit/."
+- sdd-doc-validator (markdown validation and fixing)
+  "Validate all markdown files for SDD compliance and style violations. Auto-fix what can be fixed, create a TodoWrite list for manual fixes, and store progress in _artifacts/reports/markdown-validation/."
 
 Operating notes (outside-of-repo docs)
 
@@ -706,6 +714,7 @@ Optional: Keep specs in sync via CLAUDE.md imports
   `~/.claude/agents/document-retriever.md`
   `~/.claude/agents/code-retriever.md`
   `~/.claude/agents/code-analyzer.md`
+  `~/.claude/agents/sdd-doc-validator.md`
 
 ---
 
@@ -716,8 +725,8 @@ constitution:
 document:
     type: "claude-memory"
     path: "./CLAUDE.md"
-    version: "1.0.2"
-    last_updated: "2025-09-21T07:27:35Z"
+    version: "1.0.3"
+    last_updated: "2025-09-21T14:48:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

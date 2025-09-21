@@ -9,7 +9,8 @@ This directory contains custom slash commands, hooks, and sub-agents to streamli
 ├── agents/                   # Custom sub-agents for specialized tasks
 │   ├── document-retriever.md # Document search and parsing agent
 │   ├── code-retriever.md    # AST-based code search agent
-│   └── code-analyzer.md     # Repository analysis agent
+│   ├── code-analyzer.md     # Repository analysis agent
+│   └── sdd-doc-validator.md # SDD documentation validation agent
 ├── commands/                 # Custom slash commands
 │   ├── specify.md           # Create feature specifications
 │   ├── plan.md              # Generate implementation plans
@@ -113,6 +114,14 @@ Generate executable task lists:
 - Repository-wide rule audits
 - Uses sgconfig.yml for Rust/JS/Python/Go
 - Produces JSON/SARIF reports
+
+#### SDD Doc Validator
+
+- Comprehensive markdown validation and fixing
+- SDD compliance checking across all documents
+- Auto-fixes common violations with markdownlint
+- Manages long-term documentation quality improvements
+- Tracks progress across multiple sessions for large-scale fixes
 
 ## Configuration
 

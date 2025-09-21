@@ -877,12 +877,13 @@ ACPLazyBridge/dev-docs
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-21T14:55:00Z"
 document:
     type: "warp-memory"
     path: "./WARP.md"
-    version: "1.0.2"
-    last_updated: "2025-09-21T07:27:35Z"
+    version: "1.0.3"
+    last_updated: "2025-09-21T14:55:00Z"
+    changelog: "Updated with sdd-doc-validator sub-agent integration"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

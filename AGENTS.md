@@ -316,6 +316,7 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 ## You have Augmented CLI Development tools chain and compose for codebase Code Analysis
 
 Tip: When you need to do Code Search and Retrieval and any Codebase Analysis Operations, Can use subagent: "code-retriever" or "code-analyzer"
+Tip: When you need to validate documentation, fix markdown violations, or ensure SDD compliance, Can use subagent: "sdd-doc-validator"
 
 Advanced code analysis techniques: @sdd-rules/rules/code-analysis/sdd-rules-code-analysis.md
 
@@ -876,8 +877,9 @@ constitution:
 document:
     type: "codex-memory"
     path: "./AGENTS.md"
-    version: "1.0.2"
-    last_updated: "2025-09-21T07:27:35Z"
+    version: "1.0.3"
+    last_updated: "2025-09-21T14:54:00Z"
+    changelog: "Added sdd-doc-validator reference for documentation validation"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

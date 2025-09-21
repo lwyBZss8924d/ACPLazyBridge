@@ -260,20 +260,31 @@ Use 4 spaces for nested lists:
   - Second level (2 spaces)
 ```
 
+## Automated Validation and Fixing
+
+The `sdd-doc-validator` sub-agent provides comprehensive markdown validation and fixing capabilities:
+- Runs markdownlint with project configuration
+- Auto-fixes violations where possible
+- Creates tracking lists for manual fixes
+- Manages long-term documentation quality improvements
+
+For large-scale markdown fixes or comprehensive validation, delegate to the sdd-doc-validator agent.
+
 ---
 
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-21T14:53:00Z"
 rules:
     name: "markdownlint"
     category: "documentation-style"
-    version: "1.0.1"
+    version: "1.0.2"
 document:
     type: "sdd-rule"
     path: "sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-21T14:53:00Z"
+    changelog: "Added sdd-doc-validator reference for automated validation and fixing"
     related:
         - "sdd-rules/rules/documentation-style/sdd-rules-documentation-style.md"
         - "sdd-rules/rules/documentation-style/google-markdown-style-guide.md"

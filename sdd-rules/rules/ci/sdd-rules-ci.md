@@ -261,6 +261,14 @@ Benefits:
 - Links to relevant documentation
 - Evidence preserved for debugging
 
+### Documentation Quality Automation
+
+For comprehensive markdown validation and fixing, the `sdd-doc-validator` sub-agent can be used to:
+- Run all SDD validation scripts automatically
+- Apply auto-fixes for common violations
+- Track long-term documentation improvements
+- Generate quality reports and evidence trails
+
 ## Future Enhancements
 
 ### Planned Improvements
@@ -288,17 +296,17 @@ Benefits:
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-20T16:00:00Z"
+    last_checked: "2025-09-21T14:52:00Z"
 rules:
     name: "ci-quality-gates"
     category: "ci"
-    version: "1.1.0"
+    version: "1.1.1"
 document:
     type: "sdd-rule"
     path: "sdd-rules/rules/ci/sdd-rules-ci.md"
-    version: "1.1.0"
-    last_updated: "2025-09-20T16:00:00Z"
-    changelog: "Added comprehensive CI rules following PR #36 implementation"
+    version: "1.1.1"
+    last_updated: "2025-09-21T14:52:00Z"
+    changelog: "Added sdd-doc-validator reference for documentation quality automation"
     related:
         - ".github/workflows/ci.yml"
         - "scripts/ci/run-sdd-gates.sh"
