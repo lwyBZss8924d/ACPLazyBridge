@@ -4,7 +4,6 @@ allowed-tools:
   status:*), Bash(scripts/sdd/*:*), Read, Write, Edit, MultiEdit, Glob, Grep, Task, TodoWrite
 argument-hint: <issue-number|issue-url> [additional-context]
 description: Initialize SDD task from GitHub Issue (supports issue number or full URL)
-model: claude-opus-4-1
 ---
 
 ## SDD Task Initialization
@@ -120,9 +119,9 @@ specs:
 
 This command accepts:
 
-- Issue number: `/sdd-task 28`
+- Issue number: `/sdd-task 036`
 - GitHub URL: `/sdd-task https://github.com/lwyBZss8924d/ACPLazyBridge/issues/28`
-- With context: `/sdd-task 28 "focus on performance optimization"`
+- With context: `/sdd-task 036 "focus on performance optimization"`
 
 ---
 

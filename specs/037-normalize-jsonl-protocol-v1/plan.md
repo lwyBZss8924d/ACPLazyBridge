@@ -4,8 +4,8 @@
 worktree: /Users/arthur/dev-space/acplb-worktrees/037-normalize-jsonl-protocol-v1
 feature_branch: chore/037-normalize-jsonl-protocol-v1
 created: 2025-09-21T19:30:00Z
-last_updated: 2025-09-21T20:50:06Z
-status: in_progress
+last_updated: 2025-09-21T21:48:12Z
+status: completed
 input: Feature specification from `/specs/037-normalize-jsonl-protocol-v1/spec.md`
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/14
 spec_uri: specs/037-normalize-jsonl-protocol-v1/spec.md
