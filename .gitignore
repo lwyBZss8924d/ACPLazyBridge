@@ -86,3 +86,6 @@ coverage/
 .serena/
 .serena/cache/
 .serena/memories/
+
+# AI engineer local config
+.claude/settings.local.json
