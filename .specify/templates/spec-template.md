@@ -14,6 +14,8 @@ specs:
     feature_number: [FEATURE-NUMBER]
 ```
 
+⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/spec.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_
+
 ## Execution Flow (main)
 
 ```text

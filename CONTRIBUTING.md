@@ -1,203 +1,129 @@
-# CONTRIBUTING
+## Contributing to ACPLazyBridge
 
-This repository follows a worktree-first, trunk-based development workflow with protected main and PR-based merges. Please read this guide before contributing.
+We're thrilled that you'd (all Human developers and other AI engineers) like to contribute to ACPLazyBridge. Contributions to the public under the [project's open source license](LICENSE).
 
-## Summary
+## Prerequisites for running and testing code
 
-- main is always stable and release-ready. No direct commits, PR-only.
-- Root repo directory is always checked out to main and is not used for development.
-- Each task uses its own Git worktree and feature branch from origin/main.
-- All changes go through PR with CI checks, code review, and evidence.
-- Squash merge strategy keeps a clean main history.
+- Rust stable toolchain (rustup) with `cargo`, `rustfmt`, and `clippy`.
+- Workspace uses a pinned toolchain (`rust-toolchain.toml`).
+- For docs/style checks: Node.js + `markdownlint-cli2` (or use `npx`).
+- Optional: `ast-grep` for code scanning; `cargo-tarpaulin` for coverage.
+- macOS/Linux shell environment; zsh/bash supported.
 
-## Prerequisites
+Quick checks:
 
-- Rust stable via rustup
-- cargo, rustfmt, clippy
-- Optional: jq (for validating JSONL outputs), Codex CLI for integration testing
+- Build: `cargo build --workspace --all-features`
+- Tests: `cargo test --workspace --all-features --locked`
+- Format: `cargo fmt --all -- --check`
+- Lint: `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+- Local CI (structure + language + markdown + semantic): `./scripts/ci/run-local-ci.sh`
 
-## Branching & Worktrees
+## Submitting a pull request
 
-- Naming: feature|fix|perf|chore|docs/&lt;kebab-slug&gt;
-- Create from origin/main:
-    - Container path (required): /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt;
-    - Command:
-    git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt; origin/main -b feature/&lt;slug&gt;
-    - Optional symlink (for IDE navigation under repo root):
-    ln -sfn /Users/arthur/dev-space/acplb-worktrees/&lt;task-dir&gt; /Users/arthur/dev-space/ACPLazyBridge/.worktrees/&lt;task-dir&gt;
-- One worktree per feature branch. Do not checkout the same branch in multiple worktrees.
-- After PR merge, remove the worktree and delete the local branch if desired.
+>[!NOTE]
+>If your pull request introduces a large change that materially impacts the work of the API / CLI or the rest of the repository (e.g., you're introducing new templates, arguments, or otherwise major changes), make sure that it was **discussed and agreed upon** by the project maintainers. Pull requests with large changes that did not have a prior conversation and agreement will be closed.
 
-## Commits & PRs
+Before you open a PR, ensure the following:
 
-- Conventional Commits: feat, fix, perf, chore, docs, test, refactor, build, ci
-- Keep commits focused and small; split logically distinct changes into separate PRs.
-- PR description must include:
-    - Motivation and design summary
-    - Acceptance criteria and risk/rollback plan
-    - Links to dev-docs/plan/issues and references
-    - Evidence: test commands, JSONL inputs/outputs locations, logs, and jq filters
-- Default merge method: Squash and merge into main
+- Branch/worktree: do not work on `main`.
+    - Create a branch from `origin/main` using one of: `feature|fix|perf|chore|docs`.
+    - Prefer worktree flow (example path shown in docs): see `.specify/memory/constitution.md` and AGENTS guidance.
+- SDD artifacts exist under `specs/<NNN>-<slug>/` with required metadata block:
+    - `spec.md` (WHAT/WHY, requirements, acceptance)
+    - `plan.md` (design, architecture, trade‑offs)
+    - `tasks.md` (subtasks, responsibilities, test plan)
+    - Include Issue‑URI, Spec/Plan/Tasks URIs, and Evidence‑URIs.
+- Evidence is produced and linked under `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`.
+- Quality gates pass locally:
+    - `cargo fmt --all -- --check`
+    - `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+    - `cargo test --workspace --all-features --locked`
+    - `./scripts/ci/run-local-ci.sh`
+- PR description includes:
+    - Links to `specs/<NNN>-<slug>/spec.md`, `plan.md`, `tasks.md`.
+    - Links to evidence outputs (tests/logs/jq/reports) and summary of results.
+    - Risks, rollback plan, and CI summary.
 
-## Code Quality Gates
+Commit hygiene:
 
-- Formatting: cargo fmt --all -- --check
-- Lint: cargo clippy --workspace --all-targets --all-features -- -D warnings
-- Tests: cargo test --workspace --all-features --locked
-- Protocol scenarios (JSONL) should run cleanly and log to stderr only; stdout must be valid JSONL.
-- Static Analysis: ast-grep scan -c sgconfig.yml (see AST-grep section below)
+- Use conventional, focused commits following `sdd-rules/rules/git/commit/sdd-rules-commit-message.md`.
+- Keep changes minimal and scoped to the task. Avoid unrelated refactors.
 
-## AST-grep Static Analysis
+Here are a few things you can do that will increase the likelihood of your pull request being accepted:
 
-The project uses ast-grep for static code analysis to catch common issues:
+- Follow the project's SDD-CONSTITUTION (.specify/memory/constitution.md) and (.specify/memory/lifecycle.md) and (sdd-rules/rules/README.md) and coding conventions.
+- Write tests for new functionality.
+- Update any SDD documentations (.specify/) and (sdd-rules/) if your changes affect features. Then run (.specify/memory/constitution_update_checklist.md) constitution_update_checklist job!
+- Keep your change as focused as possible. If there are multiple changes you would like to make that are not dependent upon each other, consider submitting them as separate pull requests.
+- Write a [good commit message](sdd-rules/rules/git/commit/sdd-rules-commit-message.md).
+- Test your changes with the Spec-Driven Development workflow to ensure compatibility.
 
-### Running ast-grep
+## Development workflow
 
-```bash
-# Run full scan
-ast-grep scan -c sgconfig.yml .
+When working on "ACPLazyBridge" Specification‑Driven Development (SDD) team:
 
-# Check specific rule
-ast-grep scan -c sgconfig.yml --filter '^rust-no-unwrap$' .
+- Context gathering
+    - Inspect repo and relevant SDD docs: `.specify/`, `sdd-rules/`, `dev-docs/`.
+    - Review open issues under `dev-docs/plan/issues/` when applicable.
+- Plan tasks (SDD flow)
+    - Use `/specify`, `/plan`, `/tasks` commands per `.specify/commands/*.md` to create `specs/<NNN>-<slug>/` artifacts.
+    - Ensure links and metadata blocks are present and consistent.
+- Implement & verify
+    - Develop on a feature/fix branch in a dedicated worktree.
+    - Run: `cargo fmt`, `cargo clippy -D warnings`, `cargo test --locked`.
+    - Optionally run adapter smoke tests or JSONL playback if relevant to changes.
+    - Keep stdout JSON‑only for protocol paths; route logs to stderr.
+- Evidence
+    - Store test logs and artifacts under `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`.
+    - Summarize pass/fail and reference in PR.
+- Pre‑PR checks
+    - Run `./scripts/ci/run-local-ci.sh` or individual scripts:
+        - `scripts/sdd/check_language.sh`
+        - `scripts/sdd/lint_docs.sh`
+        - `scripts/sdd/run_semantic_checks.sh`
+    - Re‑run `.specify/memory/constitution_update_checklist.md` when SDD docs change.
 
-# Run with summary
-ast-grep scan -c sgconfig.yml --inspect summary .
-```
 
-### Handling Test Code
+## Contributions in ACPLazyBridge fllow ACP (Agent Client Protocol)
 
-Test code can use `unwrap()` and `expect()` freely. Due to ast-grep limitations, suppression comments are required:
+We welcome and encourage the includes Human developers and other AI engineers to help improve ACPLazyBridge! Master AI engineers valuable contributions have been enhanced with AI engineers or human developers for code generation, issue detection, and feature definition.
 
-**Important:** File exclusion patterns in rule YAML files are ignored when rules are loaded via `ruleDirs` in sgconfig.yml. All test code needs explicit suppression comments.
+### What we're looking for
 
-For test files, add at the top of the file:
+When submitting any contributions, please ensure they include:
 
-```rust
-// ast-grep-ignore: rust-no-unwrap
-// Test files can use unwrap() freely
-```
+- **Master AI engineer understanding and testing** - You've personally tested the changes and understand what they do
+- **Clear rationale** - You can explain why the change is needed and how it fits within ACPLazyBridge's goals
+- **Concrete evidence** - Include test cases, scenarios, or examples that demonstrate the improvement
+- **Your own analysis** - Share your thoughts on the end-to-end developer experience
 
-For inline tests in src files, add suppression before each unwrap:
+### What we'll close
 
-```rust
-#[cfg(test)]
-mod tests {
-    use super::*;
+We reserve the right to close contributions that appear to be:
 
-    #[test]
-    fn test_something() {
-        // ast-grep-ignore
-        let result = Some(42).unwrap();
-    }
-}
-```
+- Untested changes submitted without verification
+- Generic suggestions that don't address specific ACPLazyBridge needs
+- Bulk submissions that show no Master AI engineer review or understanding
 
-### Suppression Comments
+### Guidelines for success
 
-When you need to suppress warnings in non-test code (use sparingly):
+The key is demonstrating that you (all Human developers and other AI engineers) understand and have validated your proposed changes. If a PR not testing, it likely needs more work before submission.
 
-```rust
-// ast-grep-ignore must be on the line immediately before the code
-// ast-grep-ignore
-let value = must_succeed.unwrap(); // Document why this is safe
+## Resources
 
-// Or suppress specific rules
-// ast-grep-ignore: rust-no-unwrap
-let value = must_succeed.unwrap();
-```
-
-**Note:** Module-level or file-level suppressions don't cascade. Each warning needs its own suppression comment on the preceding line.
-
-## Security & Logging
-
-- Never log or print secrets. Use environment variables securely in CI.
-- Protocol processes must write logs to stderr; stdout is reserved for JSON-RPC/JSONL output.
-- CodeQL custom queries enforce security rules automatically. See `dev-docs/engineering/codeql.md` for query details.
-
-## CI/CD
-
-- CI runs on PRs and on push to feature/*.
-- Required checks: fmt, clippy, test, protocol scenario replay (if scenarios present), optional security (deny/audit).
-- CodeQL security analysis runs on all PRs and main pushes. See `dev-docs/engineering/codeql.md` for details.
-- main is a protected branch requiring successful status checks and at least one review.
-
-## Reviewers & Ownership
-
-- CODEOWNERS define default reviewers. Use them for subsystem expertise.
-- For large changes, propose design in dev-docs/plan/issues and seek early feedback.
-
-## Evidence & Traceability
-
-- Keep JSONL tests under `dev-docs/review/_artifacts/tests/` and outputs under `dev-docs/review/_artifacts/logs/` when running locally.
-- Maintain traceability (e.g., dev-docs/review/_artifacts/traceability.csv) linking requirements/specs/implementation/tests.
-
-## Local Quickstart (example)
-
-- New task (worktree setup):
-  git -C /Users/arthur/dev-space/ACPLazyBridge fetch origin
-  git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/<task-dir> origin/main -b feature/<slug>
-- Build & check:
-  cargo fmt --all -- --check && cargo clippy --workspace --all-targets --all-features -- -D warnings && cargo test --workspace --all-features --locked
-- Run protocol scenarios (if present):
-  for f in dev-docs/review/_artifacts/tests/*.jsonl; do cargo run -p codex-cli-acp < "$f" | jq -c . >/dev/null || exit 1; done
-
-## Questions
-
-- Open a discussion or issue with context (link issues/specs). See ISSUE_TEMPLATE for guidance.
-
-## Non-mock testing policy (scripts + manual smoke)
-
-- Scope: WARP-Agent scripted non-mock testing and Zed manual smoke testing (interfacing with real Provider CLI).
-- Current implementation: Codex via codex-cli-acp; Claude Code / Gemini agent adapters (ACPLazyBridge) will be added later.
-
-## Non-mock testing prerequisites
-
-- Provider CLI installation and configuration:
-    - Codex CLI installed and configured (global config: ~/.codex/config.toml).
-    - Zed installed; user config: ~/.config/zed/settings.json.
-    - Claude Code (future): ~/.claude/settings.json; ANTHROPIC_API_KEY via environment variable or login flow.
-    - Gemini (future): GEMINI_API_KEY via environment variable.
-- Build adapter binaries:
-    - cargo build --release -p codex-cli-acp
-
-## Secrets
-
-- Never print or echo keys. Inject via environment variables and use implicitly in commands.
-- In documentation/command examples, use placeholders like {{ANTHROPIC_API_KEY}} / {{GEMINI_API_KEY}}.
-
-## WARP/CLAUDE-CODE/GEMINI Agent scripted non-mock tests (Codex/Claude Code/Gemini)
-
-- JSONL scenario location: dev-docs/review/_artifacts/tests/
-- Run example:
-    - target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/handshake.jsonl | tee dev-docs/review/_artifacts/logs/run_$(date +%Y%m%d_%H%M%S).log
-- Notify integration test:
-    - ACPLB_NOTIFY_PATH=/tmp/notify.jsonl target/release/codex-cli-acp < dev-docs/review/_artifacts/tests/notify_idle.jsonl | tee dev-docs/review/_artifacts/logs/notify_$(date +%Y%m%d_%H%M%S).log
-    - Verify immediate completion on notify signal vs idle timeout fallback
-- Optional validation:
-    - Use jq filters from dev-docs/review/_artifacts/jq/filters.md to generate review snapshots (error and result.stopReason).
-- Acceptance criteria:
-    - initialize returns protocolVersion, and agentCapabilities.promptCapabilities.image=false
-    - session/new returns non-empty sessionId
-    - session/prompt shows multiple session/update(type=agent_message_chunk) messages and finally returns result.stopReason
-    - session/cancel produces stopReason=Cancelled
-    - With notify: immediate completion on agent-turn-complete signal
-    - Without notify: completion after idle timeout (default 1200ms)
-
-## Zed manual smoke (manual smoke testing)
-
-- Configure `~/.config/zed/settings.json`:
-    - Current: ACPLazyBridge (Codex) → points to absolute path of target/release/codex-cli-acp
-    - Claude/Gemini entries will be enabled later when corresponding ACPLazyBridge binaries are available
-- IDE side ensures adapter stdout only outputs JSONL; logs written to `stderr` and archived per specification.
-- After running, save complete output to dev-docs/review/_artifacts/logs/ (see dev-docs/review/_artifacts/logs/README.md).
-
-## Evidence retention
-
-- Log files named with timestamps, stored in dev-docs/review/_artifacts/logs/.
-- Use jq filters to generate review summaries.
-- Do not record plaintext keys; sanitize when necessary.
-
-## Notes
-
-- This section covers repository-level policies; detailed steps for each Agent are in WARP.md and CLAUDE.md respectively.
-- After Claude Code related branches are merged into main, enable Claude/Gemini non-mock smoke configurations per the supplementary M1 test environment ISSUE checklist.
+- [constitution](.specify/memory/constitution.md)
+- [constitution-lifecycle](.specify/memory/lifecycle.md)
+- [SDD documentations Index](.specify/README.md)
+- [SDD Rules Index](sdd-rules/rules/README.md)
+- [sdd-task SOP rules](.claude/commands/sdd-task.md)
+- [sdd Tasks specify.md SOP rules](.specify/commands/specify.md)
+- [sdd Tasks specify.md template](.specify/templates/spec-template.md)
+- [sdd Tasks plan.md SOP rules](.specify/commands/plan.md)
+- [sdd Tasks plan.md template](.specify/templates/plan-template.md)
+- [sdd Tasks tasks.md SOP rules](.specify/commands/tasks.md)
+- [sdd Tasks tasks.md template](.specify/templates/tasks-template.md)
+- [ACP and outher Dev docs references](dev-docs/references/)
+- [Spec-Driven Development Methodology](./.specify/spec-driven.md)
+- [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
+- [Using Pull Requests](https://help.github.com/articles/about-pull-requests/)
+- [GitHub Help](https://help.github.com)

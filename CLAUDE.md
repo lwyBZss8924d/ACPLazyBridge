@@ -19,27 +19,108 @@ Team's AI Engineer member: ("claude")'s role and operating rules for **ACPLazyBr
 ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents and agent-tools plugins with IDEs, editors, and development tools.
 It provides native adapters for various AI systems while maintaining protocol consistency and developer workflow integration through Specification-Driven Development (SDD).
 
-## Architecture
+```tree
+ACPLazyBridge/crates
+❯ tree
+.
+├── CLAUDE.md
+├── acp-lazy-core
+│   ├── CLAUDE.md
+│   ├── Cargo.toml
+│   └── src
+│       ├── lib.rs
+│       ├── permissions.rs
+│       ├── protocol.rs
+│       └── transport.rs
+└── codex-cli-acp
+    ├── CLAUDE.md
+    ├── Cargo.toml
+    ├── src
+    │   ├── bin
+    │   │   ├── acplb_notify_forwarder.rs
+    │   │   └── playback.rs
+    │   ├── codex_proto.rs
+    │   ├── lib.rs
+    │   ├── main.rs
+    │   ├── notify_source.rs
+    │   ├── tool_calls.rs
+    │   └── validation.rs
+    └── tests
+        ├── notify_test.rs
+        ├── playback.rs
+        ├── session_update_format.rs
+        └── tool_calls_test.rs
+```
 
-The project consists of two main crates:
+### Repository Guidelines**
 
-### `acp-lazy-core/` - Protocol Library
+#### Project Structure & Module Organization
 
-- Core ACP protocol types and transport layer
-- Permission system and validation logic
-- Shared utilities for all adapters
+- Rust workspace with crates in `crates/`:
+    - `crates/acp-lazy-core`: shared ACP bridge utilities.
+    - `crates/codex-cli-acp`: Codex ACP adapter binaries (`codex-cli-acp`, `playback`, `acplb-notify-forwarder`).
+- Tests: unit in each crate under `src/` modules; integration tests in `crates/*/tests/`.
+- CI and helpers: `scripts/ci/` (pre-PR checks), `scripts/ast-grep/` (static analysis).
+- Docs/specs: `dev-docs/`, `specs/`; rule sets in `sgconfig.yml`, `sdd-rules/`.
 
-### `codex-cli-acp/` - Codex CLI Adapter
+#### Build, Test, and Development Commands
 
-- Implements ACP server for Codex CLI
-- Handles streaming with real-time `agent_message_chunk` events
-- Maps tool calls between ACP and Codex formats
-- Manages turn completion via notifications or idle timeout
-- Key components:
-    - `codex_proto.rs` - Main protocol handler and session management
-    - `streaming.rs` - Real-time streaming implementation
-    - `tool_calls.rs` - Tool call mapping and execution
-    - `notify.rs` - External notification system for turn completion
+- Format: `cargo fmt --all -- --check` — verify formatting.
+- Lint: `cargo clippy --workspace --all-targets --all-features -- -D warnings` — no warnings allowed.
+- Test: `cargo test --workspace --all-features --locked` — run all tests.
+- Adapter (debug): `cargo run -p codex-cli-acp` — run the Codex ACP adapter.
+- Adapter (release): `cargo build --release -p codex-cli-acp`.
+- Local CI suite: `scripts/ci/run-local-ci.sh` — runs structure, language, markdown, and semantic checks.
+- Static analysis: `ast-grep scan -c sgconfig.yml .`.
+
+#### Coding Style & Naming Conventions
+
+- Rust style via rustfmt (4-space indent); keep code clippy-clean.
+- Avoid `unwrap/expect` in non-test code; prefer `anyhow`/`thiserror` and `Result`.
+- Logging with `tracing` goes to stderr; stdout is reserved for JSON/JSONL protocol output.
+- Names: crates and modules `snake-kebab`/`snake_case`; types `PascalCase`; functions/vars `snake_case`; constants `SCREAMING_SNAKE_CASE`.
+
+#### Testing Guidelines
+
+- Place integration tests in `crates/<name>/tests/`.
+- For AST-grep in tests, add before uses of `unwrap()`:
+
+  ```rust
+  // ast-grep-ignore: rust-no-unwrap
+  ```
+
+- JSONL protocol scenarios (if used) live under `dev-docs/review/_artifacts/tests/` and can be piped into `codex-cli-acp`.
+
+### Architecture (high level)
+
+- Workspace overview
+    - crates/acp-lazy-core (library)
+        - protocol.rs: JSON‑RPC 2.0 types and classification (requests, notifications, responses; Error codes −32700…−32603).
+        - transport.rs: ProcessTransport (spawn child process with piped stdio, stderr severity logging), JSONL I/O helpers (read_lines, read_values, write_line), async reader tasks, MessageQueue.
+        - permissions.rs: Maps ACP permission modes to Codex CLI overrides (-c approval_policy=…, -c sandbox_mode=…, network access toggles) with env overrides (ACPLB_*).
+        - logging: tracing subscriber directed to stderr to keep stdout JSON‑only.
+    - crates/codex-cli-acp (binary "codex-cli-acp" + utilities)
+        - main.rs: Implements ACP server methods:
+            - initialize: returns protocolVersion: 1 (integer) and agentCapabilities.promptCapabilities.
+            - session/new: validates cwd is absolute, mcpServers is array; stores permissionMode; creates sessionId.
+            - session/prompt: spawns Codex CLI in proto mode with permission overrides; optionally injects a notify forwarder; streams Codex stdout to ACP session/update events; ends on notify event or idle timeout; returns stopReason.
+            - session/cancel: terminates the Codex child process.
+        - codex_proto.rs: Maps Codex events (AgentMessage, AgentMessageDelta, ToolCall, ToolCalls, TaskComplete, Error) to ACP session/update payloads:
+            - AgentMessage/Delta → AgentMessageChunk with de‑duplication.
+            - ToolCall/ToolCallUpdate with status transitions (pending → in_progress → completed/failed), kind mapping, output previews, and error categorization.
+        - tool_calls.rs: Tool categorization (read/edit/delete/move/search/execute/think/fetch/other), shell parameter extraction (command, workdir, timeout, sudo), UTF‑8 safe truncation previews.
+        - notify_source.rs: File or FIFO notification sources; watches for {"type":"agent-turn-complete", …} to cut turns immediately; file mode uses polling; FIFO mode uses a blocking reader.
+        - validation.rs: RPC error classification (InvalidParams, MethodNotFound, Internal) and helpers (absolute path validation, 1‑based line numbers).
+        - bins:
+            - acplb-notify-forwarder: small helper that writes Codex notify JSON to ACPLB_NOTIFY_PATH (file/FIFO) for immediate turn completion.
+            - playback: test utility that builds and runs the server, forwards JSONL requests, and waits for responses.
+
+- Data flow (session/prompt)
+  1) Client calls session/prompt → server maps ACP permission mode to Codex overrides.
+  2) Server spawns Codex CLI (proto) with args like: -c approval_policy=never, -c sandbox_mode=…; may inject acplb-notify-forwarder.
+  3) Server writes a Codex request {"method":"prompt","params":{"messages":[…]}} to the child stdin.
+  4) Server reads child stdout lines → codex_proto maps each to ACP session/update; writes to stdout as JSONL.
+  5) Turn ends on notify event "agent-turn-complete" or after idle timeout (defaults below). Response carries {"stopReason":"end_turn"}.
 
 ## Common Development Commands
 
@@ -75,7 +156,7 @@ cat dev-docs/review/_artifacts/tests/handshake.jsonl | cargo run -p codex-cli-ac
 codex proto -c approval_policy="never" < dev-docs/review/_artifacts/tests/basic_session.jsonl
 ```
 
-### Code Analysis command line Tools
+## You have Augmented CLI Development tools chain and compose for codebase Code Analysis
 
 Tip: When you need to do Code Search and Retrieval and any Codebase Analysis Operations, Can use subagent: "code-retriever" or "code-analyzer"
 
@@ -90,11 +171,11 @@ Advanced code analysis techniques: @sdd-rules/rules/code-analysis/sdd-rules-code
 - JSON: `jq`
 - YAML/XML: `yq`
 
-### You have Augmented CLI Development Tooling
+### Augmented CLI Development Tooling
 
 > [sdd-rules-tools-cli-list](sdd-rules/rules/tools-cli/sdd-rules-tools-cli-list.md)
 
-#### `ast-grep` (AST-based Code Analysis)
+### `ast-grep` (AST-based Code Analysis)
 
 > [sdd-rules-tools-cli-astgrep](sdd-rules/rules/tools-cli/sdd-rules-tools-cli-astgrep.md)
 
@@ -112,14 +193,14 @@ ast-grep scan -c ./sgconfig.yml --inspect summary .
 ./scripts/ast-grep/sg-baseline-acp-rust-todo.sh
 ```
 
-#### "SemTools" `search` and `parse` (Document Search and Parsing)
+### "SemTools" CLI Tools use to chain and compose for document retrievl
 
-> [sdd-rules-tools-cli-document-search-and-parsing](sdd-rules/rules/tools-cli/sdd-rules-tools-cli-document-search-and-parsing.md)
+> (sdd-rules/rules/tools-cli/sdd-rules-tools-cli-document-search-and-parsing.md)
 
-##### Parse CLI Help
+#### Parse CLI Help
 
 ```bash
-parse --help
+$ parse --help
 A CLI tool for parsing documents using various backends
 
 Usage: parse [OPTIONS] <FILES>...
@@ -135,17 +216,17 @@ Options:
   -V, --version                      Print version
 ```
 
-##### Search CLI Help
+#### Search CLI Help
 
 ```bash
-search --help
+$ search --help
 A CLI tool for fast semantic keyword search
 
 Usage: search [OPTIONS] <QUERY> [FILES]...
 
 Arguments:
   <QUERY>     Query to search for (positional argument)
-  [FILES]...  Files to search (optional if using stdin)
+  [FILES]...  Files or directories to search
 
 Options:
   -n, --n-lines <N_LINES>            How many lines before/after to return as context [default: 3]
@@ -154,6 +235,25 @@ Options:
   -i, --ignore-case                  Perform case-insensitive search (default is false)
   -h, --help                         Print help
   -V, --version                      Print version
+```
+
+#### Workspace CLI Help
+
+```bash
+$ workspace --help
+Manage semtools workspaces
+
+Usage: workspace <COMMAND>
+
+Commands:
+  use     Use or create a workspace (prints export command to run)
+  status  Show active workspace and basic stats
+  prune   Remove stale or missing files from store
+  help    Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
 ```
 
 ### SDD Validation
@@ -603,9 +703,9 @@ Operating notes (outside-of-repo docs)
 Optional: Keep specs in sync via CLAUDE.md imports
 
 - You may import the per‑user sub‑agent specs for quick reference:
-  `@~/.claude/agents/document-retriever.md`
-  `@~/.claude/agents/code-retriever.md`
-  `@~/.claude/agents/code-analyzer.md`
+  `~/.claude/agents/document-retriever.md`
+  `~/.claude/agents/code-retriever.md`
+  `~/.claude/agents/code-analyzer.md`
 
 ---
 
@@ -617,12 +717,19 @@ document:
     type: "claude-memory"
     path: "./CLAUDE.md"
     version: "1.0.2"
-    last_updated: "2025-09-20T07:27:35Z"
+    last_updated: "2025-09-21T07:27:35Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
+        - ".specify/README.md"
         - "sdd-rules/rules/README.md"
+        - ".claude/commands/sdd-task.md"
+        - ".specify/commands/specify.md"
         - ".specify/templates/spec-template.md"
+        - ".specify/commands/plan.md"
         - ".specify/templates/plan-template.md"
+        - ".specify/commands/tasks.md"
         - ".specify/templates/tasks-template.md"
+        - "(dev-docs/references/)"
+        - ".claude/CLAUDE.md"
 ```

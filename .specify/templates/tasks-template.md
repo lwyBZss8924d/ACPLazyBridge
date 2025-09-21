@@ -25,6 +25,8 @@ commits:
     last_commit: [LAST-COMMIT-HASH] # Last PR commit hash
 ```
 
+⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/tasks.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_
+
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), research.md, data-model.md, contracts/
 

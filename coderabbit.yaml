@@ -1,0 +1,167 @@
+# CodeRabbit Configuration for ACPLazyBridge SDD Workflow
+# This configuration ensures constitution updates maintain consistency across all documents
+
+# Review settings
+language: en
+review_level: thorough
+enable_ai_suggestions: true
+
+# Custom instructions for constitution update reviews
+instructions: |
+  ## SDD Constitution Compliance Review
+
+  This project follows Specification-Driven Development (SDD) with strict constitution requirements.
+  When reviewing changes, especially constitution updates, ensure:
+
+  ### 1. Constitution Version Consistency
+  - All CLAUDE.md files (12 locations) must have matching constitution version
+  - Version format must be semantic (e.g., "1.0.1")
+  - Check metadata blocks at document footers
+
+  ### 2. Document Synchronization
+  The following files MUST be updated together when constitution changes:
+  - `/CLAUDE.md` (root)
+  - `/.github/CLAUDE.md`
+  - `/.specify/CLAUDE.md`
+  - `/sdd-rules/CLAUDE.md`
+  - `/scripts/CLAUDE.md`
+  - `/crates/CLAUDE.md`
+  - `/crates/acp-lazy-core/CLAUDE.md`
+  - `/crates/codex-cli-acp/CLAUDE.md`
+  - `/dev-docs/CLAUDE.md`
+  - `/specs/CLAUDE.md`
+  - `/queries/CLAUDE.md`
+  - `/dev-docs/review/_artifacts/CLAUDE.md`
+
+  ### 3. Template Updates
+  When constitution articles change, verify template updates:
+  - `.specify/templates/spec-template.md`
+  - `.specify/templates/plan-template.md`
+  - `.specify/templates/tasks-template.md`
+
+  ### 4. Command Documentation
+  Check command documentation alignment:
+  - `.specify/commands/specify.md`
+  - `.specify/commands/plan.md`
+  - `.specify/commands/tasks.md`
+  - `.specify/commands/sdd-task.md`
+
+  ### 5. Constitutional Gates
+  Validate adherence to constitution articles:
+  - Article I: Library-First Development
+  - Article III: Test-First Development (RED→GREEN→REFACTOR)
+  - Article VII: Simplicity (≤3 projects)
+  - Article VIII: Anti-Abstraction
+  - Article IX: Integration-First
+
+  ### 6. Language Policy
+  All normative artifacts must be English-only:
+  - No non-English text in specs/, sdd-rules/, .specify/
+  - Comments in code can be any language
+  - User-facing documentation must be English
+
+  ### 7. Metadata Validation
+  Each document must have valid YAML metadata:
+  ```yaml
+  constitution:
+      version: "X.Y.Z"
+      last_checked: "ISO-8601 timestamp"
+  document:
+      type: "document-type"
+      path: "./relative/path"
+      version: "X.Y.Z"
+      last_updated: "ISO-8601 timestamp"
+      dependencies: [list of paths]
+  ```
+
+# File patterns to focus on for constitution updates
+patterns:
+  constitution:
+    - ".specify/memory/constitution.md"
+    - ".specify/memory/constitution_update_checklist.md"
+
+  claude_files:
+    - "**/CLAUDE.md"
+    - "CLAUDE.md"
+
+  templates:
+    - ".specify/templates/*.md"
+
+  sdd_docs:
+    - "sdd-rules/**/*.md"
+    - ".specify/**/*.md"
+    - "specs/**/*.md"
+
+# Review rules
+rules:
+  - id: constitution-version-sync
+    description: "Ensure constitution version is synchronized across all CLAUDE.md files"
+    severity: error
+    pattern: "constitution:\\s+version:"
+
+  - id: metadata-format
+    description: "Validate YAML metadata format at document footer"
+    severity: error
+    pattern: "^```yaml$"
+
+  - id: english-only-normative
+    description: "Check for non-English text in normative artifacts"
+    severity: warning
+    paths:
+      - "specs/**/*.md"
+      - "sdd-rules/**/*.md"
+      - ".specify/**/*.md"
+
+  - id: test-first-verification
+    description: "Ensure tests are written before implementation (Article III)"
+    severity: error
+
+  - id: library-first-check
+    description: "Verify library-first approach (Article I)"
+    severity: error
+
+  - id: simplicity-check
+    description: "Check for unnecessary complexity (Article VII)"
+    severity: warning
+
+# Exclude patterns
+exclude:
+  - "target/"
+  - "node_modules/"
+  - ".git/"
+  - "_artifacts/"
+  - "*.log"
+  - "*.tmp"
+
+# Integration with existing tools
+integrations:
+  ast_grep:
+    config: "./sgconfig.yml"
+
+  markdownlint:
+    config: "./.markdownlint.json"
+
+# Review workflow
+workflow:
+  pre_review:
+    - "Validate git worktree is not main branch"
+    - "Check for uncommitted constitution changes"
+
+  review_steps:
+    - "Analyze constitution version changes"
+    - "Check CLAUDE.md synchronization"
+    - "Validate template updates"
+    - "Verify metadata consistency"
+    - "Check language policy compliance"
+
+  post_review:
+    - "Generate consistency report"
+    - "Suggest missing updates"
+    - "Provide fix commands where applicable"
+
+# Output configuration
+output:
+  format: detailed  # detailed, summary, or minimal
+  include_suggestions: true
+  include_fixes: true
+  group_by: file  # file, rule, or severity

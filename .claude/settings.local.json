@@ -101,7 +101,21 @@
       "Bash(yq eval:*)",
       "Bash(timeout:*)",
       "Read(///**)",
-      "Bash(./scripts/ci/run-sdd-gates.sh:*)"
+      "Bash(./scripts/ci/run-sdd-gates.sh:*)",
+      "Bash(coderabbit review:*)",
+      "Bash(coderabbit auth:*)",
+      "Bash(./scripts/sdd/review-constitution-changes.sh:*)",
+      "Bash(npx:*)",
+      "Bash(./scripts/sdd/check-markdown.sh:*)",
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:github.github.com)",
+      "Bash(gh issue comment:*)",
+      "Bash(git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/028-markdown-ci origin/main -b docs/028-markdown-ci-verification)",
+      "Bash(git -C /Users/arthur/dev-space/ACPLazyBridge worktree add /Users/arthur/dev-space/acplb-worktrees/028-markdown-ci main -b docs/028-markdown-ci-verification)",
+      "Bash(ln:*)",
+      "Read(//Users/arthur/dev-space/acplb-worktrees/028-markdown-ci/**)",
+      "Bash(./scripts/sdd/setup-plan.sh:*)",
+      "Bash(./scripts/sdd/check-task-prerequisites.sh:*)"
     ],
     "deny": [],
     "ask": []

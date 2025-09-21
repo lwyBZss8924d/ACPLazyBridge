@@ -13,3 +13,7 @@ Given the feature description provided as an argument, do this:
 4. Report completion with branch name, spec file path, and readiness for the next phase.
 
 Note: The script creates and checks out the new branch and initializes the spec file before writing.
+
+---
+
+⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/spec.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_

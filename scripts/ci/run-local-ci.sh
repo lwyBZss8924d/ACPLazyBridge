@@ -17,6 +17,7 @@ STEPS=(
   scripts/sdd/run_semantic_checks.sh
   scripts/sdd/validate-metadata.sh
   scripts/sdd/check-sdd-consistency.sh
+  scripts/sdd/review-constitution-changes.sh
 )
 
 for step in "${STEPS[@]}"; do

@@ -37,3 +37,7 @@ Given the implementation details provided as an argument, do this:
 6. Report results with branch name, file paths, and generated artifacts.
 
 Use absolute paths with the repository root for all file operations to avoid path issues.
+
+---
+
+⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/plan.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_

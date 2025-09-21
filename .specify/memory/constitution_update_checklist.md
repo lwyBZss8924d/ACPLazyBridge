@@ -94,11 +94,13 @@ dependent documents are updated to maintain consistency.
    - [ ] Examples updated to match new rules
    - [ ] No contradictions between documents
    - [ ] All CLAUDE.md files updated with new Constitution version
+   - [ ] Run CodeRabbit review: `./scripts/sdd/review-constitution-changes.sh`
 
 2. After updating templates:
    - [ ] Run through a sample implementation plan
    - [ ] Verify all constitution requirements addressed
    - [ ] Check that templates are self-contained (readable without constitution)
+   - [ ] Run CodeRabbit review: `./scripts/sdd/review-constitution-changes.sh --verbose`
    - [ ] Run metadata validation: `./scripts/sdd/validate-metadata.sh`
    - [ ] Run consistency check: `./scripts/sdd/check-sdd-consistency.sh`
 
@@ -107,6 +109,94 @@ dependent documents are updated to maintain consistency.
    - [ ] Note version in template footers
    - [ ] Add amendment to constitution history
    - [ ] Update all CLAUDE.md file metadata
+
+## Automated Validation with CodeRabbit
+
+### AI-Powered Review with CodeRabbit CLI
+
+CodeRabbit provides AI-driven review of constitution changes to ensure consistency:
+
+#### Quick Start
+
+```bash
+# Review uncommitted constitution changes
+./scripts/sdd/review-constitution-changes.sh
+
+# Review all changes against main branch
+./scripts/sdd/review-constitution-changes.sh --type all --base main
+
+# Interactive review mode
+./scripts/sdd/review-constitution-changes.sh --format interactive
+
+# Dry run to preview checks
+./scripts/sdd/review-constitution-changes.sh --dry-run
+```
+
+#### What CodeRabbit Checks
+
+1. **Constitution Version Consistency**
+   - All 12 CLAUDE.md files have matching version
+   - Metadata blocks are properly formatted
+   - Version numbers follow semantic versioning
+
+2. **Document Synchronization**
+   - Templates reference new constitution requirements
+   - Command documentation is updated
+   - Cross-references are valid
+
+3. **Language Policy Compliance**
+   - Normative artifacts are English-only
+   - No non-English text in specs/, sdd-rules/, .specify/
+
+4. **Constitutional Gates Adherence**
+   - Library-First (Article I) requirements
+   - Test-First (Article III) implementation
+   - Simplicity (Article VII) constraints
+   - Anti-Abstraction (Article VIII) patterns
+   - Integration-First (Article IX) contracts
+
+#### CodeRabbit Configuration
+
+The project includes `coderabbit.yaml` with SDD-specific rules:
+
+- Constitution version synchronization checks
+- CLAUDE.md file consistency validation
+- Template update verification
+- Metadata format validation
+- Language policy enforcement
+
+#### Review Workflow
+
+1. **Before Constitution Changes**
+
+   ```bash
+   # Check current state
+   ./scripts/sdd/review-constitution-changes.sh --dry-run
+   ```
+
+2. **During Constitution Updates**
+
+   ```bash
+   # Review uncommitted changes
+   ./scripts/sdd/review-constitution-changes.sh
+
+   # Get detailed feedback
+   ./scripts/sdd/review-constitution-changes.sh --verbose
+   ```
+
+3. **After Constitution Updates**
+
+   ```bash
+   # Final validation before commit
+   ./scripts/sdd/review-constitution-changes.sh --type all
+   ```
+
+#### Review Artifacts
+
+CodeRabbit generates review artifacts in `_artifacts/reviews/constitution/`:
+
+- `coderabbit_review_[timestamp].txt` - Full review output
+- `constitution_review_summary_[timestamp].md` - Summary report
 
 ## Automated Validation
 
@@ -171,8 +261,11 @@ The following tools ensure SDD documentation consistency:
 
 ### CI Integration
 
-The validation script is automatically run in CI:
+The validation scripts are automatically run in CI:
 
+- CodeRabbit review for constitution-related changes
+- Metadata validation for YAML consistency
+- SDD consistency checks for cross-document alignment
 - On every PR that modifies Constitution or CLAUDE.md files
 - After merge to main branch
 - During scheduled weekly consistency checks

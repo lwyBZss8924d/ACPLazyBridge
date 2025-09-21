@@ -123,3 +123,7 @@ This command accepts:
 - Issue number: `/sdd-task 28`
 - GitHub URL: `/sdd-task https://github.com/lwyBZss8924d/ACPLazyBridge/issues/28`
 - With context: `/sdd-task 28 "focus on performance optimization"`
+
+---
+
+⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/tasks.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_
