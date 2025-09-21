@@ -3,8 +3,8 @@
 ```yaml
 worktree: [WORKTREE-PATH]
 feature_branch: [###-feature-name]
-created: [DATE]
-last_updated: [DATE]
+created: [UTC-DATE-TIME]
+last_updated: [UTC-DATE-TIME]
 status: [STATUS]
 input: Feature specification from `/specs/[###-feature-name]/spec.md`
 spec_uri: [SPEC-URI] # specs/[###-feature-name]/spec.md

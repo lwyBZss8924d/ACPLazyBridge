@@ -39,7 +39,7 @@ chmod +x mock_codex_proto.sh
 
 # Create a JSONL input that uses mock Codex
 cat > test_with_mock.jsonl << 'EOF'
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}
 {"jsonrpc":"2.0","id":2,"method":"session/new","params":{"workingDirectory":"/tmp/test"}}
 EOF
 
@@ -57,7 +57,7 @@ echo "Session ID: $SESSION_ID"
 
 # Now test with the actual session ID and mock Codex
 cat > test_prompt.jsonl << EOF
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05"}}
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}
 {"jsonrpc":"2.0","id":2,"method":"session/new","params":{"workingDirectory":"/tmp/test"}}
 {"jsonrpc":"2.0","id":3,"method":"session/prompt","params":{"sessionId":"$SESSION_ID","prompt":"test prompt","includeWorkspaceContext":false,"codexCommand":"./mock_codex_proto.sh"}}
 EOF

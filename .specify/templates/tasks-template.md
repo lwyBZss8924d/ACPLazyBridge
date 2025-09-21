@@ -3,8 +3,8 @@
 ```yaml
 worktree: [WORKTREE-PATH]
 feature_branch: [###-feature-name]
-created: [DATE]
-last_updated: [DATE]
+created: [UTC-DATE-TIME]
+last_updated: [UTC-DATE-TIME]
 status: [STATUS]
 input: Design documents from `/specs/[###-feature-name]/`
 spec_uri: [SPEC-URI] # specs/[###-feature-name]/spec.md
@@ -23,6 +23,9 @@ specs:
 commits:
     commit: [COMMIT-HASH] # all gh commits
     last_commit: [LAST-COMMIT-HASH] # Last PR commit hash
+    pr: [PR-URL]
+    merge_date: [UTC-DATE-TIME]
+    merge_commit: [GITHUB-MERGE-COMMIT-HASH]
 ```
 
 ⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/tasks.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_

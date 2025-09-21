@@ -1,0 +1,33 @@
+Pre-Fix Audit Report: protocolVersion Usage in JSONL Fixtures
+Generated: 2025-09-21T19:49:08Z
+=================================================================
+
+Files with incorrect string "2024-11-05" (11 files):
+- test_basic_handshake.jsonl
+- prompt_with_mock_codex.jsonl
+- tool_calls_large_output.jsonl
+- tool_calls.jsonl
+- handshake.jsonl
+- tool_calls_batch.jsonl
+- basic_session.jsonl
+- prompt_and_cancel.jsonl
+- session_update_format.jsonl
+- test_prompt_session.jsonl
+- test_streaming.sh (script generates this value in 2 places)
+
+Files with incorrect string "1" (1 file):
+- notify_idle.jsonl
+
+Files already correct with integer 1 (2 files):
+- acp_v1_alignment.jsonl
+- vec_string_command.jsonl
+
+Files with no initialize request (6 files):
+- cancel.jsonl
+- invalid_params.jsonl
+- invalid_params_missing_sessionId.jsonl
+- invalid_request.jsonl
+- test_errors.jsonl
+- unknown_method.jsonl
+
+TOTAL FILES TO FIX: 12 JSONL files + 1 shell script
