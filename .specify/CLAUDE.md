@@ -350,12 +350,12 @@ scripts/ci/run-local-ci.sh
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-21T14:50:00Z"
+    last_checked: "2025-09-22T15:20:00Z"
 document:
     type: "claude-memory"
     path: ".specify/CLAUDE.md"
-    version: "1.0.3"
-    last_updated: "2025-09-21T14:50:00Z"
+    version: "1.0.4"
+    last_updated: "2025-09-22T15:20:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

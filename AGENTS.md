@@ -873,13 +873,13 @@ ACPLazyBridge/dev-docs
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-22T15:20:00Z"
 document:
     type: "codex-memory"
     path: "./AGENTS.md"
-    version: "1.0.3"
-    last_updated: "2025-09-21T14:54:00Z"
-    changelog: "Added sdd-doc-validator reference for documentation validation"
+    version: "1.0.4"
+    last_updated: "2025-09-22T15:20:00Z"
+    changelog: "Refreshed constitution metadata after rerunning checklist"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
@@ -892,6 +892,6 @@ document:
         - ".specify/templates/plan-template.md"
         - ".specify/commands/tasks.md"
         - ".specify/templates/tasks-template.md"
-        - "(dev-docs/references/)"
+        - "dev-docs/references/acp.md"
         - ".claude/CLAUDE.md"
 ```

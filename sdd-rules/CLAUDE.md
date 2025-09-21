@@ -764,12 +764,12 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena 
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-21T14:51:00Z"
+    last_checked: "2025-09-22T15:20:00Z"
 document:
     type: "claude-memory"
     path: "./sdd-rules/CLAUDE.md"
-    version: "1.0.2"
-    last_updated: "2025-09-21T14:51:00Z"
+    version: "1.0.3"
+    last_updated: "2025-09-22T15:20:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

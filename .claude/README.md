@@ -238,3 +238,21 @@ All hooks and scripts:
 - [SDD Lifecycle](../.specify/memory/lifecycle.md)
 - [SDD Rules](../sdd-rules/rules/README.md)
 - [Contributing](../CONTRIBUTING.md)
+
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-22T15:20:00Z"
+document:
+    type: "claude-memory"
+    path: ".claude/README.md"
+    version: "1.0.1"
+    last_updated: "2025-09-22T15:20:00Z"
+    changelog: "Documented sdd-doc-validator integration and refreshed constitution checklist evidence"
+    dependencies:
+        - ".specify/memory/constitution.md"
+        - ".specify/memory/lifecycle.md"
+        - "sdd-rules/rules/README.md"
+        - ".claude/CLAUDE.md"
+        - ".claude/agents/sdd-doc-validator.md"
+```

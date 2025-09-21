@@ -147,22 +147,22 @@ All hooks and scripts:
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-21T14:45:00Z"
+    last_checked: "2025-09-22T15:20:00Z"
 document:
     type: "claude-memory"
     path: ".claude/CLAUDE.md"
-    version: "1.0.2"
-    last_updated: "2025-09-21T14:45:00Z"
+    version: "1.0.3"
+    last_updated: "2025-09-22T15:20:00Z"
     dependencies:
-        - "./CLAUDE.md"    
+        - "./CLAUDE.md"
         - ".specify/memory/lifecycle.md"
         - ".specify/README.md"
         - "sdd-rules/rules/README.md"
         - ".claude/commands/specify.md"
-        - ".specify/templates/spec-template.md"        
+        - ".specify/templates/spec-template.md"
         - ".claude/commands/plan.md"
         - ".specify/templates/plan-template.md"
         - ".claude/commands/tasks.md"
         - ".specify/templates/tasks-template.md"
-        - "(dev-docs/references/)"
+        - "dev-docs/references/acp.md"
 ```
