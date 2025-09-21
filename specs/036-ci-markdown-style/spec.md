@@ -4,10 +4,14 @@
 worktree: /Users/arthur/dev-space/acplb-worktrees/028-markdown-ci
 feature_branch: docs/028-markdown-ci-verification
 created: 2025-09-20
-last_updated: 2025-09-20
-status: in-progress
+last_updated: 2025-09-21
+status: completed
+merged_pr: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/37
+merge_date: 2025-09-21
+merge_commit: 2a4d0a98afffeba61fc6155d39e979b03f50e611
 input: GitHub Issue #28
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/28
+pr_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/37
 specs:
     constitution: 1.0.1
     type: spec

@@ -4,9 +4,14 @@
 worktree: /Users/arthur/dev-space/acplb-worktrees/028-markdown-ci
 feature_branch: docs/028-markdown-ci-verification
 created: 2025-09-20
-last_updated: 2025-09-20
-status: in-progress
+last_updated: 2025-09-21
+status: completed
+merged_pr: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/37
+merge_date: 2025-09-21
+merge_commit: 2a4d0a98afffeba61fc6155d39e979b03f50e611
 input: Design documents from `/specs/036-ci-markdown-style/`
+issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/28
+pr_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/37
 spec_uri: specs/036-ci-markdown-style/spec.md
 plan_uri: specs/036-ci-markdown-style/plan.md
 tasks_uri: specs/036-ci-markdown-style/tasks.md
@@ -20,8 +25,8 @@ specs:
     type: tasks
     feature_number: 036
 commits:
-    commit: # will be added as tasks complete
-    last_commit: # PR merge commit
+    merge_commit: 2a4d0a98afffeba61fc6155d39e979b03f50e611
+    pr_number: 37
 ```
 
 ## Execution Flow (main)
