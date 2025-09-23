@@ -2,17 +2,27 @@
 
 This index maps the legacy M1 tasks to the current SDD artefacts and clarifies status expectations. Use it as a quick reference when reviewing or creating engineering tasks for the 0.1.0 milestone.
 
-| Legacy Task | Current Coverage | Status | Notes |
+## Active GitHub Issues (Milestone 0.1.0)
+
+| Issue | Title | Status | Dependencies |
 | --- | --- | --- | --- |
-| core-transport-1 | `runtime-adoption-core-loop.md` (Runtime Adoption) | ✅ Completed | Transport module merged; evidence in `_artifacts/tests/runtime-adoption/` |
-| core-permissions-1 | `runtime-adoption-core-loop.md` | ✅ Completed | Permission mapping verified; env overrides documented |
-| acp-wire-0 | `protocol-cleanup-official-models.md` | ✅ Completed | Upstream ACP types adopted; legacy module scheduled for removal |
-| codex-stdio-1 | `runtime-adoption-core-loop.md` | 🚧 In progress | Handcrafted loop replaced; playback validation ongoing |
-| codex-proto-1 | `runtime-adoption-core-loop.md` & `streaming-alignment-session-notifications.md` | 🚧 In progress | Streaming migration + notify parity tracked together |
-| codex-notify-1 | `streaming-alignment-session-notifications.md` | 🚧 In progress | Idle timeout/notify tests needed before closure |
-| codex-tools-1 | `streaming-alignment-session-notifications.md` | 🔄 Planned | Will finalize after ACP tool-call migration |
-| codex-errors-1 | `protocol-cleanup-official-models.md` | 🔄 Planned | Invalid params + path validation to be revisited post-cleanup |
-| tests-jsonl-1 | `_artifacts/tests/protocol-baseline/` | ✅ Completed | JSONL fixtures migrated; future additions go through evidence directory |
+| [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44) | Adopt Official ACP Runtime for Core Loop | 🚧 In Progress | None |
+| [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45) | Align Streaming Notifications with ACP Models | 🔄 Planned | #44 |
+| [#46](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46) | Remove Legacy Protocol Mirror and Adopt Official Models | 🔄 Planned | #44, #45 |
+
+## Legacy Task Mapping
+
+| Legacy Task | Current Coverage | GitHub Issue | Status | Notes |
+| --- | --- | --- | --- | --- |
+| core-transport-1 | `runtime-adoption-core-loop.md` | [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44) | 🚧 In progress | Transport module merged; evidence in `_artifacts/tests/runtime-adoption/` |
+| core-permissions-1 | `runtime-adoption-core-loop.md` | [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44) | 🚧 In progress | Permission mapping verified; env overrides documented |
+| acp-wire-0 | `protocol-cleanup-official-models.md` | [#46](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46) | 🔄 Planned | Upstream ACP types adopted; legacy module scheduled for removal |
+| codex-stdio-1 | `runtime-adoption-core-loop.md` | [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44) | 🚧 In progress | Handcrafted loop replaced; playback validation ongoing |
+| codex-proto-1 | `runtime-adoption-core-loop.md` & `streaming-alignment-session-notifications.md` | [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44) & [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45) | 🚧 In progress | Streaming migration + notify parity tracked together |
+| codex-notify-1 | `streaming-alignment-session-notifications.md` | [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45) | 🔄 Planned | Idle timeout/notify tests needed before closure |
+| codex-tools-1 | `streaming-alignment-session-notifications.md` | [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45) | 🔄 Planned | Will finalize after ACP tool-call migration |
+| codex-errors-1 | `protocol-cleanup-official-models.md` | [#46](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46) | 🔄 Planned | Invalid params + path validation to be revisited post-cleanup |
+| tests-jsonl-1 | `_artifacts/tests/protocol-baseline/` | N/A | ✅ Completed | JSONL fixtures migrated; future additions go through evidence directory |
 
 ## How to Use This Index
 

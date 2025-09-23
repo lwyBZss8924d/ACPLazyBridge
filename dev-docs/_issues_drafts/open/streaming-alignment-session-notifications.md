@@ -1,6 +1,8 @@
-# Pre-Issue Note: Align Streaming Notifications with ACP Models
+# Align Streaming Notifications with ACP Models
 
-**Status**: Ready for issue drafting (Milestone 0.1.0)
+**GitHub Issue**: [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45)
+**Status**: 🔄 Planned (Milestone 0.1.0)
+**Dependencies**: [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44)
 
 ## Summary
 

@@ -1,6 +1,8 @@
-# Pre-Issue Note: Remove Legacy Protocol Mirror and Adopt Official Models
+# Remove Legacy Protocol Mirror and Adopt Official Models
 
-**Status**: Ready for issue drafting (Milestone 0.1.0)
+**GitHub Issue**: [#46](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46)
+**Status**: 🔄 Planned (Milestone 0.1.0)
+**Dependencies**: [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44), [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45)
 
 ## Summary
 
