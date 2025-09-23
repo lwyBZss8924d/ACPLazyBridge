@@ -75,7 +75,6 @@ dependent documents are updated to maintain consistency.
 - [ ] `/dev-docs/CLAUDE.md` - Development documentation guidance
 - [ ] `/specs/CLAUDE.md` - Specification guidance
 - [ ] `/queries/CLAUDE.md` - Query/CodeQL guidance
-- [ ] `/dev-docs/review/_artifacts/CLAUDE.md` - Evidence guidance
 
 ### CLAUDE.md Sync Requirements
 

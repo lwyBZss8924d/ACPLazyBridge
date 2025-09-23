@@ -112,7 +112,7 @@ cargo clippy --all-targets --all-features -- -D warnings
 cargo test --all-features --locked
 
 # Test with JSONL scenarios
-cat ../../dev-docs/review/_artifacts/tests/*.jsonl | cargo run
+cat ../../_artifacts/tests/legacy/*.jsonl | cargo run
 ```
 
 ### Evidence Collection
@@ -126,7 +126,7 @@ cat test/scenarios.jsonl | cargo run 2>&1 | \
   tee ../../_artifacts/logs/codex-cli-acp/scenario_$(date +%Y%m%d_%H%M%S).log
 
 # Legacy location (if needed)
-cargo test 2>&1 | tee ../../dev-docs/review/_artifacts/tests/codex-cli-acp/test_$(date +%Y%m%d_%H%M%S).log
+cargo test 2>&1 | tee ../../_artifacts/tests/legacy/codex-cli-acp/test_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ## Testing Guidelines

@@ -15,10 +15,7 @@
 
 Development documentation and evidence collection for the ACPLazyBridge project. This directory supports the SDD workflow through evidence management and technical documentation.
 
-**IMPORTANT**: Evidence collection is transitioning:
-
-- **New location**: `_artifacts/` at repository root (primary)
-- **Legacy location**: `dev-docs/review/_artifacts/` (maintained for compatibility)
+**IMPORTANT**: Evidence collection lives under `_artifacts/` at the repository root. Historical runs are preserved under the corresponding `_artifacts/<type>/legacy/` directories.
 
 ## SDD Integration
 
@@ -45,49 +42,40 @@ Every SDD task requires:
 
 ```tree
 dev-docs/
-├── design/              # Architecture and design docs
-├── engineering/         # Engineering guides (non-normative)
-├── plan/               # Planning documents
-│   └── issues/         # Issue tracking
-│       ├── open/       # Active issues
-│       ├── waiting/    # Blocked issues
-│       └── closed/     # Completed issues
-├── references/         # External references
-├── requirements/       # Requirements documentation
-├── review/             # Code review artifacts
-    ├── changes/        # Change logs
-    └── _artifacts/     # Evidence collection
+├── README.md              # Index of active collections
+├── CLAUDE.md              # Developer playbook (this document)
+├── _issues_drafts/        # Issue research drafts (pre-issue notes)
+├── _projects/             # Project management plans
+├── _requirements/         # Roadmap and requirement documents
+├── architecture/          # Current architecture references
+├── core_servers/          # Runtime/server design documentation
+├── changelogs/            # Release and change history
+└── references/            # External protocol and integration references
 ```
 
 ## Evidence Collection
 
-### Dual Path Structure (Transition Period)
+### Evidence Locations
 
-#### Primary (New) Location: `_artifacts/`
-
-```bash
-_artifacts/                    # Repository root
-├── tests/<task>/              # Test results
-├── logs/<task>/               # Execution logs
-├── reports/<task>/            # Analysis reports
-└── jq/<task>/                 # JSON analysis
-```
-
-#### Legacy Location: `dev-docs/review/_artifacts/`
+#### Primary Location: `_artifacts/`
 
 ```bash
-dev-docs/review/_artifacts/    # Legacy path
-├── tests/<task>/              # Test results
-├── logs/<task>/               # Execution logs
-├── jq/<task>/                 # JSON query results
-└── reports/<task>/            # Analysis reports
+_artifacts/
+├── tests/<task>/
+├── logs/<task>/
+├── reports/<task>/
+├── jq/<task>/
+└── meta/<task>/
 ```
+
+#### Legacy Archives
+
+Historical artefacts remain available under the `legacy` subdirectories for each evidence area (e.g., `_artifacts/tests/legacy/`, `_artifacts/logs/legacy/`). Use them only when auditing past work.
 
 ### Migration Guidance
 
-- **New tasks**: Use `_artifacts/` at root
-- **Existing tasks**: May continue using legacy path
-- **PRs**: Should reference both paths during transition
+- Capture new evidence under `_artifacts/<task>/...`.
+- Reference `_artifacts/<type>/legacy/` only for historical audits or regression analysis.
 
 ### Evidence Naming Conventions
 
@@ -111,9 +99,6 @@ performance_<YYYYMMDD>.md
 # PRIMARY: Run tests with evidence capture (new location)
 cargo test --workspace 2>&1 | tee _artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
 
-# LEGACY: Alternative for existing workflows
-cargo test --workspace 2>&1 | tee dev-docs/review/_artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
-
 # Capture ACP protocol testing (primary)
 echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | \
   cargo run -p codex-cli-acp 2>&1 | \
@@ -123,15 +108,16 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":
 cargo tarpaulin --out Html --output-dir _artifacts/reports/<task>/
 ```
 
-## Issue Management (plan/issues/)
+## Issue Management (`_issues_drafts/`)
 
 ### Issue States (SDD Workflow)
 
-- **open/**: Active issues being worked on (linked to specs/<NNN>/)
-- **waiting/**: Blocked on dependencies or decisions
-- **closed/**: Completed and archived (evidence in _artifacts/)
+- Root (`_issues_drafts/*.md`): Drafts under analysis prior to opening GitHub issues.
+- `closed/`: Historical drafts linked to merged issues/PRs (read-only).
 
 ### Issue Template (SDD-Aligned)
+
+Use `dev-docs/_issues_drafts/TEMPLATE.md` when preparing a draft before opening a GitHub issue. The snippet below mirrors the template for quick reference.
 
 ```markdown
 # Issue: <Title>
@@ -154,8 +140,8 @@ What needs to be done
 - Blocks: #<issue>
 
 ## Evidence
-- Tests: _artifacts/tests/<task>/ (or dev-docs/review/_artifacts/tests/<task>/)
-- Logs: _artifacts/logs/<task>/ (or dev-docs/review/_artifacts/logs/<task>/)
+- Tests: `_artifacts/tests/<task>/`
+- Logs: `_artifacts/logs/<task>/`
 ```
 
 ## Requirements Documentation
@@ -167,7 +153,7 @@ Link requirements to:
 1. **Specifications**: specs/<NNN>/spec.md (source of truth)
 2. **Implementation**: crates/*/src/ (follows spec)
 3. **Tests**: crates/*/tests/ (written first per Article III)
-4. **Evidence**: _artifacts/ or dev-docs/review/_artifacts/
+4. **Evidence**: `_artifacts/<task>/...` (see `_artifacts/<type>/legacy/` for historical runs)
 
 ### Requirement Format
 
@@ -177,7 +163,7 @@ REQ-<NNN>: <Description>
 - Constitutional: Article <X> compliance
 - Implementation: <file:line>
 - Test: <test file> (must fail first)
-- Evidence: _artifacts/<task>/ or dev-docs/review/_artifacts/<task>/
+- Evidence: `_artifacts/<task>/`
 ```
 
 ## Design Documentation
@@ -244,7 +230,7 @@ Practical examples
 For each PR, collect:
 
 - [ ] Test results showing RED→GREEN cycle
-- [ ] Evidence in _artifacts/<task>/ (primary) or dev-docs/review/_artifacts/<task>/ (legacy)
+- [ ] Evidence in _artifacts/<task>/ (primary) or_artifacts/legacy/<task>/ (legacy)
 - [ ] Links to specs/<NNN>-<slug>/ artifacts
 - [ ] Constitutional compliance verified
 - [ ] Performance metrics if applicable
@@ -294,11 +280,8 @@ What changed and why
 ### Evidence Collection
 
 ```bash
-# PRIMARY: Create task evidence directory (new location)
-mkdir -p _artifacts/<task>/{tests,logs,reports,jq}
-
-# LEGACY: Alternative for existing workflows
-mkdir -p dev-docs/review/_artifacts/<task>/{tests,logs,jq,reports}
+# PRIMARY: Create task evidence directories
+mkdir -p _artifacts/tests/<task> _artifacts/logs/<task> _artifacts/reports/<task> _artifacts/jq/<task>
 
 # Run with evidence capture (primary)
 <command> 2>&1 | tee _artifacts/<type>/<task>/<name>_$(date +%Y%m%d_%H%M%S).log
@@ -312,9 +295,8 @@ cargo test <new_test> 2>&1 | tee _artifacts/tests/<task>/green_$(date +%Y%m%d_%H
 ### Issue Management
 
 ```bash
-# Move issue through states
-mv dev-docs/plan/issues/open/issue.md dev-docs/plan/issues/waiting/
-mv dev-docs/plan/issues/waiting/issue.md dev-docs/plan/issues/closed/
+# Archive a completed issue draft
+mv dev-docs/_issues_drafts/<draft>.md dev-docs/_issues_drafts/closed/
 ```
 
 ---

@@ -4,7 +4,7 @@
 
 - Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/26
 - Spec-URI: specs/001-claude-memory-sdd-alignment/spec.md
-- Evidence-URIs: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/
+- Evidence-URIs: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/
 
 ## Overview
 
@@ -50,7 +50,7 @@ Align Claude Code memory documents (CLAUDE.md) with SDD Developer Team workflow 
 2. [ ] Per-directory CLAUDE.md files created for specified modules
 3. [ ] Rules index created and linked from AGENTS.md and WARP.md
 4. [ ] All local CI checks pass (lint, language policy)
-5. [ ] Evidence artifacts stored under dev-docs/review/_artifacts/
+5. [ ] Evidence artifacts stored under _artifacts/legacy/
 
 ## Constraints
 

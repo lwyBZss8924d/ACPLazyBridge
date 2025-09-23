@@ -1,3 +1,0 @@
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1,"capabilities":{"fs":{"readTextFile":true,"writeTextFile":true}}}}
-{"jsonrpc":"2.0","id":2,"method":"session/new","params":{"cwd":"/tmp","mcpServers":[]}}
-{"jsonrpc":"2.0","id":3,"method":"session/prompt","params":{"sessionId":"session_c8faa2f8-8082-4a0c-8664-edb0388f5aad","prompt":"test prompt for notify"}}

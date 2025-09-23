@@ -1,1 +1,1 @@
-All dev-docs/review/_artifacts/tests/*.jsonl use integer protocolVersion 1.
+All _artifacts/tests/legacy/*.jsonl use integer protocolVersion 1.

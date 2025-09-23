@@ -60,7 +60,7 @@ Successfully integrated the new SDD YAML metadata management tools into the glob
 - `.specify/README.md` - Migrated
 - `sdd-rules/rules/README.md` - Migrated
 - `sdd-rules/commands/README.md` - Migrated
-- `dev-docs/review/_artifacts/CLAUDE.md` - Migrated
+- `_artifacts/legacy/CLAUDE.md` - Migrated
 - `sdd-rules/rules/git/pr/sdd-rules-pr.md` - Migrated
 
 ### 6. Fixed Broken References

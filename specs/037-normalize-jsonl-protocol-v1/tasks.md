@@ -140,7 +140,7 @@ _GATE: Checked before marking complete_
 - [x] T901: Verify all JSONL changes
 
   ```bash
-  grep -r "protocolVersion" dev-docs/review/_artifacts/tests/*.jsonl | \
+  grep -r "protocolVersion" _artifacts/tests/legacy/*.jsonl | \
     grep -v '"protocolVersion":1' | \
     wc -l  # Should be 0
   ```

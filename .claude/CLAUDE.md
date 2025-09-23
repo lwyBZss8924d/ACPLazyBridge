@@ -64,7 +64,7 @@ This command:
 ### Evidence Collection
 
 - Primary: `_artifacts/{tests,logs,reports,jq}/<task>/`
-- Legacy: `dev-docs/review/_artifacts/{tests,logs,reports,jq}/<task>/`
+- Legacy: `_artifacts/legacy/`
 
 ### Git Workflow
 

@@ -152,7 +152,7 @@ _artifacts/
 ├── reports/<task>/    # Analysis reports
 └── jq/<task>/         # JSON validation
 
-dev-docs/review/_artifacts/  # Legacy location
+_artifacts/legacy/  # Legacy location
 ```
 
 ### Evidence Requirements

@@ -28,7 +28,7 @@ specs:
    → Preserve existing clientCapabilities/capabilities
    → Update test scripts that generate JSONL
 3. Identify scope:
-   → dev-docs/review/_artifacts/tests/*.jsonl
+   → _artifacts/tests/legacy/*.jsonl
    → test_streaming.sh script
 4. Generate acceptance criteria
    → All fixtures use integer protocolVersion
@@ -68,7 +68,7 @@ As a developer working with the ACPLazyBridge ACP adapter, I need all JSONL test
 
 ### Acceptance Criteria
 
-- [x] All initialize.params.protocolVersion in dev-docs/review/_artifacts/tests/*.jsonl are integer 1 (FR-001/FR-002)
+- [x] All initialize.params.protocolVersion in _artifacts/tests/legacy/*.jsonl are integer 1 (FR-001/FR-002)
 - [x] clientCapabilities/capabilities in fixtures remain unmodified (FR-003)
 - [x] test_streaming.sh outputs only integer protocol versions (FR-004)
 - [x] All JSONL files are valid JSON (FR-005)
@@ -78,7 +78,7 @@ As a developer working with the ACPLazyBridge ACP adapter, I need all JSONL test
 
 ### Functional Requirements
 
-- **FR-001**: System MUST update all JSONL fixtures in dev-docs/review/_artifacts/tests/ to use integer protocolVersion 1
+- **FR-001**: System MUST update all JSONL fixtures in _artifacts/tests/legacy/ to use integer protocolVersion 1
 - **FR-002**: System MUST replace string protocolVersion values ("2024-11-05", "1") with integer 1
 - **FR-003**: System MUST preserve existing clientCapabilities or capabilities blocks exactly as they are
 - **FR-004**: System MUST update test_streaming.sh to generate integer protocolVersion in its output

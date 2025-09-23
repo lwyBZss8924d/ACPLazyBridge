@@ -212,7 +212,7 @@ codeql query run queries/codeql/acp-rust/queries/no-secret-logging.ql \
 ```bash
 codeql database analyze codeql-db \
   --format=csv \
-  --output=dev-docs/review/_artifacts/reports/codeql_$(date +%Y%m%d).csv
+  --output=_artifacts/reports/legacy/codeql_$(date +%Y%m%d).csv
 ```
 
 ---

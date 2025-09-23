@@ -24,7 +24,7 @@ Nodes and expected artifacts
    - Worktree from origin/main; follow quality gates
 
 6) Acceptance & submit
-   - Evidence placed under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/
+   - Evidence placed under _artifacts/{tests,logs,jq,reports}/<task>/
    - PR description links Spec/Plan/Tasks and evidence; includes risks/rollback and CI summary
 
 7) CI (GitHub Actions + Code Scanning)
@@ -58,7 +58,7 @@ This section serves as the project’s "CONSTITUTION - Supplementary Baseline" a
 - Worktree-first: never develop on main; create a feature branch in a dedicated worktree.
 - Branch categories (canonical): feature | fix | perf | chore | docs (kebab-case). The feature/<module>-<id> style is allowed as an alternative but not the canonical example.
 - Logging discipline: stderr for logs; stdout reserved for JSON-RPC/JSONL only.
-- Evidence: store all local scenario outputs and jq validations under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/.
+- Evidence: store all local scenario outputs and jq validations under _artifacts/{tests,logs,jq,reports}/<task>/.
 - Respect human edits: do not override user modifications unless explicitly requested; reconcile conflicts conservatively.
 
 ### SDD compliance (must do for every task)
@@ -72,7 +72,7 @@ work in: (specs/)
 - Add the following metadata block at the top of each file (and mirror in the GitHub Issue body):
     - Issue-URI: <link to the GitHub issue>
     - Spec-URI / Plan-URI / Tasks-URI: <self links>
-    - Evidence-URIs: old task is in dev-docs/review/_artifacts/{tests|logs|jq|reports}/<task>/... new task is in root path (_artifacts/{tests,logs,jq,reports}/<task>/...) linked with (specs/) TASK's artifacts outputs. (Subsequent task evidence is stored under the root path)
+    - Evidence-URIs: _artifacts/{tests,logs,jq,reports}/<task>/... linked with (specs/) TASK's artifacts outputs.
 - PR description must include: links to Spec/Plan/Tasks, evidence files (tests/logs/jq/reports), risks/rollback, and CI pass summary.
 
 ### SDD commands (artifact generation)
@@ -120,7 +120,7 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 - cargo clippy --workspace --all-targets --all-features -- -D warnings
 - cargo test --workspace --all-features --locked
 - Protocol JSONL scenarios (if present) replay without errors; stdout is valid JSONL.
-- Code scanning (GitHub Code Scanning) is enabled. For local custom CodeQL queries, see dev-docs/engineering/codeql.md.
+- Code scanning (GitHub Code Scanning) is enabled.
 
 ### Constitutional gates (must pass)
 

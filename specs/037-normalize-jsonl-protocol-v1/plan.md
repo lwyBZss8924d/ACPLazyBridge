@@ -41,7 +41,7 @@ specs:
 
 ## Summary
 
-Normalize all JSONL test fixtures in dev-docs/review/_artifacts/tests/ to use integer protocolVersion 1, aligning with ACP v1 specification and enabling compatibility with the upstream agent-client-protocol crate.
+Normalize all JSONL test fixtures in _artifacts/tests/legacy/ to use integer protocolVersion 1, aligning with ACP v1 specification and enabling compatibility with the upstream agent-client-protocol crate.
 
 ## Technical Context
 
@@ -109,7 +109,7 @@ specs/037-normalize-jsonl-protocol-v1/
 ### Source Code (repository root)
 
 ```tree
-dev-docs/review/_artifacts/tests/
+_artifacts/tests/legacy/
 ├── *.jsonl              # Test fixtures to update
 └── test_streaming.sh    # Script to update
 

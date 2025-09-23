@@ -30,7 +30,7 @@
         "./crates/CLAUDE.md",
         "./crates/codex-cli-acp/CLAUDE.md",
         "./dev-docs/CLAUDE.md",
-        "./dev-docs/review/_artifacts/CLAUDE.md",
+        "./_artifacts/legacy/CLAUDE.md",
         "./queries/CLAUDE.md",
         "./scripts/CLAUDE.md",
         "./sdd-rules/CLAUDE.md",

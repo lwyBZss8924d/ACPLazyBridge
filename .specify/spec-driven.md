@@ -10,7 +10,7 @@ Principles
 Traceability
 
 - Maintain forward/back links among Spec/Plan/Tasks/Issue
-- Capture evidence under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/ and link into Spec/Plan/Tasks
+- Capture evidence under _artifacts/{tests,logs,jq,reports}/<task>/ and link into Spec/Plan/Tasks
 
 Templates
 

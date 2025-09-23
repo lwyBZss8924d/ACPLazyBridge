@@ -47,7 +47,7 @@ CLAUDE_FILES=(
     "dev-docs/CLAUDE.md"
     "specs/CLAUDE.md"
     "queries/CLAUDE.md"
-    "dev-docs/review/_artifacts/CLAUDE.md"
+    "_artifacts/legacy/CLAUDE.md"
 )
 
 # Template files that may need updates

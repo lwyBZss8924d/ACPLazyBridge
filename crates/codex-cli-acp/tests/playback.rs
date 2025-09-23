@@ -116,7 +116,7 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
 
 #[test]
 fn test_handshake() {
-    let test_file = Path::new("../../dev-docs/review/_artifacts/tests/handshake.jsonl");
+    let test_file = Path::new("../../_artifacts/tests/protocol-baseline/handshake.jsonl");
     // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
@@ -144,7 +144,7 @@ fn test_handshake() {
 
 #[test]
 fn test_basic_session() {
-    let test_file = Path::new("../../dev-docs/review/_artifacts/tests/basic_session.jsonl");
+    let test_file = Path::new("../../_artifacts/tests/protocol-baseline/basic_session.jsonl");
     // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
@@ -169,7 +169,7 @@ fn test_basic_session() {
 
 #[test]
 fn test_unknown_method() {
-    let test_file = Path::new("../../dev-docs/review/_artifacts/tests/unknown_method.jsonl");
+    let test_file = Path::new("../../_artifacts/tests/protocol-baseline/unknown_method.jsonl");
     // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
@@ -187,7 +187,7 @@ fn test_unknown_method() {
 
 #[test]
 fn test_invalid_params() {
-    let test_file = Path::new("../../dev-docs/review/_artifacts/tests/invalid_params.jsonl");
+    let test_file = Path::new("../../_artifacts/tests/protocol-baseline/invalid_params.jsonl");
     // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 
@@ -205,7 +205,7 @@ fn test_invalid_params() {
 
 #[test]
 fn test_cancel_notification() {
-    let test_file = Path::new("../../dev-docs/review/_artifacts/tests/cancel.jsonl");
+    let test_file = Path::new("../../_artifacts/tests/protocol-baseline/cancel.jsonl");
     // ast-grep-ignore
     let results = run_playback_test(test_file).expect("Playback failed");
 

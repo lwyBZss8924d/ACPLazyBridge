@@ -16,7 +16,7 @@ This document defines Claude Code–specific rules in ACPLazyBridge. It inherits
 - **Protocol compliance**: Stdout strictly JSONL; logs to stderr only
 - **Evidence paths**:
     - Primary: `_artifacts/{tests,logs,jq,reports}/<task>/`
-    - Legacy: `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`
+    - Legacy archives: `_artifacts/{tests,logs,jq,reports}/legacy/`
 - **Permission mapping**: Non-interactive defaults: approval_policy=never; sandbox_mode per task; network access only when explicitly required
 - **Protocol version**: Examples MUST use ACP v1: "protocolVersion": 1 (integer, not string)
 

@@ -31,7 +31,7 @@ instructions: |
   - `/dev-docs/CLAUDE.md`
   - `/specs/CLAUDE.md`
   - `/queries/CLAUDE.md`
-  - `/dev-docs/review/_artifacts/CLAUDE.md`
+  - `/_artifacts/legacy/CLAUDE.md`
 
   ### 3. Template Updates
   When constitution articles change, verify template updates:

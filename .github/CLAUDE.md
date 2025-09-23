@@ -18,7 +18,7 @@ For comprehensive SDD workflow execution details, see **[../.specify/CLAUDE.md](
 Key GitHub-specific SDD integration points:
 
 - **PR Creation**: Must link to specs/<NNN>-<slug>/ artifacts (spec.md, plan.md, tasks.md)
-- **Evidence Collection**: Store in both `_artifacts/` (new) and `dev-docs/review/_artifacts/` (legacy)
+- **Evidence Collection**: Store in `_artifacts/` or `_artifacts/legacy/` for historical data
 - **Constitutional Gates**: Enforce via PR template checkboxes and CI checks
 - **Branch Strategy**: Always use worktrees from origin/main, never develop on main
 - **Commit Format**: Include [TASK-NNN] or [BUG-NNN] references
@@ -87,7 +87,7 @@ Implements [feature] as specified in specs/<NNN>-<slug>/
 - [ ] Specification: specs/<NNN>-<slug>/spec.md
 - [ ] Plan: specs/<NNN>-<slug>/plan.md
 - [ ] Tasks: specs/<NNN>-<slug>/tasks.md
-- [ ] Evidence: _artifacts/<task>/ (primary) or dev-docs/review/_artifacts/<task>/ (legacy)
+- [ ] Evidence: _artifacts/<task>/ (primary) or _artifacts/legacy/<task>/ (historical)
 
 ## Testing
 - [ ] All quality gates pass

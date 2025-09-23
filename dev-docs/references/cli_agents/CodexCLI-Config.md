@@ -4,10 +4,10 @@ Codex supports several mechanisms for setting config values:
 
 - Config-specific command-line flags, such as `--model openai/gpt-5` (highest precedence).
 - A generic `-c`/`--config` flag that takes a `key=value` pair, such as `--config model="openai/gpt-5"`.
-  - The key can contain dots to set a value deeper than the root, e.g. `--config model_providers.openai.wire_api="chat"`.
-  - Values can contain objects, such as `--config shell_environment_policy.include_only=["PATH", "HOME", "USER"]`.
-  - For consistency with `config.toml`, values are in TOML format rather than JSON format, so use `{a = 1, b = 2}` rather than `{"a": 1, "b": 2}`.
-  - If `value` cannot be parsed as a valid TOML value, it is treated as a string value. This means that both `-c model="openai/gpt-5"` and `-c model=openai/gpt-5` are equivalent.
+    - The key can contain dots to set a value deeper than the root, e.g. `--config model_providers.openai.wire_api="chat"`.
+    - Values can contain objects, such as `--config shell_environment_policy.include_only=["PATH", "HOME", "USER"]`.
+    - For consistency with `config.toml`, values are in TOML format rather than JSON format, so use `{a = 1, b = 2}` rather than `{"a": 1, "b": 2}`.
+    - If `value` cannot be parsed as a valid TOML value, it is treated as a string value. This means that both `-c model="openai/gpt-5"` and `-c model=openai/gpt-5` are equivalent.
 - The `$CODEX_HOME/config.toml` configuration file where the `CODEX_HOME` environment value defaults to `~/.codex`. (Note `CODEX_HOME` will also be where logs and other Codex-related information are stored.)
 
 Both the `--config` flag and the `config.toml` file support the following options:

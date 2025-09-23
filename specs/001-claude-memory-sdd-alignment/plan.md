@@ -4,7 +4,7 @@
 
 - Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/26
 - Plan-URI: specs/001-claude-memory-sdd-alignment/plan.md
-- Evidence-URIs: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/
+- Evidence-URIs: _artifacts/logs/legacy/001-claude-memory-sdd-alignment/
 
 ## Architecture Overview
 
@@ -76,7 +76,7 @@ Inherits from: [parent CLAUDE.md]
 ## Local Conventions
 - Build: [specific commands]
 - Test: [test approach]
-- Evidence: dev-docs/review/_artifacts/[module]/
+- Evidence: _artifacts/legacy/[module]/
 
 ## Protocol Specifics
 [Module-specific protocol details]
@@ -137,9 +137,9 @@ grep -r "sdd-rules/rules/README.md" sdd-rules/
 
 ### Evidence Collection
 
-- Lint output: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/lint.log
-- Language check: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/language.log
-- Link validation: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/links.log
+- Lint output: _artifacts/logs/legacy/001-claude-memory-sdd-alignment/lint.log
+- Language check: _artifacts/logs/legacy/001-claude-memory-sdd-alignment/language.log
+- Link validation: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/links.log
 
 ## Trade-offs and Decisions
 

@@ -64,12 +64,12 @@ The SDK supports the latest Claude models available in 2025:
 ### Latest Models
 
 - **Opus 4.1** - Most capable model
-  - Full name: `"claude-opus-4-1-20250805"`
-  - Alias: `"opus"` (recommended - uses latest Opus)
+    - Full name: `"claude-opus-4-1-20250805"`
+    - Alias: `"opus"` (recommended - uses latest Opus)
 
 - **Sonnet 4** - Balanced performance
-  - Full name: `"claude-sonnet-4-20250514"`
-  - Alias: `"sonnet"` (recommended - uses latest Sonnet)
+    - Full name: `"claude-sonnet-4-20250514"`
+    - Alias: `"sonnet"` (recommended - uses latest Sonnet)
 
 ### Previous Generation
 

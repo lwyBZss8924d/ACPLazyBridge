@@ -389,7 +389,7 @@ The metadata validation is integrated into the CI pipeline:
 ast-grep scan -c sgconfig.yml . 2>&1 | tee _artifacts/reports/<task>/ast_grep_$(date +%Y%m%d_%H%M%S).log
 
 # Legacy location
-ast-grep scan -c sgconfig.yml . 2>&1 | tee dev-docs/review/_artifacts/reports/<task>/ast_grep_$(date +%Y%m%d_%H%M%S).log
+ast-grep scan -c sgconfig.yml . 2>&1 | tee _artifacts/reports/legacy/<task>/ast_grep_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ## Quick Reference

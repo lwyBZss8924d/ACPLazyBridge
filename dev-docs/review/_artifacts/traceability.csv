@@ -1,8 +1,0 @@
-SourceID,Description,MappedTo,ImplementationRefs,Evidence,Status
-REQ-LAZY-0005,"非交互权限映射（default/plan/acceptEdits/bypassPerms）",CODEX-CLI-0001;CODEX-CLI-0002;CODEX-CLI-0003,"acp-lazy-core/src/permissions.rs:99-118 (map_acp_to_codex); permissions.rs:173-185 (PermissionOverrides::apply)","dev-docs/review/_artifacts/logs/core_permissions_test_20250902_*.log",Verified
-REQ-LAZY-0001,"ACP 基线方法实现（stdio JSONL）",SPEC-ACP-METHODS-0002;SPEC-ACP-STREAM-0003;SPEC-ACP-CANCEL-0008,"acp-lazy-core/src/protocol.rs (Request/Response/Notification types)",,Partial
-ARC-LAZY-0001,"transport 行级读写与队列",SPEC-ACP-CONSTRAINTS-0005,"acp-lazy-core/src/transport.rs:161-196 (read_lines); acp-lazy-core/src/transport.rs:201-221 (write_line)","dev-docs/review/_artifacts/logs/test_20250902_*.log",Verified
-SPEC-ACP-JSONRPC-0001,"JSON-RPC 2.0 错误码",REQ-LAZY-0001,"acp-lazy-core/src/protocol.rs:13-39 (ErrorCode enum)","dev-docs/review/_artifacts/logs/test_20250902_*.log",Verified
-SPEC-ACP-CONSTRAINTS-0005,"JSONL 单行约束",ARC-LAZY-0001,"acp-lazy-core/src/transport.rs:201-221 (write_line with \\n)","dev-docs/review/_artifacts/logs/test_20250902_*.log",Verified
-ZED-REF-0001,"Zed RPC connection patterns",ARC-LAZY-0001,"acp-lazy-core/src/transport.rs (ProcessTransport, MessageQueue)","local_refs/agent-client-protocol/rust/rpc.rs; local_refs/zed-acp-examples/agent_servers/src/acp.rs",Verified
-

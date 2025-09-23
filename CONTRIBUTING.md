@@ -33,7 +33,7 @@ Before you open a PR, ensure the following:
     - `plan.md` (design, architecture, trade‑offs)
     - `tasks.md` (subtasks, responsibilities, test plan)
     - Include Issue‑URI, Spec/Plan/Tasks URIs, and Evidence‑URIs.
-- Evidence is produced and linked under `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`.
+- Evidence is produced and linked under `_artifacts/<task>/{tests,logs,jq,reports}/` (legacy mirrors in `_artifacts/legacy/` remain read-only).
 - Quality gates pass locally:
     - `cargo fmt --all -- --check`
     - `cargo clippy --workspace --all-targets --all-features -- -D warnings`
@@ -64,7 +64,7 @@ When working on "ACPLazyBridge" Specification‑Driven Development (SDD) team:
 
 - Context gathering
     - Inspect repo and relevant SDD docs: `.specify/`, `sdd-rules/`, `dev-docs/`.
-    - Review open issues under `dev-docs/plan/issues/` when applicable.
+- Review outstanding specs/tasks under `specs/` and `dev-docs/_issues_drafts/`.
 - Plan tasks (SDD flow)
     - Use `/specify`, `/plan`, `/tasks` commands per `.specify/commands/*.md` to create `specs/<NNN>-<slug>/` artifacts.
     - Ensure links and metadata blocks are present and consistent.
@@ -74,7 +74,7 @@ When working on "ACPLazyBridge" Specification‑Driven Development (SDD) team:
     - Optionally run adapter smoke tests or JSONL playback if relevant to changes.
     - Keep stdout JSON‑only for protocol paths; route logs to stderr.
 - Evidence
-    - Store test logs and artifacts under `dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/`.
+- Store test logs and artifacts under `_artifacts/<task>/{tests,logs,jq,reports}/` (legacy mirrors in `_artifacts/legacy/` only when required).
     - Summarize pass/fail and reference in PR.
 - Pre‑PR checks
     - Run `./scripts/ci/run-local-ci.sh` or individual scripts:

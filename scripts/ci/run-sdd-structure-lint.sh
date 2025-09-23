@@ -37,8 +37,8 @@ if grep -Rni --include='*.md' 'protocolVersion":"2024-11-05"' . >/dev/null; then
 fi
 
 # 3) Evidence path hints (at least appears somewhere)
-if ! grep -Rni --include='*.md' 'dev-docs/review/_artifacts' . >/dev/null; then
-  err "evidence path 'dev-docs/review/_artifacts' not referenced in docs"
+if ! grep -Rni --include='*.md' '_artifacts/legacy' . >/dev/null; then
+  err "evidence path '_artifacts/legacy' not referenced in docs"
 fi
 
 # 4) Worktree example from origin/main -b (weak check)

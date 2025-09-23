@@ -95,8 +95,7 @@ Avoid running untrusted code or scripts without review.
 - cargo test --workspace --all-features --locked
 - Protocol JSONL scenarios (if present) replay without errors; stdout is valid
   JSONL; logs to stderr.
-- Security scanning is enabled; see dev-docs/engineering/codeql.md for
-  local custom queries.
+- Security scanning is enabled.
 
 ### PRE-PR CHECKS
 
@@ -117,7 +116,7 @@ Avoid running untrusted code or scripts without review.
 
 ### EVIDENCE & LOGGING
 
-- Store evidence under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/.
+- Store evidence under _artifacts/{tests,logs,jq,reports}/<task>/.
 - Keep logs and test outputs with timestamps for reproducibility.
 
 ## GOVERNANCE

@@ -181,10 +181,10 @@ main() {
 
     # 8. Check for evidence directory
     section "8. EVIDENCE DIRECTORY CHECK"
-    if [ -d "_artifacts" ] || [ -d "dev-docs/review/_artifacts" ]; then
+    if [ -d "_artifacts" ] || [ -d "_artifacts/legacy" ]; then
         info "✓ Evidence directory exists"
     else
-        warn "No evidence directory found (_artifacts or dev-docs/review/_artifacts)"
+        warn "No evidence directory found (_artifacts or _artifacts/legacy)"
     fi
 
     # 9. Check for NEEDS CLARIFICATION markers

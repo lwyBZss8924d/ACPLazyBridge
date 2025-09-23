@@ -372,15 +372,15 @@ Hooks are organized by matchers, where each matcher can have multiple hooks:
 
 - **matcher**: Pattern to match tool names, case-sensitive (only applicable for
   `PreToolUse` and `PostToolUse`)
-  - Simple strings match exactly: `Write` matches only the Write tool
-  - Supports regex: `Edit|Write` or `Notebook.*`
-  - Use `*` to match all tools. You can also use empty string (`""`) or leave
+    - Simple strings match exactly: `Write` matches only the Write tool
+    - Supports regex: `Edit|Write` or `Notebook.*`
+    - Use `*` to match all tools. You can also use empty string (`""`) or leave
     `matcher` blank.
 - **hooks**: Array of commands to execute when the pattern matches
-  - `type`: Currently only `"command"` is supported
-  - `command`: The bash command to execute (can use `$CLAUDE_PROJECT_DIR`
+    - `type`: Currently only `"command"` is supported
+    - `command`: The bash command to execute (can use `$CLAUDE_PROJECT_DIR`
     environment variable)
-  - `timeout`: (Optional) How long a command should run, in seconds, before
+    - `timeout`: (Optional) How long a command should run, in seconds, before
     canceling that specific command.
 
 For events like `UserPromptSubmit`, `Notification`, `Stop`, and `SubagentStop`
@@ -1056,17 +1056,17 @@ This prevents malicious hook modifications from affecting your current session.
 ## Hook Execution Details
 
 - **Timeout**: 60-second execution limit by default, configurable per command.
-  - A timeout for an individual command does not affect the other commands.
+    - A timeout for an individual command does not affect the other commands.
 - **Parallelization**: All matching hooks run in parallel
 - **Deduplication**: Multiple identical hook commands are deduplicated automatically
 - **Environment**: Runs in current directory with Claude Code's environment
-  - The `CLAUDE_PROJECT_DIR` environment variable is available and contains the
+    - The `CLAUDE_PROJECT_DIR` environment variable is available and contains the
     absolute path to the project root directory (where Claude Code was started)
 - **Input**: JSON via stdin
 - **Output**:
-  - PreToolUse/PostToolUse/Stop/SubagentStop: Progress shown in transcript (Ctrl-R)
-  - Notification/SessionEnd: Logged to debug only (`--debug`)
-  - UserPromptSubmit/SessionStart: stdout added as context for Claude
+    - PreToolUse/PostToolUse/Stop/SubagentStop: Progress shown in transcript (Ctrl-R)
+    - Notification/SessionEnd: Logged to debug only (`--debug`)
+    - UserPromptSubmit/SessionStart: stdout added as context for Claude
 
 ## Debugging
 

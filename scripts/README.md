@@ -294,7 +294,7 @@ AST-grep rules are defined in `sgconfig.yml` at the repository root.
 ast-grep scan 2>&1 | tee _artifacts/reports/<task>/ast_grep_$(date +%Y%m%d).log
 
 # Legacy location
-ast-grep scan 2>&1 | tee dev-docs/review/_artifacts/reports/<task>/ast_grep_$(date +%Y%m%d).log
+ast-grep scan 2>&1 | tee _artifacts/reports/legacy/<task>/ast_grep_$(date +%Y%m%d).log
 ```
 
 ## Development Guidelines

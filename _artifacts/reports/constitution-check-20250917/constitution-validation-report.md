@@ -34,7 +34,7 @@ This report summarizes the validation of ACPLazyBridge's compliance with Constit
 ./crates/CLAUDE.md
 ./crates/codex-cli-acp/CLAUDE.md
 ./dev-docs/CLAUDE.md
-./dev-docs/review/_artifacts/CLAUDE.md
+./_artifacts/legacy/CLAUDE.md
 ./queries/CLAUDE.md
 ./scripts/CLAUDE.md
 ./sdd-rules/CLAUDE.md
@@ -54,7 +54,7 @@ This report summarizes the validation of ACPLazyBridge's compliance with Constit
 | ./crates/CLAUDE.md | ✓ | Pass |
 | ./crates/codex-cli-acp/CLAUDE.md | ✓ | Pass |
 | ./dev-docs/CLAUDE.md | ✓ | Pass |
-| ./dev-docs/review/_artifacts/CLAUDE.md | ✓ | Pass |
+| ./_artifacts/legacy/CLAUDE.md | ✓ | Pass |
 | ./queries/CLAUDE.md | ✓ | Pass |
 | ./scripts/CLAUDE.md | ✓ | Pass |
 | ./sdd-rules/CLAUDE.md | ✓ | Pass |
@@ -73,7 +73,7 @@ This report summarizes the validation of ACPLazyBridge's compliance with Constit
 | ./crates/CLAUDE.md | ✗ | 2025-09-17 |
 | ./crates/codex-cli-acp/CLAUDE.md | ✗ | 2025-09-17 |
 | ./dev-docs/CLAUDE.md | ✗ | 2025-09-17 |
-| ./dev-docs/review/_artifacts/CLAUDE.md | ✗ | 2025-09-17 |
+| ./_artifacts/legacy/CLAUDE.md | ✗ | 2025-09-17 |
 | ./queries/CLAUDE.md | ✗ | 2025-09-17 |
 | ./scripts/CLAUDE.md | ✗ | 2025-09-17 |
 | ./sdd-rules/CLAUDE.md | ✗ | 2025-09-17 |

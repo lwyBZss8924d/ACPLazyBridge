@@ -30,7 +30,7 @@ Every crate must:
 1. Be a library first (`lib.rs` required, `main.rs` optional)
 2. Have tests that fail before implementation exists
 3. Use direct framework features (no wrapper traits unless justified)
-4. Maintain evidence in `_artifacts/<task>/` or `dev-docs/review/_artifacts/<task>/`
+4. Maintain evidence in `_artifacts/<task>/` or `_artifacts/legacy/<task>/`
 5. Follow the SDD workflow: spec → plan → tasks → implementation
 
 ### TDD Workflow
@@ -188,7 +188,7 @@ cargo test --workspace 2>&1 | \
 
 # Alternative: legacy location
 cargo test --workspace 2>&1 | \
-  tee ../dev-docs/review/_artifacts/tests/<task>/test_$(date +%Y%m%d_%H%M%S).log
+  tee ../_artifacts/tests/legacy/<task>/test_$(date +%Y%m%d_%H%M%S).log
 
 # Generate test coverage
 cargo tarpaulin --workspace --out Html \
@@ -223,7 +223,7 @@ Focus areas:
 2. Define in `acp-lazy-core/src/protocol.rs`
 3. Implement handler in `codex-cli-acp/src/codex_proto.rs`
 4. Verify tests pass (RED→GREEN→REFACTOR)
-5. Update evidence in `_artifacts/<task>/` or `dev-docs/review/_artifacts/<task>/`
+5. Update evidence in `_artifacts/<task>/` or `_artifacts/legacy/<task>/`
 
 ### Tool Call Implementation
 

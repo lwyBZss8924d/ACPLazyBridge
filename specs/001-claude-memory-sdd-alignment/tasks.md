@@ -4,7 +4,7 @@
 
 - Issue-URI: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/26
 - Tasks-URI: specs/001-claude-memory-sdd-alignment/tasks.md
-- Evidence-URIs: dev-docs/review/_artifacts/{tests,logs,reports}/001-claude-memory-sdd-alignment/
+- Evidence-URIs: _artifacts/legacy/{tests,logs,reports}/001-claude-memory-sdd-alignment/
 
 ## Task List
 
@@ -32,7 +32,7 @@
 
 **Evidence**:
 
-- File diff: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/root-claude-diff.txt
+- File diff: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/root-claude-diff.txt
 
 ### Task 2: Create Module CLAUDE.md Files
 
@@ -55,7 +55,7 @@
 
 **Evidence**:
 
-- File listing: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/module-files.txt
+- File listing: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/module-files.txt
 
 ### Task 3: Create Rules Index
 
@@ -79,7 +79,7 @@
 
 **Evidence**:
 
-- Index content: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/rules-index.md
+- Index content: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/rules-index.md
 
 ### Task 4: Update Cross-References
 
@@ -101,7 +101,7 @@
 
 **Evidence**:
 
-- Diff files: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/cross-ref-diffs.txt
+- Diff files: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/cross-ref-diffs.txt
 
 ### Task 5: Run Local CI Validation
 
@@ -125,9 +125,9 @@
 
 **Evidence**:
 
-- Lint log: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/lint.log
-- Language log: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/language.log
-- Link check: dev-docs/review/_artifacts/tests/001-claude-memory-sdd-alignment/links.log
+- Lint log: _artifacts/logs/legacy/001-claude-memory-sdd-alignment/lint.log
+- Language log: _artifacts/logs/legacy/001-claude-memory-sdd-alignment/language.log
+- Link check: _artifacts/tests/legacy/001-claude-memory-sdd-alignment/links.log
 
 ### Task 6: Create GitHub Issue
 
@@ -171,7 +171,7 @@
 
 **Evidence**:
 
-- Commit log: dev-docs/review/_artifacts/logs/001-claude-memory-sdd-alignment/commit.log
+- Commit log: _artifacts/logs/legacy/001-claude-memory-sdd-alignment/commit.log
 
 ### Task 8: Create Pull Request
 
@@ -196,7 +196,7 @@
 **Evidence**:
 
 - PR URL: To be generated
-- CI results: dev-docs/review/_artifacts/reports/001-claude-memory-sdd-alignment/ci-results.txt
+- CI results: _artifacts/reports/legacy/001-claude-memory-sdd-alignment/ci-results.txt
 
 ## Dependencies
 

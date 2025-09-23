@@ -89,7 +89,7 @@ ACPLazyBridge/crates
   // ast-grep-ignore: rust-no-unwrap
   ```
 
-- JSONL protocol scenarios (if used) live under `dev-docs/review/_artifacts/tests/` and can be piped into `codex-cli-acp`.
+- JSONL protocol scenarios (if used) live under `_artifacts/tests/protocol-baseline/` (legacy mirror: `_artifacts/tests/legacy/`) and can be piped into `codex-cli-acp`.
 
 ### Architecture (high level)
 
@@ -150,10 +150,10 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":
   cargo run -p codex-cli-acp
 
 # Test with JSONL scenarios
-cat dev-docs/review/_artifacts/tests/handshake.jsonl | cargo run -p codex-cli-acp
+cat _artifacts/tests/protocol-baseline/handshake.jsonl | cargo run -p codex-cli-acp
 
 # Test with Codex proto command
-codex proto -c approval_policy="never" < dev-docs/review/_artifacts/tests/basic_session.jsonl
+codex proto -c approval_policy="never" < _artifacts/tests/protocol-baseline/basic_session.jsonl
 ```
 
 ## You have Augmented CLI Development tools chain and compose for codebase Code Analysis
@@ -295,12 +295,12 @@ Store test evidence for PRs:
 ```bash
 # Run with evidence capture
 cargo test --workspace 2>&1 | \
-  tee dev-docs/review/_artifacts/<task>/logs/test_$(date +%Y%m%d_%H%M%S).log
+  tee _artifacts/legacy/<task>/logs/test_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ## Testing Approach
 
-The project uses JSONL files for protocol testing. Key test scenarios are in `dev-docs/review/_artifacts/tests/`:
+The project uses JSONL files for protocol testing. Key test scenarios are in `_artifacts/tests/protocol-baseline/` (legacy mirror retained under `_artifacts/tests/legacy/`):
 
 - `handshake.jsonl` - Basic initialization
 - `basic_session.jsonl` - Session creation and prompting
@@ -322,7 +322,7 @@ This allows immediate turn completion instead of waiting for idle timeout.
 1. Create worktree: `git worktree add ../acplb-worktrees/feature-name origin/main -b feature/name`
 2. Run quality gates: `scripts/ci/run-local-ci.sh`
 3. Test ACP protocol: `cargo run -p codex-cli-acp < test.jsonl`
-4. Collect evidence: Store logs in `dev-docs/review/_artifacts/<task>/`
+4. Collect evidence: Store logs in `_artifacts/legacy/<task>/`
 5. Create PR with links to specs and evidence
 
 ## Current Focus (M1)
@@ -510,7 +510,7 @@ ACPLazyBridge/sdd-rules
 - Worktree-first: never develop on main; create a feature branch in a dedicated worktree.
 - Branch categories (canonical): feature | fix | perf | chore | docs (kebab-case). The feature/<module>-<id> style is allowed as an alternative but not the canonical example.
 - Logging discipline: stderr for logs; stdout reserved for JSON-RPC/JSONL only.
-- Evidence: store all local scenario outputs and jq validations under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/.
+- Evidence: store all local scenario outputs and jq validations under _artifacts/legacy/{tests,logs,jq,reports}/<task>/.
 - Respect human edits: do not override user modifications unless explicitly requested; reconcile conflicts conservatively.
 
 ### SDD compliance (must do for every task)
@@ -524,7 +524,7 @@ work in: (specs/)
 - Add the following metadata block at the top of each file (and mirror in the GitHub Issue body):
     - Issue-URI: <link to the GitHub issue>
     - Spec-URI / Plan-URI / Tasks-URI: <self links>
-    - Evidence-URIs: old task is in dev-docs/review/_artifacts/{tests|logs|jq|reports}/<task>/... new task is in root path
+    - Evidence-URIs: old task is in _artifacts/legacy/{tests|logs|jq|reports}/<task>/... new task is in root path
     (_artifacts/{tests,logs,jq,reports}/<task>/...) linked with (specs/) TASK's artifacts outputs.
     (Subsequent task evidence is stored under the root path)
 - PR description must include: links to Spec/Plan/Tasks, evidence files (tests/logs/jq/reports), risks/rollback, and CI pass summary.
@@ -580,7 +580,7 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 - `cargo clippy --workspace --all-targets --all-features -- -D warnings`
 - `cargo test --workspace --all-features --locked`
 - Protocol JSONL scenarios (if present) replay without errors; stdout is valid JSONL.
-- Code scanning (GitHub Code Scanning) is enabled. For local custom CodeQL queries, see (dev-docs/engineering/codeql.md) .
+- Code scanning (GitHub Code Scanning) is enabled.
 
 ### Constitutional gates (must pass)
 
@@ -609,9 +609,68 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 - Keep status short and actionable; when uncertain about intent, ask before proceeding.
 - Escalate risks with options and trade-offs.
 
+## (dev-docs/) and References
+
+- Project references: dev-docs/references/, dev-docs/references/acp_adapters/, dev-docs/references/cli_agents/, dev-docs/references/acp.md, dev-docs/references/zed_ide.md
+- Design/Requirements: dev-docs/architecture/, dev-docs/_requirements/ (see dev-docs/README.md)
+- Legacy planning archive: _artifacts/legacy/ (historical reference)
+
+<dev-docs>
+
+```tree
+.
+├── CLAUDE.md
+├── README.md
+├── _issues_drafts
+│   ├── TEMPLATE.md
+│   ├── closed/
+│   ├── protocol-cleanup-official-models.md
+│   ├── runtime-adoption-core-loop.md
+│   └── streaming-alignment-session-notifications.md
+├── _projects
+│   └── migration-blueprint-project-management-plan.md
+├── _requirements
+│   ├── Roadmap.md
+│   ├── acp-lazybridge-project-plan.md
+│   ├── acp-lazybridge-requirements.md
+│   ├── m1-issue-list.md
+│   └── m1-technical-implementation-plan.md
+├── architecture
+│   └── acplb-architecture.md
+├── changelogs
+│   ├── README.md
+│   ├── codex-tools-1-code-changes-2025-09-04.md
+│   └── codex-tools-1-review-2025-09-04.md
+├── core_servers
+│   └── acplb-core-runtime.md
+└── references
+    ├── acp.md
+    ├── acp_adapters
+    │   └── claude_code_acp.md
+    ├── cli_agents
+    │   ├── ClaudeCode
+    │   │   ├── ClaudeCode-Config.md
+    │   │   ├── cli-reference.md
+    │   │   ├── hooks.md
+    │   │   ├── sdk-headless.md
+    │   │   ├── sdk-overview.md
+    │   │   ├── sdk-python.md
+    │   │   ├── sdk-rust(Unofficial).md
+    │   │   ├── sdk-typescript.md
+    │   │   ├── slash-commands.md
+    │   │   └── troubleshooting.md
+    │   ├── CodexCLI-Config.md
+    │   ├── claude_code.md
+    │   ├── codex.md
+    │   └── gemini.md
+    └── zed_ide.md
+```
+
+</dev-docs>
+
 ---
 
-## My SDD Integration Understanding
+## My (Claude Code's) SDD Integration Understanding
 
 For detailed documentation of my (Claude Code's) complete understanding and operational context within the ACPLazyBridge SDD framework, see:
 
@@ -721,12 +780,12 @@ Optional: Keep specs in sync via CLAUDE.md imports
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-22T15:20:00Z"
+    last_checked: "2025-09-23T04:56:00Z"
 document:
     type: "claude-memory"
     path: "./CLAUDE.md"
-    version: "1.0.4"
-    last_updated: "2025-09-22T15:20:00Z"
+    version: "1.0.5"
+    last_updated: "2025-09-23T04:56:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
@@ -739,6 +798,11 @@ document:
         - ".specify/templates/plan-template.md"
         - ".specify/commands/tasks.md"
         - ".specify/templates/tasks-template.md"
-        - "dev-docs/references/acp.md"
+        - "(dev-docs/references/)"
+        - "(dev-docs/_requirements/)"
+        - "(dev-docs/_issues_drafts/)"
+        - "(dev-docs/_projects/)"        
+        - "(/Users/arthur/dev-space/agent-client-protocol/docs/)"
+        - "(/Users/arthur/dev-space/agent-client-protocol/rust/)"
         - ".claude/CLAUDE.md"
 ```

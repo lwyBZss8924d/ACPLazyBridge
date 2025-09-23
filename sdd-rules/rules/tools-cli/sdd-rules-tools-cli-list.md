@@ -141,7 +141,7 @@ ast-grep scan --format json | jq '.results[] | select(.severity == "error")' \
 ```bash
 # Capture analysis with timestamps
 ast-grep scan --format sarif 2>&1 \
-  | tee "dev-docs/review/_artifacts/$(date +%Y%m%d_%H%M%S)_scan.sarif"
+  | tee "_artifacts/legacy/$(date +%Y%m%d_%H%M%S)_scan.sarif"
 # Aggregate multiple tool outputs
 {
   echo '{"timestamp": "'$(date -Iseconds)'",'

@@ -206,7 +206,7 @@ The following agents compose our SDD Developer Team members. Names in brackets a
 - Worktree-first: never develop on main; create a feature branch in a dedicated worktree.
 - Branch categories (canonical): feature | fix | perf | chore | docs (kebab-case). The feature/<module>-<id> style is allowed as an alternative but not the canonical example.
 - Logging discipline: stderr for logs; stdout reserved for JSON-RPC/JSONL only.
-- Evidence: store all local scenario outputs and jq validations under dev-docs/review/_artifacts/{tests,logs,jq,reports}/<task>/.
+- Evidence: store all local scenario outputs and jq validations under `_artifacts/{tests,logs,jq,reports}/<task>/`; archived runs live in `_artifacts/{tests,logs,jq,reports}/legacy/`.
 - Respect human edits: do not override user modifications unless explicitly requested; reconcile conflicts conservatively.
 
 ### SDD compliance (must do for every task)
@@ -220,7 +220,7 @@ work in: (specs/)
 - Add the following metadata block at the top of each file (and mirror in the GitHub Issue body):
     - Issue-URI: <link to the GitHub issue>
     - Spec-URI / Plan-URI / Tasks-URI: <self links>
-    - Evidence-URIs: old task is in dev-docs/review/_artifacts/{tests|logs|jq|reports}/<task>/... new task is in root path
+    - Evidence-URIs: `_artifacts/{tests|logs|jq|reports}/<task>/...` (legacy audits may reference `_artifacts/{tests|logs|jq|reports}/legacy/`)
     (_artifacts/{tests,logs,jq,reports}/<task>/...) linked with (specs/) TASK's artifacts outputs.
     (Subsequent task evidence is stored under the root path)
 - PR description must include: links to Spec/Plan/Tasks, evidence files (tests/logs/jq/reports), risks/rollback, and CI pass summary.
@@ -275,7 +275,7 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 - cargo clippy --workspace --all-targets --all-features -- -D warnings
 - cargo test --workspace --all-features --locked
 - Protocol JSONL scenarios (if present) replay without errors; stdout is valid JSONL.
-- Code scanning (GitHub Code Scanning) is enabled. For local custom CodeQL queries, see dev-docs/engineering/codeql.md.
+- Code scanning (GitHub Code Scanning) is enabled.
 
 ### Constitutional gates (must pass)
 
@@ -1141,13 +1141,13 @@ echo "cursor-agent: "(command -v ~/.local/bin/cursor-agent >/dev/null 2>&1; and 
     - JSONL playback helper (feeds a JSONL file into a fresh server process)
 
     ```bash path=null start=null
-    cargo run -p codex-cli-acp --bin playback < dev-docs/review/_artifacts/tests/<scenario>.jsonl
+    cargo run -p codex-cli-acp --bin playback < _artifacts/tests/legacy/<scenario>.jsonl
     ```
 
 - Coverage (optional; if cargo-tarpaulin is installed)
 
   ```bash path=null start=null
-  cargo tarpaulin --workspace --out Html --output-dir dev-docs/review/_artifacts/reports/<task>/
+  cargo tarpaulin --workspace --out Html --output-dir _artifacts/reports/legacy/<task>/
   ```
 
 ### Configuration and environment
@@ -1226,7 +1226,7 @@ echo "cursor-agent: "(command -v ~/.local/bin/cursor-agent >/dev/null 2>&1; and 
 - Replay saved protocol scenarios (JSONL)
 
   ```bash path=null start=null
-  cargo run -p codex-cli-acp --bin playback < dev-docs/review/_artifacts/tests/<scenario>.jsonl
+  cargo run -p codex-cli-acp --bin playback < _artifacts/tests/legacy/<scenario>.jsonl
   ```
 
 ### Protocol implementation guidelines (ACP v1 examples)
@@ -1302,7 +1302,8 @@ echo "cursor-agent: "(command -v ~/.local/bin/cursor-agent >/dev/null 2>&1; and 
 ## (dev-docs/) and References
 
 - Project references: dev-docs/references/, dev-docs/references/acp_adapters/, dev-docs/references/cli_agents/, dev-docs/references/acp.md, dev-docs/references/zed_ide.md
-- Design/Plan/Requirements: dev-docs/design/, dev-docs/plan/, dev-docs/requirements/
+- Design/Requirements: dev-docs/architecture/, dev-docs/_requirements/ (see dev-docs/README.md)
+- Legacy planning archive: _artifacts/legacy/ (historical reference)
 
 <dev-docs>
 

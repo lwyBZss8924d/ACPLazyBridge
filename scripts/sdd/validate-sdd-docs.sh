@@ -216,7 +216,7 @@ validate_tasks() {
         fi
 
         # Check for evidence paths
-        if ! grep -q '_artifacts/\|dev-docs/review/_artifacts/' "$file"; then
+        if ! grep -q '_artifacts/\|_artifacts/legacy/' "$file"; then
             warn "No evidence paths found in tasks"
         fi
     fi

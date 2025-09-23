@@ -241,7 +241,7 @@ The nine articles that govern all SDD development:
 ### Evidence Paths
 
 - Primary: `_artifacts/{tests,logs,reports,jq}/<task>/`
-- Legacy: `dev-docs/review/_artifacts/{tests,logs,reports,jq}/<task>/`
+- Legacy: `_artifacts/legacy/`
 
 ## Version Management
 

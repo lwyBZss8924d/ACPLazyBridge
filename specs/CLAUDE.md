@@ -43,7 +43,7 @@ Key SDD principles for specifications:
    Tasks-URI: specs/NNN-feature/tasks.md
    Evidence-URIs:
      - _artifacts/<task>/ (primary)
-     - dev-docs/review/_artifacts/<task>/ (legacy)
+     - _artifacts/legacy/<task>/ (legacy)
    ```
 
 ### Directory Structure
@@ -144,7 +144,7 @@ Issue-URI: ...
 Spec-URI: ...
 Evidence-URIs:
   - _artifacts/<task>/ (primary)
-  - dev-docs/review/_artifacts/<task>/ (legacy)
+  - _artifacts/legacy/<task>/ (legacy)
 ## Overview
 Brief description
 ## User Stories
@@ -225,7 +225,7 @@ As a [role], I want [feature], so that [benefit]
 ### Evidence Paths
 
 - Primary: `_artifacts/{tests,logs,reports,jq}/<task>/`
-- Legacy: `dev-docs/review/_artifacts/{tests,logs,reports,jq}/<task>/`
+- Legacy: `_artifacts/legacy/{tests,logs,reports,jq}/<task>/`
 
 ### Related Documentation
 

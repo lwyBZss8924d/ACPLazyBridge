@@ -6,7 +6,7 @@
 
 ## Linked Issues
 
-- Closes: <link to dev-docs/plan/issues item or GitHub issue>
+- Closes: <link to GitHub issue>
 
 ## Design & Changes
 
@@ -31,7 +31,7 @@
 - [ ] Worktree-first (developed in dedicated worktree/branch from origin/main)
 - [ ] Branch uses canonical category (feature|fix|perf|chore|docs)
 - [ ] Spec/Plan/Tasks links included (specs/<NNN>-<slug>/...)
-- [ ] Evidence uses dev-docs/review/_artifacts/{tests,logs,jq,reports}/
+- [ ] Evidence uses _artifacts/{tests,logs,jq,reports}/
 - [ ] cargo fmt --all -- --check passes
 - [ ] cargo clippy --workspace --all-targets --all-features -- -D warnings passes
 - [ ] cargo test --workspace --all-features --locked passes

@@ -103,7 +103,7 @@ cargo doc --no-deps --open
 cargo test 2>&1 | tee ../../_artifacts/tests/acp-lazy-core/test_$(date +%Y%m%d_%H%M%S).log
 
 # Legacy location (if needed)
-cargo test 2>&1 | tee ../../dev-docs/review/_artifacts/tests/acp-lazy-core/test_$(date +%Y%m%d_%H%M%S).log
+cargo test 2>&1 | tee ../../_artifacts/tests/legacy/acp-lazy-core/test_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ## Testing Guidelines
