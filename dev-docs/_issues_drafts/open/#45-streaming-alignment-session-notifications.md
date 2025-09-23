@@ -1,8 +1,11 @@
 # Align Streaming Notifications with ACP Models
 
-**GitHub Issue**: [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45)
+**GitHub Issue**: [#45](dev-docs/_issues_drafts/open/#45-streaming-alignment-session-notifications.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45>
 **Status**: 🔄 Planned (Milestone 0.1.0)
-**Dependencies**: [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44)
+**Dependencies**:
+
+- [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
+
 
 ## Summary
 

@@ -1,8 +1,12 @@
 # Remove Legacy Protocol Mirror and Adopt Official Models
 
-**GitHub Issue**: [#46](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46)
+**GitHub Issue**: [#46](dev-docs/_issues_drafts/open/#46-protocol-cleanup-official-models.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46>
 **Status**: 🔄 Planned (Milestone 0.1.0)
-**Dependencies**: [#44](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44), [#45](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45)
+**Dependencies**:
+
+- [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
+
+- [#45](dev-docs/_issues_drafts/open/#45-streaming-alignment-session-notifications.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45>
 
 ## Summary
 
