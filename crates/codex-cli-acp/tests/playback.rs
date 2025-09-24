@@ -17,21 +17,16 @@ use std::time::Duration;
 
 /// Run a JSONL playback test
 fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
-    // Build the binary first
-    Command::new("cargo")
-        .args(["build", "--bin", "codex-cli-acp"])
-        .output()
-        .context("Failed to build codex-cli-acp")?;
+    let binary = env!("CARGO_BIN_EXE_codex-cli-acp");
 
     // Spawn the ACP server
-    let mut child = Command::new("cargo")
-        .args(["run", "--bin", "codex-cli-acp"])
+    let mut child = Command::new(binary)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
         .env("RUST_LOG", "info")
         .spawn()
-        .context("Failed to spawn codex-cli-acp")?;
+        .context("Failed to spawn codex-cli-acp binary")?;
 
     // ast-grep-ignore
     let mut stdin = child.stdin.take().expect("Failed to get stdin");
@@ -88,8 +83,8 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
 
         // Wait for response (if not a notification)
         let response = if !is_notification {
-            // Wait up to 2 seconds for a response
-            match rx.recv_timeout(Duration::from_secs(2)) {
+            // Wait up to 10 seconds for a response (allows first-run builds)
+            match rx.recv_timeout(Duration::from_secs(10)) {
                 Ok(resp) => Some(resp),
                 Err(_) => {
                     eprintln!("Timeout waiting for response to: {}", request);
@@ -163,6 +158,7 @@ fn test_basic_session() {
 
     // ast-grep-ignore
     let resp = resp.as_ref().unwrap();
+    eprintln!("session/new response: {resp:?}");
     assert!(resp.get("result").is_some());
     assert!(resp["result"].get("sessionId").is_some());
 }

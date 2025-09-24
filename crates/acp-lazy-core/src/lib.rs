@@ -4,11 +4,13 @@
 //! servers, including:
 //! - JSON-RPC 2.0 protocol handling
 //! - Process transport and stdio communication
+//! - Shared runtime orchestration built on the Agent Client Protocol
 //! - Permission mapping for Codex integration
 //! - Connection management following Zed's patterns
 
 pub mod permissions;
 pub mod protocol;
+pub mod runtime;
 pub mod transport;
 
 pub mod logging {

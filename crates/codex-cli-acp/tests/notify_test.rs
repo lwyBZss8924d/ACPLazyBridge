@@ -8,6 +8,10 @@ use std::path::PathBuf;
 use std::process::Command;
 use tempfile::TempDir;
 
+fn forwarder_path() -> PathBuf {
+    PathBuf::from(env!("CARGO_BIN_EXE_acplb-notify-forwarder"))
+}
+
 #[test]
 fn test_notify_forwarder_writes_to_file() -> Result<()> {
     // Create temp directory
@@ -19,30 +23,7 @@ fn test_notify_forwarder_writes_to_file() -> Result<()> {
     std::env::set_var("ACPLB_NOTIFY_PATH", notify_path.to_str().unwrap());
     std::env::set_var("ACPLB_NOTIFY_KIND", "file");
 
-    // Build the forwarder binary if needed
-    let output = Command::new("cargo")
-        .args(["build", "--bin", "acplb-notify-forwarder"])
-        .output()?;
-
-    if !output.status.success() {
-        panic!(
-            "Failed to build forwarder: {}",
-            String::from_utf8_lossy(&output.stderr)
-        );
-    }
-
-    // Find the forwarder binary - check multiple possible locations
-    let possible_paths = [
-        PathBuf::from("target/debug/acplb-notify-forwarder"),
-        PathBuf::from("../../target/debug/acplb-notify-forwarder"),
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug/acplb-notify-forwarder"),
-    ];
-
-    let forwarder_path = possible_paths
-        .iter()
-        .find(|p| p.exists())
-        .cloned()
-        .unwrap_or_else(|| panic!("Forwarder binary not found in any of: {:?}", possible_paths));
+    let forwarder_path = forwarder_path();
 
     // Test JSON payload
     let test_json = json!({
@@ -91,18 +72,7 @@ fn test_notify_forwarder_appends_to_existing_file() -> Result<()> {
     writeln!(file, "{{\"existing\": \"content\"}}")?;
     drop(file);
 
-    // Build and run forwarder - check multiple possible locations
-    let possible_paths = [
-        PathBuf::from("target/debug/acplb-notify-forwarder"),
-        PathBuf::from("../../target/debug/acplb-notify-forwarder"),
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug/acplb-notify-forwarder"),
-    ];
-
-    let forwarder_path = possible_paths
-        .iter()
-        .find(|p| p.exists())
-        .cloned()
-        .unwrap_or_else(|| panic!("Forwarder binary not found in any of: {:?}", possible_paths));
+    let forwarder_path = forwarder_path();
 
     let test_json = json!({
         "type": "agent-turn-complete",
@@ -130,18 +100,7 @@ fn test_notify_forwarder_appends_to_existing_file() -> Result<()> {
 
 #[test]
 fn test_notify_forwarder_fails_without_env() -> Result<()> {
-    // Find forwarder - check multiple possible locations
-    let possible_paths = [
-        PathBuf::from("target/debug/acplb-notify-forwarder"),
-        PathBuf::from("../../target/debug/acplb-notify-forwarder"),
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/debug/acplb-notify-forwarder"),
-    ];
-
-    let forwarder_path = possible_paths
-        .iter()
-        .find(|p| p.exists())
-        .cloned()
-        .unwrap_or_else(|| panic!("Forwarder binary not found in any of: {:?}", possible_paths));
+    let forwarder_path = forwarder_path();
 
     // Run without ACPLB_NOTIFY_PATH
     let output = Command::new(forwarder_path)

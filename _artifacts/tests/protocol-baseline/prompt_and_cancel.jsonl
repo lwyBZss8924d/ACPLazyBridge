@@ -1,5 +1,5 @@
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}
-{"jsonrpc":"2.0","id":2,"method":"session/new","params":{"workingDirectory":"/Users/arthur/dev-space/ACPLazyBridge"}}
+{"jsonrpc":"2.0","id":2,"method":"session/new","params":{"cwd":"/Users/arthur/dev-space/ACPLazyBridge"}}
 {"jsonrpc":"2.0","id":3,"method":"session/prompt","params":{"sessionId":"SESSION_ID_HERE","prompt":"The quick brown fox jumps over the lazy dog."}}
 {"jsonrpc":"2.0","method":"session/cancel","params":{"sessionId":"SESSION_ID_HERE"}}
 

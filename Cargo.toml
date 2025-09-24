@@ -5,3 +5,5 @@ members = [
 ]
 resolver = "2"
 
+[workspace.dependencies]
+agent-client-protocol = "0.4.2"
