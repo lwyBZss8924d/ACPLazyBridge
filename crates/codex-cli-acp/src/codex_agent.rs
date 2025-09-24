@@ -187,26 +187,10 @@ impl ProviderAdapter for CodexProviderAdapter {
             }),
             Err(spawn_err) => {
                 warn!(
-                    "Falling back to simulated Codex response: {}",
-                    spawn_err.message
+                    "Codex process failed to start for session {}: {}",
+                    session_id_str, spawn_err.message
                 );
-                if let Some(tx) = notifier {
-                    let _ = tx.send(SessionNotification {
-                        session_id: request.session_id.clone(),
-                        update: SessionUpdate::AgentMessageChunk {
-                            content: ContentBlock::Text(agent_client_protocol::TextContent {
-                                text: "Codex response unavailable; using simulated output.".into(),
-                                annotations: None,
-                                meta: None,
-                            }),
-                        },
-                        meta: None,
-                    });
-                }
-                Ok(PromptResponse {
-                    stop_reason: StopReason::EndTurn,
-                    meta: None,
-                })
+                Err(spawn_err)
             }
         }
     }
