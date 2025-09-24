@@ -48,9 +48,9 @@ Fixed critical ACP protocol compliance issues identified in WARP-Agent Code revi
 **Files Modified**:
 
 - `crates/codex-cli-acp/src/codex_proto.rs`:
-  - Changed `SessionUpdateParams` from flattened to nested structure with `update` field
-  - Added `sessionUpdate` discriminator tag to `SessionUpdateContent` enum
-  - Updated `ContentBlock` to use proper structure
+    - Changed `SessionUpdateParams` from flattened to nested structure with `update` field
+    - Added `sessionUpdate` discriminator tag to `SessionUpdateContent` enum
+    - Updated `ContentBlock` to use proper structure
 
 ### 2. Tool Call Structure
 

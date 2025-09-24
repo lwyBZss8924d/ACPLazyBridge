@@ -5,7 +5,7 @@ worktree: ../acplb-worktrees/038-adopt-acp-runtime
 feature_branch: feature/038-adopt-acp-runtime
 created: 2025-09-23T07:23:14Z
 last_updated: 2025-09-24T07:33:37Z
-status: ready_for_review
+status: ready_for_merge
 input: User description from GitHub issue #44
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44
 spec_uri: specs/038-adopt-acp-runtime/spec.md

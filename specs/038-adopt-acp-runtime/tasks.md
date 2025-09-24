@@ -5,7 +5,7 @@ worktree: ../acplb-worktrees/038-adopt-acp-runtime
 feature_branch: feature/038-adopt-acp-runtime
 created: 2025-09-23T07:23:14Z
 last_updated: 2025-09-24T07:33:37Z
-status: ready_for_review
+status: ready_for_merge
 input: Design documents from specs/038-adopt-acp-runtime/
 spec_uri: specs/038-adopt-acp-runtime/spec.md
 plan_uri: specs/038-adopt-acp-runtime/plan.md
@@ -20,9 +20,9 @@ specs:
     type: tasks
     feature_number: 038
 commits:
-    commit: # To be filled after implementation
+    commit: 53af1fd / e7c4595 / 2a64b67 / e654449 / d6b876e / 0308dc8 / ca0ffa0
     last_commit: # To be filled after PR
-    pr: # To be filled after PR creation
+    pr: https://github.com/lwyBZss8924d/ACPLazyBridge/pull/47
     merge_date: # To be filled after merge
     merge_commit: # To be filled after merge
 ```
