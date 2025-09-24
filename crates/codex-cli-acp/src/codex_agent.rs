@@ -618,7 +618,7 @@ impl CodexAgent {
 
     /// Construct a Codex agent instance configured for tests.
     pub fn for_testing() -> Self {
-        let adapter: Arc<dyn ProviderAdapter> = Arc::new(TestProviderAdapter::default());
+        let adapter: Arc<dyn ProviderAdapter> = Arc::new(TestProviderAdapter);
         let runtime = RuntimeServer::with_defaults(adapter, None);
         Self { runtime }
     }
