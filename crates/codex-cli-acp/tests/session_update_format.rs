@@ -23,7 +23,7 @@ fn test_agent_message_chunk_format() {
         },
     };
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let json = serde_json::to_value(&update).unwrap();
 
     // Verify structure
@@ -60,7 +60,7 @@ fn test_tool_call_format() {
         },
     };
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let json = serde_json::to_value(&update).unwrap();
 
     // Verify structure
@@ -95,9 +95,9 @@ fn test_serialization_format() {
         },
     };
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let serialized = codex_cli_acp::codex_proto::serialize_update(&update).unwrap();
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let parsed: Value = serde_json::from_str(&serialized).unwrap();
 
     // Ensure the serialized format maintains the correct structure
@@ -131,12 +131,12 @@ fn test_tool_call_content_structure() {
         },
     };
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let json = serde_json::to_value(&update).unwrap();
 
     // Verify content is an array of ContentBlocks directly
     assert!(json["params"]["update"]["content"].is_array());
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let content_array = &json["params"]["update"]["content"].as_array().unwrap();
     assert_eq!(content_array.len(), 1);
 
@@ -173,7 +173,7 @@ fn test_tool_call_update_structure() {
         },
     };
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let json = serde_json::to_value(&update).unwrap();
 
     // Verify ToolCallUpdate structure
@@ -289,7 +289,7 @@ fn test_session_new_validation_requirements() {
 
     assert!(!invalid_request["params"]["cwd"]
         .as_str()
-        // ast-grep-ignore
+        // ast-grep-ignore: rust-no-unwrap
         .unwrap()
         .starts_with('/'));
 
@@ -306,7 +306,7 @@ fn test_session_new_validation_requirements() {
 
     assert!(valid_request["params"]["cwd"]
         .as_str()
-        // ast-grep-ignore
+        // ast-grep-ignore: rust-no-unwrap
         .unwrap()
         .starts_with('/'));
 }

@@ -28,11 +28,11 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
         .spawn()
         .context("Failed to spawn codex-cli-acp binary")?;
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let mut stdin = child.stdin.take().expect("Failed to get stdin");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let stdout = child.stdout.take().expect("Failed to get stdout");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let stderr = child.stderr.take().expect("Failed to get stderr");
 
     // Channel for collecting responses
@@ -112,7 +112,7 @@ fn run_playback_test(test_file: &Path) -> Result<Vec<(Value, Option<Value>)>> {
 #[test]
 fn test_handshake() {
     let test_file = Path::new("../../_artifacts/tests/protocol-baseline/handshake.jsonl");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(!results.is_empty(), "No results from playback");
@@ -140,7 +140,7 @@ fn test_handshake() {
 #[test]
 fn test_basic_session() {
     let test_file = Path::new("../../_artifacts/tests/protocol-baseline/basic_session.jsonl");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(results.len() >= 2, "Expected at least 2 interactions");
@@ -148,7 +148,7 @@ fn test_basic_session() {
     // Check initialize
     let (_, init_resp) = &results[0];
     assert!(init_resp.is_some());
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     assert!(init_resp.as_ref().unwrap().get("result").is_some());
 
     // Check session/new
@@ -156,7 +156,7 @@ fn test_basic_session() {
     assert_eq!(req["method"], "session/new");
     assert!(resp.is_some());
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let resp = resp.as_ref().unwrap();
     eprintln!("session/new response: {resp:?}");
     assert!(resp.get("result").is_some());
@@ -166,7 +166,7 @@ fn test_basic_session() {
 #[test]
 fn test_unknown_method() {
     let test_file = Path::new("../../_artifacts/tests/protocol-baseline/unknown_method.jsonl");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(!results.is_empty());
@@ -175,7 +175,7 @@ fn test_unknown_method() {
     assert_eq!(req["method"], "unknown");
     assert!(resp.is_some());
 
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let resp = resp.as_ref().unwrap();
     assert!(resp.get("error").is_some());
     assert_eq!(resp["error"]["code"], -32601); // Method not found
@@ -184,7 +184,7 @@ fn test_unknown_method() {
 #[test]
 fn test_invalid_params() {
     let test_file = Path::new("../../_artifacts/tests/protocol-baseline/invalid_params.jsonl");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let results = run_playback_test(test_file).expect("Playback failed");
 
     assert!(!results.is_empty());
@@ -202,7 +202,7 @@ fn test_invalid_params() {
 #[test]
 fn test_cancel_notification() {
     let test_file = Path::new("../../_artifacts/tests/protocol-baseline/cancel.jsonl");
-    // ast-grep-ignore
+    // ast-grep-ignore: rust-no-unwrap
     let results = run_playback_test(test_file).expect("Playback failed");
 
     // Cancel is a notification, should not get a response
