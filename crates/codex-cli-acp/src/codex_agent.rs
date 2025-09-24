@@ -82,6 +82,39 @@ impl ProcessEntry {
     }
 }
 
+#[derive(Default)]
+struct TestProviderAdapter;
+
+#[async_trait(?Send)]
+impl ProviderAdapter for TestProviderAdapter {
+    fn agent_capabilities(&self) -> AgentCapabilities {
+        AgentCapabilities::default()
+    }
+
+    async fn handle_prompt(
+        &self,
+        _session: SessionState,
+        request: PromptRequest,
+        notifier: SessionNotifier,
+        _config: &RuntimeConfig,
+    ) -> Result<PromptResponse, Error> {
+        if let Some(tx) = notifier {
+            let _ = tx.send(SessionNotification {
+                session_id: request.session_id.clone(),
+                update: SessionUpdate::AgentMessageChunk {
+                    content: ContentBlock::from("test output"),
+                },
+                meta: None,
+            });
+        }
+
+        Ok(PromptResponse {
+            stop_reason: StopReason::EndTurn,
+            meta: None,
+        })
+    }
+}
+
 impl CodexProviderAdapter {
     fn agent_capabilities_internal(&self) -> AgentCapabilities {
         AgentCapabilities {
@@ -585,7 +618,9 @@ impl CodexAgent {
 
     /// Construct a Codex agent instance configured for tests.
     pub fn for_testing() -> Self {
-        Self::new()
+        let adapter: Arc<dyn ProviderAdapter> = Arc::new(TestProviderAdapter::default());
+        let runtime = RuntimeServer::with_defaults(adapter, None);
+        Self { runtime }
     }
 
     /// Construct with a specific runtime configuration (primarily for tests).
