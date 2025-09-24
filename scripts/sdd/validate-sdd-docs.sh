@@ -35,12 +35,12 @@ success() {
 
 warn() {
     echo -e "${YELLOW}[⚠]${NC} $*"
-    ((TOTAL_WARNINGS++))
+    ((TOTAL_WARNINGS++)) || true
 }
 
 error() {
     echo -e "${RED}[✗]${NC} $*"
-    ((TOTAL_ERRORS++))
+    ((TOTAL_ERRORS++)) || true
 }
 
 # Extract YAML frontmatter from markdown file
@@ -152,7 +152,7 @@ validate_sections() {
     local missing_sections=()
     for section in "${template_sections[@]}"; do
         # Handle section variations (e.g., "Requirements" vs "Functional Requirements")
-        if ! grep -q "^## .*$section" "$doc"; then
+        if ! grep -Fq "## $section" "$doc"; then
             missing_sections+=("$section")
         fi
     done
@@ -277,41 +277,41 @@ validate_spec_directory() {
     echo "📁 Validating: $spec_name"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-    ((TOTAL_SPECS++))
+    ((TOTAL_SPECS+=1))
 
     # Check spec.md
     if [[ -f "$spec_dir/spec.md" ]]; then
-        validate_yaml_frontmatter "$spec_dir/spec.md" "spec"
-        validate_sections "$spec_dir/spec.md" "$REPO_ROOT/.specify/templates/spec-template.md" "spec"
-        check_placeholders "$spec_dir/spec.md"
-        check_with_astgrep "$spec_dir/spec.md"
+        if ! validate_yaml_frontmatter "$spec_dir/spec.md" "spec"; then :; fi
+        if ! validate_sections "$spec_dir/spec.md" "$REPO_ROOT/.specify/templates/spec-template.md" "spec"; then :; fi
+        if ! check_placeholders "$spec_dir/spec.md"; then :; fi
+        if ! check_with_astgrep "$spec_dir/spec.md"; then :; fi
     else
         error "Missing spec.md"
     fi
 
     # Check plan.md
     if [[ -f "$spec_dir/plan.md" ]]; then
-        validate_yaml_frontmatter "$spec_dir/plan.md" "plan"
-        validate_sections "$spec_dir/plan.md" "$REPO_ROOT/.specify/templates/plan-template.md" "plan"
-        check_placeholders "$spec_dir/plan.md"
-        check_with_astgrep "$spec_dir/plan.md"
+        if ! validate_yaml_frontmatter "$spec_dir/plan.md" "plan"; then :; fi
+        if ! validate_sections "$spec_dir/plan.md" "$REPO_ROOT/.specify/templates/plan-template.md" "plan"; then :; fi
+        if ! check_placeholders "$spec_dir/plan.md"; then :; fi
+        if ! check_with_astgrep "$spec_dir/plan.md"; then :; fi
     else
         warn "Missing plan.md (may not be created yet)"
     fi
 
     # Check tasks.md
     if [[ -f "$spec_dir/tasks.md" ]]; then
-        validate_yaml_frontmatter "$spec_dir/tasks.md" "tasks"
-        validate_sections "$spec_dir/tasks.md" "$REPO_ROOT/.specify/templates/tasks-template.md" "tasks"
-        validate_tasks "$spec_dir/tasks.md"
-        check_placeholders "$spec_dir/tasks.md"
-        check_with_astgrep "$spec_dir/tasks.md"
+        if ! validate_yaml_frontmatter "$spec_dir/tasks.md" "tasks"; then :; fi
+        if ! validate_sections "$spec_dir/tasks.md" "$REPO_ROOT/.specify/templates/tasks-template.md" "tasks"; then :; fi
+        if ! validate_tasks "$spec_dir/tasks.md"; then :; fi
+        if ! check_placeholders "$spec_dir/tasks.md"; then :; fi
+        if ! check_with_astgrep "$spec_dir/tasks.md"; then :; fi
     else
         warn "Missing tasks.md (may not be created yet)"
     fi
 
     # Validate cross-references
-    validate_cross_references "$spec_dir"
+    if ! validate_cross_references "$spec_dir"; then :; fi
 }
 
 # Main function
@@ -350,7 +350,23 @@ main() {
     fi
 
     # Validate each spec directory
+    local spec_filter="${SPEC_FILTER:-}"
+
     for spec_dir in "${spec_dirs[@]}"; do
+        local spec_name
+        spec_name=$(basename "$spec_dir")
+
+        if [[ -n "$spec_filter" && ! "$spec_name" == $spec_filter ]]; then
+            info "Skipping spec directory due to filter ($spec_filter): $spec_name"
+            continue
+        fi
+
+        # Skip example directories that intentionally omit metadata
+        if [[ "$spec_name" == "000-example" ]]; then
+            info "Skipping example directory: $spec_name"
+            continue
+        fi
+
         validate_spec_directory "$spec_dir"
     done
 

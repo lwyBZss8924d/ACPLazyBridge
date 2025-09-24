@@ -14,7 +14,7 @@ Addressed all 10 critical issues identified in WARP-Agent code review for full A
 **Fix**: Set both `readTextFile` and `writeTextFile` to false until implementation is complete
 **File**: `crates/codex-cli-acp/src/main.rs:57-58`
 
-### 2. ✅ ToolCall Content Structure  
+### 2. ✅ ToolCall Content Structure
 
 **Issue**: ToolCallContent had incorrect double-nesting
 **Fix**:

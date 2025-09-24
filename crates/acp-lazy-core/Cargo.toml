@@ -8,6 +8,8 @@ license = "MIT"
 anyhow = "1"
 futures = "0.3"
 thiserror = "1"
+agent-client-protocol = { workspace = true }
+async-trait = "0.1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tracing = "0.1"
@@ -15,7 +17,10 @@ tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 tokio = { version = "1", features = ["full"] }
 tokio-util = { version = "0.7", features = ["codec"] }
 which = "6"
+uuid = { version = "1", features = ["v4"] }
 
 [dev-dependencies]
 tokio-test = "0.4"
 
+[features]
+unstable = ["agent-client-protocol/unstable"]

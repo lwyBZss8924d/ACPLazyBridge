@@ -21,10 +21,10 @@
 
 - 总体合规度：初步 Partial（最小 ACP 服务已实现握手/新会话/流式/取消通知；错误码/字段级约束与 Codex 集成待补）
 - 关键风险：
-  - JSON-RPC 错误码与 data 字段未在需求/架构显式约束（建议补充并测试覆盖）
-  - session/load 与 authenticate 能力声明与实现一致性（若暴露 loadSession: true 则需实现/说明）
-  - 平台沙箱差异（seatbelt/Landlock）与降级策略
-  - 事件 payload 的字段级 schema 需与 Zed 示例对齐
+    - JSON-RPC 错误码与 data 字段未在需求/架构显式约束（建议补充并测试覆盖）
+    - session/load 与 authenticate 能力声明与实现一致性（若暴露 loadSession: true 则需实现/说明）
+    - 平台沙箱差异（seatbelt/Landlock）与降级策略
+    - 事件 payload 的字段级 schema 需与 Zed 示例对齐
 
 ## 2) 方法与范围
 

@@ -16,12 +16,12 @@ Successfully implemented CodeQL security analysis for ACPLazyBridge with custom 
 - **Findings**: 0 security vulnerabilities
 - **Coverage**: 16 Rust files analyzed
 - **Categories checked**:
-  - SQL injection (CWE-089)
-  - Cleartext transmission (CWE-311)
-  - Broken crypto algorithms (CWE-327)
-  - Hardcoded secrets (CWE-798)
-  - Path traversal (CWE-022)
-  - And more...
+    - SQL injection (CWE-089)
+    - Cleartext transmission (CWE-311)
+    - Broken crypto algorithms (CWE-327)
+    - Hardcoded secrets (CWE-798)
+    - Path traversal (CWE-022)
+    - And more...
 
 ✅ **No security issues detected in baseline scan**
 
@@ -47,10 +47,10 @@ Successfully implemented CodeQL security analysis for ACPLazyBridge with custom 
 ### CI/CD Integration
 
 - GitHub Actions workflow configured for:
-  - Every push to main
-  - Every pull request
-  - Weekly scheduled scans
-  - SARIF artifact storage
+    - Every push to main
+    - Every pull request
+    - Weekly scheduled scans
+    - SARIF artifact storage
 
 ## Recommendations
 

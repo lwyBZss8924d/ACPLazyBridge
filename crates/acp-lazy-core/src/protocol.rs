@@ -309,62 +309,62 @@ pub enum MessageType {
 
 #[cfg(test)]
 mod tests {
-    // ast-grep-ignore: rust-no-unwrap
     use super::*;
+    use anyhow::{Context, Result};
     use serde_json::json;
 
     #[test]
-    fn test_error_codes() {
+    fn test_error_codes() -> Result<()> {
         assert_eq!(ErrorCode::ParseError.as_i32(), -32700);
         assert_eq!(ErrorCode::InvalidRequest.as_i32(), -32600);
         assert_eq!(ErrorCode::MethodNotFound.as_i32(), -32601);
         assert_eq!(ErrorCode::InvalidParams.as_i32(), -32602);
         assert_eq!(ErrorCode::InternalError.as_i32(), -32603);
+        Ok(())
     }
 
     #[test]
-    fn test_request_serialization() {
+    fn test_request_serialization() -> Result<()> {
         let request = Request::new(1, "test_method", Some(json!({"key": "value"})));
-        // ast-grep-ignore
-        let json = serde_json::to_string(&request).unwrap();
+        let json = serde_json::to_string(&request)?;
         assert!(json.contains(r#""jsonrpc":"2.0""#));
         assert!(json.contains(r#""id":1"#));
         assert!(json.contains(r#""method":"test_method""#));
+        Ok(())
     }
 
     #[test]
-    fn test_notification_serialization() {
+    fn test_notification_serialization() -> Result<()> {
         let notification = Notification::new("test_notification", None);
-        // ast-grep-ignore
-        let json = serde_json::to_string(&notification).unwrap();
+        let json = serde_json::to_string(&notification)?;
         assert!(json.contains(r#""jsonrpc":"2.0""#));
         assert!(!json.contains(r#""id""#));
         assert!(json.contains(r#""method":"test_notification""#));
+        Ok(())
     }
 
     #[test]
-    fn test_response_success() {
+    fn test_response_success() -> Result<()> {
         let response = Response::success(RequestId::Number(1), json!({"result": "ok"}));
-        // ast-grep-ignore
-        let json = serde_json::to_string(&response).unwrap();
+        let json = serde_json::to_string(&response)?;
         assert!(json.contains(r#""result":"#));
         assert!(!json.contains(r#""error":"#));
+        Ok(())
     }
 
     #[test]
-    fn test_response_error() {
+    fn test_response_error() -> Result<()> {
         let error = Error::method_not_found("unknown");
         let response = Response::error(RequestId::Number(1), error);
-        // ast-grep-ignore
-        let json = serde_json::to_string(&response).unwrap();
+        let json = serde_json::to_string(&response)?;
         assert!(json.contains(r#""error":"#));
         assert!(!json.contains(r#""result":"#));
+        Ok(())
     }
 
     #[test]
-    fn test_message_classification() {
-        // Test request
-        let msg = IncomingMessage {
+    fn test_message_classification() -> Result<()> {
+        let request_msg = IncomingMessage {
             jsonrpc: Some(JSONRPC_VERSION.to_string()),
             id: Some(RequestId::Number(1)),
             method: Some("test".to_string()),
@@ -372,14 +372,13 @@ mod tests {
             result: None,
             error: None,
         };
-        // ast-grep-ignore
-        match msg.classify().unwrap() {
+
+        match request_msg.classify()? {
             MessageType::Request(req) => assert_eq!(req.method, "test"),
             _ => panic!("Expected request"),
         }
 
-        // Test notification
-        let msg = IncomingMessage {
+        let notification_msg = IncomingMessage {
             jsonrpc: Some(JSONRPC_VERSION.to_string()),
             id: None,
             method: Some("notify".to_string()),
@@ -387,10 +386,73 @@ mod tests {
             result: None,
             error: None,
         };
-        // ast-grep-ignore
-        match msg.classify().unwrap() {
+
+        match notification_msg.classify()? {
             MessageType::Notification(notif) => assert_eq!(notif.method, "notify"),
             _ => panic!("Expected notification"),
         }
+
+        let response = Response::success(RequestId::Number(1), json!({"result": "ok"}));
+        let response_json = serde_json::to_string(&response)?;
+        let response_msg: IncomingMessage = serde_json::from_str(&response_json)?;
+
+        match response_msg.classify()? {
+            MessageType::Response(resp) => assert!(resp.error.is_none()),
+            _ => panic!("Expected response message"),
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_message_parsing_errors() -> Result<()> {
+        let invalid_json = "{not valid}";
+        let result = serde_json::from_str::<IncomingMessage>(invalid_json);
+        assert!(result.is_err());
+
+        let missing_method = serde_json::json!({
+            "jsonrpc": "2.0",
+            "id": 1,
+        });
+        let result = serde_json::to_string(&missing_method)?;
+        let msg: IncomingMessage = serde_json::from_str(&result)?;
+        let err = msg
+            .classify()
+            .expect_err("missing method should be invalid");
+        assert_eq!(err.code, ErrorCode::InvalidRequest.as_i32());
+
+        let missing_id = serde_json::json!({
+            "jsonrpc": "2.0",
+            "method": "test",
+        });
+        let result = serde_json::to_string(&missing_id)?;
+        let msg: IncomingMessage = serde_json::from_str(&result)?;
+        match msg.classify()? {
+            MessageType::Notification(notification) => {
+                assert_eq!(notification.method, "test");
+                assert!(notification.params.is_none());
+            }
+            other => panic!("expected notification, got {:?}", other),
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn test_response_with_error_data() -> Result<()> {
+        let error = Error::method_not_found("unknown");
+        let response = Response::error(RequestId::Number(1), error.with_data("details"));
+        let json = serde_json::to_string(&response)?;
+        let parsed: IncomingMessage = serde_json::from_str(&json)?;
+        match parsed.classify()? {
+            MessageType::Response(response) => {
+                assert!(response
+                    .error
+                    .as_ref()
+                    .context("missing error")?
+                    .data
+                    .is_some());
+            }
+            _ => panic!("Expected response message"),
+        }
+        Ok(())
     }
 }

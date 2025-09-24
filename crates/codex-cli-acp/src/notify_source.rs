@@ -6,12 +6,12 @@
 use anyhow::{Context, Result};
 use serde::Deserialize;
 use serde_json::Value;
-use std::fs::{File, OpenOptions};
+use std::fs::OpenOptions;
 use std::io::{BufRead, BufReader, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
 use tokio::sync::mpsc;
-use tokio::time::{interval, Duration};
-use tracing::{debug, error, info, trace, warn};
+use tokio::time::{Duration, MissedTickBehavior};
+use tracing::{debug, error, info, trace};
 
 /// Notification event from Codex
 #[derive(Debug, Clone, Deserialize)]
@@ -42,8 +42,6 @@ pub trait NotifySource: Send + Sync {
 /// File-based notification source (tail-follow with polling)
 pub struct FileNotifySource {
     path: PathBuf,
-    file: Option<BufReader<File>>,
-    position: u64,
     polling_interval_ms: u64,
     stop_signal: Option<mpsc::Sender<()>>,
 }
@@ -52,146 +50,38 @@ impl FileNotifySource {
     pub fn new(path: impl AsRef<Path>, polling_interval_ms: u64) -> Self {
         Self {
             path: path.as_ref().to_path_buf(),
-            file: None,
-            position: 0,
             polling_interval_ms,
             stop_signal: None,
         }
-    }
-
-    fn open_or_reopen(&mut self) -> Result<()> {
-        // Try to open the file
-        match OpenOptions::new().read(true).open(&self.path) {
-            Ok(mut file) => {
-                // Seek to last known position or end for initial open
-                if self.position > 0 {
-                    file.seek(SeekFrom::Start(self.position))
-                        .context("Failed to seek in notify file")?;
-                } else {
-                    // For first open, start from end to avoid processing old notifications
-                    self.position = file
-                        .seek(SeekFrom::End(0))
-                        .context("Failed to seek to end of notify file")?;
-                }
-                self.file = Some(BufReader::new(file));
-                debug!(
-                    "Opened notify file at position {}: {:?}",
-                    self.position, self.path
-                );
-                Ok(())
-            }
-            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
-                // File doesn't exist yet, that's ok for file mode
-                trace!("Notify file not found (will retry): {:?}", self.path);
-                self.file = None;
-                Ok(())
-            }
-            Err(e) => Err(e).context("Failed to open notify file"),
-        }
-    }
-
-    #[allow(dead_code)]
-    async fn read_new_lines(&mut self, tx: &mpsc::UnboundedSender<NotifyEvent>) -> Result<()> {
-        // Ensure file is open
-        if self.file.is_none() {
-            self.open_or_reopen()?;
-            if self.file.is_none() {
-                // File still doesn't exist
-                return Ok(());
-            }
-        }
-
-        // SAFETY: We checked self.file.is_none() above and returned if still None after open_or_reopen()
-        let reader = self
-            .file
-            .as_mut()
-            // ast-grep-ignore
-            .expect("file handle exists after open_or_reopen check");
-        let mut line = String::new();
-        let mut had_activity = false;
-
-        loop {
-            line.clear();
-            match reader.read_line(&mut line) {
-                Ok(0) => {
-                    // EOF reached
-                    break;
-                }
-                Ok(bytes_read) => {
-                    self.position += bytes_read as u64;
-                    had_activity = true;
-
-                    // Try to parse as JSON
-                    let trimmed = line.trim();
-                    if trimmed.is_empty() {
-                        continue;
-                    }
-
-                    match serde_json::from_str::<Value>(trimmed) {
-                        Ok(json) => {
-                            // Check if this is an agent-turn-complete event
-                            if let Some(event_type) = json.get("type").and_then(|v| v.as_str()) {
-                                if event_type == "agent-turn-complete" {
-                                    info!("Received agent-turn-complete notification");
-                                    if let Ok(event) = serde_json::from_value::<NotifyEvent>(json) {
-                                        tx.send(event).ok();
-                                    }
-                                }
-                            }
-                        }
-                        Err(e) => {
-                            debug!("Non-JSON line in notify file: {} - {}", trimmed, e);
-                        }
-                    }
-                }
-                Err(e) => {
-                    warn!("Error reading notify file: {}", e);
-                    // File might have been truncated/rotated, try reopening
-                    self.position = 0;
-                    self.open_or_reopen()?;
-                    break;
-                }
-            }
-        }
-
-        if had_activity {
-            debug!("Read notify file up to position {}", self.position);
-        }
-
-        Ok(())
     }
 }
 
 #[async_trait::async_trait]
 impl NotifySource for FileNotifySource {
-    async fn start_monitoring(&mut self, _tx: mpsc::UnboundedSender<NotifyEvent>) -> Result<()> {
+    async fn start_monitoring(&mut self, tx: mpsc::UnboundedSender<NotifyEvent>) -> Result<()> {
         info!("Starting file notify monitoring: {:?}", self.path);
 
         let (stop_tx, mut stop_rx) = mpsc::channel::<()>(1);
         self.stop_signal = Some(stop_tx);
 
-        // Initial open attempt
-        self.open_or_reopen()?;
-
-        // Start monitoring task
-        let polling_interval_ms = self.polling_interval_ms;
         let path = self.path.clone();
+        let interval = Duration::from_millis(self.polling_interval_ms);
 
         tokio::spawn(async move {
-            let mut poll_interval = interval(Duration::from_millis(polling_interval_ms));
-            poll_interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
+            let mut position: u64 = 0;
+            let mut ticker = tokio::time::interval(interval);
+            ticker.set_missed_tick_behavior(MissedTickBehavior::Skip);
 
             loop {
                 tokio::select! {
-                    _ = poll_interval.tick() => {
-                        // Poll for new content
-                        // Note: We can't move self into the spawned task, so this is simplified
-                        // In the real implementation, we'd use a shared state approach
-                        trace!("Polling notify file: {:?}", path);
-                    }
                     _ = stop_rx.recv() => {
-                        debug!("Stopping notify file monitor");
+                        debug!("Stopping file notify monitor");
                         break;
+                    }
+                    _ = ticker.tick() => {
+                        if let Err(err) = scan_notify_file(&path, &tx, &mut position) {
+                            trace!("Notify file scan error: {}", err);
+                        }
                     }
                 }
             }
@@ -204,9 +94,57 @@ impl NotifySource for FileNotifySource {
         if let Some(stop_signal) = self.stop_signal.take() {
             stop_signal.send(()).await.ok();
         }
-        self.file = None;
         Ok(())
     }
+}
+
+fn scan_notify_file(
+    path: &Path,
+    tx: &mpsc::UnboundedSender<NotifyEvent>,
+    position: &mut u64,
+) -> Result<()> {
+    if !path.exists() {
+        return Ok(());
+    }
+
+    let mut file = OpenOptions::new().read(true).open(path)?;
+    if *position > 0 {
+        file.seek(SeekFrom::Start(*position))?;
+    }
+
+    let mut reader = BufReader::new(file);
+    let mut line = String::new();
+
+    loop {
+        line.clear();
+        let bytes = reader.read_line(&mut line)?;
+        if bytes == 0 {
+            break;
+        }
+        *position += bytes as u64;
+
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
+
+        match serde_json::from_str::<Value>(trimmed) {
+            Ok(json) => {
+                if let Some(event_type) = json.get("type").and_then(|v| v.as_str()) {
+                    if event_type == "agent-turn-complete" {
+                        if let Ok(event) = serde_json::from_value::<NotifyEvent>(json) {
+                            tx.send(event).ok();
+                        }
+                    }
+                }
+            }
+            Err(err) => {
+                debug!("Skipping invalid notify line {}: {}", trimmed, err);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 /// FIFO-based notification source
@@ -238,15 +176,21 @@ impl NotifySource for FifoNotifySource {
         tokio::spawn(async move {
             loop {
                 tokio::select! {
-                    result = Self::read_fifo(&path, &tx) => {
-                        if let Err(e) = result {
-                            error!("FIFO read error: {}", e);
-                            // Continue trying
-                        }
-                    }
                     _ = stop_rx.recv() => {
                         debug!("Stopping FIFO notify monitor");
                         break;
+                    }
+                    result = tokio::task::spawn_blocking({
+                        let path = path.clone();
+                        let tx = tx.clone();
+                        move || read_fifo_blocking(&path, &tx)
+                    }) => {
+                        if let Err(join_err) = result {
+                            error!("FIFO task join error: {}", join_err);
+                            break;
+                        } else if let Err(err) = result.unwrap() {
+                            error!("FIFO read error: {}", err);
+                        }
                     }
                 }
             }
@@ -263,48 +207,37 @@ impl NotifySource for FifoNotifySource {
     }
 }
 
-impl FifoNotifySource {
-    async fn read_fifo(path: &Path, tx: &mpsc::UnboundedSender<NotifyEvent>) -> Result<()> {
-        // Use blocking task for FIFO reading
-        let path = path.to_path_buf();
-        let tx = tx.clone();
+fn read_fifo_blocking(path: &Path, tx: &mpsc::UnboundedSender<NotifyEvent>) -> Result<()> {
+    let file = OpenOptions::new()
+        .read(true)
+        .open(path)
+        .with_context(|| format!("Failed to open FIFO: {:?}", path))?;
 
-        tokio::task::spawn_blocking(move || -> Result<()> {
-            let file = OpenOptions::new()
-                .read(true)
-                .open(&path)
-                .with_context(|| format!("Failed to open FIFO: {:?}", path))?;
+    let reader = BufReader::new(file);
+    for line in reader.lines() {
+        let line = line.context("Failed to read line from FIFO")?;
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            continue;
+        }
 
-            let reader = BufReader::new(file);
-            for line in reader.lines() {
-                let line = line.context("Failed to read line from FIFO")?;
-                let trimmed = line.trim();
-                if trimmed.is_empty() {
-                    continue;
-                }
-
-                // Try to parse as JSON
-                match serde_json::from_str::<Value>(trimmed) {
-                    Ok(json) => {
-                        if let Some(event_type) = json.get("type").and_then(|v| v.as_str()) {
-                            if event_type == "agent-turn-complete" {
-                                info!("Received agent-turn-complete from FIFO");
-                                if let Ok(event) = serde_json::from_value::<NotifyEvent>(json) {
-                                    tx.send(event).ok();
-                                }
-                            }
+        match serde_json::from_str::<Value>(trimmed) {
+            Ok(json) => {
+                if let Some(event_type) = json.get("type").and_then(|v| v.as_str()) {
+                    if event_type == "agent-turn-complete" {
+                        info!("Received agent-turn-complete from FIFO");
+                        if let Ok(event) = serde_json::from_value::<NotifyEvent>(json) {
+                            tx.send(event).ok();
                         }
-                    }
-                    Err(e) => {
-                        debug!("Non-JSON line in FIFO: {} - {}", trimmed, e);
                     }
                 }
             }
-            Ok(())
-        })
-        .await
-        .context("FIFO reading task failed")?
+            Err(e) => {
+                debug!("Non-JSON line in FIFO: {} - {}", trimmed, e);
+            }
+        }
     }
+    Ok(())
 }
 
 /// Create a NotifySource based on environment configuration

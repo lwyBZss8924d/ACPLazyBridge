@@ -1,0 +1,4 @@
+{"details":{"protocolVersion":1},"event":"initialize","sessionId":null,"timestampMs":1758688755575}
+{"details":{"cwd":"/var/folders/2q/6rvg8ldd6w72_7xp6lm964q00000gn/T/.tmpdfHhJC"},"event":"session_created","sessionId":"session-3799affa-6235-4bc3-b67c-de52974a5a29","timestampMs":1758688755576}
+{"details":{"messageCount":1},"event":"prompt_started","sessionId":"session-3799affa-6235-4bc3-b67c-de52974a5a29","timestampMs":1758688755576}
+{"details":{"stopReason":"end_turn"},"event":"prompt_completed","sessionId":"session-3799affa-6235-4bc3-b67c-de52974a5a29","timestampMs":1758688755578}

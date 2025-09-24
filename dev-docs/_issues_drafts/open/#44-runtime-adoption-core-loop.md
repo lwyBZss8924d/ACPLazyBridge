@@ -1,6 +1,7 @@
-# Pre-Issue Note: Adopt Official ACP Runtime for Core Loop
+# Adopt Official ACP Runtime for Core Loop
 
-**Status**: Ready for issue drafting (Milestone 0.1.0)
+**GitHub Issue**: [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
+**Status**: 🚧 In Progress (Milestone 0.1.0)
 
 ## Summary
 

@@ -1,6 +1,11 @@
-# Pre-Issue Note: Align Streaming Notifications with ACP Models
+# Align Streaming Notifications with ACP Models
 
-**Status**: Ready for issue drafting (Milestone 0.1.0)
+**GitHub Issue**: [#45](dev-docs/_issues_drafts/open/#45-streaming-alignment-session-notifications.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45>
+**Status**: 🔄 Planned (Milestone 0.1.0)
+**Dependencies**:
+
+- [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
+
 
 ## Summary
 
@@ -46,3 +51,14 @@ Replace bespoke `SessionUpdate`, `ContentBlock`, and tool-call structs in `crate
 - `dev-docs/_requirements/Roadmap.md`
 - `dev-docs/core_servers/acplb-core-runtime.md`
 - `dev-docs/_project_management/migration-blueprint-project-management-plan.md`
+
+
+## Deferred follow-up from SDD Task 038 (Phase 4)
+
+The initial runtime adoption (Issue #44 / SDD Task 038) landed the shared runtime but explicitly deferred several streaming/alignment items. Fold the following deliverables into this issue:
+
+- **Adopt official ACP session/update models end-to-end.** Replace the interim `CodexSessionUpdate` structures in `crates/codex-cli-acp/src/codex_proto.rs` / `codex_agent.rs` with `agent_client_protocol::SessionUpdate` and `SessionNotification` so the runtime no longer double-converts streaming payloads.
+- **Reconnect real Codex process streaming.** Remove the simulated fallback branch in `CodexProviderAdapter::spawn_and_stream_codex` once the official models are in place, ensuring tool-call deltas, errors, and completion reasons propagate exactly as Codex emits them.
+- **Notify/timeout parity hardening.** Exercise idle-timeout and external notify paths using the shared runtime; store evidence under `_artifacts/038-adopt-acp-runtime/tests/streaming-alignment_*.log` to replace the interim telemetry collected during Task 038.
+- **Documentation + SDD updates.** Produce a dedicated spec/plan/tasks set for the follow-up work (or extend this draft) and link the new evidence to `dev-docs/core_servers/acplb-core-runtime.md` so downstream adapters can rely on the behavior contract.
+

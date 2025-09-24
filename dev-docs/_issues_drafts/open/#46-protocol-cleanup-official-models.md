@@ -1,6 +1,12 @@
-# Pre-Issue Note: Remove Legacy Protocol Mirror and Adopt Official Models
+# Remove Legacy Protocol Mirror and Adopt Official Models
 
-**Status**: Ready for issue drafting (Milestone 0.1.0)
+**GitHub Issue**: [#46](dev-docs/_issues_drafts/open/#46-protocol-cleanup-official-models.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46>
+**Status**: 🔄 Planned (Milestone 0.1.0)
+**Dependencies**:
+
+- [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
+
+- [#45](dev-docs/_issues_drafts/open/#45-streaming-alignment-session-notifications.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45>
 
 ## Summary
 
@@ -47,3 +53,13 @@ Delete the bespoke JSON-RPC/ACP model in `crates/acp-lazy-core/src/protocol.rs` 
 - `dev-docs/architecture/acplb-architecture.md`
 - `dev-docs/core_servers/acplb-core-runtime.md`
 - `dev-docs/_project_management/migration-blueprint-project-management-plan.md`
+
+## Deferred follow-up from SDD Task 038 (Phase 5)
+
+Streaming alignment (Issue #45) sets the stage, but SDD Task 038 also deferred the full protocol cleanup. Capture the remaining work here:
+
+- **Retire `acp-lazy-core/src/protocol.rs`.** Replace every consumer with `agent_client_protocol` equivalents, update exports in `crates/acp-lazy-core/src/lib.rs`, and delete the legacy module/tests.
+- **Refresh test fixtures and JSONL baselines.** Record new `_artifacts/038-adopt-acp-runtime/tests/protocol-cleanup_*.log` runs (workspace tests, JSONL regressions, markdown/semantic checks) to demonstrate parity after the removal.
+- **Documentation sweep.** Update `dev-docs/core_servers/acplb-core-runtime.md`, roadmap entries, and the streaming issue (#45) to point at the official models only; run `scripts/sdd/validate-sdd-docs.sh` to capture the final logs.
+- **SDD artefact follow-up.** Author a dedicated spec/plan/tasks set (or append to this draft) so Constitution gates for the cleanup are auditable once Issue #45 lands.
+
