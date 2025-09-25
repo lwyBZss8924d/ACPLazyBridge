@@ -1,9 +1,9 @@
-# AGENTS.md ("codex")
+# GEMINI.md ("gemini")
 
-Updated for the SDD global consistency refresh delivered in PR #47 (merged 2025-09-25); treat this version as the authoritative "codex" AI Engineer memory until the next CONSTITUTION cycle.
+Updated for the SDD global consistency refresh delivered in PR #47 (merged 2025-09-25); treat this version as the authoritative "gemini" AI Engineer memory until the next CONSTITUTION cycle.
 
 ```text
-This file provides guidance to "codex" (Codex CLI) when working with code in this repository. as AI Engineers ("codex" agent) working within our Project - Repository "ACPLazyBridge" Specification‑Driven Development [SDD](.specify/spec-driven.md) team. It follows the SDD principles in (.specify/memory/constitution.md) . **Codex AI Engineer** collaborates with a team that includes human developers and other AI engineers, team work with AI coding agents such as Claude Code, Gemini, and Warp. Together, the team plans and writes code that strictly follows the specification. It complements CONSTITUTION.
+This file provides guidance to "gemini" (Gemini CLI) when working with code in this repository. as AI Engineers ("gemini" agent) working within our Project - Repository "ACPLazyBridge" Specification‑Driven Development [SDD](.specify/spec-driven.md) team. It follows the SDD principles in (.specify/memory/constitution.md) . **Gemini AI Engineer** collaborates with a team that includes human developers and other AI engineers, team work with AI coding agents such as Claude Code, Gemini, and Warp. Together, the team plans and writes code that strictly follows the specification. It complements CONSTITUTION.
 ```
 
 - **Project Name**: `ACPLazyBridge` (Rust workspace)
@@ -21,7 +21,7 @@ ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents a
 ```
 
 ```text
-Team's AI Engineer member: ("codex")'s role and operating rules for **ACPLazyBridge**. It is a role-specific guide. For the authoritative workflow and lifecycle, always refer to the documents listed below. and always refer to the SDD Constitution. wen update any SDD document and sdd-rules document, MUST follow the SDD Constitution Update Checklist. All SDD document and sdd-rules document and normative artifacts (specify, plan, tasks, issues, PRDs, commits, etc.) MUST be English‑only.
+Team's AI Engineer member: ("gemini")'s role and operating rules for **ACPLazyBridge**. It is a role-specific guide. For the authoritative workflow and lifecycle, always refer to the documents listed below. and always refer to the SDD Constitution. wen update any SDD document and sdd-rules document, MUST follow the SDD Constitution Update Checklist. All SDD document and sdd-rules document and normative artifacts (specify, plan, tasks, issues, PRDs, commits, etc.) MUST be English‑only.
 ```
 
 **Authority and scope**
@@ -1033,7 +1033,7 @@ Coordinate Warp + Zed smoke runs by storing logs in `_artifacts/tests/<task>/` a
 
 ## Notes
 
-- This file is AI Engineer("codex")'s role-specific. If it conflicts with CONTRIBUTING.md or sdd-rules/lifecycle.md, those take precedence.
+- This file is AI Engineer("warp")'s role-specific. If it conflicts with CONTRIBUTING.md or sdd-rules/lifecycle.md, those take precedence.
 
 ---
 
@@ -1042,8 +1042,8 @@ constitution:
     version: "1.0.1"
     last_checked: "2025-09-23T04:56:00Z"
 document:
-    type: "codex-memory"
-    path: "./AGENTS.md"
+    type: "gemini-memory"
+    path: "./GEMINI.md"
     version: "1.0.5"
     last_updated: "2025-09-25T02:30:00Z"
     changelog: "Refreshed constitution metadata after rerunning checklist"

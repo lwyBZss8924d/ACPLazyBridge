@@ -1,7 +1,9 @@
 # Remove Legacy Protocol Mirror and Adopt Official Models
 
+_issues for SDD Task (pending)_
+
 **GitHub Issue**: [#46](dev-docs/_issues_drafts/open/#46-protocol-cleanup-official-models.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46>
-**Status**: 🔄 Planned (Milestone 0.1.0)
+**Status**: issue is open (Milestone 0.1.0)
 **Dependencies**:
 
 - [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>

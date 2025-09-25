@@ -1,4 +1,4 @@
-# CLAUDE.md (Authoritative)
+# CLAUDE.md (AI-Engineer Team Member roles)
 
 ```text
 This document defines Claude Code–specific rules in ACPLazyBridge. It inherits the global rules from CONTRIBUTING.md and sdd-rules/AGENTS.md, and defines the Developer Team's AI Engineers-"claude" roles, responsibilities, and coordination model for AI Engineers ("agents") working within our Specification‑Driven Development (SDD) team. It follows the SDD principles in .specify/spec-driven.md: specifications are the primary artifacts; plans and code serve the spec. AI Engineers development rules apply to human engineers and other AI Engineers team members (Claude Code, WARP, Gemini, Codex, etc.). It complements CONTRIBUTING.md and .specify/memory/lifecycle.md.
@@ -6,11 +6,11 @@ This document defines Claude Code–specific rules in ACPLazyBridge. It inherits
 
 ## Authority and Scope
 
-- **Normative authority**: CONTRIBUTING.md, .specify/memory/lifecycle.md, sdd-rules/AGENTS.md
-- **Constitutional authority**: .specify/memory/constitution.md (v1.0.1)
-- This file provides Claude-specific clarifications and must remain consistent with the above
+- [SDD Constitution](../.specify/memory/constitution.md) - v1.0.1 with 9 core articles
+- [SDD Lifecycle](../.specify/memory/lifecycle.md) - Supplementary Rules of the CONSTITUTION
+- [SDD Principles](../.specify/spec-driven.md) - Core SDD principles
 
-## Key Rules (Claude Code)
+## AI-Engineer Team Member Key Rules
 
 - **Development approach**: Worktree-first; branch categories: feature | fix | perf | chore | docs
 - **Protocol compliance**: Stdout strictly JSONL; logs to stderr only
@@ -20,7 +20,7 @@ This document defines Claude Code–specific rules in ACPLazyBridge. It inherits
 - **Permission mapping**: Non-interactive defaults: approval_policy=never; sandbox_mode per task; network access only when explicitly required
 - **Protocol version**: Examples MUST use ACP v1: "protocolVersion": 1 (integer, not string)
 
-## Submission Checklist (Claude PRs)
+## Submission Checklist (AI-Engineer Team Member PRs)
 
 - Links to Spec/Plan/Tasks (`specs/<NNN>-<slug>/`)
 - Evidence links (tests/logs/jq/reports) from both primary and legacy paths
@@ -28,137 +28,186 @@ This document defines Claude Code–specific rules in ACPLazyBridge. It inherits
 - CI summary (fmt/clippy/test/replay)
 - Constitutional gate verification (Articles I, II, III, VII, VIII, IX)
 
-## References
-
-- [CONTRIBUTING.md](../CONTRIBUTING.md)
-- [sdd-rules/AGENTS.md](./AGENTS.md)
-- [.specify/memory/lifecycle.md](../.specify/memory/lifecycle.md)
-- [.specify/memory/constitution.md](../.specify/memory/constitution.md)
-
----
-
 ## About SDD
-
-- [SDD Principles](../.specify/spec-driven.md)
-
-### Current SDD Rules Structure
-
-```bash
-ACPLazyBridge/sdd-rules/
-├── AGENTS.md                   # Team AI engineer profiles
-├── CLAUDE.md                   # Claude-specific rules (this file)
-├── commands/                   # SDD command documentation
-│   └── README.md              # Command workflow reference
-├── rule-tests/                 # AST-grep rule tests
-│   ├── rust-mutex-lock-test.yml
-│   └── rust-no-unwrap-test.yml
-└── rules/                      # All SDD rule categories
-    ├── README.md              # Rules index
-    ├── changelog/             # Version and change management
-    ├── ci/                    # Continuous integration rules
-    ├── code-analysis/         # Code quality and AST-grep rules
-    ├── documentation-style/   # Documentation standards
-    ├── git/                   # Git workflow rules
-    ├── research/              # Research methodology
-    ├── tests/                 # Testing standards
-    ├── tools-cli/             # CLI tool documentation
-    └── tools-mcp/             # MCP server configuration
-```
-
-### Base SDD Documentation
-
-- [AGENTS.md](./AGENTS.md) - Team coordination and roles
-- [CLAUDE.md](./CLAUDE.md) - Claude-specific rules (this file)
-- [.specify/spec-driven.md](../.specify/spec-driven.md) - Core SDD principles
-- [.specify/templates/spec-template.md](../.specify/templates/spec-template.md) - Specification template
-- [.specify/templates/plan-template.md](../.specify/templates/plan-template.md) - Plan template
-- [.specify/templates/tasks-template.md](../.specify/templates/tasks-template.md) - Tasks template
 
 ## SDD Constitution
 
 - [SDD Constitution](../.specify/memory/constitution.md) - v1.0.1 with 9 core articles
+- [SDD Lifecycle](../.specify/memory/lifecycle.md) - Supplementary Rules of the CONSTITUTION
 - [SDD Constitution Update Checklist](../.specify/memory/constitution_update_checklist.md)
+- [SDD Principles](../.specify/spec-driven.md) - Core SDD principles
+
+### Base SDD Documentation
+
+- [.specify/commands/sdd-task.md](../.specify/commands/sdd-task.md) - SDD-TASK command
+- [.specify/commands/specify.md](../.specify/commands/specify.md) - SPECIFY command
+- [.specify/commands/plan.md](../.specify/commands/plan.md) - PLAN command
+- [.specify/commands/tasks.md](../.specify/commands/tasks.md) - TASKS command
+- [.specify/templates/spec-template.md](../.specify/templates/spec-template.md) - Specification template
+- [.specify/templates/plan-template.md](../.specify/templates/plan-template.md) - Plan template
+- [.specify/templates/tasks-template.md](../.specify/templates/tasks-template.md) - Tasks template
+- [AGENTS.md](./AGENTS.md) - Team coordination and roles
+- [CLAUDE.md](./CLAUDE.md) - Claude-specific rules (this file)
+
+(.specify/)
+
+```bash
+ACPLazyBridge/.specify
+❯ tree
+.
+├── CLAUDE.md
+├── README.md
+├── commands
+│   ├── plan.md
+│   ├── sdd-task.md
+│   ├── specify.md
+│   └── tasks.md
+├── commands-template
+│   ├── plan.md
+│   ├── specify.md
+│   └── tasks.md
+├── memory
+│   ├── constitution.md
+│   ├── constitution_update_checklist.md
+│   └── lifecycle.md
+├── memory-template
+│   ├── constitution.md
+│   └── constitution_update_checklist.md
+├── scripts-template
+│   └── bash
+│       ├── check-task-prerequisites.sh
+│       ├── common.sh
+│       ├── create-new-feature.sh
+│       ├── get-feature-paths.sh
+│       ├── setup-plan.sh
+│       └── update-agent-context.sh
+├── spec-driven.md
+└── templates
+    ├── agent-file-template.md
+    ├── plan-template.md
+    ├── spec-template.md
+    └── tasks-template.md
+```
 
 ## SDD - (/specs)
 
 Work in `./specs/`
 
-## SDD - Scripts & CI/CD
+### Current SDD Rules Structure
+
+(/sdd-rules/rules/)
 
 ```bash
-ACPLazyBridge/scripts/
-├── sdd/                        # SDD workflow automation (12 scripts)
-│   ├── create-new-feature.sh   # Initialize features
-│   ├── setup-plan.sh           # Create plans
-│   ├── check-task-prerequisites.sh  # Validate tasks
-│   ├── validate-sdd-docs.sh    # SDD document validation
-│   ├── check_language.sh       # Language policy
-│   ├── run_semantic_checks.sh  # Link validation
-│   ├── check-markdown.sh       # Markdown checks
-│   ├── fix-markdown.sh         # Auto-fix markdown
-│   ├── lint_docs.sh            # Doc linting
-│   ├── get-feature-paths.sh    # Path utilities
-│   ├── update-agent-context.sh # Memory sync
-│   └── common.sh               # Shared functions
-├── ci/                         # CI/CD automation (4 scripts)
-│   ├── run-local-ci.sh        # Main CI orchestrator
-│   ├── run-sdd-structure-lint.sh  # SDD validation
-│   ├── check-language-policy.sh   # English enforcement
-│   └── run-markdown-style.sh  # Markdown linting
-└── ast-grep/                   # Code analysis (6 scripts)
-    ├── sg-scan.sh              # Full codebase scan
-    ├── sg-scan-file.sh         # Single file scan
-    ├── sg-baseline-acp-rust-dbg.sh     # Find dbg! macros
-    ├── sg-baseline-acp-rust-no-unwrap.sh  # Find unwrap()
-    ├── sg-baseline-acp-rust-todo.sh    # Find TODOs
-    └── sg-fix.sh               # Apply auto-fixes
-```
-
-## SDD Rules Categories
-
-```bash
-ACPLazyBridge/sdd-rules/rules/
-├── README.md                   # Rules index
-├── changelog/                  # Version management
+ACPLazyBridge/sdd-rules/rules
+❯ tree
+.
+├── README.md
+├── changelog
+│   ├── examples.md
+│   ├── keep-a-changelog-index.html.haml
 │   ├── sdd-rules-changelog.md
-│   └── semver.md
-├── ci/                         # CI/CD rules
+│   └── semantic-versioning-2.0.0.md
+├── ci
+│   ├── claude-code-github-actions.md
 │   └── sdd-rules-ci.md
-├── code-analysis/              # Code quality rules
-│   ├── sdd-rules-code-analysis.md
-│   └── ast-grep/               # AST-grep rule definitions
-│       ├── go/no-fmt-println.yml
-│       ├── js/
-│       │   ├── no-console-log.yml
-│       │   └── no-only-in-tests.yml
-│       ├── python/
-│       │   ├── no-pdb.yml
-│       │   └── no-print.yml
-│       └── rust/
-│           ├── no-dbg.yml
-│           ├── no-unwrap.yml
-│           ├── rust-mutex-lock.yml
-│           └── todo-comment.yml
-├── documentation-style/        # Documentation standards
-│   ├── Google-developer-documentation-style-guide.md
+├── code-analysis
+│   ├── ast-grep
+│   │   ├── go
+│   │   │   └── no-fmt-println.yml
+│   │   ├── js
+│   │   │   ├── no-console-log.yml
+│   │   │   └── no-only-in-tests.yml
+│   │   ├── python
+│   │   │   ├── no-pdb.yml
+│   │   │   └── no-print.yml
+│   │   └── rust
+│   │       ├── no-dbg.yml
+│   │       ├── no-unwrap.yml
+│   │       ├── rust-mutex-lock.yml
+│   │       └── todo-comment.yml
+│   └── sdd-rules-code-analysis.md
+├── documentation-style
+│   ├── google-developer-documentation-style-guide.md
+│   ├── google-markdown-style-guide.md
 │   ├── sdd-rules-documentation-markdownlint.md
 │   └── sdd-rules-documentation-style.md
-├── git/                        # Git workflow
-│   ├── comments/sdd-rules-comments.md
-│   ├── issues/sdd-rules-issues.md
-│   ├── pr/sdd-rules-pr.md
-│   └── worktree/sdd-rules-worktrees.md
-├── research/                   # Research methodology
+├── git
+│   ├── comments
+│   │   └── sdd-rules-comments.md
+│   ├── commit
+│   │   └── sdd-rules-commit-message.md
+│   ├── issues
+│   │   └── sdd-rules-issues.md
+│   ├── pr
+│   │   └── sdd-rules-pr.md
+│   └── worktree
+│       └── sdd-rules-worktrees.md
+├── research
 │   └── sdd-rules-research.md
-├── tests/                      # Testing standards
+├── sdd-validation
+│   ├── needs-clarification.yml
+│   ├── placeholders.yml
+│   ├── task-numbering.yml
+│   └── todo-markers.yml
+├── tests
 │   └── sdd-rules-tests.md
-├── tools-cli/                  # CLI tool documentation
-│   ├── sdd-rules-tools-cli-list.md
+├── tools-cli
+│   ├── ast-grep.llms.txt
 │   ├── sdd-rules-tools-cli-astgrep.md
 │   ├── sdd-rules-tools-cli-document-search-and-parsing.md
-│   └── ast-grep.llms.txt
-└── tools-mcp/                  # MCP server rules
+│   └── sdd-rules-tools-cli-list.md
+└── tools-mcp
     └── sdd-rules-tools-mcp.md
+```
+
+## SDD - Scripts & CI/CD
+
+all scripts (AI-Engineer's own for Dev scripts Tools and custom CLI-Tools, CI scripts, SDD scripts, and E2E-TESTS / Dev project scripts CLI etc., which need to be unified in the future.)
+
+```bash
+ACPLazyBridge/scripts
+❯ tree
+.
+├── CLAUDE.md
+├── README.md
+├── ast-grep
+│   ├── sg-baseline-acp-rust-dbg.sh
+│   ├── sg-baseline-acp-rust-no-unwrap.sh
+│   ├── sg-baseline-acp-rust-todo.sh
+│   ├── sg-fix.sh
+│   ├── sg-scan-file.sh
+│   └── sg-scan.sh
+├── ci
+│   ├── check-language-policy.sh
+│   ├── json-to-sarif.jq
+│   ├── run-local-ci.sh
+│   ├── run-markdown-style.sh
+│   ├── run-sdd-gates.sh
+│   └── run-sdd-structure-lint.sh
+└── sdd
+    ├── check-markdown.sh
+    ├── check-sdd-consistency.sh
+    ├── check-task-prerequisites.sh
+    ├── check_language.sh
+    ├── common.sh
+    ├── create-new-feature.sh
+    ├── fix-markdown.sh
+    ├── get-feature-paths.sh
+    ├── lib
+    │   └── metadata-utils.sh
+    ├── lint_docs.sh
+    ├── migrate-to-yaml-metadata.sh
+    ├── query-metadata.sh
+    ├── review-constitution-changes.sh
+    ├── run_semantic_checks.sh
+    ├── setup-plan.sh
+    ├── update-agent-context.sh
+    ├── upstream
+    │   └── lib
+    │       └── common.sh
+    ├── validate-claude-md.sh
+    ├── validate-metadata.sh
+    └── validate-sdd-docs.sh
 ```
 
 ## SDD Templates Location
@@ -199,9 +248,9 @@ ruleDirs:
 
 The following agents compose our SDD Developer Team members. Names in brackets are short identifiers used throughout this document.
 
-- [claude] Claude Code (CLI/VS Code) — Primary dev agent and orchestrator  `claude --help`
-- [warp] Warp Agent (Terminal/CLI) — Project manager, planner, reviewer      `warp-preview agent run --help`
 - [codex] Codex CLI — Code analysis and optimization                         `codex --help`
+- [claude] Claude Code (CLI/VS Code) — Primary dev agent and orchestrator    `claude --help`
+- [warp] Warp Agent (Terminal/CLI) — Project manager, planner, reviewer      `warp-preview agent run --help`
 - [gemini] Gemini CLI — Research and documentation                           `gemini --help`
 - [cursor] Cursor Agent — Pair programming and refactors                     `cursor-agent --help`
 
@@ -240,12 +289,141 @@ permissions:
 
 ## SDD Team Workflows
 
+### SDD-TASKs INITIALIZATION WORKFLOW
+
+<SDD-TASK-INITIALIZATION-WORKFLOW>
+
+```text
+Any AI Engineers that specializes in Spec-Driven Development (SDD) task initialization. You will be given a GitHub issue and need to create a complete SDD task workflow including specifications, plans, and executable tasks.
+
+Here is the GitHub issue you need to process:
+
+<github_issue>
+{{GITHUB_ISSUE}}
+</github_issue>
+
+## SDD Workflow Overview
+
+You will follow this complete workflow:
+ISSUES(#XXX) → SDD-TASKs Initialization → Specification Documents → Review → Development → Tests → Final Review → PR
+
+The core SDD commands you need to simulate are:
+1. `/sdd-task` — initialize SDD task from GitHub issue
+2. `/specify` — generate feature specification and branch/worktree structure
+3. `/plan` — create implementation plan and design docs
+4. `/tasks` — derive executable tasks from the plan
+
+## Step-by-Step Instructions
+
+### Phase 1: Issue Analysis and Setup
+First, analyze the GitHub issue thoroughly. Extract:
+- Issue number and title
+- Problem description and requirements
+- Acceptance criteria
+- Any technical constraints or dependencies
+
+### Phase 2: Worktree Structure Creation
+Create the following directory structure for the SDD task:
+
+specs/<NNN>-<slug>/
+├── spec.md
+├── plan.md
+├── tasks.md
+└── [additional specification documents as needed]
+
+
+Where XXX is a 3-digit number and <slug> is derived from the issue title.
+
+### Phase 3: SDD TASKs Specification Documents Generation
+
+**spec.md Requirements:**
+- Must include UTC timestamp in YAML frontmatter: `date: YYYY-MM-DDTHH:MM:SSZ`
+- Follow the spec-template structure
+- Include problem statement, requirements, acceptance criteria
+- Reference the original GitHub issue
+
+**plan.md Requirements:**
+- Must include UTC timestamp in YAML frontmatter
+- Follow the plan-template structure
+- Break down implementation approach
+- Identify technical dependencies and risks
+- Include design decisions and architecture considerations
+
+**tasks.md Requirements:**
+- Must include UTC timestamp in YAML frontmatter
+- Follow the tasks-template structure
+- Derive specific, executable tasks from the plan
+- Include task priorities and dependencies
+- Specify testing requirements
+
+### Phase 4: Consistency and Alignment
+Ensure all documents:
+- Reference the SDD rules and constitution
+- Maintain consistency with existing project structure
+- Follow the lifecycle management guidelines
+- Include proper cross-references between documents
+
+## Output Requirements
+
+Your response should contain:
+
+1. **Worktree Information:**
+   - Suggested worktree path: `/acplb-worktrees/XXX-<slug>`
+   - Issue reference and URI
+
+2. **Complete File Contents:**
+   - Full content for `spec.md`
+   - Full content for `plan.md`
+   - Full content for `tasks.md`
+   - Any additional specification documents needed
+
+3. **Metadata:**
+   - Current UTC timestamp for all documents
+   - Proper YAML frontmatter for each file
+   - Cross-references between documents
+
+## Critical Requirements
+
+⚠️ **MUST include current UTC timestamp** in format `YYYY-MM-DDTHH:MM:SSZ` in all document headers
+⚠️ **MUST follow the template structures** referenced in the SDD commands
+⚠️ **MUST create proper cross-references** between spec → plan → tasks
+⚠️ **MUST align with SDD rules** and constitution guidelines
+
+## Final Output Format
+
+Structure your response with clear sections for each file, using appropriate headers and formatting. Include the complete file contents that would be created in the worktree, ready for immediate use in the SDD workflow.
+
+Your final response should contain the complete, ready-to-use SDD task initialization package that can be directly implemented in the project worktree structure.
+
+## Best Practice Example
+
+(/ACPLazyBridge) | worktree: (acplb-worktrees/038-adopt-acp-runtime)
+
+acplb-worktrees/038-adopt-acp-runtime/specs/038-adopt-acp-runtime
+❯ tree
+.
+├── contracts
+│   └── runtime_api.md
+├── data-model.md
+├── plan.md
+├── quickstart.md
+├── research.md
+├── spec.md
+└── tasks.md
+
+```
+
+</SDD-TASK-INITIALIZATION-WORKFLOW>
+
+> Notes:
+> Use these commands to maintain the spec → plan → tasks flow described in (.specify/spec-driven.md) and (.specify/memory/lifecycle.md).
+
 ### New Feature Workflow (spec → plan → tasks → code)
 
-1. **warp**: Co‑define requirements with human devs; capture the WHAT and WHY (no HOW). If needed, open/triage a GitHub Issue.
-2. **warp**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify` or `/sdd-task <issue>` for issue-based initialization.
+1. **codex**: Co‑define requirements with human devs; capture the WHAT and WHY (no HOW). If needed, open/triage a GitHub Issue.
+2. **claude**: Create a feature branch and worktree (auto‑numbered) and initialize `specs/NNN-feature/` using `/specify` or `/sdd-task <issue>` for issue-based initialization.
 3. **claude**: Generate implementation plan via `/plan`, producing `plan.md`, and supporting docs (`data-model.md`, `contracts/`, `research.md`, `quickstart.md`).
-4. **warp**: Validate plan against SDD gates (Simplicity, Anti‑Abstraction, Integration‑First, Test‑First). Mark ambiguities as `[NEEDS CLARIFICATION]`.
+4. **codex**: Validate plan against SDD gates (Simplicity, Anti‑Abstraction, Integration‑First, Test‑First). Mark ambiguities as `[NEEDS CLARIFICATION]`.
    - Library‑First Gate (Article I):
      - [ ] Feature implemented as a library first (package/module skeleton present)
      - [ ] Minimal testable structure exists (contract/integration scaffolds)
@@ -254,36 +432,37 @@ permissions:
      - [ ] CLI entrypoint(s) defined and discoverable (`<tool> --help`)
      - [ ] CLI supports stdin/stdout and JSON for structured IO
      - [ ] CLI contract tests present (help/usage snapshot + sample IO cases)
-5. **claude**: Generate executable `tasks.md` via `/tasks`. Mark parallelizable tasks.
-6. **claude**: Implement via strict TDD (contract → integration → e2e → unit), only writing code to make tests pass.
-7. **warp**: Review artifacts in `specs/NNN-feature/`, update progress, and link the branch/commits to the Issue.
-8. **warp**: Run local checks (structure, language policy, semantic, template drift). Push branch and open PR.
-9. **warp + claude**: Monitor CI, process PR review, keep specs/tasks in sync with requested changes.
-10. **warp**: Merge, clean up worktree, pull main, run SDD consistency pass, and update team‑wide SDD docs if required.
+5. **codex**: Generate executable `tasks.md` via `/tasks`. Mark parallelizable tasks.
+6. **codex**: Implement via strict TDD (contract → integration → e2e → unit), only writing code to make tests pass.
+7. All Team members AI-Engineer: (Dev Cooking 🚧)
+8. **codex**: Review SDD TASKs artifacts in `specs/NNN-feature/`, update progress, and link the branch/commits to the Issue.
+9. **claude + warp**: Run local checks (structure, language policy, semantic, template drift). pre-PR and TASKs Review Pass. Then Push branch and open PR.
+10. Monitor GitHub Actions CI/CD and PR Review & Team members AI-Engineer Observation and Fix Review comments for Loop Phase.
+11. **claude**: Merge, clean up worktree, pull main, run SDD consistency pass, and update team‑wide SDD docs if required.
 
 ### Bug Fix Workflow (spec‑first, reproduction‑driven)
 
 Use the feature workflow adapted for bug reproduction and prevention. Code changes must be specification‑driven, not patch‑first.
 
-1. **warp**: Open/triage a GitHub Issue. Create a bugfix worktree/branch `NNN-bug-[slug]`.
-2. **warp**: In `specs/NNN-bug-[slug]/spec.md`, document:
+1. **claude**: Open/triage a GitHub Issue. Create a bugfix worktree/branch `NNN-bug-[slug]`.
+2. **codex**: In `specs/NNN-bug-[slug]/spec.md`, document:
    - Title, context, impacted versions, severity
    - Minimal Reproduction Steps (MRS)
    - Expected vs. Actual behavior
    - Scope (components, contracts, data)
    - Non‑functional impacts (perf, security, compatibility)
-3. **claude**: Generate `plan.md` with root‑cause hypotheses and proposed fix strategies. Record validation points and potential regressions.
-4. **claude**: Write failing tests first derived from MRS (contract/integration/e2e). No implementation until tests are red.
-5. **claude**: Implement the fix to make tests pass; update contracts if behavior is clarified. Keep changes minimal per Simplicity/Anti‑Abstraction gates.
+3. **codex**: Generate `plan.md` with root‑cause hypotheses and proposed fix strategies. Record validation points and potential regressions.
+4. **codex**: Write failing tests first derived from MRS (contract/integration/e2e). No implementation until tests are red.
+5. **codex**: Implement the fix to make tests pass; update contracts if behavior is clarified. Keep changes minimal per Simplicity/Anti‑Abstraction gates.
    - If the fix touches behavior contracts:
      - [ ] Update CLI help/usage and examples accordingly
      - [ ] Update CLI contract tests (help snapshot + sample IO)
      - [ ] Record rationale and impact in `spec.md`/`plan.md`
-6. **warp**: Ensure the change lands in a replaceable library unit (Article I) and the CLI surface remains consistent (Article II).
-7. **warp**: Update `tasks.md` for the bugfix, mark status, and link commit messages to the Issue `[BUG-NNN]` (or `[TASK-XXX]` if unified).
-8. **warp**: Run local CI (structure, language, semantic, drift). Push branch and open PR with reproduction, fix rationale, and test evidence.
-9. **warp + claude**: Address PR feedback. If the bug implies spec ambiguity, update feature specs to remove `[NEEDS CLARIFICATION]` markers system‑wide.
-10. **warp**: Merge, clean up branch. Backport if needed. Update CHANGELOG/Release notes.
+6. **codex**: Ensure the change lands in a replaceable library unit (Article I) and the CLI surface remains consistent (Article II).
+7. **codex**: Update `tasks.md` for the bugfix, mark status, and link commit messages to the Issue `[BUG-NNN]` (or `[TASK-XXX]` if unified).
+8. **claude**: Run local CI (structure, language, semantic, drift). Push branch and open PR with reproduction, fix rationale, and test evidence.
+9. **claude + warp**: Address PR feedback. If the bug implies spec ambiguity, update feature specs to remove `[NEEDS CLARIFICATION]` markers system‑wide.
+10. **claude**: Merge, clean up branch. Backport if needed. Update CHANGELOG/Release notes.
 
 ### SDD Documentation & CI Dynamic Consistency Update Workflow
 
@@ -342,17 +521,19 @@ Outcome: documentation, plans, tasks, and CI checks remain a living, executable 
 **CLAUDE.md**: All Claude Code's AI-Engineer memory and SDD rules files
 **Github Actions**: <https://docs.anthropic.com/en/docs/claude-code/github-actions>
 
-#### CLAUDE.md
+#### CLAUDE.md (such as AGENTS.md / GEMINI.md / WARP.md for Team member AI all Engineers's memory)
 
-Claude Code can remember project's SDD rules preferences across sessions, like style guidelines and common commands in SDD-DeveloperTeam workflow.
+Claude Code "claude" / Codex "codex" / Gemini "gemini" / Warp "warp" etc. can remember project's SDD rules preferences across sessions, like style guidelines and common commands in SDD-DeveloperTeam workflow.
 
 ##### "Claude-Code" AI-Engineer SDD rules and memory type
+
+Example CLAUDE.md (outer AGENTS.md etc. similarly)
 
 Claude Code offers four memory locations in a hierarchical structure, each serving a different purpose:
 
 | Memory Type                | Location                                                                                                                                                | Purpose                                             | Use Case Examples                                                    | Shared With                     |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------- |
-| **Enterprise policy**      | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux: `/etc/claude-code/CLAUDE.md`<br />Windows: `C:\ProgramData\ClaudeCode\CLAUDE.md` | Organization-wide instructions managed by IT/DevOps | Company coding standards, security policies, compliance requirements | All users in organization       |
+| **Enterprise policy**      | macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`<br />Linux: `/etc/claude-code/CLAUDE.md`<br /> | Organization-wide instructions managed by IT/DevOps | Company coding standards, security policies, compliance requirements | All users in organization       |
 | **Project memory**         | `./CLAUDE.md`                                                                                                                                           | Team-shared instructions for the project            | Project architecture, coding standards, common workflows             | Team members via source control |
 | **User memory**            | `~/.claude/CLAUDE.md`                                                                                                                                   | Personal preferences for all projects               | Code styling preferences, personal tooling shortcuts                 | Just you (all projects)         |
 | **Project memory (local)** | `./CLAUDE.local.md`                                                                                                                                     | Personal project-specific preferences               | **(Deprecated, see below)** Your sandbox URLs, preferred test data     | Just you (current project)      |
@@ -360,6 +541,8 @@ Claude Code offers four memory locations in a hierarchical structure, each servi
 All memory files are automatically loaded into Claude Code's context when launched. Files higher in the hierarchy take precedence and are loaded first, providing a foundation that more specific memories build upon.
 
 ##### CLAUDE.md imports
+
+Example CLAUDE.md (outer AGENTS.md etc. similarly):
 
 CLAUDE.md files can import additional files using `@path/to/import` syntax. The following example imports 3 files:
 
@@ -386,7 +569,9 @@ This code span will not be treated as an import: `@anthropic-ai/claude-code`
 
 Imported files can recursively import additional files, with a max-depth of 5 hops. You can see what memory files are loaded by running `/memory` command.
 
-##### How Claude looks up memories
+##### How Claude looks up memories (such as Codex / Gemini / Warp etc.)
+
+Example CLAUDE.md (outer AGENTS.md etc. similarly):
 
 Claude Code reads memories recursively: starting in the cwd, Claude Code recurses up to (but not including) the root directory **/** and reads any CLAUDE.md or CLAUDE.local.md files it finds.
 This is especially convenient when working in large repositories where you run Claude Code in **foo/bar/**, and have memories in both **foo/CLAUDE.md** and **foo/bar/CLAUDE.md**.
@@ -425,7 +610,7 @@ Bootstrap a CLAUDE.md for your codebase with the following command:
 - CLAUDE.md memories can be used for both instructions shared with your team and for your individual preferences.
 </Tip>
 
-##### Organization-level SDD rules and memory management
+##### Organization-level SDD rules and memory management (such as Codex / Gemini / Warp etc.)
 
 Enterprise organizations can deploy centrally managed CLAUDE.md files that apply to all users.
 
@@ -435,76 +620,42 @@ To set up organization-level memory management:
 
 - macOS: `/Library/Application Support/ClaudeCode/CLAUDE.md`
 - Linux/WSL: `/etc/claude-code/CLAUDE.md`
-- Windows: `C:\ProgramData\ClaudeCode\CLAUDE.md`
 
 2). Deploy via your configuration management system (MDM, Group Policy, Ansible, etc.) to ensure consistent distribution across all developer machines.
 
-##### SDD rules and memory best practices
+##### SDD rules and memory best practices (such as Codex / Gemini / Warp etc.)
 
 - **Be specific**: "Use 2-space indentation" is better than "Format code properly".
 - **Use structure to organize**: Format each individual memory as a bullet point and group related memories under descriptive markdown headings.
 - **Review periodically**: Update memories as your project evolves to ensure Claude is always using the most up to date information and context.
 
-#### "Claude-Code" CLI reference
+#### AI-Engineer developer team members
 
-> Complete reference for Claude Code command-line interface, including commands and flags.
+### (Codex CLI) AI-Engineer "codex"
 
-##### CLI commands
-
-| Command                            | Description                                    | Example                                                            |
-| :--------------------------------- | :--------------------------------------------- | :----------------------------------------------------------------- |
-| `claude`                           | Start interactive REPL                         | `claude`                                                           |
-| `claude "query"`                   | Start REPL with initial prompt                 | `claude "explain this project"`                                    |
-| `claude -p "query"`                | Query via SDK, then exit                       | `claude -p "explain this function"`                                |
-| `cat file \| claude -p "query"`    | Process piped content                          | `cat logs.txt \| claude -p "explain"`                              |
-| `claude -c`                        | Continue most recent conversation              | `claude -c`                                                        |
-| `claude -c -p "query"`             | Continue via SDK                               | `claude -c -p "Check for type errors"`                             |
-| `claude -r "<session-id>" "query"` | Resume session by ID                           | `claude -r "abc123" "Finish this PR"`                              |
-| `claude update`                    | Update to latest version                       | `claude update`                                                    |
-| `claude mcp`                       | Configure Model Context Protocol (MCP) servers | See the [Claude Code MCP documentation](/en/docs/claude-code/mcp). |
-
-##### CLI flags
-
-Customize Claude Code's behavior with these command-line flags:
-
-| Flag                             | Description                                                                                                                                              | Example                                                                    |
-| :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
-| `--add-dir`                      | Add additional working directories for Claude to access (validates each path exists as a directory)                                                      | `claude --add-dir ../apps ../lib`                                          |
-| `--allowedTools`                 | A list of tools that should be allowed without prompting the user for permission, in addition to [settings.json files](/en/docs/claude-code/settings)    | `"Bash(git log:*)" "Bash(git diff:*)" "Read"`                              |
-| `--disallowedTools`              | A list of tools that should be disallowed without prompting the user for permission, in addition to [settings.json files](/en/docs/claude-code/settings) | `"Bash(git log:*)" "Bash(git diff:*)" "Edit"`                              |
-| `--print`, `-p`                  | Print response without interactive mode (see [SDK documentation](/en/docs/claude-code/sdk) for programmatic usage details)                               | `claude -p "query"`                                                        |
-| `--append-system-prompt`         | Append to system prompt (only with `--print`)                                                                                                            | `claude --append-system-prompt "Custom instruction"`                       |
-| `--output-format`                | Specify output format for print mode (options: `text`, `json`, `stream-json`)                                                                            | `claude -p "query" --output-format json`                                   |
-| `--input-format`                 | Specify input format for print mode (options: `text`, `stream-json`)                                                                                     | `claude -p --output-format json --input-format stream-json`                |
-| `--include-partial-messages`     | Include partial streaming events in output (requires `--print` and `--output-format=stream-json`)                                                        | `claude -p --output-format stream-json --include-partial-messages "query"` |
-| `--verbose`                      | Enable verbose logging, shows full turn-by-turn output (helpful for debugging in both print and interactive modes)                                       | `claude --verbose`                                                         |
-| `--max-turns`                    | Limit the number of agentic turns in non-interactive mode                                                                                                | `claude -p --max-turns 3 "query"`                                          |
-| `--model`                        | Sets the model for the current session with an alias for the latest model (`sonnet` or `opus`) or a model's full name                                    | `claude --model claude-sonnet-4-20250514`                                  |
-| `--permission-mode`              | Begin in a specified [permission mode](iam#permission-modes)                                                                                             | `claude --permission-mode plan`                                            |
-| `--permission-prompt-tool`       | Specify an MCP tool to handle permission prompts in non-interactive mode                                                                                 | `claude -p --permission-prompt-tool mcp_auth_tool "query"`                 |
-| `--resume`                       | Resume a specific session by ID, or by choosing in interactive mode                                                                                      | `claude --resume abc123 "query"`                                           |
-| `--continue`                     | Load the most recent conversation in the current directory                                                                                               | `claude --continue`                                                        |
-| `--dangerously-skip-permissions` | Skip permission prompts (use with caution)                                                                                                               | `claude --dangerously-skip-permissions`                                    |
-
-<Tip>
-  The `--output-format json` flag is particularly useful for scripting and
-  automation, allowing you to parse Claude's responses programmatically.
-</Tip>
-
-For detailed information about print mode (`-p`) including output formats,
-streaming, verbose logging, and programmatic usage, see the
-[SDK documentation](/en/docs/claude-code/sdk).
-
-#### "Claude-Code" developer team's sub-agents
-
-### "Warp" Terminal & CLI Agents
-
-**Role**: Project Manager, Issues Planner, and task‑artifact Reviewer
+**Role**: Project-Co-Founder, Project Manager, Issues Planner, and task‑artifact Reviewer, Full-stack development
 **Capabilities**: Command execution, log analysis, debugging
 **Access Level**: All Permissions Always allow with selective execution (Apply code diffs / Read files / Create plans / Execute commands)
 **Command allowlist**: Always allow
 `which .*` `ls(\s.*)?` `grep(\s.*)?` `ast-grep(\s.*)?` `find .*` `echo(\s.*)?` `bash(\s.*)?` `zsh(\s.*)?` `fish(\s.*)?` `wget(\s.*)?` `rm(\s.*)?` `source(\s.*)?` `eval(\s.*)?` `curl(\s.*)?` `sh(\s.*)?` `pwsh(\s.*)?` e.g. all config allowed CLI tools
-**MCP Servers**: Always allow All available with config MCP tools ( github-mcp / serena / context7 / jina-mcp / deepwiki / e.g. )
+**MCP Servers**: Always allow All available with config MCP tools ( context7 / jina-mcp / deepwiki / serena / e.g. )
+
+### (Claude Code CLI) AI-Engineer "claude"
+
+**Role**: Project-Co-Founder, Project Manager, Issues Planner, and task‑artifact Reviewer, Full-stack development
+**Capabilities**: Command execution, log analysis, debugging
+**Access Level**: All Permissions Always allow with selective execution (Apply code diffs / Read files / Create plans / Execute commands)
+**Command allowlist**: Always allow
+`which .*` `ls(\s.*)?` `grep(\s.*)?` `ast-grep(\s.*)?` `find .*` `echo(\s.*)?` `bash(\s.*)?` `zsh(\s.*)?` `fish(\s.*)?` `wget(\s.*)?` `rm(\s.*)?` `source(\s.*)?` `eval(\s.*)?` `curl(\s.*)?` `sh(\s.*)?` `pwsh(\s.*)?` e.g. all config allowed CLI tools
+**MCP Servers**: Always allow All available with config MCP tools ( context7 / jina-mcp / deepwiki / serena / e.g. )
+
+### (Warp) Terminal & CLI AI-Engineer "warp"
+
+**Role**: Code analysis and optimization and GitHub operationser
+**Capabilities**: Performance profiling, security scanning
+**Access Level**: All Permissions Always allow with selective execution
+**Primary Tools**: Bash / Task / Todo / Write / Edit / Read / Glob / Grep / Bash(ast-grep) and (/allowed-tools) all local CLI tools
+**MCP Servers**: All available with config MCP tools
 
 ```bash
 # List available profiles
@@ -522,23 +673,10 @@ warp-preview agent run --gui \
   --prompt "Validate SDD compliance for PR #123"
 ```
 
-### "Codex CLI" Agents
-
-**Role**: Code analysis and optimization
-**Capabilities**: Performance profiling, security scanning
-**Access Level**: All Permissions Always allow with selective execution
-**Primary Tools**: Bash / Task / Todo / Write / Edit / Read / Glob / Grep / Bash(ast-grep) and (/allowed-tools) all local CLI tools
-**MCP Servers**: All available with config MCP tools
-
-```bash
-codex-cli analyze --spec specs/001-feature/spec.md
-codex-cli optimize --file src/module.py
-```
-
 ### "Gemini CLI" Agents
 
-**Role**: Research and documentation
-**Capabilities**: Technical research, API exploration
+**Role**: Researcher / Documentation Retriever / Code Retriever / Codebase Analyzer
+**Capabilities**: Technical research, API exploration, Code & Document Search any Codebase Analysis Operations
 **Access Level**: All Permissions Always allow with selective execution
 **Primary Tools**: Bash / Task / Todo / Write / Edit / Read / Glob / Grep / Bash(ast-grep) and (/allowed-tools) all local CLI tools
 **MCP Servers**: All available with config MCP tools
@@ -550,14 +688,12 @@ gemini document --spec specs/001-feature/
 
 ### "Cursor" IDE & CLI Agents
 
-**Role**: Pair programming assistant
+**Role**: Pair programming developer
 **Capabilities**: Real-time code suggestions, refactoring
 **Access Level**: All Permissions Always allow with selective execution
 **Primary Tools**: Bash / Task / Todo / Write / Edit / Read / Glob / Grep / Bash(ast-grep) and (/allowed-tools) all local CLI tools
 **MCP Servers**: All available with config MCP tools
 **Invocation**: Integrated in Cursor IDE
-
-"Claude-Code" developer team's sub-agents
 
 ## Agent Coordination
 
@@ -565,21 +701,21 @@ gemini document --spec specs/001-feature/
 
 ```yaml
 specification_phase:
-  lead: claude_code
-  support: [claude_code_subagents, gemini_cli]
+  lead: codex
+  support: [cladue, claude_code_subagents, warp_agent, gemini]
 
 planning_phase:
-  lead: claude_code
-  reviewers: [warp_agent, codex_cli]
+  lead: codex
+  reviewers: [claude, warp_agent]
 
 implementation_phase:
-  lead: claude_code
-  pair: cursor_agent
-  reviewers: [warp_agent]
+  lead: codex
+  pair: claude
+  reviewers: [codex, claude, warp_agent, cursor_agent]
 
 validation_phase:
-  lead: warp_agent
-  support: [claude_code_subagents]
+  lead: codex
+  support: [cladue, claude_code_subagents, warp_agent, gemini]
 ```
 
 ### Communication Channels
@@ -630,12 +766,6 @@ export ANTHROPIC_API_KEY=$(security find-generic-password -s anthropic)
 }
 ```
 
-**For Claude Code CLI:**
-
-```bash
-claude mcp add --transport http github https://api.githubcopilot.com/mcp -H "Authorization: Bearer YOUR_GITHUB_PAT"
-```
-
 ### "jina-mcp"
 
 - [MCP] <https://github.com/jina-ai/MCP>
@@ -656,13 +786,6 @@ claude mcp add --transport http github https://api.githubcopilot.com/mcp -H "Aut
     }
   }
 }
-```
-
-**For Claude Code CLI:**
-
-```bash
-claude mcp add --transport sse jina-mcp https://mcp.jina.ai/sse \
-  --header "X-API-Key: Bearer ${JINA_API_KEY}"
 ```
 
 ### "context7"
@@ -687,12 +810,6 @@ claude mcp add --transport sse jina-mcp https://mcp.jina.ai/sse \
 }
 ```
 
-**For Claude Code CLI:**
-
-```bash
-claude mcp add --transport http context7 https://mcp.context7.com/mcp --header "CONTEXT7_API_KEY: YOUR_API_KEY"
-```
-
 ### "deepwiki"
 
 - [MCP] <https://mcp.deepwiki.com>
@@ -710,12 +827,6 @@ claude mcp add --transport http context7 https://mcp.context7.com/mcp --header "
     }
   }
 }
-```
-
-**For Claude Code CLI:**
-
-```bash
-claude mcp add -s user -t http deepwiki https://mcp.deepwiki.com/mcp
 ```
 
 ### "serena"
@@ -743,21 +854,15 @@ uvx --from git+https://github.com/oraios/serena serena start-mcp-server
 }
 ```
 
-**For Claude Code CLI:**
-
-```bash
-claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project $(pwd)
-```
-
 ## Version Compatibility
 
 | Agent | Min Version | Recommended | Notes |
 |-------|------------|-------------|-------|
-| Claude Code | 1.0.117 | Latest | Primary agent |
-| warp-preview | v0.2025.09.10.08.11.preview_01 | Latest | CLI required |
-| codex-cli | 0.36.0 | Latest | Optional |
-| gemini-cli | 0.4.1 | Latest | Research focus |
-| cursor-agent | 2025.09.12-4852336 | Latest | Cursor IDE's CLI agent |
+| Claude Code | 1.0.123 | Latest | Primary agent |
+| warp-preview | v0.2025.09.17.08.11.preview_01 | Latest | CLI required |
+| codex-cli | 0.41.0 | Latest | Optional |
+| gemini-cli | 0.6.1 | Latest | Research focus |
+| cursor-agent | 2025.09.18-7ae6800 | Latest | Cursor IDE's CLI agent |
 
 ---
 
@@ -769,13 +874,22 @@ document:
     type: "claude-memory"
     path: "./sdd-rules/CLAUDE.md"
     version: "1.0.3"
-    last_updated: "2025-09-22T15:20:00Z"
+    last_updated: "2025-09-25T02:30:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
+        - ".specify/README.md"
         - "sdd-rules/rules/README.md"
+        - ".claude/commands/sdd-task.md"
+        - ".specify/commands/specify.md"
         - ".specify/templates/spec-template.md"
+        - ".specify/commands/plan.md"
         - ".specify/templates/plan-template.md"
+        - ".specify/commands/tasks.md"
         - ".specify/templates/tasks-template.md"
+        - "(dev-docs/references/)"
+        - "(dev-docs/_requirements/)"
+        - "(dev-docs/_issues_drafts/)"
+        - "(dev-docs/_projects/)"
         - "./CLAUDE.md"
 ```

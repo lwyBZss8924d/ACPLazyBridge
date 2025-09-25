@@ -63,6 +63,24 @@ specs/
 └── NNN-next-feature/
 ```
 
+### Best practice**: (specs/<NNN>-<slug>) in SDD TASKs WORKTREE
+
+(/ACPLazyBridge) | worktree: (acplb-worktrees/038-adopt-acp-runtime)
+
+```tree
+acplb-worktrees/038-adopt-acp-runtime/specs/038-adopt-acp-runtime
+❯ tree
+.
+├── contracts
+│   └── runtime_api.md
+├── data-model.md
+├── plan.md
+├── quickstart.md
+├── research.md
+├── spec.md
+└── tasks.md
+```
+
 ## Specification Writing Guidelines
 
 ### Focus on WHAT and WHY, not HOW

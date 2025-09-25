@@ -20,6 +20,7 @@ Cargo.lock
 .env
 .env.local
 .mcp.json
+.browser-echo-mcp.json
 
 # Logs
 *.log

@@ -19,26 +19,34 @@ Related:
 
 ## 2. Milestone Summary
 
-| Milestone | Target | Primary Outcomes | Key References |
-| --- | --- | --- | --- |
-| 0.1.0 – Core Runtime & Zed ↔ Codex MVP | Q4 2025 | Adopt `agent-client-protocol` runtime, replace handcrafted streaming, deprecate internal protocol models | FR-0101…FR-0105 in `acp-lazybridge-requirements.md`; Issue drafts in `_issues_drafts/` |
-| 0.2.0 – Multi-Agent Runtime & Composer Foundations | Q1 2026 | Claude & Gemini adapters on shared runtime; composer pipeline (`subagents`, `commands`, `hooks`) | FR-0201…FR-0204 |
-| 0.3.0 – Cross-Editor Clients & Advanced Workflows | Q2 2026 | VS Code / Obsidian / tldraw integrations; multi-session orchestration; workflow telemetry | FR-0301…FR-0303 |
-| 0.4.0 – Ecosystem Hardening & SDK Polish | Q3 2026 | Rust & TypeScript SDKs, runtime hardening, resilience testing | FR-0401…FR-0402 |
+| Milestone | Target | Primary Outcomes | Status | Key References |
+| --- | --- | --- | --- | --- |
+| 0.1.0 – Core Runtime & Zed ↔ Codex MVP | Q3-1 2025 | Adopt `agent-client-protocol` runtime, replace handcrafted streaming, deprecate internal protocol models | ✅ **Completed** | FR-0101…FR-0105 in `acp-lazybridge-requirements.md`; `specs/038-adopt-acp-runtime/` (PR #47) |
+| 0.2.0 – Multi-Agent Runtime & Composer Foundations | Q3-2 2025 | Claude & Gemini adapters on shared runtime; composer pipeline (`subagents`, `commands`, `hooks`) | 🔄 Planned | FR-0201…FR-0204; Issue drafts pending |
+| 0.3.0 – Cross-Editor Clients & Advanced Workflows | Q4-1 2025 | VS Code / Obsidian / tldraw integrations; multi-session orchestration; workflow telemetry | 🔄 Planned | FR-0301…FR-0303; Issue drafts pending |
+| 0.4.0 – Ecosystem Hardening & SDK Polish | Q4-2 2025 | Rust & TypeScript SDKs, runtime hardening, resilience testing | 🔄 Planned | FR-0401…FR-0402; Issue drafts pending |
 
 ## 3. Workstreams & Responsibilities
 
-1. **Runtime Adoption** (Milestone 0.1.0)
+1. **Runtime Adoption** (Milestone 0.1.0) ✅ **Completed**
    - Owner: Runtime WG
    - Deliverables: Shared runtime crate, LocalSet orchestration, Codex adapter migration, regression evidence.
-   - Issue Drafts: `runtime-adoption-core-loop.md`, `streaming-alignment-session-notifications.md`, `protocol-cleanup-official-models.md`.
-2. **Composer Pipeline** (Milestones 0.2.0–0.3.0)
+   - Issue Drafts: `specs/038-adopt-acp-runtime/` (Issue #44 completed via PR #47).
+2. **Streaming Alignment** (Milestone 0.1.0, Phase 4)
+   - Owner: Runtime WG
+   - Deliverables: Official ACP streaming models, deduplication safeguards, notify/timeout parity.
+   - Issue Drafts: `_issues_drafts/open/#45-streaming-alignment-session-notifications.md`.
+3. **Protocol Cleanup** (Milestone 0.1.0, Phase 5)
+   - Owner: Runtime WG
+   - Deliverables: Legacy protocol module removal, upstream type adoption.
+   - Issue Drafts: `_issues_drafts/open/#46-protocol-cleanup-official-models.md`.
+4. **Composer Pipeline** (Milestones 0.2.0–0.3.0)
    - Owner: Composer WG
    - Deliverables: Plugin traits, translator subagent, configuration schema, orchestration telemetry.
-3. **Client Integrations** (Milestones 0.3.0+)
+5. **Client Integrations** (Milestones 0.3.0+)
    - Owner: Client WG
    - Deliverables: VS Code extension fork, Obsidian integration, tldraw agent UI, end-to-end workflow scripts.
-4. **Ecosystem & Tooling** (Milestones 0.4.0)
+6. **Ecosystem & Tooling** (Milestones 0.4.0)
    - Owner: Ecosystem WG
    - Deliverables: SDK documentation, resilience tests, long-term support plan.
 

@@ -1,14 +1,20 @@
 # CLAUDE.md
 
+Updated for the SDD global consistency refresh delivered in PR #47 (merged 2025-09-25); treat this version as Claude Code's authoritative memory until the next constitution checkpoint.
+
 ```text
-This file provides guidance to CLAUDE (Claude Code Agents) when working with code in this repository. as AI Engineers ("claude" agent) working within our Project - Repository "ACPLazyBridge" Specification‑Driven Development (SDD) team. It follows the SDD principles in (.specify/memory/constitution.md) . ****Claude AI Engineer**** collaborates with a team that includes human developers and other AI engineers, team work with AI coding agents such as Claude Code, Gemini, and Codex. Together, the team plans and writes code that strictly follows the specification. It complements CONTRIBUTING.
+This file provides guidance to CLAUDE (Claude Code Agents) when working with code in this repository. as AI Engineers ("claude" agent) working within our Project - Repository "ACPLazyBridge" Specification‑Driven Development [SDD](.specify/spec-driven.md) team. It follows the SDD principles in (.specify/memory/constitution.md) . ****Claude AI Engineer**** collaborates with a team that includes human developers and other AI engineers, team work with AI coding agents such as Claude Code, Gemini, and Codex. Together, the team plans and writes code that strictly follows the specification. It complements CONTRIBUTING.
 ```
 
 - **Project Name**: `ACPLazyBridge` (Rust workspace)
 - **Project Repository URL**: <https://github.com/lwyBZss8924d/ACPLazyBridge>
-- **ACP (Agent Client Protocol) Protocol**: <https://github.com/zed-industries/agent-client-protocol>
-- **ACP JSON Schema**: <https://github.com/zed-industries/agent-client-protocol/blob/main/schema/schema.json>
+- **ACP (Agent Client Protocol) Protocol**: <https://agentclientprotocol.com/protocol>
+- **ACP Protocol Schema**: <https://agentclientprotocol.com/protocol/schema>
+- **ACP official Rust library**: `cargo add agent-client-protocol`
+- **ACP official TypeScript library**: `npm install @zed-industries/agent-client-protocol`
+- **ACP Agents adapter best practice (@zed-industries/claude-code-acp)**: [Claude Code SDK from ACP-compatible clients for Zed IDE external-agents Custom Agents as ACP client adapter](https://github.com/zed-industries/claude-code-acp)
 - **ACP Repository local path**: (~/dev-space/agent-client-protocol)
+- **(ACP) Protocol Lastest Version**: `v0.4.2` (2025-09-22)
 
 ```text
 Team's AI Engineer member: ("claude")'s role and operating rules for **ACPLazyBridge**. It is a role-specific guide. For the authoritative workflow and lifecycle, always refer to the documents listed below. and always refer to the SDD Constitution. wen update any SDD document and sdd-rules document, MUST follow the SDD Constitution Update Checklist. All SDD document and sdd-rules document and normative artifacts (specify, plan, tasks, issues, PRDs, commits, etc.) MUST be English‑only.
@@ -19,7 +25,7 @@ Team's AI Engineer member: ("claude")'s role and operating rules for **ACPLazyBr
 ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents and agent-tools plugins with IDEs, editors, and development tools.
 It provides native adapters for various AI systems while maintaining protocol consistency and developer workflow integration through Specification-Driven Development (SDD).
 
-```tree
+```bash
 ACPLazyBridge/crates
 ❯ tree
 .
@@ -27,11 +33,19 @@ ACPLazyBridge/crates
 ├── acp-lazy-core
 │   ├── CLAUDE.md
 │   ├── Cargo.toml
-│   └── src
-│       ├── lib.rs
-│       ├── permissions.rs
-│       ├── protocol.rs
-│       └── transport.rs
+│   ├── README.md
+│   ├── src
+│   │   ├── lib.rs
+│   │   ├── permissions.rs
+│   │   ├── protocol.rs
+│   │   ├── runtime
+│   │   │   ├── adapter.rs
+│   │   │   ├── mod.rs
+│   │   │   ├── server.rs
+│   │   │   └── session.rs
+│   │   └── transport.rs
+│   └── tests
+│       └── runtime_test.rs
 └── codex-cli-acp
     ├── CLAUDE.md
     ├── Cargo.toml
@@ -39,6 +53,7 @@ ACPLazyBridge/crates
     │   ├── bin
     │   │   ├── acplb_notify_forwarder.rs
     │   │   └── playback.rs
+    │   ├── codex_agent.rs
     │   ├── codex_proto.rs
     │   ├── lib.rs
     │   ├── main.rs
@@ -46,13 +61,21 @@ ACPLazyBridge/crates
     │   ├── tool_calls.rs
     │   └── validation.rs
     └── tests
+        ├── acp_integration_test.rs
+        ├── jsonl_regression_test.rs
         ├── notify_test.rs
         ├── playback.rs
         ├── session_update_format.rs
         └── tool_calls_test.rs
 ```
 
-### Repository Guidelines**
+### Repository Guidelines
+
+Synchronized with the 2025-09-25 governance sweep. Claude must:
+
+- run `scripts/sdd/validate-metadata.sh` and `scripts/sdd/check-sdd-consistency.sh` whenever editing agent docs;
+- reconcile updates with `sdd-rules/CLAUDE.md`, `sdd-rules/AGENTS.md`, and `.specify/CLAUDE.md`;
+- reference constitution Articles III, VII, and IX when documenting workflow obligations.
 
 #### Project Structure & Module Organization
 
@@ -93,6 +116,8 @@ ACPLazyBridge/crates
 
 ### Architecture (high level)
 
+Post-refresh architecture outline—keeps Claude aligned with codex-cli-acp runtime responsibilities and the metadata-aware orchestration flows described in `dev-docs/architecture/acplb-architecture.md`.
+
 - Workspace overview
     - crates/acp-lazy-core (library)
         - protocol.rs: JSON‑RPC 2.0 types and classification (requests, notifications, responses; Error codes −32700…−32603).
@@ -124,6 +149,8 @@ ACPLazyBridge/crates
 
 ## Common Development Commands
 
+Command set reflects the PR #47 tooling refresh; treat metadata validation scripts as mandatory pre-PR gates alongside fmt/clippy/test.
+
 ### Build & Test
 
 ```bash
@@ -154,6 +181,26 @@ cat _artifacts/tests/protocol-baseline/handshake.jsonl | cargo run -p codex-cli-
 
 # Test with Codex proto command
 codex proto -c approval_policy="never" < _artifacts/tests/protocol-baseline/basic_session.jsonl
+```
+
+### Metadata & Consistency Tooling
+
+- Validate YAML frontmatter and document headers before writing specs or memories:
+
+```bash
+scripts/sdd/validate-metadata.sh
+```
+
+- Run the global consistency audit (must pass prior to PR handoff):
+
+```bash
+scripts/sdd/check-sdd-consistency.sh
+```
+
+- Query metadata when triaging cross-doc drift (optional example):
+
+```bash
+scripts/sdd/query-metadata.sh --owner claude --format table
 ```
 
 ## You have Augmented CLI Development tools chain and compose for codebase Code Analysis
@@ -200,20 +247,7 @@ ast-grep scan -c ./sgconfig.yml --inspect summary .
 #### Parse CLI Help
 
 ```bash
-$ parse --help
-A CLI tool for parsing documents using various backends
-
-Usage: parse [OPTIONS] <FILES>...
-
-Arguments:
-  <FILES>...  Files to parse
-
-Options:
-  -c, --parse-config <PARSE_CONFIG>  Path to the config file. Defaults to ~/.parse_config.json
-  -b, --backend <BACKEND>            The backend type to use for parsing. Defaults to `llama-parse` [default: llama-parse]
-  -v, --verbose                      Verbose output while parsing
-  -h, --help                         Print help
-  -V, --version                      Print version
+parse --help
 ```
 
 #### Search CLI Help
@@ -258,6 +292,8 @@ Options:
 
 ### SDD Validation
 
+Claude must integrate the metadata and consistency tooling into every validation pass; escalate any drift discovered by these scripts before shipping artifacts.
+
 ```bash
 # Run full local CI suite (includes all SDD checks)
 scripts/ci/run-local-ci.sh
@@ -266,9 +302,13 @@ scripts/ci/run-local-ci.sh
 scripts/sdd/validate-sdd-docs.sh
 scripts/sdd/run_semantic_checks.sh
 scripts/sdd/check_language.sh
+scripts/sdd/validate-metadata.sh
+scripts/sdd/check-sdd-consistency.sh
 ```
 
 ## Important Conventions
+
+Conventions below incorporate the refreshed governance rules—ensure Claude's guidance stays in lockstep with `AGENTS.md` and the SDD constitution after each pull.
 
 ### Protocol Requirements
 
@@ -300,6 +340,8 @@ cargo test --workspace 2>&1 | \
 
 ## Testing Approach
 
+Reaffirmed after the refresh: keep JSONL scenarios current, store evidence under `_artifacts/`, and rerun metadata + consistency checks before publishing results.
+
 The project uses JSONL files for protocol testing. Key test scenarios are in `_artifacts/tests/protocol-baseline/` (legacy mirror retained under `_artifacts/tests/legacy/`):
 
 - `handshake.jsonl` - Basic initialization
@@ -309,6 +351,8 @@ The project uses JSONL files for protocol testing. Key test scenarios are in `_a
 
 ## Notification System
 
+Notification guidance now explicitly covers acplb-notify-forwarder behavior and environment defaults introduced during the refresh.
+
 The adapter supports external turn completion signals via environment variables:
 
 - `ACPLB_NOTIFY_PATH`: Path to notification sink
@@ -317,15 +361,9 @@ The adapter supports external turn completion signals via environment variables:
 
 This allows immediate turn completion instead of waiting for idle timeout.
 
-## Quick Start for New Features
+## Current Focus (Milestone 0.1.0)
 
-1. Create worktree: `git worktree add ../acplb-worktrees/feature-name origin/main -b feature/name`
-2. Run quality gates: `scripts/ci/run-local-ci.sh`
-3. Test ACP protocol: `cargo run -p codex-cli-acp < test.jsonl`
-4. Collect evidence: Store logs in `_artifacts/legacy/<task>/`
-5. Create PR with links to specs and evidence
-
-## Current Focus (M1)
+Status snapshot pulled from the milestone tracker immediately after PR #47 (2025-09-25); update when milestones shift or new scope opens.
 
 - Codex native adapter implementation
 - Streaming support with real-time chunks
@@ -389,12 +427,15 @@ root path: (`.specify/`)
 
 <sdd-specify>
 
-```tree
+```bash
 ACPLazyBridge/.specify
 ❯ tree
 .
+├── CLAUDE.md
+├── README.md
 ├── commands
 │   ├── plan.md
+│   ├── sdd-task.md
 │   ├── specify.md
 │   └── tasks.md
 ├── commands-template
@@ -434,62 +475,59 @@ root path: (`sdd-rules/`)
 
 <sdd-rules>
 
-```tree
-ACPLazyBridge/sdd-rules
+```bash
+ACPLazyBridge/sdd-rules/rules
 ❯ tree
 .
-├── AGENTS.md
-├── CLAUDE.md
-├── rule-tests
-│   ├── rust-mutex-lock-test.yml
-│   └── rust-no-unwrap-test.yml
-└── rules
-    ├── README.md
-    ├── changelog
-    │   ├── keep-a-changelog-index.html.haml
-    │   ├── sdd-rules-changelog.md
-    │   └── semver.md
-    ├── ci
-    │   └── sdd-rules-ci.md
-    ├── code-analysis
-    │   ├── ast-grep
-    │   │   ├── go
-    │   │   │   └── no-fmt-println.yml
-    │   │   ├── js
-    │   │   │   ├── no-console-log.yml
-    │   │   │   └── no-only-in-tests.yml
-    │   │   ├── python
-    │   │   │   ├── no-pdb.yml
-    │   │   │   └── no-print.yml
-    │   │   └── rust
-    │   │       ├── no-dbg.yml
-    │   │       ├── no-unwrap.yml
-    │   │       ├── rust-mutex-lock.yml
-    │   │       └── todo-comment.yml
-    │   └── sdd-rules-code-analysis.md
-    ├── documentation-style
-    │   ├── Google-developer-documentation-style-guide.md
-    │   ├── sdd-rules-documentation-markdownlint.md
-    │   └── sdd-rules-documentation-style.md
-    ├── git
-    │   ├── comments
-    │   │   └── sdd-rules-comments.md
-    │   ├── issues
-    │   │   └── sdd-rules-issues.md
-    │   ├── pr
-    │   │   └── sdd-rules-pr.md
-    │   └── worktree
-    │       └── sdd-rules-worktrees.md
-    ├── research
-    │   └── sdd-rules-research.md
-    ├── tests
-    │   └── sdd-rules-tests.md
-    ├── tools-cli
-    │   ├── ast-grep.llms.txt
-    │   ├── sdd-rules-tools-cli-astgrep.md
-    │   └── sdd-rules-tools-cli-list.md
-    └── tools-mcp
-        └── sdd-rules-tools-mcp.md
+├── README.md
+├── changelog
+│   ├── examples.md
+│   ├── keep-a-changelog-index.html.haml
+│   ├── sdd-rules-changelog.md
+│   └── semantic-versioning-2.0.0.md
+├── ci
+│   ├── claude-code-github-actions.md
+│   └── sdd-rules-ci.md
+├── code-analysis
+│   ├── ast-grep
+│   │   └── rust
+│   │       ├── no-dbg.yml
+│   │       ├── no-unwrap.yml
+│   │       ├── rust-mutex-lock.yml
+│   │       └── todo-comment.yml
+│   └── sdd-rules-code-analysis.md
+├── documentation-style
+│   ├── google-developer-documentation-style-guide.md
+│   ├── google-markdown-style-guide.md
+│   ├── sdd-rules-documentation-markdownlint.md
+│   └── sdd-rules-documentation-style.md
+├── git
+│   ├── comments
+│   │   └── sdd-rules-comments.md
+│   ├── commit
+│   │   └── sdd-rules-commit-message.md
+│   ├── issues
+│   │   └── sdd-rules-issues.md
+│   ├── pr
+│   │   └── sdd-rules-pr.md
+│   └── worktree
+│       └── sdd-rules-worktrees.md
+├── research
+│   └── sdd-rules-research.md
+├── sdd-validation
+│   ├── needs-clarification.yml
+│   ├── placeholders.yml
+│   ├── task-numbering.yml
+│   └── todo-markers.yml
+├── tests
+│   └── sdd-rules-tests.md
+├── tools-cli
+│   ├── ast-grep.llms.txt
+│   ├── sdd-rules-tools-cli-astgrep.md
+│   ├── sdd-rules-tools-cli-document-search-and-parsing.md
+│   └── sdd-rules-tools-cli-list.md
+└── tools-mcp
+    └── sdd-rules-tools-mcp.md
 ```
 
 </sdd-rules>
@@ -529,17 +567,14 @@ work in: (specs/)
     (Subsequent task evidence is stored under the root path)
 - PR description must include: links to Spec/Plan/Tasks, evidence files (tests/logs/jq/reports), risks/rollback, and CI pass summary.
 
-### SDD commands (artifact generation)
+### SDD commands and SDD-TASKs Workflow
 
-- `/specify` — generate a new feature specification and branch/worktree; see sdd-rules/commands/specify.md
-- `/plan` — create implementation plan and design docs; see sdd-rules/commands/plan.md
-- `/tasks` — derive executable tasks from the plan; see sdd-rules/commands/tasks.md
-- `/sdd-task` — initialize SDD task from GitHub issue; see .specify/commands/sdd-task.md
+1. `/sdd-task` — initialize SDD task from GitHub issue; see .specify/commands/sdd-task.md
+2. `/specify` — generate a new feature specification and branch/worktree; see sdd-rules/commands/specify.md
+3. `/plan` — create implementation plan and design docs; see sdd-rules/commands/plan.md
+4. `/tasks` — derive executable tasks from the plan; see sdd-rules/commands/tasks.md
 
-> Notes:
-> Use these commands to maintain the spec → plan → tasks flow described in (.specify/spec-driven.md) and (.specify/memory/lifecycle.md).
-
-### Standard procedure
+#### Standard procedure
 
 1) Context gathering
    - Inspect repository state, read relevant files, and list existing workflows.
@@ -554,6 +589,133 @@ work in: (specs/)
    - After merge:
      - MUST re-run the SDD Documentation Dynamic Consistency Check Workflow (.specify/memory/constitution_update_checklist.md) first!
      - Then if needed to add any new sdd-rules or update .specify/memory/constitution.md and resync docs/templates if needed.
+
+<SDD-TASK-INITIALIZATION-WORKFLOW>
+
+```text
+Any AI Engineers that specializes in Spec-Driven Development (SDD) task initialization. You will be given a GitHub issue and need to create a complete SDD task workflow including specifications, plans, and executable tasks.
+
+Here is the GitHub issue you need to process:
+
+<github_issue>
+{{GITHUB_ISSUE}}
+</github_issue>
+
+## SDD Workflow Overview
+
+You will follow this complete workflow:
+ISSUES(#XXX) → SDD-TASKs Initialization → Specification Documents → Review → Development → Tests → Final Review → PR
+
+The core SDD commands you need to simulate are:
+1. `/sdd-task` — initialize SDD task from GitHub issue
+2. `/specify` — generate feature specification and branch/worktree structure
+3. `/plan` — create implementation plan and design docs
+4. `/tasks` — derive executable tasks from the plan
+
+## Step-by-Step Instructions
+
+### Phase 1: Issue Analysis and Setup
+First, analyze the GitHub issue thoroughly. Extract:
+- Issue number and title
+- Problem description and requirements
+- Acceptance criteria
+- Any technical constraints or dependencies
+
+### Phase 2: Worktree Structure Creation
+Create the following directory structure for the SDD task:
+
+specs/<NNN>-<slug>/
+├── spec.md
+├── plan.md
+├── tasks.md
+└── [additional specification documents as needed]
+
+
+Where XXX is a 3-digit number and <slug> is derived from the issue title.
+
+### Phase 3: SDD TASKs Specification Documents Generation
+
+**spec.md Requirements:**
+- Must include UTC timestamp in YAML frontmatter: `date: YYYY-MM-DDTHH:MM:SSZ`
+- Follow the spec-template structure
+- Include problem statement, requirements, acceptance criteria
+- Reference the original GitHub issue
+
+**plan.md Requirements:**
+- Must include UTC timestamp in YAML frontmatter
+- Follow the plan-template structure
+- Break down implementation approach
+- Identify technical dependencies and risks
+- Include design decisions and architecture considerations
+
+**tasks.md Requirements:**
+- Must include UTC timestamp in YAML frontmatter
+- Follow the tasks-template structure
+- Derive specific, executable tasks from the plan
+- Include task priorities and dependencies
+- Specify testing requirements
+
+### Phase 4: Consistency and Alignment
+Ensure all documents:
+- Reference the SDD rules and constitution
+- Maintain consistency with existing project structure
+- Follow the lifecycle management guidelines
+- Include proper cross-references between documents
+
+## Output Requirements
+
+Your response should contain:
+
+1. **Worktree Information:**
+   - Suggested worktree path: `/acplb-worktrees/XXX-<slug>`
+   - Issue reference and URI
+
+2. **Complete File Contents:**
+   - Full content for `spec.md`
+   - Full content for `plan.md`
+   - Full content for `tasks.md`
+   - Any additional specification documents needed
+
+3. **Metadata:**
+   - Current UTC timestamp for all documents
+   - Proper YAML frontmatter for each file
+   - Cross-references between documents
+
+## Critical Requirements
+
+⚠️ **MUST include current UTC timestamp** in format `YYYY-MM-DDTHH:MM:SSZ` in all document headers
+⚠️ **MUST follow the template structures** referenced in the SDD commands
+⚠️ **MUST create proper cross-references** between spec → plan → tasks
+⚠️ **MUST align with SDD rules** and constitution guidelines
+
+## Final Output Format
+
+Structure your response with clear sections for each file, using appropriate headers and formatting. Include the complete file contents that would be created in the worktree, ready for immediate use in the SDD workflow.
+
+Your final response should contain the complete, ready-to-use SDD task initialization package that can be directly implemented in the project worktree structure.
+
+## Best Practice Example
+
+(/ACPLazyBridge) | worktree: (acplb-worktrees/038-adopt-acp-runtime)
+
+acplb-worktrees/038-adopt-acp-runtime/specs/038-adopt-acp-runtime
+❯ tree
+.
+├── contracts
+│   └── runtime_api.md
+├── data-model.md
+├── plan.md
+├── quickstart.md
+├── research.md
+├── spec.md
+└── tasks.md
+
+```
+
+</SDD-TASK-INITIALIZATION-WORKFLOW>
+
+> Notes:
+> Use these commands to maintain the spec → plan → tasks flow described in (.specify/spec-driven.md) and (.specify/memory/lifecycle.md).
 
 ## SDD Rules
 
@@ -611,22 +773,20 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 
 ## (dev-docs/) and References
 
-- Project references: dev-docs/references/, dev-docs/references/acp_adapters/, dev-docs/references/cli_agents/, dev-docs/references/acp.md, dev-docs/references/zed_ide.md
-- Design/Requirements: dev-docs/architecture/, dev-docs/_requirements/ (see dev-docs/README.md)
-- Legacy planning archive: _artifacts/legacy/ (historical reference)
-
 <dev-docs>
 
-```tree
+```bash
 .
 ├── CLAUDE.md
 ├── README.md
 ├── _issues_drafts
 │   ├── TEMPLATE.md
-│   ├── closed/
-│   ├── protocol-cleanup-official-models.md
-│   ├── runtime-adoption-core-loop.md
-│   └── streaming-alignment-session-notifications.md
+│   ├── closed
+│   │   ├── ...
+│   │   └── #44-runtime-adoption-core-loop.md
+│   └── open
+│       ├── #45-streaming-alignment-session-notifications.md
+│       └── #46-protocol-cleanup-official-models.md
 ├── _projects
 │   └── migration-blueprint-project-management-plan.md
 ├── _requirements
@@ -638,6 +798,7 @@ For every formal TASK (e.g., `specs/<NNN>-<slug>/`), create a new worktree and b
 ├── architecture
 │   └── acplb-architecture.md
 ├── changelogs
+│   ├── 038-adopt-acp-runtime.md
 │   ├── README.md
 │   ├── codex-tools-1-code-changes-2025-09-04.md
 │   └── codex-tools-1-review-2025-09-04.md
@@ -785,7 +946,7 @@ document:
     type: "claude-memory"
     path: "./CLAUDE.md"
     version: "1.0.5"
-    last_updated: "2025-09-23T04:56:00Z"
+    last_updated: "2025-09-25T02:30:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
@@ -801,8 +962,10 @@ document:
         - "(dev-docs/references/)"
         - "(dev-docs/_requirements/)"
         - "(dev-docs/_issues_drafts/)"
-        - "(dev-docs/_projects/)"        
-        - "(/Users/arthur/dev-space/agent-client-protocol/docs/)"
-        - "(/Users/arthur/dev-space/agent-client-protocol/rust/)"
+        - "(dev-docs/_projects/)"
+        - "<https://github.com/zed-industries/agent-client-protocol/tree/main/docs>"
+        - "<https://agentclientprotocol.com/protocol>"
+        - "<https://agentclientprotocol.com/protocol/schema>"
+        - "sdd-rules/CLAUDE.md"
         - ".claude/CLAUDE.md"
 ```

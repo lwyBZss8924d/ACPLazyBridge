@@ -1,7 +1,9 @@
 # Adopt Official ACP Runtime for Core Loop
 
-**GitHub Issue**: [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
-**Status**: 🚧 In Progress (Milestone 0.1.0)
+_issues for SDD Task 038_
+
+**GitHub Issue**: [#44](dev-docs/_issues_drafts/closed/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
+**Status**: issue is closed (Milestone 0.1.0)
 
 ## Summary
 
@@ -48,3 +50,21 @@ Implement a shared ACPLazyBridge runtime built on `agent-client-protocol::AgentS
 - `dev-docs/architecture/acplb-architecture.md`
 - `dev-docs/core_servers/acplb-core-runtime.md`
 - `dev-docs/_project_management/migration-blueprint-project-management-plan.md`
+
+## SDD Task 038 remarks
+
+[specs/038-adopt-acp-runtime](specs/038-adopt-acp-runtime)
+
+```tree
+ACPLazyBridge/specs/038-adopt-acp-runtime main*​ ≡
+❯ tree
+.
+├── contracts
+│   └── runtime_api.md
+├── data-model.md
+├── plan.md
+├── quickstart.md
+├── research.md
+├── spec.md
+└── tasks.md
+```

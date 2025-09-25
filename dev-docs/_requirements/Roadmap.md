@@ -24,21 +24,21 @@ This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves in
 
 **Scope**
 
-- Replace handcrafted JSON-RPC loop with `agent_client_protocol::AgentSideConnection` and Tokio `LocalSet` execution.
-- Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types.
-- Remove `acp-lazy-core::protocol` module and reuse upstream error/response models everywhere.
-- Validate end-to-end with Zed’s Custom Agent client connected to the Codex CLI adapter.
+- ✅ **Completed**: Replace handcrafted JSON-RPC loop with `agent_client_protocol::AgentSideConnection` and Tokio `LocalSet` execution (SDD Task 038, PR #47).
+- 🔄 **Deferred**: Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types (Issue #45, Phase 4).
+- 🔄 **Deferred**: Remove `acp-lazy-core::protocol` module and reuse upstream error/response models everywhere (Issue #46, Phase 5).
+- ✅ **Completed**: Validate end-to-end with Zed's Custom Agent client connected to the Codex CLI adapter.
 
 **Acceptance**
 
-- CI (`scripts/ci/run-local-ci.sh`) is green and replayed JSONL scenarios match ACP schema snapshots.
-- SDD spec/plan/tasks documented for runtime migration, streaming refactor, and protocol cleanup.
-- Evidence artefacts stored under `_artifacts/<task>/` (primary) with legacy mirrors retained in `_artifacts/legacy/` only when historical comparisons are required.
+- ✅ **Completed**: CI (`scripts/ci/run-local-ci.sh`) is green and replayed JSONL scenarios match ACP schema snapshots.
+- ✅ **Completed**: SDD spec/plan/tasks documented for runtime migration via `specs/038-adopt-acp-runtime/`.
+- ✅ **Completed**: Evidence artefacts stored under `_artifacts/038-adopt-acp-runtime/` with test logs, performance benchmarks, and SDD validation reports.
 
 **Risks & Mitigations**
 
-- _Tokio `!Send` futures_: confine ACP loop inside `LocalSet`; add integration tests that spawn notify forwarders to catch runtime regressions.
-- _CLI parity_: add snapshot tests comparing Codex CLI launch arguments pre/post migration to prevent permission-mode drift.
+- ✅ **Resolved**: Tokio `!Send` futures confined inside `LocalSet`; integration tests added and passing.
+- ✅ **Resolved**: CLI parity maintained via snapshot tests and permission mapping validation.
 
 ## Milestone 0.2.0 – Multi-Agent Runtime & Composer Foundations
 

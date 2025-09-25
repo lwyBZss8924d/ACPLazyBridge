@@ -1,7 +1,9 @@
 # Align Streaming Notifications with ACP Models
 
+_issues for SDD Task (pending)_
+
 **GitHub Issue**: [#45](dev-docs/_issues_drafts/open/#45-streaming-alignment-session-notifications.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45>
-**Status**: 🔄 Planned (Milestone 0.1.0)
+**Status**: issue is open (Milestone 0.1.0)
 **Dependencies**:
 
 - [#44](dev-docs/_issues_drafts/open/#44-runtime-adoption-core-loop.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/44>
