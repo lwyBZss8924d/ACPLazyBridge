@@ -2,7 +2,7 @@
 
 ```yaml
 worktree: ../acplb-worktrees/039-streaming-alignment
-feature_branch: feature/039-streaming-alignment
+feature_branch: feature/039-streaming-alignment-v2
 created: 2025-09-25T07:40:16Z
 last_updated: 2025-09-27T21:00:00Z
 status: ready_for_pr
