@@ -1,3 +1,10 @@
+# Performance Test Report
+
+## Test Execution Summary
+
+### First Run - Filtered Tests
+
+```text
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running unittests src/lib.rs (target/debug/deps/codex_cli_acp-6dc660b66be2e421)
 
@@ -76,7 +83,11 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; fini
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+```
 
+### Performance Metrics - Run 1
+
+```text
         0.17 real         0.09 user         0.05 sys
             44777472  maximum resident set size
                    0  average shared memory size
@@ -95,6 +106,11 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; fini
            928750414  instructions retired
            292512715  cycles elapsed
             31097856  peak memory footprint
+```
+
+### Second Run - Full Test Suite
+
+```text
     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
      Running unittests src/lib.rs (target/debug/deps/codex_cli_acp-6dc660b66be2e421)
 
@@ -218,7 +234,11 @@ test test_single_tool_call_progression ... ok
 test test_tool_kind_mapping_comprehensive ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+```
 
+### Performance Metrics - Run 2
+
+```text
         3.18 real         0.14 user         0.10 sys
             45039616  maximum resident set size
                    0  average shared memory size
@@ -237,3 +257,12 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
            916295397  instructions retired
            281627793  cycles elapsed
             31360000  peak memory footprint
+```
+
+## Summary
+
+- **Total Tests**: 68 tests across 13 test suites
+- **Test Result**: All tests passed ✅
+- **Total Time**: 3.18 seconds
+- **Peak Memory**: ~31MB
+- **Status**: Performance acceptable for CI/CD pipeline
