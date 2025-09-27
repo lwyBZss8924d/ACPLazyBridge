@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use agent_client_protocol::{
     Agent, ClientCapabilities, ContentBlock, InitializeRequest, NewSessionRequest, PromptRequest,
-    StopReason, VERSION,
+    SessionNotification, StopReason, VERSION,
 };
 use anyhow::Result;
 use codex_cli_acp::codex_agent::CodexAgent;
@@ -46,4 +46,27 @@ async fn jsonl_regression_playback_remains_compatible() -> Result<()> {
 
     assert_eq!(playback_result.stop_reason, StopReason::EndTurn);
     Ok(())
+}
+
+#[test]
+fn jsonl_regression_requires_official_schema() {
+    let legacy = serde_json::json!({
+        "jsonrpc": "2.0",
+        "method": "session/update",
+        "params": {
+            "sessionId": "legacy-session",
+            "update": {
+                "sessionUpdate": "tool_call",
+                "toolCallId": "tool_legacy",
+                "title": "read_file",
+                "kind": "read",
+                "status": "pending"
+            }
+        }
+    });
+
+    assert!(
+        serde_json::from_value::<SessionNotification>(legacy).is_err(),
+        "Legacy JSONL structure should not deserialize into the official schema"
+    );
 }

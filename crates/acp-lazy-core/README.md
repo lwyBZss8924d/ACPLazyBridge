@@ -1,6 +1,6 @@
 # acp-lazy-core Runtime Module
 
- provides the shared runtime foundation used by ACPLazyBridge adapters. The runtime wraps the official Agent Client Protocol (ACP) implementation and offers a stable surface for IDE-facing agents.
+`acp-lazy-core` provides the shared runtime foundation used by ACPLazyBridge adapters. The runtime wraps the official Agent Client Protocol (ACP) implementation and offers a stable surface for IDE-facing agents.
 
 ## Key Components
 

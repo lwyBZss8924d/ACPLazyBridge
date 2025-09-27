@@ -378,7 +378,6 @@ where
 
 #[cfg(test)]
 mod tests {
-    // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
     use super::*;
     use futures::StreamExt;
     use std::sync::{Arc, Mutex};
@@ -407,8 +406,8 @@ mod tests {
         read_lines(cursor, move |line| {
             let received = received_clone.clone();
             async move {
-                // ast-grep-ignore: rust-no-unwrap
-                received.lock().unwrap().push(line);
+                // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+                received.lock().expect("test mutex poisoned").push(line);
                 Ok(())
             }
         })
@@ -416,8 +415,8 @@ mod tests {
         // ast-grep-ignore: rust-no-unwrap
         .unwrap();
 
-        // ast-grep-ignore: rust-no-unwrap
-        let results = received.lock().unwrap();
+        // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+        let results = received.lock().expect("test mutex poisoned");
         assert_eq!(results.len(), 2);
         assert_eq!(results[0], r#"{"valid": 1}"#);
         assert_eq!(results[1], r#"{"valid": 2}"#);
@@ -434,8 +433,8 @@ mod tests {
         read_lines(cursor, move |line| {
             let received = received_clone.clone();
             async move {
-                // ast-grep-ignore: rust-no-unwrap
-                received.lock().unwrap().push(line);
+                // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+                received.lock().expect("test mutex poisoned").push(line);
                 Ok(())
             }
         })
@@ -443,8 +442,8 @@ mod tests {
         // ast-grep-ignore: rust-no-unwrap
         .unwrap();
 
-        // ast-grep-ignore: rust-no-unwrap
-        let results = received.lock().unwrap();
+        // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+        let results = received.lock().expect("test mutex poisoned");
         assert_eq!(results.len(), 2);
         assert_eq!(results[0], r#"{"valid": 1}"#);
         assert_eq!(results[1], r#"{"valid": 2}"#);
@@ -552,8 +551,8 @@ invalid json
             async move {
                 // Verify we received a parsed Value, not a string
                 if let Some(id) = value.get("id").and_then(|v| v.as_i64()) {
-                    // ast-grep-ignore: rust-no-unwrap
-                    received.lock().unwrap().push(id);
+                    // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+                    received.lock().expect("test mutex poisoned").push(id);
                 }
                 Ok(())
             }
@@ -562,8 +561,8 @@ invalid json
         // ast-grep-ignore: rust-no-unwrap
         .unwrap();
 
-        // ast-grep-ignore: rust-no-unwrap
-        let results = received.lock().unwrap();
+        // ast-grep-ignore: rust-no-unwrap, rust-mutex-lock
+        let results = received.lock().expect("test mutex poisoned");
         assert_eq!(results.len(), 3);
         assert_eq!(results[0], 1);
         assert_eq!(results[1], 2);

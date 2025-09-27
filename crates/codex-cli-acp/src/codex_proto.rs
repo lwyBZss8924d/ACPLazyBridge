@@ -1,18 +1,108 @@
 //! Codex proto mode event handling
 //!
-//! This module handles parsing and mapping of Codex native proto events to ACP events.
+//! This module translates Codex CLI proto events into the official
+//! `agent_client_protocol` streaming surface so downstream ACP clients receive
+//! canonical `SessionNotification` and `SessionUpdate` payloads.  It is
+//! responsible for:
+//!
+//! - Deserialising Codex protocol JSON into strongly typed helper events.
+//! - Building ACP content blocks (text, reasoning, plan, available commands,
+//!   mode updates, tool calls) directly with the v0.4.2 models.
+//! - Preserving Codex metadata such as tool raw I/O, stop reasons, and
+//!   notification timing while applying the LastChunkGuard deduplication rules.
+//! - Emitting updates through `AgentSideConnection::session_notification` so
+//!   notify/idle stop reasons propagate as `StopReason::EndTurn` and
+//!   `StopReason::IdleTimeout`.
+//!
+//! The module intentionally avoids defining forked ACP types—any schema changes
+//! must be pulled from the upstream crate to stay compliant with the SDD
+//! constitution’s anti-abstraction rule (Article VIII).
 
 use crate::tool_calls::{
     extract_shell_command, extract_shell_params, format_tool_output, map_tool_kind,
     MAX_OUTPUT_PREVIEW_BYTES,
 };
+use agent_client_protocol::Error as AcpError;
+use agent_client_protocol::{
+    AudioContent, AvailableCommand, BlobResourceContents, ContentBlock, EmbeddedResource,
+    EmbeddedResourceResource, ImageContent, Plan, PlanEntry, PlanEntryPriority, PlanEntryStatus,
+    ResourceLink, SessionId, SessionModeId, SessionNotification, SessionUpdate, TextContent,
+    TextResourceContents, ToolCall, ToolCallContent, ToolCallId, ToolCallLocation, ToolCallStatus,
+    ToolCallUpdate, ToolCallUpdateFields, ToolKind,
+};
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, trace};
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct CodexUserMessageEvent {
+    pub message: String,
+    #[serde(default)]
+    pub kind: Option<String>,
+    #[serde(default)]
+    pub images: Option<Vec<String>>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CodexPlanItem {
+    pub step: String,
+    pub status: CodexStepStatus,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CodexStepStatus {
+    Pending,
+    InProgress,
+    Completed,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct CodexPlanUpdateEvent {
+    #[serde(default)]
+    pub explanation: Option<String>,
+    pub plan: Vec<CodexPlanItem>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct CodexToolAnnotations {
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub title: Option<String>,
+    #[serde(flatten, default)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct CodexToolDefinition {
+    #[serde(default)]
+    pub name: Option<String>,
+    #[serde(default)]
+    pub title: Option<String>,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(rename = "inputSchema", default)]
+    pub input_schema: Option<Value>,
+    #[serde(default)]
+    pub annotations: Option<CodexToolAnnotations>,
+    #[serde(flatten, default)]
+    pub extra: HashMap<String, Value>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct CodexSessionConfiguredEvent {
+    #[serde(default)]
+    pub session_id: Option<String>,
+    #[serde(default)]
+    pub model: Option<String>,
+    #[serde(flatten, default)]
+    pub extra: HashMap<String, Value>,
+}
 
 /// Codex proto event types
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -28,6 +118,20 @@ pub enum CodexEvent {
         #[serde(default)]
         _timestamp: Option<String>,
     },
+    UserMessage(CodexUserMessageEvent),
+    AgentReasoning {
+        text: String,
+    },
+    AgentReasoningDelta {
+        delta: String,
+    },
+    AgentReasoningRawContent {
+        text: String,
+    },
+    AgentReasoningRawContentDelta {
+        delta: String,
+    },
+    AgentReasoningSectionBreak,
     ToolCall {
         id: String,
         name: String,
@@ -41,6 +145,15 @@ pub enum CodexEvent {
     },
     ToolCalls {
         calls: Vec<ToolCallItem>,
+    },
+    PlanUpdate(CodexPlanUpdateEvent),
+    McpListToolsResponse {
+        tools: HashMap<String, CodexToolDefinition>,
+    },
+    SessionConfigured(CodexSessionConfiguredEvent),
+    TaskStarted {
+        #[serde(default)]
+        model_context_window: Option<u32>,
     },
     TaskComplete {
         #[serde(default)]
@@ -68,116 +181,48 @@ pub struct ToolCallItem {
     pub error: Option<String>,
 }
 
-/// ACP session update event for streaming
-#[derive(Debug, Clone, Serialize)]
-pub struct SessionUpdate {
-    pub jsonrpc: String,
-    pub method: String,
-    pub params: SessionUpdateParams,
-}
-
-#[derive(Debug, Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct SessionUpdateParams {
-    pub session_id: String,
-    pub update: SessionUpdateContent,
-}
-
-/// Content blocks for agent messages
-#[derive(Debug, Clone, Serialize)]
-#[serde(tag = "type", rename_all = "snake_case")]
-pub enum ContentBlock {
-    Text { text: String },
-}
-
-// ToolCallContent removed - using ContentBlock directly per ACP spec
-
-/// Tool call status
-#[derive(Debug, Clone, Copy, Serialize, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum ToolCallStatus {
-    Pending,
-    InProgress,
-    Completed,
-    Failed,
-}
-
-#[derive(Debug, Clone, Serialize)]
-#[serde(tag = "sessionUpdate", rename_all = "snake_case")]
-pub enum SessionUpdateContent {
-    AgentMessageChunk {
-        content: ContentBlock,
-    },
-    ToolCall {
-        #[serde(rename = "toolCallId")]
-        tool_call_id: String,
-        title: String,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        kind: Option<String>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        status: Option<ToolCallStatus>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        content: Option<Vec<ContentBlock>>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        locations: Option<Vec<Value>>,
-        #[serde(skip_serializing_if = "Option::is_none", rename = "rawInput")]
-        raw_input: Option<Value>,
-        #[serde(skip_serializing_if = "Option::is_none", rename = "rawOutput")]
-        raw_output: Option<Value>,
-    },
-    // Now used for tool call status updates (pending -> in_progress -> completed/failed)
-    ToolCallUpdate {
-        #[serde(rename = "toolCallId")]
-        tool_call_id: String,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        title: Option<String>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        kind: Option<String>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        status: Option<ToolCallStatus>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        content: Option<Vec<ContentBlock>>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        locations: Option<Vec<Value>>,
-        #[serde(skip_serializing_if = "Option::is_none", rename = "rawInput")]
-        raw_input: Option<Value>,
-        #[serde(skip_serializing_if = "Option::is_none", rename = "rawOutput")]
-        raw_output: Option<Value>,
-    },
+#[derive(Debug, Clone)]
+struct ToolCallRecord {
+    // Cached state so we can emit ToolCall/ToolCallUpdate pairs with the right
+    // ACP fields even when Codex only sends partial deltas.
+    status: ToolCallStatus,
+    title: String,
+    kind: ToolKind,
+    locations: Vec<ToolCallLocation>,
+    raw_input: Option<Value>,
 }
 
 /// Manages streaming from Codex proto to ACP
 ///
-/// Note: Uses singular 'update' field per ACP spec SessionNotification structure,
-/// not 'updates' array. This matches agent-client-protocol/rust/client.rs.
+/// Note: Uses singular update field per ACP spec SessionNotification structure,
+/// not updates array. This matches agent-client-protocol/rust/client.rs.
 pub struct CodexStreamManager {
-    session_id: String,
-    tx: mpsc::UnboundedSender<SessionUpdate>,
-    last_sent_chunk: Option<String>,
+    session_id: SessionId,
+    tx: mpsc::UnboundedSender<SessionNotification>,
+    last_text_chunk: Option<String>,
     finalized: bool,
-    /// Track tool calls that have been sent to avoid duplicate pending events
-    tool_call_states: HashMap<String, ToolCallStatus>,
+    tool_calls: HashMap<String, ToolCallRecord>,
+    last_tool_call_id: Option<String>,
 }
 
 impl CodexStreamManager {
-    pub fn new(session_id: String, tx: mpsc::UnboundedSender<SessionUpdate>) -> Self {
+    pub fn new(session_id: SessionId, tx: mpsc::UnboundedSender<SessionNotification>) -> Self {
         Self {
             session_id,
             tx,
-            last_sent_chunk: None,
+            last_text_chunk: None,
             finalized: false,
-            tool_call_states: HashMap::new(),
+            tool_calls: HashMap::new(),
+            last_tool_call_id: None,
         }
     }
 
     /// Process a line from Codex stdout
     pub async fn process_line(&mut self, line: &str) -> Result<()> {
-        // Skip empty lines
         if line.trim().is_empty() {
             return Ok(());
         }
 
-        // Try to parse as JSON
         let value: Value = match serde_json::from_str(line) {
             Ok(v) => v,
             Err(e) => {
@@ -186,11 +231,19 @@ impl CodexStreamManager {
             }
         };
 
-        // Try to parse as Codex event
-        let event: CodexEvent = match serde_json::from_value(value.clone()) {
+        // Codex proto outputs events in {"id":"...", "msg":{...}} format
+        // Extract the msg field which contains the actual event
+        let event_value = if let Some(msg) = value.get("msg") {
+            msg.clone()
+        } else {
+            // Fall back to parsing the whole value for backward compatibility
+            value.clone()
+        };
+
+        let event: CodexEvent = match serde_json::from_value(event_value.clone()) {
             Ok(e) => e,
             Err(e) => {
-                debug!("Unknown Codex event format: {} - {}", value, e);
+                debug!("Unknown Codex event format: {} - {}", event_value, e);
                 return Ok(());
             }
         };
@@ -204,6 +257,22 @@ impl CodexStreamManager {
             CodexEvent::AgentMessageDelta { delta, .. } => {
                 self.send_chunk(delta).await?;
             }
+            CodexEvent::UserMessage(event) => {
+                self.send_user_message(event).await?;
+            }
+            CodexEvent::AgentReasoning { text } => {
+                self.send_agent_thought(&text).await?;
+            }
+            CodexEvent::AgentReasoningDelta { delta } => {
+                self.send_agent_thought(&delta).await?;
+            }
+            CodexEvent::AgentReasoningRawContent { text } => {
+                self.send_agent_thought(&text).await?;
+            }
+            CodexEvent::AgentReasoningRawContentDelta { delta } => {
+                self.send_agent_thought(&delta).await?;
+            }
+            CodexEvent::AgentReasoningSectionBreak => {}
             CodexEvent::ToolCall {
                 id,
                 name,
@@ -228,93 +297,27 @@ impl CodexStreamManager {
                     .await?;
                 }
             }
+            CodexEvent::PlanUpdate(update) => {
+                self.send_plan_update(update).await?;
+            }
+            CodexEvent::McpListToolsResponse { tools } => {
+                self.send_available_commands(tools).await?;
+            }
+            CodexEvent::SessionConfigured(event) => {
+                self.send_current_mode_update(event).await?;
+            }
+            CodexEvent::TaskStarted {
+                model_context_window,
+            } => {
+                debug!("Task started: context_window={:?}", model_context_window);
+                // Task started indicates Codex is processing the request
+            }
             CodexEvent::TaskComplete { reason } => {
                 info!("Task complete: {:?}", reason);
                 self.finalized = true;
-                // Do not emit any synthetic content; allow upstream to observe
-                // stream completion by channel closure.
             }
             CodexEvent::Error { message, code } => {
-                error!("Codex error: {} (code: {:?})", message, code);
-
-                // Map Codex error codes to semantic categories
-                let error_category = match code.as_deref() {
-                    Some("timeout") | Some("TIMEOUT") => "timeout",
-                    Some("permission_denied") | Some("PERMISSION_DENIED") => "permission_denied",
-                    Some("not_found") | Some("NOT_FOUND") => "not_found",
-                    Some("cancelled") | Some("CANCELLED") => "cancelled",
-                    Some("rate_limit") | Some("RATE_LIMIT") => "rate_limit",
-                    _ => "error",
-                };
-
-                // Check if this error is in the context of a tool call
-                // If we have active tool calls, map the error to the most recent one
-                if let Some((tool_id, _)) = self.tool_call_states.iter().last() {
-                    // Send as ToolCallUpdate with status=failed for the last tool
-                    let tool_id_str = tool_id.clone();
-
-                    // Format error message with category
-                    let error_text = match error_category {
-                        "timeout" => format!("Tool execution timed out: {}", message),
-                        "permission_denied" => format!("Permission denied: {}", message),
-                        "not_found" => format!("Resource not found: {}", message),
-                        "cancelled" => format!("Tool execution cancelled: {}", message),
-                        "rate_limit" => format!("Rate limit exceeded: {}", message),
-                        _ => {
-                            if let Some(ref code) = code {
-                                format!("Error [{}]: {}", code, message)
-                            } else {
-                                format!("Error: {}", message)
-                            }
-                        }
-                    };
-
-                    let update = SessionUpdate {
-                        jsonrpc: "2.0".to_string(),
-                        method: "session/update".to_string(),
-                        params: SessionUpdateParams {
-                            session_id: self.session_id.clone(),
-                            update: SessionUpdateContent::ToolCallUpdate {
-                                tool_call_id: tool_id_str.clone(),
-                                title: None,
-                                kind: None,
-                                status: Some(ToolCallStatus::Failed),
-                                content: Some(vec![ContentBlock::Text { text: error_text }]),
-                                locations: None,
-                                raw_input: None,
-                                raw_output: Some(json!({
-                                    "error": message,
-                                    "code": code,
-                                    "category": error_category
-                                })),
-                            },
-                        },
-                    };
-                    self.tx
-                        .send(update)
-                        .context("Failed to send error update")?;
-
-                    // Mark the tool as failed in our tracking
-                    self.tool_call_states
-                        .insert(tool_id_str, ToolCallStatus::Failed);
-                } else {
-                    // No tool context, send as a message chunk
-                    let error_msg = match error_category {
-                        "timeout" => format!("Operation timed out: {}", message),
-                        "permission_denied" => format!("Permission denied: {}", message),
-                        "not_found" => format!("Not found: {}", message),
-                        "cancelled" => format!("Operation cancelled: {}", message),
-                        "rate_limit" => format!("Rate limit exceeded: {}", message),
-                        _ => {
-                            if let Some(ref code) = code {
-                                format!("Error [{}]: {}", code, message)
-                            } else {
-                                format!("Error: {}", message)
-                            }
-                        }
-                    };
-                    self.send_chunk(error_msg).await?;
-                }
+                self.handle_error(message, code).await?;
             }
             CodexEvent::Unknown => {
                 debug!("Unknown Codex event type");
@@ -324,41 +327,135 @@ impl CodexStreamManager {
         Ok(())
     }
 
-    /// Send an agent message chunk
     async fn send_chunk(&mut self, content: String) -> Result<()> {
-        // Skip if already finalized
         if self.finalized {
             trace!("Skipping chunk after finalization");
             return Ok(());
         }
 
-        // Deduplicate if same as last chunk
-        if let Some(ref last) = self.last_sent_chunk {
+        if let Some(ref last) = self.last_text_chunk {
             if last == &content {
                 trace!("Skipping duplicate chunk");
                 return Ok(());
             }
         }
 
-        let update = SessionUpdate {
-            jsonrpc: "2.0".to_string(),
-            method: "session/update".to_string(),
-            params: SessionUpdateParams {
-                session_id: self.session_id.clone(),
-                update: SessionUpdateContent::AgentMessageChunk {
-                    content: ContentBlock::Text {
-                        text: content.clone(),
-                    },
-                },
-            },
-        };
-
-        self.tx.send(update).context("Failed to send update")?;
-        self.last_sent_chunk = Some(content);
+        let block = content_block_from_string(&content);
+        let notification =
+            self.build_notification(SessionUpdate::AgentMessageChunk { content: block });
+        debug!(
+            "Sending AgentMessageChunk notification for session {}: content_len={}",
+            self.session_id.0,
+            content.len()
+        );
+        self.tx
+            .send(notification)
+            .context("Failed to send update")?;
+        self.last_text_chunk = Some(content);
         Ok(())
     }
 
-    /// Send a tool call event with enhanced status tracking and output formatting
+    async fn send_user_message(&mut self, event: CodexUserMessageEvent) -> Result<()> {
+        if !event.message.trim().is_empty() {
+            let block = content_block_from_string(&event.message);
+            let notification =
+                self.build_notification(SessionUpdate::UserMessageChunk { content: block });
+            self.tx
+                .send(notification)
+                .context("Failed to send user message chunk")?;
+        }
+
+        if let Some(images) = event.images {
+            for image in images {
+                if let Some(block) = content_block_from_image_source(&image) {
+                    let notification =
+                        self.build_notification(SessionUpdate::UserMessageChunk { content: block });
+                    self.tx
+                        .send(notification)
+                        .context("Failed to send user image chunk")?;
+                }
+            }
+        }
+
+        Ok(())
+    }
+
+    async fn send_agent_thought(&mut self, text: &str) -> Result<()> {
+        if text.trim().is_empty() {
+            return Ok(());
+        }
+
+        let block = content_block_from_string(text);
+        let notification =
+            self.build_notification(SessionUpdate::AgentThoughtChunk { content: block });
+        self.tx
+            .send(notification)
+            .context("Failed to send agent thought chunk")?;
+        Ok(())
+    }
+
+    async fn send_plan_update(&mut self, update: CodexPlanUpdateEvent) -> Result<()> {
+        if update.plan.is_empty() {
+            return Ok(());
+        }
+
+        let entries: Vec<PlanEntry> = update.plan.into_iter().map(plan_entry_from_codex).collect();
+
+        let meta = update.explanation.and_then(|explanation| {
+            if explanation.trim().is_empty() {
+                None
+            } else {
+                Some(json!({ "explanation": explanation }))
+            }
+        });
+
+        let plan = Plan { entries, meta };
+        let notification = self.build_notification(SessionUpdate::Plan(plan));
+        self.tx
+            .send(notification)
+            .context("Failed to send plan update")?;
+        Ok(())
+    }
+
+    async fn send_available_commands(
+        &mut self,
+        tools: HashMap<String, CodexToolDefinition>,
+    ) -> Result<()> {
+        let mut commands = Vec::new();
+        for (key, tool) in tools {
+            if let Some(command) = available_command_from_tool(&key, tool) {
+                commands.push(command);
+            }
+        }
+
+        if commands.is_empty() {
+            return Ok(());
+        }
+
+        let notification = self.build_notification(SessionUpdate::AvailableCommandsUpdate {
+            available_commands: commands,
+        });
+        self.tx
+            .send(notification)
+            .context("Failed to send available commands update")?;
+        Ok(())
+    }
+
+    async fn send_current_mode_update(&mut self, event: CodexSessionConfiguredEvent) -> Result<()> {
+        let Some(model) = event.model.filter(|m| !m.trim().is_empty()) else {
+            return Ok(());
+        };
+
+        let notification = self.build_notification(SessionUpdate::CurrentModeUpdate {
+            current_mode_id: SessionModeId(Arc::from(model.as_str())),
+        });
+
+        self.tx
+            .send(notification)
+            .context("Failed to send current mode update")?;
+        Ok(())
+    }
+
     async fn send_tool_call(
         &mut self,
         id: String,
@@ -368,7 +465,6 @@ impl CodexStreamManager {
         output: Option<Value>,
         error: Option<String>,
     ) -> Result<()> {
-        // Parse the status
         let tool_status = match status.unwrap_or("pending") {
             "completed" | "success" => ToolCallStatus::Completed,
             "in_progress" | "running" => ToolCallStatus::InProgress,
@@ -376,16 +472,8 @@ impl CodexStreamManager {
             _ => ToolCallStatus::Pending,
         };
 
-        // Check if we've already sent this tool call to track state transitions
-        let previous_status = self.tool_call_states.get(&id).copied();
+        self.last_tool_call_id = Some(id.clone());
 
-        // Determine if this is an initial call or an update
-        let is_initial = previous_status.is_none();
-
-        // Update our tracking
-        self.tool_call_states.insert(id.clone(), tool_status);
-
-        // Extract shell parameters if this is a shell tool
         let shell_params =
             if name.contains("shell") || name.contains("bash") || name.contains("command") {
                 Some(extract_shell_params(&name, &arguments))
@@ -393,9 +481,8 @@ impl CodexStreamManager {
                 None
             };
 
-        // Determine the title - for shell commands, include workdir if different
         let title = if let Some(cmd) = extract_shell_command(&name, &arguments) {
-            if let Some(ref params) = shell_params {
+            if let Some(params) = shell_params.as_ref() {
                 if let Some(ref workdir) = params.workdir {
                     format!("{}: {} (in {})", name, cmd, workdir)
                 } else {
@@ -408,67 +495,51 @@ impl CodexStreamManager {
             name.clone()
         };
 
-        // Map to ACP tool kind using our utility
-        let kind = Some(map_tool_kind(&name));
+        let kind = map_tool_kind(&name);
 
-        // Build locations array if workdir is present
-        let locations = if let Some(ref params) = shell_params {
-            params.workdir.as_ref().map(|dir| {
-                vec![json!({
-                    "path": dir,
-                    "type": "directory"
-                })]
+        let locations = shell_params
+            .as_ref()
+            .and_then(|params| {
+                params.workdir.as_ref().map(|dir| {
+                    vec![ToolCallLocation {
+                        path: PathBuf::from(dir),
+                        line: None,
+                        meta: None,
+                    }]
+                })
             })
-        } else {
-            None
-        };
+            .unwrap_or_default();
 
-        // Format content based on output/error
-        let content =
-            if tool_status == ToolCallStatus::Completed || tool_status == ToolCallStatus::Failed {
-                let mut content_blocks = Vec::new();
+        let mut content_blocks: Vec<ToolCallContent> = Vec::new();
+        if let Some(ref out) = output {
+            let formatted = format_tool_output(&name, out, MAX_OUTPUT_PREVIEW_BYTES);
+            if !formatted.is_empty() {
+                content_blocks.push(ToolCallContent::from(formatted));
+            }
+        }
 
-                // Add output if present
-                if let Some(ref out) = output {
-                    let formatted = format_tool_output(&name, out, MAX_OUTPUT_PREVIEW_BYTES);
-                    if !formatted.is_empty() {
-                        content_blocks.push(ContentBlock::Text { text: formatted });
-                    }
-                }
+        if let Some(ref err) = error {
+            content_blocks.push(ToolCallContent::from(format!("[Error]: {}", err)));
+        }
 
-                // Add error if present
-                if let Some(ref err) = error {
-                    content_blocks.push(ContentBlock::Text {
-                        text: format!("[Error]: {}", err),
-                    });
-                }
-
-                // Default message if no output or error
-                if content_blocks.is_empty() {
-                    content_blocks.push(ContentBlock::Text {
-                        text: match tool_status {
-                            ToolCallStatus::Completed => {
-                                "Tool execution completed successfully".to_string()
-                            }
-                            ToolCallStatus::Failed => "Tool execution failed".to_string(),
-                            _ => format!("Tool status: {:?}", tool_status),
-                        },
-                    });
-                }
-
-                Some(content_blocks)
-            } else if tool_status == ToolCallStatus::InProgress {
-                Some(vec![ContentBlock::Text {
-                    text: "Tool is running...".to_string(),
-                }])
+        if matches!(
+            tool_status,
+            ToolCallStatus::Completed | ToolCallStatus::Failed
+        ) && content_blocks.is_empty()
+        {
+            let default_text = if tool_status == ToolCallStatus::Completed {
+                "Tool execution completed successfully"
             } else {
-                None
+                "Tool execution failed"
             };
+            content_blocks.push(ToolCallContent::from(default_text));
+        } else if tool_status == ToolCallStatus::InProgress && content_blocks.is_empty() {
+            content_blocks.push(ToolCallContent::from("Tool is running..."));
+        }
 
-        // Enhance raw_input with extracted parameters for debugging
-        let enhanced_raw_input = if let Some(ref params) = shell_params {
+        let enhanced_raw_input = if let Some(params) = shell_params.as_ref() {
             let mut enhanced = json!({
-                "original": arguments,
+                "original": arguments.clone(),
                 "extracted": {}
             });
 
@@ -495,85 +566,207 @@ impl CodexStreamManager {
             arguments.clone()
         };
 
-        // Prepare raw output for completed/failed states
-        let raw_output = if tool_status == ToolCallStatus::Completed
-            || tool_status == ToolCallStatus::Failed
-        {
+        let raw_output = if matches!(
+            tool_status,
+            ToolCallStatus::Completed | ToolCallStatus::Failed
+        ) {
             if let Some(ref err) = error {
                 Some(json!({
                     "status": "failed",
                     "error": err
                 }))
-            } else if let Some(ref out) = output {
-                // Include full output in raw_output
-                Some(out.clone())
+            } else if let Some(out) = output.clone() {
+                Some(out)
             } else {
                 Some(json!({
-                    "status": if tool_status == ToolCallStatus::Completed { "completed" } else { "failed" }
+                    "status": if tool_status == ToolCallStatus::Completed {
+                        "completed"
+                    } else {
+                        "failed"
+                    }
                 }))
             }
         } else {
             None
         };
 
-        // Create the appropriate update based on whether this is initial or update
-        let update = if is_initial {
-            // Initial tool call - send as ToolCall
+        let tool_call_id = ToolCallId(Arc::from(id.as_str()));
+        let record = ToolCallRecord {
+            status: tool_status,
+            title: title.clone(),
+            kind,
+            locations: locations.clone(),
+            raw_input: Some(enhanced_raw_input.clone()),
+        };
+
+        if let Some(previous) = self.tool_calls.get(&id).cloned() {
+            let mut fields = ToolCallUpdateFields {
+                status: Some(tool_status),
+                ..Default::default()
+            };
+
+            if previous.title != title {
+                fields.title = Some(title.clone());
+            }
+            if previous.kind != kind {
+                fields.kind = Some(kind);
+            }
+            if previous.locations != locations {
+                fields.locations = Some(locations.clone());
+            }
+            if previous.raw_input.as_ref() != Some(&enhanced_raw_input) {
+                fields.raw_input = Some(enhanced_raw_input.clone());
+            }
+            if !content_blocks.is_empty() {
+                fields.content = Some(content_blocks.clone());
+            }
+            if let Some(value) = raw_output.clone() {
+                fields.raw_output = Some(value);
+            }
+
+            let redundant = previous.status == tool_status
+                && fields.content.is_none()
+                && fields.raw_output.is_none()
+                && fields.title.is_none()
+                && fields.kind.is_none()
+                && fields.locations.is_none()
+                && fields.raw_input.is_none();
+
+            if redundant {
+                self.tool_calls.insert(id, record);
+                return Ok(());
+            }
+
+            if fields != ToolCallUpdateFields::default() {
+                let notification =
+                    self.build_notification(SessionUpdate::ToolCallUpdate(ToolCallUpdate {
+                        id: tool_call_id,
+                        fields,
+                        meta: None,
+                    }));
+                self.tx
+                    .send(notification)
+                    .context("Failed to send tool call update")?;
+            }
+        } else {
             debug!(
                 "Sending initial tool call {} with status {:?}",
                 id, tool_status
             );
-            SessionUpdate {
-                jsonrpc: "2.0".to_string(),
-                method: "session/update".to_string(),
-                params: SessionUpdateParams {
-                    session_id: self.session_id.clone(),
-                    update: SessionUpdateContent::ToolCall {
-                        tool_call_id: id,
-                        title: title.clone(),
-                        kind: kind.clone(),
-                        status: Some(tool_status),
-                        content: content.clone(),
-                        locations,
-                        raw_input: Some(enhanced_raw_input.clone()),
-                        raw_output: raw_output.clone(),
-                    },
-                },
-            }
-        } else {
-            // Status update - send as ToolCallUpdate
-            debug!(
-                "Sending tool call update for {} from {:?} to {:?}",
-                id, previous_status, tool_status
-            );
+            let notification = self.build_notification(SessionUpdate::ToolCall(ToolCall {
+                id: tool_call_id,
+                title,
+                kind,
+                status: tool_status,
+                content: content_blocks,
+                locations,
+                raw_input: Some(enhanced_raw_input.clone()),
+                raw_output: raw_output.clone(),
+                meta: None,
+            }));
+            self.tx
+                .send(notification)
+                .context("Failed to send tool call")?;
+        }
 
-            // Only send update if status actually changed or we have new output
-            if previous_status == Some(tool_status) && output.is_none() && error.is_none() {
-                trace!("Skipping duplicate status update for tool {}", id);
-                return Ok(());
-            }
+        self.tool_calls.insert(id, record);
 
-            SessionUpdate {
-                jsonrpc: "2.0".to_string(),
-                method: "session/update".to_string(),
-                params: SessionUpdateParams {
-                    session_id: self.session_id.clone(),
-                    update: SessionUpdateContent::ToolCallUpdate {
-                        tool_call_id: id,
-                        title: None, // Don't repeat title in updates
-                        kind: None,  // Don't repeat kind in updates
-                        status: Some(tool_status),
-                        content,
-                        locations: None,
-                        raw_input: None, // Already sent in initial call
-                        raw_output,
-                    },
-                },
-            }
+        Ok(())
+    }
+
+    async fn handle_error(&mut self, message: String, code: Option<String>) -> Result<()> {
+        error!("Codex error: {} (code: {:?})", message, code);
+
+        let error_category = match code.as_deref() {
+            Some("timeout") | Some("TIMEOUT") => "timeout",
+            Some("permission_denied") | Some("PERMISSION_DENIED") => "permission_denied",
+            Some("not_found") | Some("NOT_FOUND") => "not_found",
+            Some("cancelled") | Some("CANCELLED") => "cancelled",
+            Some("rate_limit") | Some("RATE_LIMIT") => "rate_limit",
+            _ => "error",
         };
 
-        self.tx.send(update).context("Failed to send tool call")?;
+        if let Some(tool_id) = self.last_tool_call_id.clone() {
+            let error_text = match error_category {
+                "timeout" => format!("Tool execution timed out: {}", message),
+                "permission_denied" => format!("Permission denied: {}", message),
+                "not_found" => format!("Resource not found: {}", message),
+                "cancelled" => format!("Tool execution cancelled: {}", message),
+                "rate_limit" => format!("Rate limit exceeded: {}", message),
+                _ => {
+                    if let Some(ref code) = code {
+                        format!("Error [{}]: {}", code, message)
+                    } else {
+                        format!("Error: {}", message)
+                    }
+                }
+            };
+
+            let mut fields = ToolCallUpdateFields {
+                status: Some(ToolCallStatus::Failed),
+                content: Some(vec![ToolCallContent::from(error_text)]),
+                raw_output: Some(acp_error_value(error_category, &message, code.as_deref())),
+                ..Default::default()
+            };
+
+            if let Some(record) = self.tool_calls.get_mut(&tool_id) {
+                record.status = ToolCallStatus::Failed;
+                if let Some(raw_input) = record.raw_input.clone() {
+                    fields.raw_input = Some(raw_input);
+                }
+                if !record.locations.is_empty() {
+                    fields.locations = Some(record.locations.clone());
+                }
+                fields.title = Some(record.title.clone());
+                fields.kind = Some(record.kind);
+
+                let notification =
+                    self.build_notification(SessionUpdate::ToolCallUpdate(ToolCallUpdate {
+                        id: ToolCallId(Arc::from(tool_id.as_str())),
+                        fields,
+                        meta: None,
+                    }));
+                self.tx
+                    .send(notification)
+                    .context("Failed to send error update")?;
+            } else {
+                let notification =
+                    self.build_notification(SessionUpdate::ToolCallUpdate(ToolCallUpdate {
+                        id: ToolCallId(Arc::from(tool_id.as_str())),
+                        fields,
+                        meta: None,
+                    }));
+                self.tx
+                    .send(notification)
+                    .context("Failed to send error update")?;
+            }
+        } else {
+            let error_msg = match error_category {
+                "timeout" => format!("Operation timed out: {}", message),
+                "permission_denied" => format!("Permission denied: {}", message),
+                "not_found" => format!("Not found: {}", message),
+                "cancelled" => format!("Operation cancelled: {}", message),
+                "rate_limit" => format!("Rate limit exceeded: {}", message),
+                _ => {
+                    if let Some(ref code) = code {
+                        format!("Error [{}]: {}", code, message)
+                    } else {
+                        format!("Error: {}", message)
+                    }
+                }
+            };
+            self.send_chunk(error_msg).await?;
+        }
+
         Ok(())
+    }
+
+    fn build_notification(&self, update: SessionUpdate) -> SessionNotification {
+        SessionNotification {
+            session_id: self.session_id.clone(),
+            update,
+            meta: None,
+        }
     }
 
     /// Check if streaming is finalized
@@ -582,11 +775,240 @@ impl CodexStreamManager {
     }
 }
 
+fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
+    PlanEntry {
+        content: item.step,
+        priority: PlanEntryPriority::Medium,
+        status: match item.status {
+            CodexStepStatus::Pending => PlanEntryStatus::Pending,
+            CodexStepStatus::InProgress => PlanEntryStatus::InProgress,
+            CodexStepStatus::Completed => PlanEntryStatus::Completed,
+        },
+        meta: None,
+    }
+}
+
+fn available_command_from_tool(key: &str, tool: CodexToolDefinition) -> Option<AvailableCommand> {
+    let name = key.to_string();
+    let description = tool
+        .annotations
+        .as_ref()
+        .and_then(|a| a.description.clone())
+        .or(tool.description.clone())
+        .or(tool.title.clone())
+        .unwrap_or_else(|| name.clone());
+
+    Some(AvailableCommand {
+        name,
+        description,
+        input: None,
+        meta: None,
+    })
+}
+
+fn content_block_from_string(text: &str) -> ContentBlock {
+    match serde_json::from_str::<Value>(text) {
+        Ok(Value::Object(obj)) => {
+            let value = Value::Object(obj);
+            content_block_from_value(&value).unwrap_or_else(|| ContentBlock::from(text.to_string()))
+        }
+        _ => ContentBlock::from(text.to_string()),
+    }
+}
+
+fn content_block_from_value(value: &Value) -> Option<ContentBlock> {
+    let obj = value.as_object()?;
+    let block_type = obj.get("type")?.as_str()?;
+    match block_type {
+        "text" => {
+            let text = obj.get("text")?.as_str()?.to_string();
+            Some(ContentBlock::Text(TextContent {
+                annotations: None,
+                text,
+                meta: None,
+            }))
+        }
+        "image" => {
+            let data = obj.get("data")?.as_str()?.to_string();
+            let mime_type = obj
+                .get("mimeType")
+                .and_then(|v| v.as_str())
+                .unwrap_or("image/png")
+                .to_string();
+            let uri = obj.get("uri").and_then(|v| v.as_str()).map(String::from);
+            Some(ContentBlock::Image(ImageContent {
+                annotations: None,
+                data,
+                mime_type,
+                uri,
+                meta: None,
+            }))
+        }
+        "audio" => {
+            let data = obj.get("data")?.as_str()?.to_string();
+            let mime_type = obj
+                .get("mimeType")
+                .and_then(|v| v.as_str())
+                .unwrap_or("audio/mpeg")
+                .to_string();
+            Some(ContentBlock::Audio(AudioContent {
+                annotations: None,
+                data,
+                mime_type,
+                meta: None,
+            }))
+        }
+        "resource_link" => {
+            let uri = obj.get("uri")?.as_str()?.to_string();
+            let name = obj
+                .get("name")
+                .and_then(|v| v.as_str())
+                .unwrap_or(&uri)
+                .to_string();
+            let description = obj
+                .get("description")
+                .and_then(|v| v.as_str())
+                .map(String::from);
+            let mime_type = obj
+                .get("mimeType")
+                .and_then(|v| v.as_str())
+                .map(String::from);
+            let title = obj.get("title").and_then(|v| v.as_str()).map(String::from);
+            let size = obj.get("size").and_then(|v| v.as_i64());
+            Some(ContentBlock::ResourceLink(ResourceLink {
+                annotations: None,
+                description,
+                mime_type,
+                name,
+                size,
+                title,
+                uri,
+                meta: None,
+            }))
+        }
+        "resource" => {
+            let resource = obj.get("resource")?.as_object()?;
+            let embedded = if let Some(text) = resource.get("text").and_then(|v| v.as_str()) {
+                let uri = resource
+                    .get("uri")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string();
+                let mime_type = resource
+                    .get("mimeType")
+                    .and_then(|v| v.as_str())
+                    .map(String::from);
+                EmbeddedResourceResource::TextResourceContents(TextResourceContents {
+                    mime_type,
+                    text: text.to_string(),
+                    uri,
+                    meta: None,
+                })
+            } else if let Some(blob) = resource.get("blob").and_then(|v| v.as_str()) {
+                let uri = resource
+                    .get("uri")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string();
+                let mime_type = resource
+                    .get("mimeType")
+                    .and_then(|v| v.as_str())
+                    .map(String::from);
+                EmbeddedResourceResource::BlobResourceContents(BlobResourceContents {
+                    blob: blob.to_string(),
+                    mime_type,
+                    uri,
+                    meta: None,
+                })
+            } else {
+                return None;
+            };
+
+            Some(ContentBlock::Resource(EmbeddedResource {
+                annotations: None,
+                resource: embedded,
+                meta: None,
+            }))
+        }
+        _ => None,
+    }
+}
+
+fn content_block_from_image_source(source: &str) -> Option<ContentBlock> {
+    if let Some(image) = parse_data_uri_image(source) {
+        return Some(ContentBlock::Image(image));
+    }
+
+    if source.starts_with("http://") || source.starts_with("https://") {
+        return Some(ContentBlock::ResourceLink(ResourceLink {
+            annotations: None,
+            description: None,
+            mime_type: None,
+            name: source.to_string(),
+            size: None,
+            title: None,
+            uri: source.to_string(),
+            meta: None,
+        }));
+    }
+
+    None
+}
+
+fn parse_data_uri_image(data_uri: &str) -> Option<ImageContent> {
+    if !data_uri.starts_with("data:") {
+        return None;
+    }
+
+    let mut parts = data_uri.splitn(2, ',');
+    let header = parts.next()?;
+    let data = parts.next()?.to_string();
+    let mime_type = header
+        .trim_start_matches("data:")
+        .trim_end_matches(";base64")
+        .to_string();
+
+    Some(ImageContent {
+        annotations: None,
+        data,
+        mime_type,
+        uri: None,
+        meta: None,
+    })
+}
+
+fn acp_error_value(category: &str, message: &str, code: Option<&str>) -> Value {
+    let numeric_code = match category {
+        "timeout" => -32001,
+        "permission_denied" => -32002,
+        "not_found" => -32003,
+        "cancelled" => -32004,
+        "rate_limit" => -32005,
+        _ => -32603,
+    };
+
+    let error = AcpError::new((numeric_code, message.to_string())).with_data(json!({
+        "category": category,
+        "codex_code": code,
+    }));
+
+    serde_json::to_value(error).unwrap_or_else(|_| {
+        json!({
+            "code": numeric_code,
+            "message": message,
+            "data": {
+                "category": category,
+                "codex_code": code
+            }
+        })
+    })
+}
+
 /// Read and process Codex stdout
 pub async fn stream_codex_output<R>(
     reader: R,
-    session_id: String,
-    tx: mpsc::UnboundedSender<SessionUpdate>,
+    session_id: SessionId,
+    tx: mpsc::UnboundedSender<SessionNotification>,
 ) -> Result<()>
 where
     R: tokio::io::AsyncRead + Unpin,
@@ -603,17 +1025,11 @@ where
             .context("Failed to read from Codex stdout")?;
 
         if bytes_read == 0 {
-            // EOF reached
             break;
         }
 
         if let Err(e) = manager.process_line(&line).await {
-            error!(
-                "Error processing Codex output line '{}': {}",
-                line.trim(),
-                e
-            );
-            // Continue processing other lines despite individual errors
+            error!("Error processing Codex output line {}: {}", line.trim(), e);
         }
 
         if manager.is_finalized() {
@@ -625,7 +1041,7 @@ where
     Ok(())
 }
 
-/// Serialize a session update to JSON line
-pub fn serialize_update(update: &SessionUpdate) -> Result<String> {
-    serde_json::to_string(update).context("Failed to serialize session update")
+/// Serialize a session notification to JSON line
+pub fn serialize_update(update: &SessionNotification) -> Result<String> {
+    serde_json::to_string(update).context("Failed to serialize session notification")
 }

@@ -43,11 +43,11 @@ impl Default for RuntimeConfig {
             idle_timeout_ms: std::env::var("ACPLB_IDLE_TIMEOUT_MS")
                 .ok()
                 .and_then(|s| s.parse().ok())
-                .unwrap_or(1_200),
+                .unwrap_or(1_000_000), // Increased from 1.2s to 1000s for API calls
             polling_interval_ms: std::env::var("ACPLB_POLLING_INTERVAL_MS")
                 .ok()
                 .and_then(|s| s.parse().ok())
-                .unwrap_or(100),
+                .unwrap_or(1000),
             evidence_path: std::env::var("ACPLB_EVIDENCE_PATH").ok().map(PathBuf::from),
         }
     }

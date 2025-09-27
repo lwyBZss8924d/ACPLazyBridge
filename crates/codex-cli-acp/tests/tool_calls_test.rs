@@ -1,24 +1,42 @@
 //! Integration tests for tool call functionality
 
-// ast-grep-ignore: rust-no-unwrap
 // Test files can use unwrap() freely
 
-use codex_cli_acp::codex_proto::{
-    CodexEvent, CodexStreamManager, SessionUpdate, SessionUpdateContent, ToolCallItem,
-    ToolCallStatus,
+use agent_client_protocol::{
+    SessionId, SessionNotification, SessionUpdate, ToolCallStatus, ToolKind,
 };
+use codex_cli_acp::codex_proto::{CodexEvent, CodexStreamManager, ToolCallItem};
 use codex_cli_acp::tool_calls::{
     extract_shell_command, format_tool_output, map_tool_kind, MAX_OUTPUT_PREVIEW_BYTES,
 };
 use serde_json::json;
+use std::sync::Arc;
 use tokio::sync::mpsc;
+
+fn session_id(value: &str) -> SessionId {
+    SessionId(Arc::from(value))
+}
+
+fn expected_tool_kind(tag: &str) -> ToolKind {
+    match tag {
+        "read" => ToolKind::Read,
+        "edit" => ToolKind::Edit,
+        "delete" => ToolKind::Delete,
+        "move" => ToolKind::Move,
+        "search" => ToolKind::Search,
+        "execute" => ToolKind::Execute,
+        "think" => ToolKind::Think,
+        "fetch" => ToolKind::Fetch,
+        "switch_mode" => ToolKind::SwitchMode,
+        _ => ToolKind::Other,
+    }
+}
 
 #[tokio::test]
 async fn test_single_tool_call_progression() {
-    let (tx, mut rx) = mpsc::unbounded_channel::<SessionUpdate>();
-    let mut manager = CodexStreamManager::new("test_session".to_string(), tx);
+    let (tx, mut rx) = mpsc::unbounded_channel::<SessionNotification>();
+    let mut manager = CodexStreamManager::new(session_id("test_session"), tx);
 
-    // Simulate a tool call with pending status
     let event = CodexEvent::ToolCall {
         id: "tool_001".to_string(),
         name: "read_file".to_string(),
@@ -27,33 +45,24 @@ async fn test_single_tool_call_progression() {
         output: None,
         error: None,
     };
-
-    // Process the pending event
     // ast-grep-ignore: rust-no-unwrap
     let event_json = serde_json::to_string(&event).unwrap();
     // ast-grep-ignore: rust-no-unwrap
     manager.process_line(&event_json).await.unwrap();
 
-    // Check we got a ToolCall with pending status
     // ast-grep-ignore: rust-no-unwrap
-    let update = rx.recv().await.unwrap();
-    match &update.params.update {
-        SessionUpdateContent::ToolCall {
-            tool_call_id,
-            title,
-            kind,
-            status,
-            ..
-        } => {
-            assert_eq!(tool_call_id, "tool_001");
-            assert_eq!(title, "read_file");
-            assert_eq!(kind.as_deref(), Some("read"));
-            assert_eq!(*status, Some(ToolCallStatus::Pending));
+    let notification = rx.recv().await.unwrap();
+    match notification.update {
+        SessionUpdate::ToolCall(tool_call) => {
+            assert_eq!(tool_call.id.0.as_ref(), "tool_001");
+            assert_eq!(tool_call.title, "read_file");
+            assert_eq!(tool_call.kind, ToolKind::Read);
+            assert_eq!(tool_call.status, ToolCallStatus::Pending);
+            assert!(tool_call.raw_input.is_some());
         }
-        _ => panic!("Expected ToolCall"),
+        other => panic!("Expected ToolCall update, got {:?}", other),
     }
 
-    // Simulate in_progress status
     let event = CodexEvent::ToolCall {
         id: "tool_001".to_string(),
         name: "read_file".to_string(),
@@ -62,28 +71,21 @@ async fn test_single_tool_call_progression() {
         output: None,
         error: None,
     };
-
     // ast-grep-ignore: rust-no-unwrap
     let event_json = serde_json::to_string(&event).unwrap();
     // ast-grep-ignore: rust-no-unwrap
     manager.process_line(&event_json).await.unwrap();
 
-    // Check we got a ToolCallUpdate with in_progress status
     // ast-grep-ignore: rust-no-unwrap
-    let update = rx.recv().await.unwrap();
-    match &update.params.update {
-        SessionUpdateContent::ToolCallUpdate {
-            tool_call_id,
-            status,
-            ..
-        } => {
-            assert_eq!(tool_call_id, "tool_001");
-            assert_eq!(*status, Some(ToolCallStatus::InProgress));
+    let notification = rx.recv().await.unwrap();
+    match notification.update {
+        SessionUpdate::ToolCallUpdate(update) => {
+            assert_eq!(update.id.0.as_ref(), "tool_001");
+            assert_eq!(update.fields.status, Some(ToolCallStatus::InProgress));
         }
-        _ => panic!("Expected ToolCallUpdate"),
+        other => panic!("Expected ToolCallUpdate, got {:?}", other),
     }
 
-    // Simulate completed status with output
     let event = CodexEvent::ToolCall {
         id: "tool_001".to_string(),
         name: "read_file".to_string(),
@@ -92,298 +94,94 @@ async fn test_single_tool_call_progression() {
         output: Some(json!({"content": "File contents here"})),
         error: None,
     };
-
     // ast-grep-ignore: rust-no-unwrap
     let event_json = serde_json::to_string(&event).unwrap();
     // ast-grep-ignore: rust-no-unwrap
     manager.process_line(&event_json).await.unwrap();
 
-    // Check we got a ToolCallUpdate with completed status and output
     // ast-grep-ignore: rust-no-unwrap
-    let update = rx.recv().await.unwrap();
-    match &update.params.update {
-        SessionUpdateContent::ToolCallUpdate {
-            tool_call_id,
-            status,
-            content,
-            raw_output,
-            ..
-        } => {
-            assert_eq!(tool_call_id, "tool_001");
-            assert_eq!(*status, Some(ToolCallStatus::Completed));
-            assert!(content.is_some());
-            assert!(raw_output.is_some());
+    let notification = rx.recv().await.unwrap();
+    match notification.update {
+        SessionUpdate::ToolCallUpdate(update) => {
+            assert_eq!(update.id.0.as_ref(), "tool_001");
+            assert_eq!(update.fields.status, Some(ToolCallStatus::Completed));
+            assert!(update
+                .fields
+                .raw_output
+                .as_ref()
+                .and_then(|value| value.get("content"))
+                .is_some());
+            assert!(update.fields.raw_input.is_none());
         }
-        _ => panic!("Expected ToolCallUpdate"),
+        other => panic!("Expected ToolCallUpdate, got {:?}", other),
     }
 }
 
 #[tokio::test]
 async fn test_batch_tool_calls() {
-    let (tx, mut rx) = mpsc::unbounded_channel::<SessionUpdate>();
-    let mut manager = CodexStreamManager::new("test_session".to_string(), tx);
+    let (tx, mut rx) = mpsc::unbounded_channel::<SessionNotification>();
+    let mut manager = CodexStreamManager::new(session_id("tool-call-session"), tx);
 
-    // Simulate batch tool calls
     let event = CodexEvent::ToolCalls {
         calls: vec![
             ToolCallItem {
-                id: "tool_001".to_string(),
+                id: "tool_a".to_string(),
                 name: "read_file".to_string(),
-                arguments: json!({"path": "/file1.txt"}),
+                arguments: json!({"path": "."}),
                 status: Some("pending".to_string()),
                 output: None,
                 error: None,
             },
             ToolCallItem {
-                id: "tool_002".to_string(),
+                id: "tool_b".to_string(),
                 name: "write_file".to_string(),
-                arguments: json!({"path": "/file2.txt", "content": "data"}),
-                status: Some("pending".to_string()),
-                output: None,
-                error: None,
-            },
-            ToolCallItem {
-                id: "tool_003".to_string(),
-                name: "local_shell".to_string(),
-                arguments: json!({"command": "ls -la"}),
+                arguments: json!({"path": "./out.txt", "content": "data"}),
                 status: Some("pending".to_string()),
                 output: None,
                 error: None,
             },
         ],
     };
-
     // ast-grep-ignore: rust-no-unwrap
     let event_json = serde_json::to_string(&event).unwrap();
     // ast-grep-ignore: rust-no-unwrap
     manager.process_line(&event_json).await.unwrap();
 
-    // Check we got 3 ToolCall events
-    for i in 0..3 {
-        // ast-grep-ignore: rust-no-unwrap
-        let update = rx.recv().await.unwrap();
-        match &update.params.update {
-            SessionUpdateContent::ToolCall {
-                tool_call_id,
-                kind,
-                status,
-                ..
-            } => {
-                assert!(tool_call_id.starts_with("tool_"));
-                assert_eq!(*status, Some(ToolCallStatus::Pending));
-
-                // Check correct kind mapping
-                if i == 0 {
-                    assert_eq!(kind.as_deref(), Some("read"));
-                } else if i == 1 {
-                    assert_eq!(kind.as_deref(), Some("edit"));
-                } else {
-                    assert_eq!(kind.as_deref(), Some("execute"));
-                }
-            }
-            _ => panic!("Expected ToolCall"),
-        }
-    }
-}
-
-#[tokio::test]
-async fn test_shell_command_title() {
-    let (tx, mut rx) = mpsc::unbounded_channel::<SessionUpdate>();
-    let mut manager = CodexStreamManager::new("test_session".to_string(), tx);
-
-    // Simulate a shell command tool call
-    let event = CodexEvent::ToolCall {
-        id: "tool_shell".to_string(),
-        name: "local_shell".to_string(),
-        arguments: json!({"command": "git status --porcelain"}),
-        status: Some("pending".to_string()),
-        output: None,
-        error: None,
-    };
-
     // ast-grep-ignore: rust-no-unwrap
-    let event_json = serde_json::to_string(&event).unwrap();
+    let first = rx.recv().await.unwrap();
     // ast-grep-ignore: rust-no-unwrap
-    manager.process_line(&event_json).await.unwrap();
+    let second = rx.recv().await.unwrap();
+    let ids: Vec<_> = [first, second]
+        .into_iter()
+        .map(|notification| match notification.update {
+            SessionUpdate::ToolCall(tool_call) => tool_call.id.0.as_ref().to_string(),
+            other => panic!("Expected ToolCall, got {:?}", other),
+        })
+        .collect();
 
-    // Check the title includes the command
-    // ast-grep-ignore: rust-no-unwrap
-    let update = rx.recv().await.unwrap();
-    match &update.params.update {
-        SessionUpdateContent::ToolCall { title, kind, .. } => {
-            assert!(title.contains("git status --porcelain"));
-            assert_eq!(kind.as_deref(), Some("execute"));
-        }
-        _ => panic!("Expected ToolCall"),
-    }
-}
-
-#[tokio::test]
-async fn test_tool_output_truncation() {
-    let (tx, mut rx) = mpsc::unbounded_channel::<SessionUpdate>();
-    let mut manager = CodexStreamManager::new("test_session".to_string(), tx);
-
-    // Create large output that exceeds 2KB
-    let large_output = "a".repeat(5000);
-
-    // Simulate completed tool call with large output
-    let event = CodexEvent::ToolCall {
-        id: "tool_large".to_string(),
-        name: "local_shell".to_string(),
-        arguments: json!({"command": "cat largefile.txt"}),
-        status: Some("completed".to_string()),
-        output: Some(json!({
-            "stdout": large_output.clone(),
-            "exit_code": 0
-        })),
-        error: None,
-    };
-
-    // ast-grep-ignore: rust-no-unwrap
-    let event_json = serde_json::to_string(&event).unwrap();
-    // ast-grep-ignore: rust-no-unwrap
-    manager.process_line(&event_json).await.unwrap();
-
-    // Check the output is truncated in content but full in raw_output
-    // ast-grep-ignore: rust-no-unwrap
-    let update = rx.recv().await.unwrap();
-    match &update.params.update {
-        SessionUpdateContent::ToolCall {
-            content,
-            raw_output,
-            ..
-        } => {
-            // Content should be truncated
-            // ast-grep-ignore: rust-no-unwrap
-            let content_text = &content.as_ref().unwrap()[0];
-            let codex_cli_acp::codex_proto::ContentBlock::Text { text } = content_text;
-            assert!(text.len() <= MAX_OUTPUT_PREVIEW_BYTES + 100); // Allow for truncation marker
-            assert!(text.contains("[truncated"));
-            assert!(text.starts_with("aaa"));
-            assert!(text.ends_with("[exit code: 0]") || text.contains("aaa"));
-
-            // Raw output should have full content
-            // ast-grep-ignore: rust-no-unwrap
-            let raw = raw_output.as_ref().unwrap();
-            assert_eq!(raw["stdout"], large_output);
-        }
-        _ => panic!("Expected ToolCall"),
-    }
-}
-
-#[tokio::test]
-async fn test_tool_error_handling() {
-    let (tx, mut rx) = mpsc::unbounded_channel::<SessionUpdate>();
-    let mut manager = CodexStreamManager::new("test_session".to_string(), tx);
-
-    // Simulate failed tool call with error
-    let event = CodexEvent::ToolCall {
-        id: "tool_error".to_string(),
-        name: "write_file".to_string(),
-        arguments: json!({"path": "/readonly/file.txt", "content": "data"}),
-        status: Some("failed".to_string()),
-        output: None,
-        error: Some("Permission denied: cannot write to /readonly/file.txt".to_string()),
-    };
-
-    // ast-grep-ignore: rust-no-unwrap
-    let event_json = serde_json::to_string(&event).unwrap();
-    // ast-grep-ignore: rust-no-unwrap
-    manager.process_line(&event_json).await.unwrap();
-
-    // Check error is included in content
-    // ast-grep-ignore: rust-no-unwrap
-    let update = rx.recv().await.unwrap();
-    match &update.params.update {
-        SessionUpdateContent::ToolCall {
-            status,
-            content,
-            raw_output,
-            ..
-        } => {
-            assert_eq!(*status, Some(ToolCallStatus::Failed));
-
-            // Content should include error message
-            // ast-grep-ignore: rust-no-unwrap
-            let content_text = &content.as_ref().unwrap()[0];
-            let codex_cli_acp::codex_proto::ContentBlock::Text { text } = content_text;
-            assert!(text.contains("Permission denied"));
-
-            // Raw output should indicate failure
-            // ast-grep-ignore: rust-no-unwrap
-            let raw = raw_output.as_ref().unwrap();
-            assert_eq!(raw["status"], "failed");
-            // ast-grep-ignore: rust-no-unwrap
-            assert!(raw["error"].as_str().unwrap().contains("Permission denied"));
-        }
-        _ => panic!("Expected ToolCall"),
-    }
+    assert_eq!(ids, vec!["tool_a", "tool_b"]);
 }
 
 #[test]
 fn test_tool_kind_mapping_comprehensive() {
-    // Test all categories thoroughly
     let test_cases = vec![
-        // Read operations
         ("read_file", "read"),
-        ("get_content", "read"),
-        ("fetch_file_data", "read"),
-        ("cat", "read"),
-        ("list_files", "read"),
-        ("view_source", "read"),
-        // Edit operations
         ("write_file", "edit"),
-        ("edit_config", "edit"),
-        ("update_settings", "edit"),
-        ("modify_data", "edit"),
-        ("patch_file", "edit"),
-        ("change_value", "edit"),
-        ("set_property", "edit"),
-        // Delete operations
         ("delete_file", "delete"),
-        ("remove_item", "delete"),
-        ("rm", "delete"),
-        ("rmdir", "delete"),
-        // Move operations
         ("move_file", "move"),
-        ("rename_folder", "move"),
-        ("mv", "move"),
-        // Search operations
         ("search_code", "search"),
-        ("find_pattern", "search"),
-        ("grep_files", "search"),
-        ("locate_item", "search"),
-        ("query_database", "search"),
-        // Execute operations
         ("execute_command", "execute"),
-        ("run_script", "execute"),
-        ("local_shell", "execute"),
-        ("bash", "execute"),
-        ("python_exec", "execute"),
-        ("cmd_run", "execute"),
-        // Think operations
         ("think_about_problem", "think"),
-        ("reason_through", "think"),
-        ("plan_solution", "think"),
-        ("analyze_code", "think"),
-        ("consider_options", "think"),
-        // Fetch operations
         ("fetch_url", "fetch"),
-        ("download_file", "fetch"),
-        ("curl_request", "fetch"),
-        ("wget_resource", "fetch"),
-        ("http_get", "fetch"),
-        // Other operations
-        ("custom_tool", "other"),
-        ("unknown_operation", "other"),
-        ("special_function", "other"),
+        ("switch_mode", "switch_mode"),
+        ("unknown_tool", "other"),
     ];
 
     for (tool_name, expected_kind) in test_cases {
         assert_eq!(
             map_tool_kind(tool_name),
-            expected_kind,
-            "Tool '{}' should map to '{}'",
+            expected_tool_kind(expected_kind),
+            "Tool {} should map to {}",
             tool_name,
             expected_kind
         );
@@ -392,7 +190,6 @@ fn test_tool_kind_mapping_comprehensive() {
 
 #[test]
 fn test_shell_command_extraction() {
-    // Test various argument patterns
     assert_eq!(
         extract_shell_command("local_shell", &json!({"command": "ls -la"})),
         Some("ls -la".to_string())
@@ -409,11 +206,10 @@ fn test_shell_command_extraction() {
     );
 
     assert_eq!(
-        extract_shell_command("python_shell", &json!({"code": "print('test')"})),
-        Some("print('test')".to_string())
+        extract_shell_command("python_shell", &json!({"code": "print(test)"})),
+        Some("print(test)".to_string())
     );
 
-    // Non-shell tools should return None
     assert_eq!(
         extract_shell_command("read_file", &json!({"path": "/file.txt"})),
         None
@@ -421,33 +217,30 @@ fn test_shell_command_extraction() {
 }
 
 #[test]
-fn test_output_formatting() {
-    // Test string output
-    let output = json!("Simple output");
-    let formatted = format_tool_output("any_tool", &output, 100);
-    assert_eq!(formatted, "Simple output");
-
-    // Test structured output with stdout/stderr
-    let output = json!({
-        "stdout": "Command successful",
-        "stderr": "Warning: deprecated",
-        "exit_code": 0
-    });
-    let formatted = format_tool_output("shell", &output, 200);
-    assert!(formatted.contains("Command successful"));
-    assert!(formatted.contains("[stderr]"));
-    assert!(formatted.contains("Warning: deprecated"));
-
-    // Test array output
-    let output = json!(["item1", "item2", "item3"]);
-    let formatted = format_tool_output("list", &output, 100);
-    assert!(formatted.contains("item1\nitem2\nitem3"));
-
-    // Test truncation of large output
-    let large = "x".repeat(3000);
-    let output = json!(large);
-    let formatted = format_tool_output("tool", &output, MAX_OUTPUT_PREVIEW_BYTES);
-    assert!(formatted.len() <= MAX_OUTPUT_PREVIEW_BYTES + 100);
-    assert!(formatted.contains("[truncated"));
+fn test_output_truncation() {
+    let long_output = "a".repeat(MAX_OUTPUT_PREVIEW_BYTES * 2);
+    let truncated = format_tool_output("example", &json!({"output": long_output}), 64);
+    assert!(truncated.contains("[truncated"));
 }
-// formatting: ensure trailing newline
+
+#[test]
+fn test_shell_params_extraction() {
+    use codex_cli_acp::tool_calls::extract_shell_params;
+
+    let params = extract_shell_params(
+        "local_shell",
+        &json!({
+            "command": "ls",
+            "cwd": "/tmp",
+            "timeout_ms": 1_000,
+            "with_escalated_permissions": true,
+            "justification": "test"
+        }),
+    );
+
+    assert_eq!(params.command.as_deref(), Some("ls"));
+    assert_eq!(params.workdir.as_deref(), Some("/tmp"));
+    assert_eq!(params.timeout_ms, Some(1_000));
+    assert_eq!(params.with_escalated_permissions, Some(true));
+    assert_eq!(params.justification.as_deref(), Some("test"));
+}

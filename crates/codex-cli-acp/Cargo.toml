@@ -28,7 +28,9 @@ acp-lazy-core = { path = "../acp-lazy-core" }
 agent-client-protocol = { workspace = true }
 
 [dev-dependencies]
+insta = { version = "1", features = ["json"] }
 tempfile = "3"
+chrono = "0.4"
 
 [features]
 unstable = ["acp-lazy-core/unstable"]

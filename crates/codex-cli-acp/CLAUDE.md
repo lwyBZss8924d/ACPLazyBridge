@@ -420,12 +420,12 @@ cat scenario.jsonl | cargo run | jq -c . > /dev/null && echo "Valid JSONL"
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-27T11:37:10Z"
 document:
     type: "claude-memory"
     path: "./crates/codex-cli-acp/CLAUDE.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-27T11:37:10Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - "./CLAUDE.md"

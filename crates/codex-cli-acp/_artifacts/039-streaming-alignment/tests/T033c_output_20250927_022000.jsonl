@@ -1,0 +1,8 @@
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"agentCapabilities":{"loadSession":false,"promptCapabilities":{"image":false,"audio":false,"embeddedContext":false},"mcpCapabilities":{"http":false,"sse":false}},"authMethods":[]}}
+{"jsonrpc":"2.0","id":2,"result":{"sessionId":"session-3217b807-f5ef-4892-a8cb-a26facd61f57"}}
+{"sessionId":"session-3217b807-f5ef-4892-a8cb-a26facd61f57","update":{"sessionUpdate":"current_mode_update","currentModeId":"gpt-5-codex"}}
+{"sessionId":"session-3217b807-f5ef-4892-a8cb-a26facd61f57","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":"Hello"}}}
+{"sessionId":"session-3217b807-f5ef-4892-a8cb-a26facd61f57","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":" there"}}}
+{"sessionId":"session-3217b807-f5ef-4892-a8cb-a26facd61f57","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":"!"}}}
+{"sessionId":"session-3217b807-f5ef-4892-a8cb-a26facd61f57","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":"Hello there!"}}}
+{"jsonrpc":"2.0","id":3,"result":{"stopReason":"end_turn"}}
