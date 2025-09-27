@@ -1,17 +1,28 @@
 //! Tool call utilities for mapping Codex events to ACP protocol
 //!
-//! This module provides utilities for:
-//! - Mapping tool names to ACP ToolKind categories
-//! - Truncating tool output for preview (2KB limit)
-//! - Formatting tool calls for ACP protocol compliance
+//! Helpers in this module enrich Codex tool call payloads so they can be fed
+//! directly into `agent_client_protocol::ToolCall` / `ToolCallUpdate` values.
+//! Responsibilities include:
+//!
+//! - Categorising tool identifiers into official `ToolKind` enums for UI parity.
+//! - Extracting command metadata (cwd, timeout, escalation flags) that becomes
+//!   `ToolCall.locations` and `ToolCallUpdateFields` deltas.
+//! - Generating UTF-8 safe output previews that slot into ACP content blocks
+//!   without truncation artefacts.
+//! - Preserving raw Codex payloads so downstream clients can inspect
+//!   `raw_input` / `raw_output` fields during lifecycle transitions.
 
+use agent_client_protocol::ToolKind;
 use serde_json::Value;
 use tracing::debug;
 
 /// Maximum size for tool output preview in bytes (2KB)
 pub const MAX_OUTPUT_PREVIEW_BYTES: usize = 2048;
 
-/// Extracted shell tool parameters matching Codex's ShellToolCallParams
+/// Extracted shell tool parameters matching the Codex ShellToolCallParams contract
+///
+/// These values populate ToolCall.locations and the optional
+/// ToolCallUpdateFields entries when Codex emits lifecycle deltas.
 #[derive(Debug, Clone, Default)]
 pub struct ExtractedShellParams {
     pub command: Option<String>,
@@ -25,8 +36,18 @@ pub struct ExtractedShellParams {
 ///
 /// This function categorizes tools based on their names to help clients
 /// choose appropriate icons and UI treatment.
-pub fn map_tool_kind(tool_name: &str) -> String {
+pub fn map_tool_kind(tool_name: &str) -> ToolKind {
     let name_lower = tool_name.to_lowercase();
+
+    // Detect explicit mode switching tools
+    if name_lower.contains("switch_mode")
+        || name_lower.contains("mode_switch")
+        || name_lower.contains("set_mode")
+        || name_lower.contains("switch-session-mode")
+        || name_lower.contains("session_mode_switch")
+    {
+        return ToolKind::SwitchMode;
+    }
 
     // Check for fetch operations first (network tools often have specific prefixes)
     if (name_lower.contains("fetch") && !name_lower.contains("fetch_file"))
@@ -35,7 +56,7 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("wget")
         || name_lower.contains("http")
     {
-        return "fetch".to_string();
+        return ToolKind::Fetch;
     }
 
     // Check for search operations (before read, as some search tools contain "get")
@@ -45,7 +66,7 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("locate")
         || name_lower.contains("query")
     {
-        return "search".to_string();
+        return ToolKind::Search;
     }
 
     // Check for read operations
@@ -56,7 +77,7 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("cat")
         || name_lower.contains("list")
     {
-        return "read".to_string();
+        return ToolKind::Read;
     }
 
     // Check for edit operations
@@ -66,9 +87,8 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("modify")
         || name_lower.contains("patch")
         || name_lower.contains("change")
-        || name_lower.contains("set")
     {
-        return "edit".to_string();
+        return ToolKind::Edit;
     }
 
     // Check for delete operations
@@ -76,13 +96,13 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("remove")
         || name_lower.starts_with("rm")
     {
-        return "delete".to_string();
+        return ToolKind::Delete;
     }
 
     // Check for move operations
     if name_lower.contains("move") || name_lower.contains("rename") || name_lower.starts_with("mv")
     {
-        return "move".to_string();
+        return ToolKind::Move;
     }
 
     // Check for execute operations
@@ -96,7 +116,7 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("bash")
         || name_lower.contains("python")
     {
-        return "execute".to_string();
+        return ToolKind::Execute;
     }
 
     // Check for think operations
@@ -106,11 +126,11 @@ pub fn map_tool_kind(tool_name: &str) -> String {
         || name_lower.contains("analyze")
         || name_lower.contains("consider")
     {
-        return "think".to_string();
+        return ToolKind::Think;
     }
 
     // Default to other
-    "other".to_string()
+    ToolKind::Other
 }
 
 /// Truncate output to a maximum size while preserving beginning and end
@@ -224,7 +244,8 @@ pub fn extract_shell_command(tool_name: &str, arguments: &Value) -> Option<Strin
 
 /// Extract all shell tool parameters from arguments
 ///
-/// Extracts command, workdir, timeout, and permission fields per Codex ShellToolCallParams
+/// Extracts command, workdir, timeout, and permission fields per the Codex
+/// ShellToolCallParams spec so callers can surface them in ACP metadata.
 pub fn extract_shell_params(tool_name: &str, arguments: &Value) -> ExtractedShellParams {
     let name_lower = tool_name.to_lowercase();
 
@@ -294,7 +315,8 @@ pub fn extract_shell_params(tool_name: &str, arguments: &Value) -> ExtractedShel
 
 /// Format tool output for display in content blocks
 ///
-/// Handles special formatting for different tool types
+/// Handles special formatting for different tool types before wrapping the
+/// preview in a ToolCallContent::Output value.
 pub fn format_tool_output(_tool_name: &str, output: &Value, max_preview_bytes: usize) -> String {
     // Handle string output
     if let Some(text) = output.as_str() {
@@ -357,59 +379,64 @@ pub fn format_tool_output(_tool_name: &str, output: &Value, max_preview_bytes: u
 #[cfg(test)]
 mod tests {
     use super::*;
+    use agent_client_protocol::ToolKind;
     use serde_json::json;
 
     #[test]
     fn test_map_tool_kind() {
         // Read operations
-        assert_eq!(map_tool_kind("read_file"), "read");
-        assert_eq!(map_tool_kind("get_content"), "read");
-        assert_eq!(map_tool_kind("fetch_file_data"), "read");
-        assert_eq!(map_tool_kind("view_document"), "read");
-        assert_eq!(map_tool_kind("cat"), "read");
-        assert_eq!(map_tool_kind("list_files"), "read");
+        assert_eq!(map_tool_kind("read_file"), ToolKind::Read);
+        assert_eq!(map_tool_kind("get_content"), ToolKind::Read);
+        assert_eq!(map_tool_kind("fetch_file_data"), ToolKind::Read);
+        assert_eq!(map_tool_kind("view_document"), ToolKind::Read);
+        assert_eq!(map_tool_kind("cat"), ToolKind::Read);
+        assert_eq!(map_tool_kind("list_files"), ToolKind::Read);
 
         // Edit operations
-        assert_eq!(map_tool_kind("write_file"), "edit");
-        assert_eq!(map_tool_kind("edit_content"), "edit");
-        assert_eq!(map_tool_kind("update_config"), "edit");
-        assert_eq!(map_tool_kind("modify_data"), "edit");
-        assert_eq!(map_tool_kind("patch_file"), "edit");
+        assert_eq!(map_tool_kind("write_file"), ToolKind::Edit);
+        assert_eq!(map_tool_kind("edit_content"), ToolKind::Edit);
+        assert_eq!(map_tool_kind("update_config"), ToolKind::Edit);
+        assert_eq!(map_tool_kind("modify_data"), ToolKind::Edit);
+        assert_eq!(map_tool_kind("patch_file"), ToolKind::Edit);
 
         // Delete operations
-        assert_eq!(map_tool_kind("delete_file"), "delete");
-        assert_eq!(map_tool_kind("remove_item"), "delete");
-        assert_eq!(map_tool_kind("rm"), "delete");
+        assert_eq!(map_tool_kind("delete_file"), ToolKind::Delete);
+        assert_eq!(map_tool_kind("remove_item"), ToolKind::Delete);
+        assert_eq!(map_tool_kind("rm"), ToolKind::Delete);
 
         // Move operations
-        assert_eq!(map_tool_kind("move_file"), "move");
-        assert_eq!(map_tool_kind("rename_document"), "move");
-        assert_eq!(map_tool_kind("mv"), "move");
+        assert_eq!(map_tool_kind("move_file"), ToolKind::Move);
+        assert_eq!(map_tool_kind("rename_document"), ToolKind::Move);
+        assert_eq!(map_tool_kind("mv"), ToolKind::Move);
 
         // Search operations
-        assert_eq!(map_tool_kind("search_content"), "search");
-        assert_eq!(map_tool_kind("find_files"), "search");
-        assert_eq!(map_tool_kind("grep_pattern"), "search");
+        assert_eq!(map_tool_kind("search_content"), ToolKind::Search);
+        assert_eq!(map_tool_kind("find_files"), ToolKind::Search);
+        assert_eq!(map_tool_kind("grep_pattern"), ToolKind::Search);
 
         // Execute operations
-        assert_eq!(map_tool_kind("execute_command"), "execute");
-        assert_eq!(map_tool_kind("run_script"), "execute");
-        assert_eq!(map_tool_kind("local_shell"), "execute");
-        assert_eq!(map_tool_kind("bash_command"), "execute");
+        assert_eq!(map_tool_kind("execute_command"), ToolKind::Execute);
+        assert_eq!(map_tool_kind("run_script"), ToolKind::Execute);
+        assert_eq!(map_tool_kind("local_shell"), ToolKind::Execute);
+        assert_eq!(map_tool_kind("bash_command"), ToolKind::Execute);
 
         // Think operations
-        assert_eq!(map_tool_kind("think_about"), "think");
-        assert_eq!(map_tool_kind("reason_through"), "think");
-        assert_eq!(map_tool_kind("plan_approach"), "think");
+        assert_eq!(map_tool_kind("think_about"), ToolKind::Think);
+        assert_eq!(map_tool_kind("reason_through"), ToolKind::Think);
+        assert_eq!(map_tool_kind("plan_approach"), ToolKind::Think);
 
         // Fetch operations
-        assert_eq!(map_tool_kind("fetch_url"), "fetch");
-        assert_eq!(map_tool_kind("download_resource"), "fetch");
-        assert_eq!(map_tool_kind("curl_request"), "fetch");
+        assert_eq!(map_tool_kind("fetch_url"), ToolKind::Fetch);
+        assert_eq!(map_tool_kind("download_resource"), ToolKind::Fetch);
+        assert_eq!(map_tool_kind("curl_request"), ToolKind::Fetch);
+
+        // Switch mode operations
+        assert_eq!(map_tool_kind("switch_mode"), ToolKind::SwitchMode);
+        assert_eq!(map_tool_kind("set_mode_debug"), ToolKind::SwitchMode);
 
         // Other operations
-        assert_eq!(map_tool_kind("unknown_tool"), "other");
-        assert_eq!(map_tool_kind("custom_operation"), "other");
+        assert_eq!(map_tool_kind("unknown_tool"), ToolKind::Other);
+        assert_eq!(map_tool_kind("custom_operation"), ToolKind::Other);
     }
 
     #[test]

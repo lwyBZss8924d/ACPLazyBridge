@@ -13,8 +13,7 @@ use agent_client_protocol::{
     ContentBlock, Error, ExtNotification, ExtRequest, ExtResponse, InitializeRequest,
     InitializeResponse, LoadSessionRequest, LoadSessionResponse, NewSessionRequest,
     NewSessionResponse, PromptRequest, PromptResponse, SessionId, SessionNotification,
-    SessionUpdate, StopReason, ToolCall, ToolCallContent, ToolCallId, ToolCallStatus,
-    ToolCallUpdate, ToolCallUpdateFields,
+    SessionUpdate, StopReason,
 };
 use anyhow::Error as AnyhowError;
 use async_trait::async_trait;
@@ -24,8 +23,9 @@ use tokio::task::JoinSet;
 use tokio::time::{self, Duration, Instant};
 use tracing::{debug, warn};
 
-use crate::codex_proto::{self, SessionUpdate as CodexSessionUpdate, SessionUpdateContent};
+use crate::codex_proto;
 use crate::notify_source::{create_notify_source, NotifyEvent};
+use uuid::Uuid;
 
 #[derive(Default)]
 struct CodexProviderAdapter {
@@ -319,17 +319,9 @@ impl CodexProviderAdapter {
             warn!("Failed to monitor Codex stderr: {}", e);
         }
 
-        let messages = build_codex_messages(request);
-        let codex_request = json!({
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "prompt",
-            "params": {
-                "messages": messages
-            }
-        });
+        let submission = build_codex_submission(request)?;
 
-        if let Err(e) = write_line(process.stdin(), &codex_request.to_string()).await {
+        if let Err(e) = write_line(process.stdin(), &submission.to_string()).await {
             self.processes.write().await.remove(&session_key);
             return Err(Error::internal_error().with_data(e.to_string()));
         }
@@ -344,11 +336,11 @@ impl CodexProviderAdapter {
 
         entry.store_transport(process).await;
 
-        let (update_tx, mut update_rx) = mpsc::unbounded_channel::<CodexSessionUpdate>();
+        let (update_tx, mut update_rx) = mpsc::unbounded_channel::<SessionNotification>();
         let mut join_set: JoinSet<Result<(), Error>> = JoinSet::new();
-        let stream_session = session_key.clone();
+        let stream_session_id = SessionId(Arc::from(session_key.as_str()));
         join_set.spawn(async move {
-            codex_proto::stream_codex_output(stdout, stream_session, update_tx)
+            codex_proto::stream_codex_output(stdout, stream_session_id, update_tx)
                 .await
                 .map_err(anyhow_to_acp)
         });
@@ -387,14 +379,24 @@ impl CodexProviderAdapter {
                 update = update_rx.recv(), if stream_open => {
                     match update {
                         Some(update) => {
-                            if let Some(session_notification) = convert_session_update(update) {
-                                if let Some(tx) = notifier.as_ref() {
-                                    let _ = tx.send(session_notification);
+                            debug!(
+                                "Received update from CodexStreamManager: session={}, update_type={:?}",
+                                session_key,
+                                std::mem::discriminant(&update.update)
+                            );
+                            if let Some(tx) = notifier.as_ref() {
+                                if let Err(e) = tx.send(update.clone()) {
+                                    warn!("Failed to send update to notifier channel: {}", e);
+                                } else {
+                                    debug!("Successfully sent update to notifier channel");
                                 }
+                            } else {
+                                warn!("No notifier channel available for session {}", session_key);
                             }
                             last_activity = Instant::now();
                         }
                         None => {
+                            debug!("CodexStreamManager channel closed for session {}", session_key);
                             stream_open = false;
                         }
                     }
@@ -473,135 +475,36 @@ fn resolve_forwarder_path() -> Result<String, Error> {
     Ok("acplb-notify-forwarder".into())
 }
 
-fn build_codex_messages(request: &PromptRequest) -> Vec<Value> {
-    let mut blocks: Vec<Value> = Vec::new();
+fn build_codex_submission(request: &PromptRequest) -> Result<Value, Error> {
+    let mut items: Vec<Value> = Vec::new();
     for block in &request.prompt {
-        if let ContentBlock::Text(text) = block {
-            blocks.push(json!({
-                "type": "text",
-                "text": text.text
-            }));
+        match block {
+            ContentBlock::Text(text) => {
+                items.push(json!({
+                    "type": "text",
+                    "text": text.text,
+                }));
+            }
+            other => {
+                return Err(Error::invalid_params()
+                    .with_data(format!("unsupported content block in prompt: {:?}", other)));
+            }
         }
     }
-    vec![json!({
-        "role": "user",
-        "content": blocks
-    })]
-}
 
-fn convert_session_update(update: CodexSessionUpdate) -> Option<SessionNotification> {
-    let session_id = SessionId(Arc::from(update.params.session_id));
-    let acp_update = match update.params.update {
-        SessionUpdateContent::AgentMessageChunk { content } => {
-            let text = convert_content_block(content)?;
-            SessionUpdate::AgentMessageChunk { content: text }
-        }
-        SessionUpdateContent::ToolCall { .. } | SessionUpdateContent::ToolCallUpdate { .. } => {
-            convert_tool_update(update.params.update).ok()?
-        }
-    };
-    Some(SessionNotification {
-        session_id,
-        update: acp_update,
-        meta: None,
-    })
-}
-
-fn convert_content_block(block: codex_proto::ContentBlock) -> Option<ContentBlock> {
-    match block {
-        codex_proto::ContentBlock::Text { text } => {
-            Some(ContentBlock::Text(agent_client_protocol::TextContent {
-                text,
-                annotations: None,
-                meta: None,
-            }))
-        }
+    if items.is_empty() {
+        return Err(
+            Error::invalid_params().with_data("prompt must contain at least one text block")
+        );
     }
-}
 
-fn convert_tool_update(content: SessionUpdateContent) -> Result<SessionUpdate, Error> {
-    match content {
-        SessionUpdateContent::ToolCall {
-            tool_call_id,
-            title,
-            kind,
-            status,
-            content,
-            raw_input,
-            raw_output,
-            ..
-        } => {
-            let tool_call = ToolCall {
-                id: ToolCallId(Arc::from(tool_call_id)),
-                title,
-                kind: map_tool_kind(kind),
-                status: status.map_or(ToolCallStatus::Pending, map_tool_status),
-                content: convert_tool_content(content),
-                locations: Vec::new(),
-                raw_input,
-                raw_output,
-                meta: None,
-            };
-            Ok(SessionUpdate::ToolCall(tool_call))
+    Ok(json!({
+        "id": format!("submission-{}", Uuid::new_v4()),
+        "op": {
+            "type": "user_input",
+            "items": items
         }
-        SessionUpdateContent::ToolCallUpdate {
-            tool_call_id,
-            status,
-            title,
-            kind,
-            content,
-            raw_output,
-            ..
-        } => {
-            let fields = ToolCallUpdateFields {
-                kind: kind.map(|value| map_tool_kind(Some(value))),
-                status: status.map(map_tool_status),
-                title,
-                content: content.map(|value| convert_tool_content(Some(value))),
-                locations: None,
-                raw_input: None,
-                raw_output,
-            };
-            Ok(SessionUpdate::ToolCallUpdate(ToolCallUpdate {
-                id: ToolCallId(Arc::from(tool_call_id)),
-                fields,
-                meta: None,
-            }))
-        }
-        _ => Err(Error::internal_error()),
-    }
-}
-
-fn convert_tool_content(content: Option<Vec<codex_proto::ContentBlock>>) -> Vec<ToolCallContent> {
-    content
-        .unwrap_or_default()
-        .into_iter()
-        .filter_map(|block| convert_content_block(block).map(ToolCallContent::from))
-        .collect()
-}
-
-fn map_tool_kind(kind: Option<String>) -> agent_client_protocol::ToolKind {
-    match kind.as_deref() {
-        Some("read") => agent_client_protocol::ToolKind::Read,
-        Some("edit") => agent_client_protocol::ToolKind::Edit,
-        Some("delete") => agent_client_protocol::ToolKind::Delete,
-        Some("move") => agent_client_protocol::ToolKind::Move,
-        Some("search") => agent_client_protocol::ToolKind::Search,
-        Some("execute") => agent_client_protocol::ToolKind::Execute,
-        Some("think") => agent_client_protocol::ToolKind::Think,
-        Some("fetch") => agent_client_protocol::ToolKind::Fetch,
-        Some("switch_mode") => agent_client_protocol::ToolKind::SwitchMode,
-        _ => agent_client_protocol::ToolKind::Other,
-    }
-}
-
-fn map_tool_status(status: codex_proto::ToolCallStatus) -> ToolCallStatus {
-    match status {
-        codex_proto::ToolCallStatus::Pending => ToolCallStatus::Pending,
-        codex_proto::ToolCallStatus::InProgress => ToolCallStatus::InProgress,
-        codex_proto::ToolCallStatus::Completed => ToolCallStatus::Completed,
-        codex_proto::ToolCallStatus::Failed => ToolCallStatus::Failed,
-    }
+    }))
 }
 
 /// Shared runtime agent used by the Codex adapter.

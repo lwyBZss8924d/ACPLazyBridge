@@ -373,12 +373,12 @@ echo '{"jsonrpc":"2.0","id":1,"method":"test"}' | cargo run -p codex-cli-acp
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-17T04:32:00Z"
+    last_checked: "2025-09-27T11:37:10Z"
 document:
     type: "claude-memory"
     path: "./crates/CLAUDE.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T08:26:00Z"
+    last_updated: "2025-09-27T11:37:10Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - "./CLAUDE.md"

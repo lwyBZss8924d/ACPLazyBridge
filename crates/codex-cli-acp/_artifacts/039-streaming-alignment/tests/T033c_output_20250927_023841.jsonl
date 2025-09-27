@@ -1,0 +1,7 @@
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"agentCapabilities":{"loadSession":false,"promptCapabilities":{"image":false,"audio":false,"embeddedContext":false},"mcpCapabilities":{"http":false,"sse":false}},"authMethods":[]}}
+{"jsonrpc":"2.0","id":2,"result":{"sessionId":"session-d3de70f5-ef58-4daa-9896-b75d92a97133"}}
+{"jsonrpc":"2.0","method":"session/update","params":{"sessionId":"session-d3de70f5-ef58-4daa-9896-b75d92a97133","update":{"currentModeId":"gpt-5-codex","sessionUpdate":"current_mode_update"}}}
+{"jsonrpc":"2.0","method":"session/update","params":{"sessionId":"session-d3de70f5-ef58-4daa-9896-b75d92a97133","update":{"content":{"text":"Hello","type":"text"},"sessionUpdate":"agent_message_chunk"}}}
+{"jsonrpc":"2.0","method":"session/update","params":{"sessionId":"session-d3de70f5-ef58-4daa-9896-b75d92a97133","update":{"content":{"text":"!","type":"text"},"sessionUpdate":"agent_message_chunk"}}}
+{"jsonrpc":"2.0","method":"session/update","params":{"sessionId":"session-d3de70f5-ef58-4daa-9896-b75d92a97133","update":{"content":{"text":"Hello!","type":"text"},"sessionUpdate":"agent_message_chunk"}}}
+{"jsonrpc":"2.0","id":3,"result":{"stopReason":"end_turn"}}
