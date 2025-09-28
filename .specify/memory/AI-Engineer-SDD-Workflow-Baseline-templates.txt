@@ -1,0 +1,217 @@
+⏺ _AI-Engineer-SDD-Workflow-Baseline-templates_
+
+⏺ AI-Engineer: ("codex") / ("claude") / ("gemini") / ("cursor-agent") / ("warp agent")
+
+---
+
+SDD-TASKs ["Initial_Tasks"]
+
+# "[ISSUES(#number)]-[SDDTASKS-SPEC(#number)]-xxx"
+
+- worktree: ../acplb-worktrees/xxx-xxx
+- feature_branch: feature/xxx-xxx
+- created: "{{YYYY-MM-DD}}T{{HH:MM:SS}}Z"
+- last_updated:
+- status: " "
+- input: User description from GitHub issue #xxx
+- issue_link: </issues/xxx>
+- issues_drafts: (dev-docs/_issues_drafts/open/xxx-xxx)
+
+// MUST:
+1. - [x] Create git wortrees new tree (and create a symbolic link with the main worktree directory at (/dev-space/ACPLazyBridge/.worktrees) for SDD Tasks firat!
+2. - [x] Then analyze ISSUES & MUST DEEPRESEARCH about how to advance the SDD tasks plan.
+3. - [x] Run SDD-TASKs Initialization**commands** (`/sdd-task` -> `/specify` -> `/plan` -> `/tasks` ) in worktree (specs/) Deepresearch fllow:
+    - {ISSUES}
+    - @.specify/memory/constitution.md
+    - @.specify/memory/lifecycle.md
+    - @sdd-rules/rules/README.md
+    - @.specify/commands/sdd-task.md
+    - @.specify/commands/specify.md --> @.specify/templates/spec-template.md --> TASK's (specs/xxx-xxx/spec.md)
+    - @.specify/commands/plan.md  --> @.specify/templates/plan-template.md --> TASK's (specs/xxx-xxx/plan.md) and outher TASK's Specification Documents
+    - @.specify/commands/tasks.md  --> @.specify/templates/tasks-template.md --> TASK's (specs/xxx-xxx/task.md) and outher TASK's Specification Documents
+
+// ⚠️ MUST follow and get UTC time NOW! `{{YYYY-MM-DD}}T{{HH:MM:SS}}Z` (date -u '+%Y-%m-%dT%H:%M:%SZ') first for specs file in the header's metadata-date yaml code block.
+// ⚠️ MUST Update worktree with last local main as the tree directory for ISSUES(#xx) --> NEW SDD-TASKS(#xx)
+// ⚠️ Always use local main to create the SDD TASKs initialization image task tree for the worktree, and create a symbolic link with the main worktree directory at: (/dev-space/ACPLazyBridge/.worktrees)
+
+> Github Issues
+- issue_link: </issues/xxx>
+```text
+...
+
+```
+
+> Github Issue Comments
+- issuecomment_link: </issues/xxx#issuecomment-xxxxxxxxxx>
+```text
+...
+
+```
+
+---
+
+## ISSUES(#xxx)-SDD-TASKs(#xxx)-workflow-status-(plan.md&tasks.md)
+
+[SDD-TASKs Cooking]
+
+- SDD-TASK-#: xxx
+- worktree: ../acplb-worktrees/xxx-xxx/
+- Branch feature: /xxx-xxx
+- SDD-TASKs Specification Documents: specs/xxx-xxx/
+- issue_uri: @xxx
+- Spec: @specs/xxx-xxx/spec.md
+- Plan: @specs/xxx-xxx/plan.md
+- Tasks: @specs/xxx-xxx/tasks.md
+- OutherSpecificationDocuments: @specs/xxx-xxx/xxx.md
+- Artifacts: _artifacts/xxx-xxx/tests, logs / jq ...
+
+### Phase Status and Steps Status
+
+⏺ - [ ] "NEW ISSUES(#xxx)-SDD-TASKs(#xxx)"
+⏺ owner: HumanDeveloper("@lwyBZss8924d")
+
+Phase: "Initial_Tasks"
+- - [ ] "status": " "
+- - [ ] "[TODO-Lists]": ""
+
+⏺ - [ ] "Initial_Tasks": ["DeepResearch ISSUES"]
+⏺ "owner": "codex"
+
+⏺ - [ ] "Initial_Tasks": ["Solution for ISSUES"]
+⏺ "owner": "claude"
+
+⏺ - [ ] "Initial_Tasks": ["Create new worktree"]
+⏺ "owner": "claude"
+
+⏺ - [ ] "Initial_Tasks": ["Execute Initial SDD-TASKs Commands"]
+- `/sdd-task` @.specify/commands/sdd-task.md
+- `/specify` @.specify/commands/specify.md --> @.specify/templates/spec-template.md --> TASK's (specs/xxx-xxx/spec.md)
+- `plan` @.specify/commands/plan.md @.specify/templates/plan-template.md --> TASK's (specs/xxx-xxx/plan.md) and outher TASK's Specification Documents
+- `/task` @.specify/commands/tasks.md @.specify/templates/tasks-template.md --> TASK's (specs/xxx-xxx/task.md) and outher TASK's Specification Documents
+⏺ "owner": "claude"
+⚠️ MUST follow and get UTC time NOW! `{{YYYY-MM-DD}}T{{HH:MM:SS}}Z` (date -u '+%Y-%m-%dT%H:%M:%SZ') first for specs file in the header's metadata-date yaml code block.
+
+
+Phase: "Research and Update SDD-TASKs (specs/xxx-xxx/)"
+⏺ owner: ("codex")
+⏺ "status": " "
+⏺ - [ ] "Initial_Phase": ["Research and Update SDD-TASKs (specs/) All Specification documents"],
+⏺ - [ ] `git add xxxx && git commit -m "..."`
+- - 🚧 ...
+
+Phase: "Dev_Cooking" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T001-T00x]"
+⏺ owner: ("codex")
+- - 🚧 Pending...
+
+Phase: "Cooking_Review" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T001-T00x]"
+⏺ reviewer: ("claude")
+⏺ - [ ] `git add xxxx && git commit -m "..."`
+- - 🚧 Pending...
+
+Phase: "Dev_Cooking" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T00x+1-T00x]"
+⏺ owner: ("codex")
+- - 🚧 Pending...
+
+Phase: "Cooking_Review" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T00x+1-T00x]"
+⏺ reviewer: ("claude")
+⏺ - [ ] `git add xxxx && git commit -m "..."`
+- - 🚧 Pending...
+
+Phase: "Testing" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T00x+1-T00x]"
+- - [ ] "artifacts": "(_artifacts/xxx-xxx/tests, logs / jq ...)"
+⏺ owner: ("claude")
+- - 🚧 Pending...
+
+Phase: "Testing_Review" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T00x+1-T00x]"
+- - [ ] "review_report": "(_artifacts/xxx-xxx/reports/...)"
+⏺ reviewer: ("codex")
+⏺ - [ ] `git add xxxx && git commit -m "..."`
+- - 🚧 Pending...
+
+Phase: "SDD-TASKs pre-PR Review" fllow (specs/xxx-xxx/) @plan.md and @tasks.md
+⏺ - [ ] Phase x.x : [xxx]
+⏺ "status": " "
+- - [ ] "[TODO-Lists]": "[T00x+1-T00x]"
+- - [ ] "artifacts": "(_artifacts/xxx-xxx/tests, logs / jq ...)"
+- - [ ] "review_report": "(_artifacts/xxx-xxx/reports/...)"
+⏺ owner: ("codex")
+⏺ - [ ] `git add xxxx && git commit -m "..."`
+...
+
+---
+
+AI-Engineer Working Logs
+
+`(specs/xxx-xxx/aienginner-cooking-logs-"{{YYYY-MM-DD}}T".txt`
+
+`(specs/xxx-xxx/aienginner-cooking-logs-2025092601.txt`
+
+```txt
+
+⏺ date: "(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+⏺ owner: AI-Engineer("claude" / "codex")
+• [TODO-Lists]: ""
+"""
+working summary ...
+"""
+
+```bash
+git add xxxx && git commit -m "..."
+```
+
+⏺ date: "(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+⏺ owner: AI-Engineer("claude" / "codex")
+• [TODO-Lists]: ""
+"""
+working summary ...
+"""
+
+```bash
+git add xxxx && git commit -m "..."
+```
+
+```
+
+---
+
+[SDD-TASKs PR-CodeReview]
+
+- - [ ] Review feedback Comments and fix
+
+---
+
+[SDD-TASKs PR-Merge]
+
+- - [ ] 1. Add PR Merge comment Remark;
+
+- - [ ] 2. Execute PR-Merge operation;
+
+- - [ ] 3. Add ISSUES(#number) of SDD-TASKs, complete PR-Merge comment Remark, execute ISSUES closing operation
+
+⚠️ Before merging, need to add comment "merge for SDD TASKs PR comment" and after merged need cloesd ISSUES(comment and close issues)
+
+---
+
+[Local (main) pull origin Github remote with last PR-Merged]
+
+- - [ ] 1. pulling
+- - [ ] 2. latest Update specs/xxx/xxx SDD-TASKs All Specification documents complete status and all metadata with "(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+- - [ ] 3. commit msg (doc) and push main

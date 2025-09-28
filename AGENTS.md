@@ -14,7 +14,7 @@ This file provides guidance to "codex" (Codex CLI) when working with code in thi
 - **ACP official TypeScript library**: `npm install @zed-industries/agent-client-protocol`
 - **ACP Agents adapter best practice (@zed-industries/claude-code-acp)**: [Claude Code SDK from ACP-compatible clients for Zed IDE external-agents Custom Agents as ACP client adapter](https://github.com/zed-industries/claude-code-acp)
 - **ACP Repository local path**: (~/dev-space/agent-client-protocol)
-- **(ACP) Protocol Lastest Version**: `v0.4.2` (2025-09-22)
+- **(ACP) Protocol Rust Library Lastest Version**: `agent-client-protocol = "0.4.3"` (2025-09-25) _always check latest version from `agent-client-protocol`_
 
 ```text
 ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents and agent-tools plugins with IDEs, editors, and development tools. It provides native adapters for various AI systems while maintaining protocol consistency and developer workflow integration through Specification-Driven Development (SDD).
@@ -264,6 +264,8 @@ work in: (specs/)
    - After merge:
      - MUST re-run the SDD Documentation Dynamic Consistency Check Workflow (.specify/memory/constitution_update_checklist.md) first!
      - Then if needed to add any new sdd-rules or update .specify/memory/constitution.md and resync docs/templates if needed.
+
+📌 Wen AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 <SDD-TASK-INITIALIZATION-WORKFLOW>
 
@@ -1045,7 +1047,7 @@ document:
     type: "codex-memory"
     path: "./AGENTS.md"
     version: "1.0.5"
-    last_updated: "2025-09-25T02:30:00Z"
+    last_updated: "2025-09-27T10:09:00Z"
     changelog: "Refreshed constitution metadata after rerunning checklist"
     dependencies:
         - ".specify/memory/constitution.md"

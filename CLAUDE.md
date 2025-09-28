@@ -14,7 +14,7 @@ This file provides guidance to CLAUDE (Claude Code Agents) when working with cod
 - **ACP official TypeScript library**: `npm install @zed-industries/agent-client-protocol`
 - **ACP Agents adapter best practice (@zed-industries/claude-code-acp)**: [Claude Code SDK from ACP-compatible clients for Zed IDE external-agents Custom Agents as ACP client adapter](https://github.com/zed-industries/claude-code-acp)
 - **ACP Repository local path**: (~/dev-space/agent-client-protocol)
-- **(ACP) Protocol Lastest Version**: `v0.4.2` (2025-09-22)
+- **(ACP) Protocol Rust Library Lastest Version**: `agent-client-protocol = "0.4.3"` (2025-09-25) _always check latest version from `agent-client-protocol`_
 
 ```text
 Team's AI Engineer member: ("claude")'s role and operating rules for **ACPLazyBridge**. It is a role-specific guide. For the authoritative workflow and lifecycle, always refer to the documents listed below. and always refer to the SDD Constitution. wen update any SDD document and sdd-rules document, MUST follow the SDD Constitution Update Checklist. All SDD document and sdd-rules document and normative artifacts (specify, plan, tasks, issues, PRDs, commits, etc.) MUST be English‑only.
@@ -244,50 +244,16 @@ ast-grep scan -c ./sgconfig.yml --inspect summary .
 
 > (sdd-rules/rules/tools-cli/sdd-rules-tools-cli-document-search-and-parsing.md)
 
-#### Parse CLI Help
-
 ```bash
 parse --help
 ```
 
-#### Search CLI Help
-
 ```bash
-$ search --help
-A CLI tool for fast semantic keyword search
-
-Usage: search [OPTIONS] <QUERY> [FILES]...
-
-Arguments:
-  <QUERY>     Query to search for (positional argument)
-  [FILES]...  Files or directories to search
-
-Options:
-  -n, --n-lines <N_LINES>            How many lines before/after to return as context [default: 3]
-      --top-k <TOP_K>                The top-k files or texts to return (ignored if max_distance is set) [default: 3]
-  -m, --max-distance <MAX_DISTANCE>  Return all results with distance below this threshold (0.0+)
-  -i, --ignore-case                  Perform case-insensitive search (default is false)
-  -h, --help                         Print help
-  -V, --version                      Print version
+search --help
 ```
 
-#### Workspace CLI Help
-
 ```bash
-$ workspace --help
-Manage semtools workspaces
-
-Usage: workspace <COMMAND>
-
-Commands:
-  use     Use or create a workspace (prints export command to run)
-  status  Show active workspace and basic stats
-  prune   Remove stale or missing files from store
-  help    Print this message or the help of the given subcommand(s)
-
-Options:
-  -h, --help     Print help
-  -V, --version  Print version
+workspace --help
 ```
 
 ### SDD Validation
@@ -589,6 +555,8 @@ work in: (specs/)
    - After merge:
      - MUST re-run the SDD Documentation Dynamic Consistency Check Workflow (.specify/memory/constitution_update_checklist.md) first!
      - Then if needed to add any new sdd-rules or update .specify/memory/constitution.md and resync docs/templates if needed.
+
+📌 Wen AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 <SDD-TASK-INITIALIZATION-WORKFLOW>
 
@@ -946,7 +914,7 @@ document:
     type: "claude-memory"
     path: "./CLAUDE.md"
     version: "1.0.5"
-    last_updated: "2025-09-25T02:30:00Z"
+    last_updated: "2025-09-27T10:09:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"

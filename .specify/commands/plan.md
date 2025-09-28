@@ -40,4 +40,5 @@ Use absolute paths with the repository root for all file operations to avoid pat
 
 ---
 
-⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/plan.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_
+// ⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/plan.md), YOU MUST ULTRATHINK Analyze ISSUES [input], spec.md then edit the template file for the task first!_
+// ⚠️ MUST follow and get UTC time NOW! `{{YYYY-MM-DD}}T{{HH:MM:SS}}Z` (date -u '+%Y-%m-%dT%H:%M:%SZ') first for specs file in the header's metadata-date yaml code block.
