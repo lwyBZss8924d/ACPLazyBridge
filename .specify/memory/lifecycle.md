@@ -2,6 +2,10 @@
 
 This lifecycle defines the end-to-end workflow for every task (human or AI engineer).
 
+📌 Wen any AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+
+---
+
 Nodes and expected artifacts
 
 1) Requirements analysis
@@ -337,7 +341,7 @@ document:
     type: "constitution-lifecycle"
     path: ".specify/memory/lifecycle.md"
     version: "1.0.3"
-    last_updated: "2025-09-20T09:30:00Z"
+    last_updated: "2025-09-27T10:14:00Z"
     changelog: "Added validate-sdd-docs.sh for comprehensive SDD document validation"
     dependencies:
         - ".specify/memory/constitution.md"

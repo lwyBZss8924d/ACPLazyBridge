@@ -1,8 +1,8 @@
-# CLAUDE.md - Claude Code Agent SDD Integration
+# AGENTS.md - Codex Agent SDD Integration
 
 ## Purpose
 
-This document captures my (Claude Code) understanding and operational context within the ACPLazyBridge Specification-Driven Development (SDD) framework.
+This document captures my (Codex) understanding and operational context within the ACPLazyBridge Specification-Driven Development (SDD) framework.
 It serves as a reference for consistent SDD workflow execution and ensures alignment with project constitution and rules.
 
 ## SDD Workflow Understanding
@@ -345,10 +345,10 @@ constitution:
     version: "1.0.1"
     last_checked: "2025-09-22T15:20:00Z"
 document:
-    type: "claude-memory"
-    path: ".specify/CLAUDE.md"
+    type: "codex-memory"
+    path: ".specify/AGENTS.md"
     version: "1.0.4"
-    last_updated: "2025-09-27T10:16:00Z"
+    last_updated: "2025-09-27T10:21:00Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
@@ -357,5 +357,5 @@ document:
         - ".specify/templates/spec-template.md"
         - ".specify/templates/plan-template.md"
         - ".specify/templates/tasks-template.md"
-        - "./CLAUDE.md"
+        - "./AGENTS.md"
 ```

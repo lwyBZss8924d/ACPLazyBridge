@@ -138,6 +138,8 @@ Amendments require documentation, approval, and a migration plan.
 - [Commands](.specify/commands/) - Command implementations
 - [Templates](.specify/templates/) - Document templates
 
+📌 Wen any AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+
 ---
 
 ```yaml
@@ -149,5 +151,5 @@ document:
     type: "constitution"
     path: ".specify/memory/constitution.md"
     version: "1.0.1"
-    last_updated: "2025-09-17T12:00:00Z"
+    last_updated: "2025-09-27T10:14:00Z"
 ```

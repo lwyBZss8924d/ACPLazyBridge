@@ -1,10 +1,13 @@
 ---
+name: sdd-task
+description: Initialize SDD task from GitHub Issue (supports issue number or full URL)
+argument-hint: <issue-number|issue-url> [additional-context]
 allowed-tools:
   Bash(gh issue view:*), Bash(git worktree:*), Bash(git checkout:*), Bash(git branch:*), Bash(git
   status:*), Bash(scripts/sdd/*:*), Read, Write, Edit, MultiEdit, Glob, Grep, Task, TodoWrite
-argument-hint: <issue-number|issue-url> [additional-context]
-description: Initialize SDD task from GitHub Issue (supports issue number or full URL)
 ---
+
+📌 When any AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 ## SDD Task Initialization
 
@@ -91,20 +94,17 @@ You MUST follow these SDD documents:
 Create this metadata block for all SDD artifacts:
 
 ```yaml
-worktree: [../acplb-worktrees/NNN-slug]
-feature_branch: [branch-type]/[NNN-slug]
-created: [CURRENT_DATE]
-last_updated: [CURRENT_DATE]
-status: in_progress
-issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/[NNN]
-spec_uri: specs/[NNN-slug]/spec.md
-plan_uri: specs/[NNN-slug]/plan.md
-tasks_uri: specs/[NNN-slug]/tasks.md
-evidence_uris: _artifacts/[NNN-slug]/
+worktree: [WORKTREE-PATH]
+feature_branch: [###-feature-name]
+created: [UTC-DATE-TIME]
+last_updated: [UTC-DATE-TIME]
+status: [STATUS]
+input: User description: "$ARGUMENTS"
+issue_uri: [ISSUE-LINK]
 specs:
-    constitution: 1.0.1
-    type: spec
-    feature_number: [NNN]
+    constitution: [CONSTITUTION-VERSION]
+    type: [SPECS-TYPE]
+    feature_number: [FEATURE-NUMBER]
 ```
 
 ### Execution Guidelines
@@ -125,4 +125,7 @@ This command accepts:
 
 ---
 
-⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/tasks.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_
+// ⚠️ _Whether initializing, modifying, or updating this SDD TASKs file (specs/xxxx-xxxx/tasks.md), YOU MUST ULTRATHINK Analyze ISSUES [input] then edit the template file for the task first!_
+// ⚠️ MUST follow and get UTC time NOW! `{{YYYY-MM-DD}}T{{HH:MM:SS}}Z` (date -u '+%Y-%m-%dT%H:%M:%SZ') first for specs file in the header's metadata-date yaml code block.
+// ⚠️ MUST Update worktree with last local main as the tree directory for ISSUES(#xx) --> NEW SDD-TASKS(#xx)
+// ⚠️ Always use local main to create the SDD TASKs initialization image task tree for the worktree, and create a symbolic link with the main worktree directory at: (/dev-space/ACPLazyBridge/.worktrees)

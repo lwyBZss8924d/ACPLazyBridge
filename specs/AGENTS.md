@@ -1,4 +1,4 @@
-# CLAUDE.md (specs/)
+# AGENTS.md (specs/)
 
 - ⚠️ _Based on SDD CONSTITUTION: `.specify/memory/constitution.md`_
 - ⚠️ _Fllow the SDD workflow implementation: `.specify/memory/lifecycle.md`_
@@ -20,7 +20,7 @@ This directory contains all feature specifications following the SDD lifecycle. 
 
 ## SDD Integration
 
-For comprehensive SDD workflow details, see **[../.specify/CLAUDE.md](../.specify/CLAUDE.md)**
+For comprehensive SDD workflow details, see **[../.specify/AGENTS.md](../.specify/AGENTS.md)**
 Key SDD principles for specifications:
 
 - **Library-First (Article I)**: All features start as library specifications
@@ -260,12 +260,12 @@ constitution:
     version: "1.0.1"
     last_checked: "2025-09-17T04:32:00Z"
 document:
-    type: "claude-memory"
-    path: "./specs/CLAUDE.md"
+    type: "codex-memory"
+    path: "./specs/AGENTS.md"
     version: "1.0.1"
     last_updated: "2025-09-27T10:05:00Z"
     dependencies:
-        - "./CLAUDE.md"
+        - "./AGENTS.md"
         - ".specify/memory/constitution.md"
         - ".specify/memory/lifecycle.md"
         - ".specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt"

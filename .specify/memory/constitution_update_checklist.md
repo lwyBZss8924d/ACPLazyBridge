@@ -7,15 +7,17 @@ dependent documents are updated to maintain consistency.
 
 ### When adding/modifying ANY article
 
+- [ ] `.specify/memory/lifecycle.md`
+- [ ] `.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt`
 - [ ] `.specify/templates/plan-template.md` - Update Constitution Check section
 - [ ] `.specify/templates/spec-template.md` - Update if requirements/scope affected
 - [ ] `.specify/templates/tasks-template.md` - Update if new task types needed
+- [ ] `.specify/commands/specify.md` - Update if new feature specification changes
 - [ ] `/.claude/commands/plan.md` - Update if planning process changes
 - [ ] `/.claude/commands/tasks.md` - Update if task generation affected
 - [ ] `/.claude/commands/sdd-task.md` - Update if issue initialization changes
-- [ ] `/CLAUDE.md` - Update runtime development guidelines
-- [ ] `/WARP.md` - Update runtime development guidelines
-- [ ] `/AGENTS.md` - Update runtime development guidelines (if have any)
+- [ ] `/CLAUDE.md` - Update AI-Engineer project runtime development guidelines memory files
+- [ ] `/AGENTS.md` - Update AI-Engineer runtime development guidelines memory files (if have any)
 
 ### Article-specific updates
 
@@ -311,7 +313,7 @@ document:
     type: "constitution-checklist"
     path: ".specify/memory/constitution_update_checklist.md"
     version: "1.0.1"
-    last_updated: "2025-09-20T07:58:23Z"
+    last_updated: "2025-09-27T10:14:00Z"
     last_sync_check: "2025-09-20"
     dependencies:
         - ".specify/memory/constitution.md"

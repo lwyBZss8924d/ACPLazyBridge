@@ -68,3 +68,17 @@ The subject/body distinction may seem unimportant but it’s one of many subtle 
 Comments disabled. Email me instead.
 
 © Tim Pope
+
+
+---
+
+```yaml
+constitution:
+    version: "1.0.1"
+    last_checked: "2025-09-27T11:37:10Z"
+document:
+    type: "sdd-rule"
+    path: "sdd-rules/rules/git/commit/sdd-rules-commit-message.md"
+    version: "1.0.0"
+    last_updated: "2025-09-27T11:37:10Z"
+```

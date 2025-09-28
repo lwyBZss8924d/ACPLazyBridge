@@ -261,7 +261,7 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 ## Summary
 
-- **Total Tests**: 68 tests across 13 test suites
+- **Total Tests**: 45 tests across 9 test suites
 - **Test Result**: All tests passed ✅
 - **Total Time**: 3.18 seconds
 - **Peak Memory**: ~31MB
