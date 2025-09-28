@@ -12,10 +12,9 @@ Core library guidance for AI Engineers working with the ACPLazyBridge protocol i
 
 `acp-lazy-core` is the foundational library providing:
 
-- ACP protocol type definitions
-- Transport layer abstractions
 - Permission system implementations
-- Shared utilities for ACPLazyBridge
+- Shared `RuntimeServer` for orchestrating agent behavior
+- Utilities for ACPLazyBridge agent development
 
 ## Library-First Architecture (Article I)
 
@@ -23,8 +22,6 @@ This crate is a pure library with no CLI components:
 
 ```rust
 // src/lib.rs - Public API
-pub mod protocol;   // ACP types
-pub mod transport;  // I/O abstractions
 pub mod permissions; // Permission models
 pub mod runtime;    // Runtime components
 ```
@@ -49,24 +46,6 @@ cargo test -p acp-lazy-core --all-features
 
 ## Core Components
 
-### Protocol Module
-
-Defines ACP protocol types:
-
-- Request/Response structures
-- Error codes and types
-- Protocol version handling
-- JSON-RPC message types
-
-### Transport Module
-
-Handles I/O operations:
-
-- Process spawning and management
-- JSONL reading/writing
-- Stream management
-- Message queuing
-
 ### Permissions Module
 
 Maps ACP permissions to implementations:
@@ -78,12 +57,12 @@ Maps ACP permissions to implementations:
 
 ### Runtime Module
 
-Orchestrates protocol execution:
+Orchestrates protocol execution via `RuntimeServer`:
 
 - Session management
 - Adapter coordination
-- Server lifecycle
-- State management
+- Server lifecycle and state management
+- Implements the `agent_client_protocol::Agent` trait
 
 ## Anti-Abstraction Guidelines (Article VIII)
 
@@ -120,7 +99,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_protocol_parsing() {
+    fn test_permission_logic() {
         // Test implementation
     }
 }
@@ -142,26 +121,19 @@ async fn test_full_session() {
 
 ## Common Tasks
 
-### Adding Protocol Types
-
-1. Define in `src/protocol.rs`
-2. Add serde derives
-3. Write unit tests
-4. Update documentation
-
-### Implementing Transport Features
-
-1. Extend `src/transport.rs`
-2. Add error handling
-3. Test with mock I/O
-4. Verify JSONL compliance
-
 ### Updating Permissions
 
 1. Modify `src/permissions.rs`
 2. Map to Codex flags
 3. Test permission combinations
 4. Document security implications
+
+### Extending the Runtime
+
+1. Modify components in `src/runtime/`
+2. Ensure changes are compatible with the `ProviderAdapter` trait
+3. Add integration tests in `tests/runtime_test.rs`
+4. Update documentation for `RuntimeServer`
 
 ## Performance Considerations
 
@@ -188,6 +160,8 @@ serde_json = { workspace = true }
 tokio = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
+agent-client-protocol = { workspace = true }
+async-trait = { workspace = true }
 ```
 
 ## Documentation
@@ -223,8 +197,8 @@ constitution:
 document:
     type: "agent-memory"
     path: "crates/acp-lazy-core/AGENTS.md"
-    version: "1.0.0"
-    last_updated: "2025-09-27T11:37:10Z"
+    version: "1.1.0"
+    last_updated: "2025-09-28T13:10:42Z"
     dependencies:
         - "../AGENTS.md"
         - "../../AGENTS.md"

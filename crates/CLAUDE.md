@@ -9,7 +9,7 @@
 
 ## Purpose
 
-Rust workspace containing the ACP protocol implementation. This workspace manages multiple crates that together form the ACPLazyBridge system.
+Rust workspace containing the ACPLazyBridge system, which implements the `agent-client-protocol`.
 
 ## SDD Integration
 
@@ -54,17 +54,17 @@ cargo test --workspace
 
 ```tree
 crates/
-├── acp-lazy-core/      # Core protocol library
+├── acp-lazy-core/      # Core library for agent runtimes
 │   ├── src/
 │   │   ├── lib.rs      # Public API
-│   │   ├── protocol.rs # ACP protocol types
-│   │   ├── transport.rs # Transport layer
+│   │   ├── runtime/    # Shared `RuntimeServer` and components
 │   │   └── permissions.rs # Permission system
 │   └── CLAUDE.md       # Crate-specific guidance
 └── codex-cli-acp/      # Codex CLI adapter
     ├── src/
     │   ├── main.rs     # CLI entry point
-    │   ├── codex_proto.rs # Protocol handler
+    │   ├── codex_agent.rs # `Agent` trait implementation
+    │   ├── codex_proto.rs # Codex-specific protocol mapping
     │   ├── tool_calls.rs # Tool mapping
     │   └── validation.rs # Request validation
     └── CLAUDE.md       # Crate-specific guidance
@@ -113,14 +113,13 @@ cargo doc --workspace --no-deps
 
 ## ACP Protocol Implementation
 
+The workspace relies on the `agent-client-protocol` crate for all protocol definitions and handling.
+
 ### Version Handling
 
 **Current**: ACP v1 (protocolVersion: 1 as integer)
 
 ```rust
-// Always use integer protocol version
-const PROTOCOL_VERSION: u32 = 1;
-
 // In JSON
 {"protocolVersion": 1}  // ✅ Correct
 {"protocolVersion": "1"} // ❌ Wrong - must be integer
@@ -138,14 +137,7 @@ eprintln!("[DEBUG] Processing request");
 
 ### Error Handling
 
-```rust
-// Use standard JSON-RPC error codes
-const PARSE_ERROR: i32 = -32700;
-const INVALID_REQUEST: i32 = -32600;
-const METHOD_NOT_FOUND: i32 = -32601;
-const INVALID_PARAMS: i32 = -32602;
-const INTERNAL_ERROR: i32 = -32603;
-```
+Errors are handled by the `agent_client_protocol::Error` type and its associated methods.
 
 ## Testing Patterns
 
@@ -156,8 +148,8 @@ const INTERNAL_ERROR: i32 = -32603;
 ```rust
 // 1. RED: Write test that fails
 #[test]
-fn test_new_protocol_method() {
-    let result = handle_new_method(params);
+fn test_new_feature() {
+    let result = run_feature(params);
     assert_eq!(result, expected); // This MUST fail first
 }
 
@@ -201,29 +193,24 @@ cargo tarpaulin --workspace --out Html \
 
 Focus areas:
 
-- Protocol type definitions
-- Transport abstraction
+- Shared `RuntimeServer` implementation
 - Permission models
-- Keep stdout clean for protocol
+- Core traits and utilities for agent adapters
 
 ### codex-cli-acp
 
 Focus areas:
 
-- ACP server implementation
-- Tool call mapping
-- Streaming support
-- JSONL compliance
+- `agent_client_protocol::Agent` implementation for Codex
+- Tool call mapping to Codex-specific commands
+- Streaming support from the Codex process
+- JSONL compliance for inter-process communication
 
 ## Common Patterns
 
-### Adding New Protocol Methods
+### Extending Agent Behavior
 
-1. Write failing test first (TDD - Article III)
-2. Define in `acp-lazy-core/src/protocol.rs`
-3. Implement handler in `codex-cli-acp/src/codex_proto.rs`
-4. Verify tests pass (RED→GREEN→REFACTOR)
-5. Update evidence in `_artifacts/<task>/` or `_artifacts/legacy/<task>/`
+To add new functionality, extend the `ProviderAdapter` trait in `acp-lazy-core` and implement the new behavior in the `codex-cli-acp` adapter. This ensures that all agents built on the core runtime can benefit from shared logic.
 
 ### Tool Call Implementation
 
@@ -232,7 +219,7 @@ Focus areas:
 match tool_call.name.as_str() {
     "fs/read_text_file" => handle_read_file(params),
     "fs/write_text_file" => handle_write_file(params),
-    _ => Err(method_not_found()),
+    _ => Err(Error::method_not_found()),
 }
 ```
 
@@ -242,6 +229,7 @@ match tool_call.name.as_str() {
 
 ```toml
 [workspace.dependencies]
+agent-client-protocol = { version = "0.4.2", features = ["jsonrpc"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.0", features = ["full"] }
@@ -327,18 +315,7 @@ cargo publish -p acp-lazy-core
 
 ### Input Validation
 
-```rust
-// Validate protocol version
-if params.protocol_version != PROTOCOL_VERSION {
-    return Err(invalid_params("Unsupported protocol version"));
-}
-
-// Validate file paths
-let path = canonicalize(requested_path)?;
-if !path.starts_with(workspace_root) {
-    return Err(invalid_params("Path outside workspace"));
-}
-```
+Input validation is now primarily handled by the `agent-client-protocol` crate. Custom validation should be added for provider-specific logic.
 
 ## Quick Reference
 
@@ -377,8 +354,8 @@ constitution:
 document:
     type: "claude-memory"
     path: "./crates/CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-27T11:37:10Z"
+    version: "1.1.0"
+    last_updated: "2025-09-28T13:11:09Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - "./CLAUDE.md"

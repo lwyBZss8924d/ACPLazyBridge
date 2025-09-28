@@ -12,11 +12,10 @@
 
 ACP server implementation for Codex CLI providing:
 
-- JSON-RPC 2.0 server with JSONL streaming
-- Tool call mapping between ACP and Codex formats
-- Session management and turn completion
-- Notification system for external control
-- Protocol validation and error handling
+- An implementation of the `agent_client_protocol::Agent` trait.
+- Tool call mapping between ACP and Codex formats.
+- Session management and turn completion via `acp-lazy-core`.
+- Notification system for external control.
 
 This crate is **BOTH**:
 
@@ -55,11 +54,11 @@ fn test_new_tool_mapping() {
 
 ### Core Development Tasks
 
-1. **Protocol Handler Development**
+1. **Agent Logic Development**
 
    ```bash
-   # Test protocol handling
-   cargo test codex_proto::tests
+   # Test agent logic
+   cargo test codex_agent::tests
 
    # Test with real JSONL
    echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":1}}' | \
@@ -238,36 +237,6 @@ diff session.jsonl replay.jsonl
 
 4. **Verify tests pass** and collect evidence
 
-### Extending Protocol Handlers
-
-1. **Test protocol message first**
-
-   ```rust
-   #[test]
-   fn test_new_method() {
-       let msg = parse_jsonrpc(r#"{"method":"new/method"}"#);
-       let response = handle_new_method(msg);
-       assert!(response.is_ok());
-   }
-   ```
-
-2. **Add handler in codex_proto.rs**
-
-   ```rust
-   pub async fn handle_method(params: Value) -> Result<Value> {
-       // Implementation following test requirements
-   }
-   ```
-
-3. **Wire into main dispatch**
-
-   ```rust
-   match method {
-       "new/method" => handle_new_method(params).await,
-       // ... other methods
-   }
-   ```
-
 ### Debugging Streaming
 
 ```bash
@@ -424,8 +393,8 @@ constitution:
 document:
     type: "claude-memory"
     path: "./crates/codex-cli-acp/CLAUDE.md"
-    version: "1.0.1"
-    last_updated: "2025-09-27T11:37:10Z"
+    version: "1.1.0"
+    last_updated: "2025-09-28T13:11:41Z"
     dependencies:
         - ".specify/memory/constitution.md"
         - "./CLAUDE.md"

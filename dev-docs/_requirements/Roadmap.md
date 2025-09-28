@@ -26,7 +26,7 @@ This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves in
 
 - ✅ **Completed**: Replace handcrafted JSON-RPC loop with `agent_client_protocol::AgentSideConnection` and Tokio `LocalSet` execution (SDD Task 038, PR #47).
 - 🔄 **Deferred**: Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types (Issue #45, Phase 4).
-- 🔄 **Deferred**: Remove `acp-lazy-core::protocol` module and reuse upstream error/response models everywhere (Issue #46, Phase 5).
+- ✅ **Completed**: Remove `acp-lazy-core::protocol` module and reuse upstream error/response models everywhere (Issue #46, Phase 5).
 - ✅ **Completed**: Validate end-to-end with Zed's Custom Agent client connected to the Codex CLI adapter.
 
 **Acceptance**

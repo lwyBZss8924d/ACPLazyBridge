@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
+use std::process::Stdio;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
@@ -7,7 +8,6 @@ use acp_lazy_core::permissions::map_acp_to_codex;
 use acp_lazy_core::runtime::{
     ProviderAdapter, RuntimeConfig, RuntimeServer, SessionNotifier, SessionState,
 };
-use acp_lazy_core::transport::{write_line, ProcessTransport};
 use agent_client_protocol::{
     Agent, AgentCapabilities, AuthenticateRequest, AuthenticateResponse, CancelNotification,
     ContentBlock, Error, ExtNotification, ExtRequest, ExtResponse, InitializeRequest,
@@ -15,17 +15,19 @@ use agent_client_protocol::{
     NewSessionResponse, PromptRequest, PromptResponse, SessionId, SessionNotification,
     SessionUpdate, StopReason,
 };
-use anyhow::Error as AnyhowError;
+use anyhow::{Error as AnyhowError, Result as AnyhowResult};
 use async_trait::async_trait;
 use serde_json::{json, Value};
+use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
+use tokio::process::{Child, Command};
 use tokio::sync::{mpsc, Mutex, Notify, RwLock};
 use tokio::task::JoinSet;
 use tokio::time::{self, Duration, Instant};
 use tracing::{debug, warn};
+use uuid::Uuid;
 
 use crate::codex_proto;
 use crate::notify_source::{create_notify_source, NotifyEvent};
-use uuid::Uuid;
 
 #[derive(Default)]
 struct CodexProviderAdapter {
@@ -33,7 +35,7 @@ struct CodexProviderAdapter {
 }
 
 struct ProcessEntry {
-    transport: Mutex<Option<ProcessTransport>>,
+    process: Mutex<Option<Child>>,
     cancelled: AtomicBool,
     cancel_notify: Notify,
     notify_source: Mutex<Option<Box<dyn crate::notify_source::NotifySource + Send>>>,
@@ -42,20 +44,20 @@ struct ProcessEntry {
 impl ProcessEntry {
     fn new() -> Self {
         Self {
-            transport: Mutex::new(None),
+            process: Mutex::new(None),
             cancelled: AtomicBool::new(false),
             cancel_notify: Notify::new(),
             notify_source: Mutex::new(None),
         }
     }
 
-    async fn store_transport(&self, transport: ProcessTransport) {
-        let mut guard = self.transport.lock().await;
-        *guard = Some(transport);
+    async fn store_process(&self, process: Child) {
+        let mut guard = self.process.lock().await;
+        *guard = Some(process);
     }
 
-    async fn take_transport(&self) -> Option<ProcessTransport> {
-        self.transport.lock().await.take()
+    async fn take_process(&self) -> Option<Child> {
+        self.process.lock().await.take()
     }
 
     async fn store_notify_source(
@@ -143,12 +145,14 @@ impl CodexProviderAdapter {
     }
 
     async fn shutdown_entry(&self, entry: &Arc<ProcessEntry>) {
-        if let Some(mut process) = entry.take_transport().await {
-            if process.is_running() {
-                if let Err(e) = process.kill().await {
-                    warn!("Failed to kill Codex process: {}", e);
-                }
+        if let Some(mut process) = entry.take_process().await {
+            if let Err(e) = process.kill().await {
+                warn!(
+                    "Failed to kill Codex process (it may have already exited): {}",
+                    e
+                );
             }
+            // We should still wait to reap the process
             if let Err(e) = process.wait().await {
                 warn!("Failed to wait for Codex process exit: {}", e);
             }
@@ -237,7 +241,7 @@ impl ProviderAdapter for CodexProviderAdapter {
 
         if let Some(entry) = entry {
             entry.mark_cancelled();
-            if let Some(mut process) = entry.take_transport().await {
+            if let Some(mut process) = entry.take_process().await {
                 if let Err(e) = process.kill().await {
                     return Err(Error::internal_error().with_data(e.to_string()));
                 }
@@ -304,37 +308,50 @@ impl CodexProviderAdapter {
 
         let codex_cmd = std::env::var("CODEX_CMD").unwrap_or_else(|_| "codex".into());
 
-        let mut process =
-            match ProcessTransport::spawn(&codex_cmd, &args, None, session.working_dir.to_str())
-                .await
-            {
-                Ok(proc) => proc,
-                Err(err) => {
-                    self.processes.write().await.remove(&session_key);
-                    return Err(Error::internal_error().with_data(err.to_string()));
-                }
-            };
+        let mut command = Command::new(&codex_cmd);
+        command
+            .args(&args)
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped());
+        if let Some(cwd) = session.working_dir.to_str() {
+            command.current_dir(cwd);
+        }
 
-        if let Err(e) = process.monitor_stderr() {
-            warn!("Failed to monitor Codex stderr: {}", e);
+        let mut process = match command.spawn() {
+            Ok(proc) => proc,
+            Err(err) => {
+                self.processes.write().await.remove(&session_key);
+                return Err(Error::internal_error().with_data(err.to_string()));
+            }
+        };
+
+        let mut stdin = process
+            .stdin
+            .take()
+            .ok_or_else(|| Error::internal_error().with_data("missing stdin"))?;
+        let stdout = process
+            .stdout
+            .take()
+            .ok_or_else(|| Error::internal_error().with_data("missing stdout"))?;
+        if let Some(stderr) = process.stderr.take() {
+            tokio::spawn(async move {
+                let reader = BufReader::new(stderr);
+                let mut lines = reader.lines();
+                while let Ok(Some(line)) = lines.next_line().await {
+                    warn!("[codex-stderr] {}", line);
+                }
+            });
         }
 
         let submission = build_codex_submission(request)?;
 
-        if let Err(e) = write_line(process.stdin(), &submission.to_string()).await {
+        if let Err(e) = write_line_async(&mut stdin, &submission.to_string()).await {
             self.processes.write().await.remove(&session_key);
             return Err(Error::internal_error().with_data(e.to_string()));
         }
 
-        let stdout = match process.take_stdout() {
-            Some(stdout) => stdout,
-            None => {
-                self.processes.write().await.remove(&session_key);
-                return Err(Error::internal_error().with_data("missing stdout"));
-            }
-        };
-
-        entry.store_transport(process).await;
+        entry.store_process(process).await;
 
         let (update_tx, mut update_rx) = mpsc::unbounded_channel::<SessionNotification>();
         let mut join_set: JoinSet<Result<(), Error>> = JoinSet::new();
@@ -601,4 +618,14 @@ impl Agent for CodexAgent {
     async fn ext_notification(&self, notification: ExtNotification) -> Result<(), Error> {
         self.runtime.ext_notification(notification).await
     }
+}
+
+async fn write_line_async<W: AsyncWriteExt + Unpin>(
+    writer: &mut W,
+    line: &str,
+) -> AnyhowResult<()> {
+    writer.write_all(line.as_bytes()).await?;
+    writer.write_all(b"\n").await?;
+    writer.flush().await?;
+    Ok(())
 }

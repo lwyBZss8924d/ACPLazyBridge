@@ -9,9 +9,7 @@
 //! - Connection management following Zed's patterns
 
 pub mod permissions;
-pub mod protocol;
 pub mod runtime;
-pub mod transport;
 
 pub mod logging {
     /// Initialize tracing with environment-based filtering.
@@ -37,7 +35,3 @@ pub mod logging {
 
 // Re-export commonly used types
 pub use permissions::{map_acp_to_codex, AcpPermissionMode, CodexTurnOverrides};
-pub use protocol::{
-    Error, ErrorCode, IncomingMessage, MessageType, Notification, Request, Response,
-};
-pub use transport::{read_lines, write_line, MessageQueue, ProcessTransport};

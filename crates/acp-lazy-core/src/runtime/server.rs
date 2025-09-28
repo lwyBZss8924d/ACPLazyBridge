@@ -25,6 +25,8 @@ use uuid::Uuid;
 use crate::permissions::AcpPermissionMode;
 use crate::runtime::adapter::{ProviderAdapter, SessionNotifier};
 use crate::runtime::session::{SessionState, SessionStore};
+use agent_client_protocol::Agent;
+use async_trait::async_trait;
 
 /// Configuration options for the runtime server.
 #[derive(Debug, Clone)]
@@ -398,4 +400,54 @@ async fn append_line(path: &PathBuf, line: String) -> std::io::Result<()> {
         .await?;
     file.write_all(line.as_bytes()).await?;
     file.write_all(b"\n").await
+}
+
+#[async_trait(?Send)]
+impl Agent for RuntimeServer {
+    async fn initialize(&self, args: InitializeRequest) -> Result<InitializeResponse, Error> {
+        self.initialize(args).await
+    }
+
+    async fn authenticate(&self, args: AuthenticateRequest) -> Result<AuthenticateResponse, Error> {
+        self.authenticate(args).await
+    }
+
+    async fn new_session(&self, args: NewSessionRequest) -> Result<NewSessionResponse, Error> {
+        self.new_session(args).await
+    }
+
+    async fn load_session(&self, args: LoadSessionRequest) -> Result<LoadSessionResponse, Error> {
+        self.load_session(args).await
+    }
+
+    async fn prompt(&self, args: PromptRequest) -> Result<PromptResponse, Error> {
+        self.prompt(args).await
+    }
+
+    async fn cancel(&self, notification: CancelNotification) -> Result<(), Error> {
+        self.cancel(notification).await
+    }
+
+    async fn set_session_mode(
+        &self,
+        args: agent_client_protocol::SetSessionModeRequest,
+    ) -> Result<agent_client_protocol::SetSessionModeResponse, Error> {
+        self.set_session_mode(args).await
+    }
+
+    #[cfg(feature = "unstable")]
+    async fn set_session_model(
+        &self,
+        args: agent_client_protocol::SetSessionModelRequest,
+    ) -> Result<agent_client_protocol::SetSessionModelResponse, Error> {
+        self.set_session_model(args).await
+    }
+
+    async fn ext_method(&self, args: ExtRequest) -> Result<ExtResponse, Error> {
+        self.ext_method(args).await
+    }
+
+    async fn ext_notification(&self, notification: ExtNotification) -> Result<(), Error> {
+        self.ext_notification(notification).await
+    }
 }
