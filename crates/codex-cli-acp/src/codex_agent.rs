@@ -423,7 +423,10 @@ impl CodexProviderAdapter {
 
                     let now = Instant::now();
                     if now.duration_since(last_activity) >= idle_timeout {
-                        debug!("Session {} idle timeout reached", session_key);
+                        debug!("Session idle timeout reached");
+                        // Note: Using EndTurn for idle timeout as per ACP protocol v0.4.3
+                        // The protocol doesn't have a specific IdleTimeout variant
+                        stop_reason = StopReason::EndTurn;
                         break;
                     }
 

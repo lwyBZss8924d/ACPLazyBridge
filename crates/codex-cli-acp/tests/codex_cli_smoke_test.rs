@@ -71,7 +71,7 @@ fn t033c_streaming_notifications() {
     }
 
     // Build path to our adapter binary using cargo manifest dir
-    // ast-grep-ignore: rust-no-unwrap
+    // ast-grep-ignore: rust-no-unwrap, rust-no-expect
     let manifest_dir = env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR not set");
     let adapter_bin =
         std::path::Path::new(&manifest_dir).join("../../target/release/codex-cli-acp");
@@ -96,9 +96,9 @@ fn t033c_streaming_notifications() {
         .spawn()
         .expect("Failed to spawn codex-cli-acp");
 
-    // ast-grep-ignore: rust-no-unwrap
+    // ast-grep-ignore: rust-no-unwrap, rust-no-expect
     let mut stdin = child.stdin.take().expect("Failed to get stdin");
-    // ast-grep-ignore: rust-no-unwrap
+    // ast-grep-ignore: rust-no-unwrap, rust-no-expect
     let stdout = child.stdout.take().expect("Failed to get stdout");
     let mut reader = BufReader::new(stdout);
 
@@ -140,9 +140,9 @@ fn t033c_streaming_notifications() {
         }
     }
 
-    // ast-grep-ignore: rust-no-unwrap
+    // ast-grep-ignore: rust-no-unwrap, rust-no-expect
     let session_id = session_id.expect("Failed to get session ID");
-    eprintln!("T033c: Created session: {}", session_id);
+    eprintln!("T033c: Created session (ID masked for security)");
 
     // Send prompt with correct session ID
     let prompt_request = format!(
