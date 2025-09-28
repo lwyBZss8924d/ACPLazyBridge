@@ -1,0 +1,16 @@
+[2m2025-09-27T03:52:30.590128Z[0m [32m INFO[0m [2mcodex_core::config[0m[2m:[0m cwd not set, using current dir
+{"id":"","msg":{"type":"session_configured","session_id":"0199894d-068c-70a1-857c-753ef9abf7b5","model":"gpt-5-codex","history_log_id":1104763548210798038,"history_entry_count":3,"rollout_path":"/home/node/.codex/sessions/2025/09/27/rollout-2025-09-27T03-52-30-0199894d-068c-70a1-857c-753ef9abf7b5.jsonl"}}
+[2m2025-09-27T03:52:30.614151Z[0m [32m INFO[0m [2mcodex_cli::proto[0m[2m:[0m Submission queue closed
+{"id":"test","msg":{"type":"task_started","model_context_window":272000}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":"Hey"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":"!"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":" How"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":" can"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":" I"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":" help"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":" you"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":" today"}}
+{"id":"test","msg":{"type":"agent_message_delta","delta":"?"}}
+{"id":"test","msg":{"type":"agent_message","message":"Hey! How can I help you today?"}}
+{"id":"test","msg":{"type":"token_count","info":{"total_token_usage":{"input_tokens":2552,"cached_input_tokens":0,"output_tokens":15,"reasoning_output_tokens":0,"total_tokens":2567},"last_token_usage":{"input_tokens":2552,"cached_input_tokens":0,"output_tokens":15,"reasoning_output_tokens":0,"total_tokens":2567},"model_context_window":272000},"rate_limits":null}}
+{"id":"test","msg":{"type":"task_complete","last_agent_message":"Hey! How can I help you today?"}}
