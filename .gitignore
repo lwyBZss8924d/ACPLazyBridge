@@ -90,3 +90,6 @@ coverage/
 
 # AI engineer local config
 .claude/settings.local.json
+
+# Claude hooks local build artifacts
+.claude/hooks/target/

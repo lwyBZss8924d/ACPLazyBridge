@@ -17,10 +17,12 @@ This directory contains custom slash commands, hooks, and sub-agents to streamli
 │   ├── tasks.md             # Create task breakdowns
 │   └── sdd-task.md          # Initialize from GitHub issues
 ├── hooks/                    # Automated validation hooks
-│   ├── inject-datetime.sh   # Auto-inject UTC timestamps
-│   ├── validate-sdd-compliance.sh  # Pre-tool validation
-│   ├── post-sdd-check.sh    # Post-tool validation
-│   └── sdd-task-fetch.sh    # GitHub issue helper
+│   ├── inject-datetime.sh          # Auto-inject UTC timestamps (UserPromptSubmit)
+│   ├── validate-sdd-compliance.sh  # Pre-tool validation (PreToolUse: Write|Edit|MultiEdit)
+│   ├── pre-tool-use-approval.sh    # Auto-approve Read for docs (PreToolUse: Read)
+│   ├── post-sdd-check.sh           # Post-tool validation (PostToolUse: Write|Edit|MultiEdit)
+│   ├── markdown-formatter.sh       # Post-tool markdown normalization (PostToolUse)
+│   └── sdd-task-fetch.sh           # GitHub issue helper
 ├── settings.local.json       # Local configuration
 ├── CLAUDE.md                # Claude-specific guidance
 └── README.md                # This file
@@ -89,11 +91,24 @@ Generate executable task lists:
 - Validates spec directory naming conventions
 - Checks required metadata in SDD documents
 
+#### Pre-Tool Auto Approval (`pre-tool-use-approval.sh`)
+
+- Automatically approves `Read` tool calls for documentation files
+- Extensions: `.md`, `.mdx`, `.txt`, `.json`
+- Reduces friction for non-sensitive reads (PreToolUse: `Read`)
+
 #### Post-Tool Validation (`post-sdd-check.sh`)
 
 - Runs after spec/plan/task files are created/modified
 - Executes appropriate validation scripts
 - Reports validation results back to Claude
+
+#### Markdown Formatter (`markdown-formatter.sh`)
+
+- Normalizes Markdown after edits/writes (PostToolUse: `Write|Edit|MultiEdit`)
+- Adds missing language tags to code fences
+- Trims excessive blank lines outside code blocks
+- Idempotent; safe to re-run
 
 ### 3. Specialized Sub-Agents
 
@@ -135,6 +150,19 @@ Contains:
 - Agent allowlists
 
 ### Hook Configuration
+
+Registered hooks:
+
+- UserPromptSubmit:
+    - `$CLAUDE_PROJECT_DIR/.claude/hooks/inject-datetime.sh`
+- PreToolUse:
+    - `matcher: Write|Edit|MultiEdit` → `$CLAUDE_PROJECT_DIR/.claude/hooks/validate-sdd-compliance.sh`
+    - `matcher: Read` → `$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-use-approval.sh`
+- PostToolUse:
+    - `matcher: Write|Edit|MultiEdit` → `$CLAUDE_PROJECT_DIR/.claude/hooks/post-sdd-check.sh`
+    - `matcher: Write|Edit|MultiEdit` → `$CLAUDE_PROJECT_DIR/.claude/hooks/markdown-formatter.sh`
+
+Note: The sensitive prompt blocker (Rust `user-prompt-submit`) is present but not registered; `inject-datetime` handles the UserPromptSubmit context injection.
 
 Hooks are shell scripts for:
 
@@ -247,7 +275,7 @@ document:
     type: "claude-memory"
     path: ".claude/README.md"
     version: "1.0.1"
-    last_updated: "2025-09-22T15:20:00Z"
+    last_updated: "2025-09-28T17:50:00Z"
     changelog: "Documented sdd-doc-validator integration and refreshed constitution checklist evidence"
     dependencies:
         - ".specify/memory/constitution.md"

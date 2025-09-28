@@ -4,13 +4,17 @@
 worktree: ../acplb-worktrees/039-streaming-alignment
 feature_branch: feature/039-streaming-alignment-v2
 created: 2025-09-25T07:40:16Z
-last_updated: 2025-09-27T21:00:00Z
-status: ready_for_pr
+last_updated: 2025-09-28T18:05:00Z
+status: merged
 input: User description from GitHub issue #45
 issue_uri: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/45
 spec_uri: specs/039-streaming-alignment-session-notifications/spec.md
 plan_uri: specs/039-streaming-alignment-session-notifications/plan.md
 tasks_uri: specs/039-streaming-alignment-session-notifications/tasks.md
+pr_uris:
+  - https://github.com/lwyBZss8924d/ACPLazyBridge/pull/48
+  - https://github.com/lwyBZss8924d/ACPLazyBridge/pull/50
+merged_commit: 81c48b9072f0c5fc1617485fd5336d086b4992e2
 evidence_uris:
   - _artifacts/039-streaming-alignment/tests/
   - _artifacts/039-streaming-alignment/logs/
@@ -24,7 +28,7 @@ dependencies:
   - specs/038-adopt-acp-runtime/spec.md
   - dev-docs/architecture/acplb-architecture.md
   - dev-docs/core_servers/acplb-core-runtime.md
-  - agent-client-protocol v0.4.2
+  - agent-client-protocol v0.4.3
 ```
 
 ## Summary

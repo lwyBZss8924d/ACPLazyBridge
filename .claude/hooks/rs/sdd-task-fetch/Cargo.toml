@@ -1,0 +1,10 @@
+[package]
+name = "sdd-task-fetch"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+anyhow = { workspace = true }
+hook-support = { path = "../hook-support" }
+serde_json = { workspace = true }

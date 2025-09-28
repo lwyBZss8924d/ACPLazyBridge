@@ -21,9 +21,11 @@ This directory contains Claude Code's custom configuration for the ACPLazyBridge
 
 ### Validation Hooks (.claude/hooks/)
 
-- `inject-datetime.sh` - Automatic UTC timestamp injection
-- `validate-sdd-compliance.sh` - Pre-tool SDD validation
-- `post-sdd-check.sh` - Post-tool SDD validation
+- `inject-datetime.sh` - Automatic UTC timestamp injection (UserPromptSubmit)
+- `validate-sdd-compliance.sh` - Pre-tool SDD validation (PreToolUse: Write|Edit|MultiEdit)
+- `pre-tool-use-approval.sh` - Auto-approve documentation reads (PreToolUse: Read)
+- `post-sdd-check.sh` - Post-tool SDD validation (PostToolUse: Write|Edit|MultiEdit)
+- `markdown-formatter.sh` - Post-tool Markdown normalization (PostToolUse)
 - `sdd-task-fetch.sh` - GitHub issue helper script
 
 ### Specialized Sub-Agents (.claude/agents/)
@@ -116,6 +118,19 @@ Key allowed tools:
 - `Bash(./scripts/ci/run-local-ci.sh:*)`
 - `Read(///**)`
 
+### Hook Registration Summary (local)
+
+- UserPromptSubmit
+    - `$CLAUDE_PROJECT_DIR/.claude/hooks/inject-datetime.sh`
+- PreToolUse
+    - matcher `Write|Edit|MultiEdit`: `$CLAUDE_PROJECT_DIR/.claude/hooks/validate-sdd-compliance.sh`
+    - matcher `Read`: `$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-use-approval.sh`
+- PostToolUse
+    - matcher `Write|Edit|MultiEdit`: `$CLAUDE_PROJECT_DIR/.claude/hooks/post-sdd-check.sh`
+    - matcher `Write|Edit|MultiEdit`: `$CLAUDE_PROJECT_DIR/.claude/hooks/markdown-formatter.sh`
+
+Note: Rust hook `user-prompt-submit` (sensitive prompt blocker) is available but not registered; we rely on `inject-datetime` only for UserPromptSubmit.
+
 ## Technical Decisions
 
 ### Shell Scripts (not Python)
@@ -152,7 +167,7 @@ document:
     type: "claude-memory"
     path: ".claude/CLAUDE.md"
     version: "1.0.3"
-    last_updated: "2025-09-22T15:20:00Z"
+    last_updated: "2025-09-28T17:50:00Z"
     dependencies:
         - "./CLAUDE.md"
         - ".specify/memory/lifecycle.md"

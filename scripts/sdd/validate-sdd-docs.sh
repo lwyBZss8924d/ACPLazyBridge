@@ -210,7 +210,10 @@ validate_tasks() {
 
         # Check for [P] parallel task markers
         local parallel_count
-        parallel_count=$(grep -c '\[P\]' "$file" 2>/dev/null || echo "0")
+        # grep -c prints 0 even when exit status is 1 (no matches), so avoid
+        # appending an extra "0" which would result in "0\n0". Use `|| true`
+        # to prevent set -e from exiting on status 1 while keeping grep output.
+        parallel_count=$(grep -c '\[P\]' "$file" 2>/dev/null || true)
         if [[ "$parallel_count" -gt 0 ]]; then
             info "Found $parallel_count parallel tasks marked with [P]"
         fi

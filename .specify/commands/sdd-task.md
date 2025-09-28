@@ -1,6 +1,6 @@
 ---
 name: sdd-task
-description: Initialize SDD task from GitHub Issue (supports issue number or full URL)
+description: Initialize SDD task from GitHub Issue (supports issue number or full URL) , then follow the SDD-TASKs Task Initialization Workflow to Run `/specify` -> `/plan` -> `/tasks` step by step Run SlashCommands to generate the specification, plan, and tasks documents. 📌 When AI-Engineer("claude") START SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 argument-hint: <issue-number|issue-url> [additional-context]
 allowed-tools:
   Bash(gh issue view:*), Bash(git worktree:*), Bash(git checkout:*), Bash(git branch:*), Bash(git
