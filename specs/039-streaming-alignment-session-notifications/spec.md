@@ -24,7 +24,7 @@ dependencies:
   - specs/038-adopt-acp-runtime/spec.md
   - dev-docs/architecture/acplb-architecture.md
   - dev-docs/core_servers/acplb-core-runtime.md
-  - agent-client-protocol v0.4.3
+  - agent-client-protocol v0.4.2
 ```
 
 ## Summary
@@ -124,7 +124,7 @@ As a developer using ACPLazyBridge with an ACP-compliant client, I want streamin
 - **Task 038 Completion**: PR #47 merged (commit 7ae2628) establishing shared runtime
 - **Architecture Baseline**: `dev-docs/architecture/acplb-architecture.md` defines streaming contracts
 - **Runtime Design**: `dev-docs/core_servers/acplb-core-runtime.md` specifies notification flow
-- **Protocol Version**: `agent-client-protocol` crate v0.4.3 or compatible
+- **Protocol Version**: `agent-client-protocol` crate v0.4.2 or compatible
 
 ## Evidence Expectations
 
@@ -138,7 +138,7 @@ As a developer using ACPLazyBridge with an ACP-compliant client, I want streamin
 
 ### Successfully Implemented (T001-T032, T034a/T034b)
 
-- **Type Migration Complete**: All custom types replaced with official `agent_client_protocol` v0.4.3 types
+- **Type Migration Complete**: All custom types replaced with official `agent_client_protocol` v0.4.2 types
 - **Direct ACP Integration**: CodexStreamManager now emits official SessionNotification/SessionUpdate structs end-to-end
 - **Tool Call Fidelity**: Full metadata preservation including titles, status transitions, working directories, and raw I/O
 - **Error Handling**: ACP-compliant ToolCallUpdate payloads for failure states with structured diagnostics

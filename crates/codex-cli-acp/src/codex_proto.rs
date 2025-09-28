@@ -7,7 +7,7 @@
 //!
 //! - Deserialising Codex protocol JSON into strongly typed helper events.
 //! - Building ACP content blocks (text, reasoning, plan, available commands,
-//!   mode updates, tool calls) directly with the v0.4.3 models.
+//!   mode updates, tool calls) directly with the v0.4.2 models.
 //! - Preserving Codex metadata such as tool raw I/O, stop reasons, and
 //!   notification timing while applying the LastChunkGuard deduplication rules.
 //! - Emitting updates through `AgentSideConnection::session_notification` so

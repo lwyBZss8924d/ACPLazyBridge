@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Migrated from agent_client_protocol v0.4.3 to v0.4.3
+- Migrated from agent_client_protocol v0.4.2 to v0.4.3
 - Refactored CodexStreamManager to use official ACP types
 - Updated ToolCallUpdateFields to follow official schema
 - Improved session/update message format compliance

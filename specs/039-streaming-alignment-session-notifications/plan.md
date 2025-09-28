@@ -59,7 +59,7 @@ Replace bespoke streaming types (`SessionUpdate`, `ContentBlock`, `ToolCallStatu
 ## Technical Context
 
 **Language/Version**: Rust 1.89
-**Primary Dependencies**: agent-client-protocol 0.4.3, tokio 1.x, serde_json, anyhow
+**Primary Dependencies**: agent-client-protocol 0.4.2, tokio 1.x, serde_json, anyhow
 **Testing**: cargo test with snapshot testing (insta), JSONL regression
 **Target Platform**: Linux/macOS CLI
 **Project Type**: single (Rust workspace)
@@ -270,7 +270,7 @@ _Prerequisites: Design complete, contracts defined_
 
 ### Lessons Learned
 
-1. **Direct Type Adoption Success**: The migration to official `agent_client_protocol` types was straightforward, with the crate providing all necessary structs and enums. The v0.4.3 API was stable and well-documented.
+1. **Direct Type Adoption Success**: The migration to official `agent_client_protocol` types was straightforward, with the crate providing all necessary structs and enums. The v0.4.2 API was stable and well-documented.
 
 2. **Deduplication Strategy Validated**: The existing last-chunk suppression approach (`LastChunkGuard`) successfully adapted to official types without modification, confirming the design decision to preserve existing semantics.
 

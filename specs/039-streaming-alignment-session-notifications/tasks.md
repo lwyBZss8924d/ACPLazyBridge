@@ -333,7 +333,7 @@ Based on the implementation review, the following enhancements are recommended f
 - [ ] T063 Add tests for ToolCallUpdateFields granularity
 - [ ] T064 Add integration tests with MCP bridge scenarios
 
-These tasks address the gaps identified in the Deep-Research Checklist and would bring the adapter to full ACP v0.4.3 compliance. They depend on upstream Codex CLI support for the additional event types.
+These tasks address the gaps identified in the Deep-Research Checklist and would bring the adapter to full ACP v0.4.2 compliance. They depend on upstream Codex CLI support for the additional event types.
 
 ## Dependencies
 
@@ -410,7 +410,7 @@ _GATE: Checked by main() before returning_
 
 ## IMPORTANT TECHNICAL STANDARDS
 
-- Use `agent_client_protocol` v0.4.3 types exclusively
+- Use `agent_client_protocol` v0.4.2 types exclusively
 - Maintain exact JSONL output compatibility
 - Preserve all existing behavior (notify, timeout, dedup)
 - Follow Test-First Development (Article III)
@@ -421,7 +421,7 @@ _GATE: Checked by main() before returning_
 ### Current State (T001-T033, T034-T040 complete)
 
 ```bash
-feat(codex-cli-acp): migrate to official ACP v0.4.3 types
+feat(codex-cli-acp): migrate to official ACP v0.4.2 types
 
 BREAKING CHANGE: Replace custom streaming types with agent_client_protocol models
 

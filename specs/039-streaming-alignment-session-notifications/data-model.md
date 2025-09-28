@@ -44,7 +44,7 @@ pub enum SessionUpdate {
 }
 ```
 
-- Variants in ACP v0.4.3 cover user/agent streaming text, tool-call lifecycle, planning, and session-mode/command updates. The JSON discriminator is the `sessionUpdate` field.
+- Variants in ACP v0.4.2 cover user/agent streaming text, tool-call lifecycle, planning, and session-mode/command updates. The JSON discriminator is the `sessionUpdate` field.
 
 ### ContentBlock
 
@@ -129,7 +129,7 @@ pub enum ToolCallStatus {
 }
 ```
 
-- `Pending` is the default; `Cancelled` is _not_ part of ACP v0.4.3.
+- `Pending` is the default; `Cancelled` is _not_ part of ACP v0.4.2.
 - Tool calls transition forward only (pending → in_progress → {completed | failed}).
 
 ## Supporting Entities
@@ -260,7 +260,7 @@ impl LastChunkGuard {
 
 ## Dependencies
 
-- `agent_client_protocol` v0.4.3
+- `agent_client_protocol` v0.4.2
 - `serde` v1.0 with derive
 - `serde_json` v1.0
 - `tokio` v1.x (async runtime)
