@@ -556,7 +556,7 @@ work in: (specs/)
      - MUST re-run the SDD Documentation Dynamic Consistency Check Workflow (.specify/memory/constitution_update_checklist.md) first!
      - Then if needed to add any new sdd-rules or update .specify/memory/constitution.md and resync docs/templates if needed.
 
-📌 Wen AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+📌 When AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 <SDD-TASK-INITIALIZATION-WORKFLOW>
 

@@ -13,7 +13,7 @@ It serves as a reference for consistent SDD workflow execution and ensures align
 Idea → /specify → spec.md → /plan → plan.md → /tasks → tasks.md → Implementation → Evidence → PR → Merge
 ```
 
-📌 Wen AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+📌 When AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 ### Phase Responsibilities
 

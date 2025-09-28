@@ -7,7 +7,7 @@ allowed-tools:
   status:*), Bash(scripts/sdd/*:*), Read, Write, Edit, MultiEdit, Glob, Grep, Task, TodoWrite
 ---
 
-📌 Wen any AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+📌 When any AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 ## SDD Task Initialization
 

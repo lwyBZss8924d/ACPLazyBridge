@@ -65,7 +65,7 @@ NEW ISSUES(#xxx)-SDD-TASKs(#xxx):
 - Architecture baseline: dev-docs/architecture/acplb-architecture.md
 - Core runtime design: dev-docs/core_servers/acplb-core-runtime.md
 - Milestone tracking: dev-docs/_projects/migration-blueprint-project-management-plan.md and dev-docs/_requirements/{m1-issue-list.md,m1-technical-implementation-plan.md,acp-lazybridge-project-plan.md,acp-lazybridge-requirements.md}
-- ACP references: https://agentclientprotocol.com/protocol and https://agentclientprotocol.com/protocol/schema; agent-client-protocol crate (v0.4.2 as of 2025-09-22)
+- ACP references: https://agentclientprotocol.com/protocol and https://agentclientprotocol.com/protocol/schema; agent-client-protocol crate (v0.4.3 as of 2025-09-22)
 - ACP Agents adapter best practice (@zed-industries/claude-code-acp): [Claude Code SDK from ACP-compatible clients for Zed IDE external-agents Custom Agents as ACP client adapter] local path: (/Users/arthur/dev-space/claude-code-acp)
 - ACP Repository docs local path: (~/dev-space/agent-client-protocol/docs)
 - ACP official Rust library local path: (~/dev-space/agent-client-protocol/rust)
@@ -231,7 +231,7 @@ date: 2025-09-25T09:53:46Z
 """"
 - Reconciled spec.md/plan.md/tasks.md wording with the updated ACP-aligned data model and mapping contracts.
 - Expanded Phase 3.2 test tasks to exercise the full `SessionUpdate` variant set and richer `ContentBlock`/`ToolCall` structures.
-- Cross-checked documentation against `agent-client-protocol` v0.4.2 sources and reran targeted metadata validation (`data-model.md`, `contracts/type_mappings.md`, `research.md`).
+- Cross-checked documentation against `agent-client-protocol` v0.4.3 sources and reran targeted metadata validation (`data-model.md`, `contracts/type_mappings.md`, `research.md`).
 - Marked Dev_Cooking_Phase status to "ready"; Phase 3.1 (T001–T006) is the next execution step.
 """"
 
@@ -265,11 +265,11 @@ date: 2025-09-25T09:57:00Z
   src/codex_proto.rs:327-358). Either explain the planned migration in the spec/plan/tasks or update the data-model to match reality; right now the
   contract is inconsistent with the code and planned work.
 
- - Updated spec.md, plan.md, and tasks.md so their wording now matches the ACP v0.4.2 data model: FR-039-01 points to SessionNotification/
+ - Updated spec.md, plan.md, and tasks.md so their wording now matches the ACP v0.4.3 data model: FR-039-01 points to SessionNotification/
   SessionUpdate, tasks call for exercising all official SessionUpdate and ContentBlock variants, and timestamps reflect the latest edits. (files:
   specs/039-streaming-alignment-session-notifications/spec.md, plan.md, tasks.md)
   - Refined data-model.md, contracts/type_mappings.md, and research.md to mirror ACP source definitions (session updates, content blocks, tool-
-  call structures, stop reasons, dedup guard). These documents now describe exactly what’s in agent-client-protocol v0.4.2. (files: data-model.md,
+  call structures, stop reasons, dedup guard). These documents now describe exactly what’s in agent-client-protocol v0.4.3. (files: data-model.md,
   contracts/type_mappings.md, research.md)
 
   Logs & Workflow
@@ -280,7 +280,7 @@ date: 2025-09-25T09:57:00Z
   Verification
 
   - Ran ./scripts/sdd/validate-metadata.sh --file … --verbose for data-model.md, contracts/type_mappings.md, and research.md; all returned ✓ Valid.
-  - Cross-referenced the updates with ~/dev-space/agent-client-protocol/rust/{client.rs, content.rs, tool_call.rs} to ensure parity with ACP v0.4.2.
+  - Cross-referenced the updates with ~/dev-space/agent-client-protocol/rust/{client.rs, content.rs, tool_call.rs} to ensure parity with ACP v0.4.3.
 
   Next Steps
 
@@ -299,7 +299,7 @@ date: 2025-09-25T10:25:00Z
 ⏺ owner: AI-Engineer("codex")
 """
 - Completed Phase 3.1 setup (T001–T006): added `insta` as a dev-dependency, introduced the shared `SnapshotHarness`, and scaffolded `streaming_snapshots_test.rs` + `tool_call_lifecycle_test.rs` with passing smoke tests.
-- Refreshed research/data-model/contracts with ACP v0.4.2 details (SessionUpdate fields, LastChunkGuard notes, tool-call mappings) and updated metadata timestamps to 2025-09-25T10:14:27Z.
+- Refreshed research/data-model/contracts with ACP v0.4.3 details (SessionUpdate fields, LastChunkGuard notes, tool-call mappings) and updated metadata timestamps to 2025-09-25T10:14:27Z.
 - Expanded plan.md with a dedicated Phase 3.2 test-planning section and annotated tasks.md so each test track lists expected failure modes and evidence capture locations.
 - Ran `cargo fmt` and `cargo test -p codex-cli-acp --tests`; harness compiles cleanly (warnings noted for unused `ingest_raw` helper until Phase 3.2 uses it).
 """
@@ -328,7 +328,7 @@ date: 2025-09-26T00:07:45Z
 """
 - Phase 3.3 core refactor (T017–T027) complete: codex_proto.rs now emits `agent_client_protocol::SessionNotification`/`SessionUpdate` directly, content/tool-call mapping uses the official models, and the last-chunk dedup guard was retained with ACP-compliant payloads. Tool kind inference returns `ToolKind` enums and enriched raw IO/location metadata is attached to each tool call.
 - Phase 3.4 integration (T028–T032) finished: codex_agent.rs streams the new notification structs, notify/idle paths reuse the official `StopReason`, and error propagation surfaces ACP-formatted `ToolCallUpdate` failures. The simulated fallback branch is removed.
-- Updated snapshot and regression tests to the v0.4.2 JSON shape; regenerated inline insta baselines and rewrote the session_update_format assertions for the flattened schema. All suites pass via `cargo test -p codex-cli-acp --tests`.
+- Updated snapshot and regression tests to the v0.4.3 JSON shape; regenerated inline insta baselines and rewrote the session_update_format assertions for the flattened schema. All suites pass via `cargo test -p codex-cli-acp --tests`.
 - tasks.md reflects the completed items (T017–T032 checked, timestamp bumped); next actionable work is the Phase 3.5 polish set (T034+) plus validation T041–T047. Manual Zed smoke test (T033) and SDD tooling runs remain outstanding.
 """
 

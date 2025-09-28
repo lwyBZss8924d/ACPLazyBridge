@@ -24,7 +24,7 @@ use tokio::time::{sleep, Instant};
 fn parse_notification(value: &serde_json::Value) -> SessionNotification {
     // ast-grep-ignore: rust-no-unwrap
     serde_json::from_value(value.clone())
-        .expect("Tool call update should already conform to agent_client_protocol v0.4.2")
+        .expect("Tool call update should already conform to agent_client_protocol v0.4.3")
 }
 
 async fn simulate_stop_reason(

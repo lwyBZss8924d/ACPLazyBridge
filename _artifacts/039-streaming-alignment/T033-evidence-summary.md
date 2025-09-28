@@ -58,7 +58,7 @@
 ### Migration Achievements
 
 1. **Protocol Alignment**:
-   - Successfully migrated from v0.4.2 to v0.4.3
+   - Successfully migrated from v0.4.3 to v0.4.3
    - All session/update messages conform to official schema
    - Tool call lifecycle properly implements status transitions
 

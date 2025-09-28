@@ -26,10 +26,10 @@ Analysis of the official `agent_client_protocol` types and their compatibility w
 
 ### Official Type Structures
 
-Based on agent-client-protocol v0.4.2:
+Based on agent-client-protocol v0.4.3:
 
 ```rust
-// From agent_client_protocol crate (v0.4.2)
+// From agent_client_protocol crate (v0.4.3)
 pub struct SessionNotification {
     pub session_id: SessionId,
     pub update: SessionUpdate,

@@ -4,7 +4,7 @@
 - ⚠️ _Fllow the SDD workflow implementation: `.specify/memory/lifecycle.md`_
 - ⚠️ _Follow the SDD rules: `sdd-rules/rules/README.md`_
 
-📌 Wen AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+📌 When AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 ## Authority
 

@@ -1,7 +1,7 @@
 //! Snapshot scaffolding for Codex streaming updates.
 //!
 //! Phase 3.2 populates these tests with RED expectations that enforce the
-//! agent_client_protocol v0.4.2 schema. Implementation work must update the
+//! agent_client_protocol v0.4.3 schema. Implementation work must update the
 //! streaming mapper so these tests pass.
 
 #[path = "support/mod.rs"]
@@ -16,7 +16,7 @@ use support::SnapshotHarness;
 fn parse_notification(value: &Value) -> SessionNotification {
     // ast-grep-ignore: rust-no-unwrap
     serde_json::from_value(value.clone())
-        .expect("SessionNotification should already match agent_client_protocol v0.4.2 schema")
+        .expect("SessionNotification should already match agent_client_protocol v0.4.3 schema")
 }
 
 #[tokio::test]

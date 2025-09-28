@@ -265,7 +265,7 @@ work in: (specs/)
      - MUST re-run the SDD Documentation Dynamic Consistency Check Workflow (.specify/memory/constitution_update_checklist.md) first!
      - Then if needed to add any new sdd-rules or update .specify/memory/constitution.md and resync docs/templates if needed.
 
-📌 Wen AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
+📌 When AI-Engineer SDD-TASKs Cooking Workflow can follow the BASELINE TEMPLATES work in (specs/): [AI-Engineer-SDD-Workflow-Baseline-templates](.specify/memory/AI-Engineer-SDD-Workflow-Baseline-templates.txt)
 
 <SDD-TASK-INITIALIZATION-WORKFLOW>
 
@@ -891,9 +891,9 @@ Validated workflows reflecting the refreshed protocol and consistency toolchain�
 - **ACP Protocol Schema**: <https://agentclientprotocol.com/protocol/schema>
 - **ACP official Rust library**: `cargo add agent-client-protocol`
 - **ACP Repository local path**: (~/dev-space/agent-client-protocol)
-- **(ACP) Protocol Lastest Version**: `v0.4.2` (2025-09-22)
+- **(ACP) Protocol Lastest Version**: `v0.4.3` (2025-09-22)
 
-Updated to match ACP v1 schema guidance (agent-client-protocol v0.4.2 released 2025-09-22); keep examples synchronized with `dev-docs/references/acp.md`.
+Updated to match ACP v1 schema guidance (agent-client-protocol v0.4.3 released 2025-09-22); keep examples synchronized with `dev-docs/references/acp.md`.
 
 - All examples use ACP v1: "protocolVersion": 1
 - JSON-RPC 2.0 message structure:
