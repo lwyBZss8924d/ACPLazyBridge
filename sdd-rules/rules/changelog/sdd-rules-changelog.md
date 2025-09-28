@@ -6,7 +6,6 @@
 
 [TODO]: base [Changelog Best Practices] and [Semantic Versioning] for
         "ACPLazyBridge" SSD-CHANGELOG [Constitution](.specify/memory/constitution.md)
----
 
 ```yaml
 constitution:
