@@ -4,6 +4,7 @@
 **Issue URI:** (to be created) #50
 **Related Specs:** `specs/040-codex-protocol-alignment-mvp/`
 **Analysis Artifacts:**
+
 - Codex Protocol Mapping: `_artifacts/reports/codex-protocol-analysis/`
 - ACP Protocol Mapping: `_artifacts/reports/acp-protocol-complete-mapping.md`
 - Claude-Code-ACP Reference: `_artifacts/reports/claude-code-acp-analysis/`
@@ -25,6 +26,7 @@ This gap analysis compares the **current codex-cli-acp implementation** against 
 ### ✅ What Works Today
 
 **Event Handling ([codex_proto.rs](../../crates/codex-cli-acp/src/codex_proto.rs)):**
+
 ```rust
 // Currently mapped Codex events → ACP
 CodexEvent::AgentMessage { message }           → SessionUpdate::AgentMessageChunk
@@ -41,6 +43,7 @@ CodexEvent::Error { message, code }            → ToolCallUpdate (failed)
 ```
 
 **Tool Call Features ([tool_calls.rs](../../crates/codex-cli-acp/src/tool_calls.rs)):**
+
 - ✅ Shell command extraction (`extract_shell_command`)
 - ✅ Shell parameter parsing (`extract_shell_params`: workdir, timeout, sudo)
 - ✅ Basic tool kind mapping (10 categories)
@@ -48,6 +51,7 @@ CodexEvent::Error { message, code }            → ToolCallUpdate (failed)
 - ✅ Raw input/output preservation
 
 **Runtime ([codex_agent.rs](../../crates/codex-cli-acp/src/codex_agent.rs)):**
+
 - ✅ Permission mode mapping (ACP → Codex CLI flags)
 - ✅ Process spawning with proto mode
 - ✅ Notify integration (file/FIFO turn completion)
@@ -55,6 +59,7 @@ CodexEvent::Error { message, code }            → ToolCallUpdate (failed)
 - ✅ Cancellation support
 
 **Strengths:**
+
 1. Solid foundation for event streaming
 2. Good tool call lifecycle tracking (pending → in_progress → completed)
 3. Shell tool parameter extraction is comprehensive
@@ -69,7 +74,9 @@ CodexEvent::Error { message, code }            → ToolCallUpdate (failed)
 These event types are **essential** for a complete Codex workflow but **not yet handled**:
 
 #### 2.1. Execution Tool Lifecycle
+
 **Codex Events:**
+
 ```rust
 // Not yet mapped:
 ExecCommandBegin {
@@ -111,6 +118,7 @@ ExecApproved {
 ```
 
 **Required ACP Mapping:**
+
 ```rust
 // Begin → ToolCall (pending)
 ExecCommandBegin → SessionUpdate::ToolCall {
@@ -165,7 +173,9 @@ ExecApprovalRequest → (call ACP permission flow, await response, submit approv
 ---
 
 #### 2.2. Patch/Edit Tool Lifecycle
+
 **Codex Events:**
+
 ```rust
 // Not yet mapped:
 PatchApplyBegin {
@@ -204,6 +214,7 @@ enum FileChange {
 ```
 
 **Required ACP Mapping:**
+
 ```rust
 // Begin → ToolCall per file (or one with multi-file content)
 PatchApplyBegin → {
@@ -263,7 +274,9 @@ PatchApprovalRequest → (call ACP permission flow with full diff content)
 ---
 
 #### 2.3. MCP Tool Call Lifecycle
+
 **Codex Events:**
+
 ```rust
 // Not yet mapped:
 McpToolCallBegin {
@@ -281,6 +294,7 @@ McpToolCallEnd {
 ```
 
 **Required ACP Mapping:**
+
 ```rust
 // Begin → ToolCall
 McpToolCallBegin → SessionUpdate::ToolCall {
@@ -313,7 +327,9 @@ McpToolCallEnd → SessionUpdate::ToolCallUpdate {
 ---
 
 #### 2.4. Web Search Lifecycle
+
 **Codex Events:**
+
 ```rust
 // Not yet mapped:
 WebSearchBegin {
@@ -328,6 +344,7 @@ WebSearchEnd {
 ```
 
 **Required ACP Mapping:**
+
 ```rust
 WebSearchBegin → SessionUpdate::ToolCall {
     id: id,
@@ -353,7 +370,9 @@ WebSearchEnd → SessionUpdate::ToolCallUpdate {
 ---
 
 #### 2.5. User Input Events
+
 **Codex Events:**
+
 ```rust
 // Partially handled (UserMessage), but missing fields:
 UserMessage {
@@ -374,6 +393,7 @@ UserInputReceived {
 ```
 
 **Required ACP Mapping:**
+
 ```rust
 UserFileAttachment → SessionUpdate::UserMessageChunk {
     content: ContentBlock::Resource(EmbeddedResource {
@@ -393,7 +413,9 @@ UserInputReceived → (optional, for echo/confirmation; may skip)
 ---
 
 #### 2.6. Extended Reasoning Events
+
 **Codex Events:**
+
 ```rust
 // Partially handled (AgentReasoning), but missing granular events:
 AgentReasoningRawContent { text }       // Already mapped ✅
@@ -406,6 +428,7 @@ ThinkingEnd
 ```
 
 **Required ACP Mapping:**
+
 ```rust
 // Current mapping is sufficient; Begin/End are metadata
 ThinkingBegin → (no-op, or start buffering if needed)
@@ -419,6 +442,7 @@ ThinkingEnd → (no-op, or flush buffered thought)
 ### 🟡 Medium Priority Gaps (Nice-to-Have for MVP)
 
 #### 2.7. Session Metadata Events
+
 ```rust
 // Not yet mapped:
 SessionMetadata {
@@ -437,6 +461,7 @@ TaskStarted {
 ---
 
 #### 2.8. Slash Command Execution
+
 ```rust
 // Not yet mapped:
 SlashCommandInvoked {
@@ -467,9 +492,11 @@ SlashCommandResult {
 ### 🔴 Critical Gaps
 
 #### 3.1. Submission Context Handling
+
 **Required:** Capture and expose submission metadata to ACP clients.
 
 **Current State:**
+
 ```rust
 // codex_agent.rs:483-513 (build_codex_submission)
 // Only handles prompt.messages (text content)
@@ -477,6 +504,7 @@ SlashCommandResult {
 ```
 
 **What's Missing:**
+
 ```rust
 struct SubmissionContext {
     cwd: PathBuf,                    // From session.working_dir ✅ (used in spawn)
@@ -489,10 +517,12 @@ struct SubmissionContext {
 ```
 
 **Required Changes:**
+
 1. Store `model` in session state (from `SessionConfigured` event or initial config)
 2. Parse `@-mentions` from prompt text (regex `@[filename]` or `[@filename](uri)`)
 3. Extract file attachments from `ContentBlock::Resource` and `ContentBlock::ResourceLink`
 4. Expose in session metadata:
+
    ```rust
    SessionUpdate::CurrentModeUpdate {
        current_mode_id: format!("{}:{}", permission_mode, model),
@@ -509,9 +539,11 @@ struct SubmissionContext {
 ---
 
 #### 3.2. Content Block Handling
+
 **Required:** Support all ACP content types in prompts and responses.
 
 **Current State:**
+
 ```rust
 // codex_agent.rs:483-498 (build_codex_submission)
 ContentBlock::Text(text) → items.push(json!({"type": "text", "text": text.text}))
@@ -519,12 +551,14 @@ ContentBlock::Text(text) → items.push(json!({"type": "text", "text": text.text
 ```
 
 **What's Missing:**
+
 - ❌ `ContentBlock::Image` → Codex image submission
 - ❌ `ContentBlock::Audio` → Codex audio submission (if supported)
 - ❌ `ContentBlock::Resource` → Embed as context
 - ❌ `ContentBlock::ResourceLink` → Convert to @-mention
 
 **Required Mapping:**
+
 ```rust
 match block {
     ContentBlock::Text(text) => {
@@ -581,9 +615,11 @@ match block {
 ---
 
 #### 3.3. Tool Call Diff Content
+
 **Required:** For `Edit` tool calls, provide `ContentBlock::Diff` with oldText/newText.
 
 **Current State:**
+
 ```rust
 // codex_proto.rs:514-523 (send_tool_call)
 // Only sends formatted output preview as text
@@ -591,10 +627,12 @@ content_blocks.push(ToolCallContent::from(formatted));
 ```
 
 **What's Missing:**
+
 - ❌ No diff generation for `PatchApply*` events
 - ❌ No file content cache to compute oldText
 
 **Required Pattern (from claude-code-acp):**
+
 ```rust
 // 1. Cache file content on reads
 let file_content_cache: Arc<RwLock<HashMap<String, String>>>;
@@ -633,15 +671,18 @@ PatchApplyBegin { changes } => {
 ### 🟡 Medium Priority Gaps
 
 #### 3.4. Permission Request Integration
+
 **Required:** Call `client.request_permission()` for approval flows.
 
 **Current State:**
+
 ```rust
 // Permission mode mapping exists (permissions.rs)
 // But no active permission request flow
 ```
 
 **What's Missing:**
+
 ```rust
 // When receiving ExecApprovalRequest or PatchApprovalRequest:
 ExecApprovalRequest { id, command, cwd, .. } => {
@@ -690,9 +731,11 @@ ExecApprovalRequest { id, command, cwd, .. } => {
 ---
 
 #### 3.5. Plan Entry Priority
+
 **Required:** Map Codex plan items to ACP with priority.
 
 **Current State:**
+
 ```rust
 // codex_proto.rs:397-418 (send_plan_update)
 let entries: Vec<PlanEntry> = update.plan.into_iter()
@@ -710,10 +753,12 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ```
 
 **What's Missing:**
+
 - Codex doesn't provide priority in `CodexPlanItem`
 - Need heuristic or default
 
 **Options:**
+
 1. Keep `Medium` default (simplest)
 2. Infer from keywords ("URGENT", "CRITICAL" → High)
 3. Add to Codex protocol (not feasible for MVP)
@@ -767,6 +812,7 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 | `Error` | `ToolCallUpdate` (failed) | ✅ Done | High |
 
 **Summary:**
+
 - ✅ **Done:** 11 / 25 (44%)
 - ❌ **Missing:** 14 / 25 (56%)
 - **Critical Missing:** 8 events (ExecCommand*, PatchApply*, Approval flows)
@@ -820,6 +866,7 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 | (custom modes) | (not applicable) | N/A |
 
 **Additional Codex Flags:**
+
 - `-c sandbox_mode=limited` / `full` / `none` (mapped from permission_mode in `permissions.rs`)
 - `-c network_access=allow` / `deny` (via env `ACPLB_NETWORK_ACCESS`)
 
@@ -832,11 +879,14 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 **Goal:** Handle all execution and patch tool lifecycles.
 
 #### Task 1.1: ExecCommand* Events
+
 **Files:** `codex_proto.rs`, `tool_calls.rs`
 
 **Changes:**
+
 1. Add `ExecCommandBegin`, `ExecCommandStdout`, `ExecCommandStderr`, `ExecCommandEnd` to `CodexEvent` enum
 2. Implement event handlers:
+
    ```rust
    CodexEvent::ExecCommandBegin { id, command, cwd, .. } => {
        self.send_exec_tool_call_begin(id, command, cwd, ...).await?;
@@ -848,10 +898,12 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 
    // Similar for Stderr, End
    ```
+
 3. Track tool state (pending → in_progress → completed) in `tool_calls: HashMap<String, ToolCallRecord>`
 4. Test with JSONL scenario: shell command execution with streaming output
 
 **Acceptance:**
+
 - ✅ Shell commands show as ToolCall with `kind: Execute`
 - ✅ Stdout/stderr appear as incremental ToolCallUpdate chunks
 - ✅ Exit code determines final status (0 → Completed, non-zero → Failed)
@@ -860,11 +912,14 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ---
 
 #### Task 1.2: PatchApply* Events
+
 **Files:** `codex_proto.rs`, `tool_calls.rs`
 
 **Changes:**
+
 1. Add `PatchApplyBegin`, `PatchApplyProgress`, `PatchApplyEnd` to `CodexEvent` enum
 2. Add `FileChange` enum:
+
    ```rust
    #[derive(Deserialize, Serialize)]
    #[serde(tag = "type", rename_all = "snake_case")]
@@ -874,14 +929,18 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
        Delete,
    }
    ```
+
 3. Implement file content cache:
+
    ```rust
    struct CodexStreamManager {
        file_content_cache: Arc<RwLock<HashMap<PathBuf, String>>>,
        // ...
    }
    ```
+
 4. Generate diffs in `send_patch_tool_call`:
+
    ```rust
    let old_content = self.file_content_cache.read().await.get(path).cloned().unwrap_or_default();
    let new_content = apply_changes(&old_content, &file_changes)?;
@@ -892,9 +951,11 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
        new_text: new_content,
    }]
    ```
+
 5. Test with JSONL scenario: multi-file patch application
 
 **Acceptance:**
+
 - ✅ File edits show as ToolCall with `kind: Edit` or `Delete`
 - ✅ Diff content includes full oldText and newText
 - ✅ Multiple file changes tracked separately
@@ -903,11 +964,14 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ---
 
 #### Task 1.3: Approval Flows
+
 **Files:** `codex_proto.rs`, `codex_agent.rs`
 
 **Changes:**
+
 1. Add `ExecApprovalRequest`, `PatchApprovalRequest`, `ExecApproved`, `PatchApproved` to `CodexEvent`
 2. Implement approval handler:
+
    ```rust
    CodexEvent::ExecApprovalRequest { id, command, cwd, .. } => {
        let response = self.request_permission_from_client(
@@ -927,10 +991,12 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
        })).await?;
    }
    ```
+
 3. Add `client: Arc<dyn Client>` to `CodexStreamManager` for permission requests
 4. Test with JSONL scenario: shell command requiring approval
 
 **Acceptance:**
+
 - ✅ Approval requests trigger `client.request_permission()`
 - ✅ User choice (allow/reject) sent back to Codex as approval op
 - ✅ Rejected commands show as Failed ToolCallUpdate
@@ -941,20 +1007,25 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ### Phase 2: MCP and Web Search (Week 2)
 
 #### Task 2.1: McpToolCall* Events
+
 **Files:** `codex_proto.rs`, `tool_calls.rs`
 
 **Changes:**
+
 1. Add `McpToolCallBegin`, `McpToolCallEnd` to `CodexEvent`
 2. Implement heuristic tool kind mapping:
+
    ```rust
    fn infer_mcp_tool_kind(server: &str, tool: &str) -> ToolKind {
        let name = format!("{}:{}", server, tool).to_lowercase();
        map_tool_kind(&name)  // Reuse existing heuristic
    }
    ```
+
 3. Test with JSONL scenario: MCP server tool invocation
 
 **Acceptance:**
+
 - ✅ MCP tools show as ToolCall with inferred kind
 - ✅ Server and tool name in title
 - ✅ Result/error mapped to ToolCallUpdate
@@ -962,14 +1033,17 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ---
 
 #### Task 2.2: WebSearch* Events
+
 **Files:** `codex_proto.rs`
 
 **Changes:**
+
 1. Add `WebSearchBegin`, `WebSearchEnd` to `CodexEvent`
 2. Map to `ToolKind::Fetch`
 3. Format search results as markdown list
 
 **Acceptance:**
+
 - ✅ Web searches show as ToolCall with `kind: Fetch`
 - ✅ Results formatted as readable list
 
@@ -978,10 +1052,13 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ### Phase 3: Content and Submission Enhancements (Week 2-3)
 
 #### Task 3.1: Image Support
+
 **Files:** `codex_agent.rs` (`build_codex_submission`)
 
 **Changes:**
+
 1. Handle `ContentBlock::Image`:
+
    ```rust
    ContentBlock::Image(img) => {
        if let Some(uri) = img.uri {
@@ -1003,16 +1080,20 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
    ```
 
 **Acceptance:**
+
 - ✅ Image prompts accepted (no error)
 - ✅ Base64 and URL formats supported
 
 ---
 
 #### Task 3.2: Resource Embedding
+
 **Files:** `codex_agent.rs`
 
 **Changes:**
+
 1. Handle `ContentBlock::Resource` and `ContentBlock::ResourceLink`:
+
    ```rust
    ContentBlock::Resource(res) => {
        let (uri, text) = extract_resource_content(res)?;
@@ -1027,21 +1108,26 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
        items.push(json!({ "type": "text", "text": format_uri_as_link(&link.uri) }));
    }
    ```
+
 2. Append `context_blocks` after main `items`
 
 **Acceptance:**
+
 - ✅ @-mentions rendered as `[@name](uri)`
 - ✅ Embedded resources wrapped in `<context>` tags
 
 ---
 
 #### Task 3.3: Submission Metadata
+
 **Files:** `codex_agent.rs`, `codex_proto.rs`
 
 **Changes:**
+
 1. Add `model: Option<String>` to session state
 2. Capture model from `SessionConfigured` event
 3. Emit metadata in `CurrentModeUpdate`:
+
    ```rust
    SessionUpdate::CurrentModeUpdate {
        current_mode_id: format!("{}:{}", permission_mode, model.unwrap_or("default")),
@@ -1055,6 +1141,7 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
    ```
 
 **Acceptance:**
+
 - ✅ Session metadata exposed to client
 - ✅ Model name visible in mode ID or meta
 
@@ -1063,9 +1150,11 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 ### Phase 4: Testing and Evidence (Week 3)
 
 #### Task 4.1: JSONL Test Scenarios
+
 **Files:** `_artifacts/tests/protocol-baseline/`
 
 **New Scenarios:**
+
 1. `exec_command_streaming.jsonl` - Shell with stdout/stderr
 2. `patch_apply_multi_file.jsonl` - Edit multiple files
 3. `approval_flow_exec.jsonl` - Command requiring approval
@@ -1075,6 +1164,7 @@ fn plan_entry_from_codex(item: CodexPlanItem) -> PlanEntry {
 7. `image_submission.jsonl` - Prompt with image
 
 **Test Execution:**
+
 ```bash
 for scenario in _artifacts/tests/protocol-baseline/*.jsonl; do
     echo "Testing $scenario..."
@@ -1087,9 +1177,11 @@ done
 ---
 
 #### Task 4.2: Integration Tests
+
 **Files:** `crates/codex-cli-acp/tests/e2e_test.rs`
 
 **New Tests:**
+
 ```rust
 #[tokio::test]
 async fn test_exec_command_lifecycle() {
@@ -1112,15 +1204,18 @@ async fn test_patch_approval_flow() {
 ---
 
 #### Task 4.3: Evidence Collection
+
 **Files:** `_artifacts/040-codex-protocol-alignment-mvp/`
 
 **Artifacts:**
+
 1. `logs/` - Test run logs (stdout/stderr)
 2. `jq/` - JQ validation results
 3. `reports/` - Coverage reports (which events handled)
 4. `schemas/` - JSON schema validation results
 
 **Commands:**
+
 ```bash
 # Test suite
 ./scripts/sdd/run-e2e-tests.sh 2>&1 | tee _artifacts/040-.../logs/e2e_$(date +%Y%m%d_%H%M%S).log
@@ -1139,9 +1234,11 @@ done
 ## 6. Risk Mitigation
 
 ### Risk 1: Codex Event Schema Drift
+
 **Probability:** Medium
 **Impact:** High
 **Mitigation:**
+
 - Pin Codex CLI version in Docker image
 - Add integration tests against known Codex version
 - Document event schema assumptions in code comments
@@ -1150,9 +1247,11 @@ done
 ---
 
 ### Risk 2: File Content Cache Memory Usage
+
 **Probability:** Low
 **Impact:** Medium
 **Mitigation:**
+
 - Implement LRU cache with size limit (e.g., 100 files)
 - Clear cache on session end
 - Add memory usage metrics
@@ -1161,9 +1260,11 @@ done
 ---
 
 ### Risk 3: Permission Flow Blocking
+
 **Probability:** Medium
 **Impact:** High
 **Mitigation:**
+
 - Add timeout to `client.request_permission()` (default 5 minutes)
 - Allow cancellation during permission wait
 - Test with client that doesn't respond (should timeout gracefully)
@@ -1171,9 +1272,11 @@ done
 ---
 
 ### Risk 4: Diff Generation Errors
+
 **Probability:** Medium
 **Impact:** Medium
 **Mitigation:**
+
 - Wrap diff computation in try-catch; fallback to text-only on error
 - Add unit tests for edge cases (empty file, binary file, large file)
 - Log diff errors with file path and change details
@@ -1250,6 +1353,7 @@ done
 ## Appendix A: Reference Documents
 
 ### Research Artifacts
+
 1. **Codex Protocol Analysis:** `_artifacts/reports/codex-protocol-analysis/`
    - Complete event mapping (50+ events)
    - Tool structures and parameters
@@ -1269,22 +1373,24 @@ done
    - Content transformation recipes
 
 ### Related Code Files
+
 - **Current Implementation:**
-  - `crates/codex-cli-acp/src/main.rs` - Entry point
-  - `crates/codex-cli-acp/src/codex_proto.rs` - Event handling
-  - `crates/codex-cli-acp/src/tool_calls.rs` - Tool utilities
-  - `crates/codex-cli-acp/src/codex_agent.rs` - Runtime
-  - `crates/acp-lazy-core/src/permissions.rs` - Permission mapping
+    - `crates/codex-cli-acp/src/main.rs` - Entry point
+    - `crates/codex-cli-acp/src/codex_proto.rs` - Event handling
+    - `crates/codex-cli-acp/src/tool_calls.rs` - Tool utilities
+    - `crates/codex-cli-acp/src/codex_agent.rs` - Runtime
+    - `crates/acp-lazy-core/src/permissions.rs` - Permission mapping
 
 - **Test Scenarios:**
-  - `_artifacts/tests/protocol-baseline/*.jsonl`
+    - `_artifacts/tests/protocol-baseline/*.jsonl`
 
 ---
 
 ## Appendix B: Event Mapping Quick Reference
 
 ### Critical Priority (Must Implement)
-```
+
+```txt
 ExecCommandBegin → ToolCall (Execute, pending)
 ExecCommandStdout → ToolCallUpdate (in_progress, stdout content)
 ExecCommandStderr → ToolCallUpdate (in_progress, stderr content)
@@ -1297,7 +1403,8 @@ PatchApprovalRequest → client.request_permission() → PatchApproved op
 ```
 
 ### High Priority (Should Implement)
-```
+
+```txt
 McpToolCallBegin → ToolCall (inferred kind, pending)
 McpToolCallEnd → ToolCallUpdate (completed/failed, result)
 ContentBlock::Image → Codex image submission
@@ -1306,7 +1413,8 @@ ContentBlock::ResourceLink → @-mention text
 ```
 
 ### Medium Priority (Nice-to-Have)
-```
+
+```txt
 WebSearchBegin → ToolCall (Fetch, pending)
 WebSearchEnd → ToolCallUpdate (completed, results)
 UserFileAttachment → Resource content block
@@ -1318,6 +1426,7 @@ Submission metadata capture (model, cwd, attachments)
 **End of Gap Analysis**
 
 **Next Steps:**
+
 1. Review this document with team
 2. Prioritize tasks for sprint planning
 3. Create GitHub issue #50 with summary

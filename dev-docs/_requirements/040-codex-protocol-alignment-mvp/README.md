@@ -20,9 +20,11 @@ This directory contains comprehensive research and requirements analysis for imp
 ## Document Structure
 
 ### 1. Main Research Report
+
 **[issue-50-research-report.md](./issue-50-research-report.md)** (3,500+ lines)
 
 The comprehensive research report with:
+
 - Executive summary and recommendations
 - Protocol capability analysis (Codex + ACP)
 - 3-week phased implementation roadmap
@@ -36,9 +38,11 @@ The comprehensive research report with:
 ---
 
 ### 2. Gap Analysis
+
 **[issue-50-gap-analysis.md](./issue-50-gap-analysis.md)** (2,500+ lines)
 
 Detailed gap analysis covering:
+
 - Current implementation state (44% coverage)
 - Missing event mappings (14 critical events)
 - Complete mapping tables (Codex ↔ ACP)
@@ -50,9 +54,11 @@ Detailed gap analysis covering:
 ---
 
 ### 3. ACP Protocol Requirements
+
 **[acp-protocol-complete-mapping.md](./acp-protocol-complete-mapping.md)** (800+ lines)
 
 Complete ACP protocol reference:
+
 - All 8 SessionUpdate variants
 - 10 ToolKind categories
 - ToolCallStatus lifecycle
@@ -64,9 +70,11 @@ Complete ACP protocol reference:
 ---
 
 ### 4. Codex Protocol Analysis
+
 **[codex-protocol-analysis/](./codex-protocol-analysis/)** (1,800+ lines)
 
 Comprehensive Codex CLI protocol documentation:
+
 - **README.md** - Overview and navigation
 - **codex-complete-protocol-mapping.md** - All 50+ events, tool structures
 - **codex-to-acp-mapping-recommendations.md** - Event mapping patterns
@@ -80,16 +88,19 @@ Comprehensive Codex CLI protocol documentation:
 ### Key Findings
 
 **Current Coverage:**
+
 - ✅ 44% of events (11/25)
 - ✅ Solid runtime infrastructure
 - ❌ Missing approval flows and tool lifecycles
 
 **Required Implementation:**
+
 - **8 critical events** (ExecCommand*, PatchApply*, Approval flows)
 - **6 high-priority features** (file cache, content blocks, MCP lifecycle)
 - **~1,150 lines** across 4 files
 
 **Effort Estimate:**
+
 - **Time:** 2-3 weeks (one developer)
 - **Risk:** Low-Medium (proven patterns from claude-code-acp)
 - **Value:** Complete Codex workflow support in Zed IDE
@@ -99,17 +110,20 @@ Comprehensive Codex CLI protocol documentation:
 ### Implementation Roadmap
 
 **Week 1: Critical Events (Days 1-5)**
+
 - ExecCommand* lifecycle
 - PatchApply* lifecycle
 - Approval flow skeleton
 
 **Week 2: Integration (Days 6-10)**
+
 - Content block support
 - MCP tool lifecycle
 - Web search events
 - Submission metadata
 
 **Week 3: Testing & Evidence (Days 11-15)**
+
 - 7+ JSONL test scenarios
 - Integration tests
 - Evidence collection
@@ -120,6 +134,7 @@ Comprehensive Codex CLI protocol documentation:
 ### Missing Events (Priority Order)
 
 **Critical (Week 1):**
+
 1. `ExecCommandBegin` → ToolCall (Execute, pending)
 2. `ExecCommandStdout` → ToolCallUpdate (in_progress, stdout)
 3. `ExecCommandStderr` → ToolCallUpdate (in_progress, stderr)
@@ -144,6 +159,7 @@ Comprehensive Codex CLI protocol documentation:
 ## Research Statistics
 
 **Analysis Scope:**
+
 - **50+ files** across 4 repositories analyzed
 - **20,000+ lines** of code examined
 - **8,600+ lines** of documentation generated
@@ -151,6 +167,7 @@ Comprehensive Codex CLI protocol documentation:
 - **30+ code patterns** extracted
 
 **Time Investment:**
+
 - Codex CLI protocol: 12 hours
 - ACP protocol: 4 hours
 - Reference implementation: 8 hours
@@ -168,9 +185,11 @@ Comprehensive Codex CLI protocol documentation:
 1. **Review** research report with team
 2. **Create GitHub Issue #50** with summary
 3. **Run `/sdd-task 50`** to initialize workflow:
+
    ```bash
    /sdd-task 50
    ```
+
    This will:
    - Create worktree: `../acplb-worktrees/040-codex-protocol-alignment-mvp`
    - Generate `specs/040-codex-protocol-alignment-mvp/spec.md` from research
@@ -191,7 +210,8 @@ Use these documents in order:
 ## Evidence Location
 
 After implementation, evidence will be stored at:
-```
+
+```tree
 _artifacts/040-codex-protocol-alignment-mvp/
 ├── logs/       # Test execution logs
 ├── jq/         # JSON validation results
@@ -204,12 +224,14 @@ _artifacts/040-codex-protocol-alignment-mvp/
 ## Related Documents
 
 **In Repository:**
+
 - Current implementation: `crates/codex-cli-acp/src/`
 - Test scenarios: `_artifacts/tests/protocol-baseline/`
 - SDD Constitution: `.specify/memory/constitution.md`
 - SDD Templates: `.specify/templates/`
 
 **External References:**
+
 - Codex CLI: https://github.com/openai/codex
 - ACP Protocol: https://agentclientprotocol.com
 - Claude-Code-ACP: https://github.com/zed-industries/claude-code-acp
