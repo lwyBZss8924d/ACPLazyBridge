@@ -3,10 +3,10 @@
 created: 2025-09-29T21:24:56Z
 updated: 2025-09-30T14:31:58Z
 
-`[Status: Draft]`
+`[Status: Created as Issue #52]`
 
 - **Milestone**: 0.1.0 – Core Runtime & Zed ↔ Codex-CLI MVP
-- **Issue URI**: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/50 _(to be created; link placeholder)_
+- **Issue URI**: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/52 _(created 2025-09-30)_
 - **Requirements & Research**: `dev-docs/_requirements/040-codex-protocol-alignment-mvp/`
     - Research report (3,500 lines)
     - Gap analysis (2,500 lines)
@@ -578,9 +578,9 @@ Protocol:
 
 **Phase 1: Issue Creation & SDD Initialization**
 
-(1) **Create GitHub Issue #50** from this draft specification
+(1) ✅ **GitHub Issue #52 Created**: https://github.com/lwyBZss8924d/ACPLazyBridge/issues/52
 
-(2) **Initialize SDD workflow**: Run `/sdd-task 50` (or `/sdd-task https://github.com/lwyBZss8924d/ACPLazyBridge/issues/50`)
+(2) **Initialize SDD workflow**: Run `/sdd-task 52` (or `/sdd-task https://github.com/lwyBZss8924d/ACPLazyBridge/issues/52`)
 
 - This will automatically:
     - Create worktree: `../acplb-worktrees/040-codex-protocol-alignment-mvp` from `origin/main`
