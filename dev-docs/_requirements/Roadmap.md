@@ -108,7 +108,7 @@ This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves in
 
 - Roadmap evolution is governed by the SDD Constitution; updates require spec/plan/task artefacts and adherence to the Constitution Update Checklist when touching normative documents.
 - Each milestone is managed through GitHub Projects with links to specs, plans, tasks, and evidence folders:
-    - **Project #7**: [Milestone 0.1.0 - Core Runtime & Codex MVP](https://github.com/lwyBZss8924d/ACPLazyBridge/projects/7)
+    - **Project #7**: [Milestone 0.1.0 - Core Runtime & Codex MVP](https://github.com/users/lwyBZss8924d/projects/7)
     - **Setup Guide**: [github-projects-setup.md](./github-projects-setup.md) (detailed configuration)
     - **Quick Start**: [PROJECT-QUICKSTART.md](./PROJECT-QUICKSTART.md) (5-minute guide)
 - Deviations from scope require explicit approval recorded in `sdd-rules` change logs.

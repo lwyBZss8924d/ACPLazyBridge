@@ -150,7 +150,7 @@ graph LR
 Since GitHub CLI requires interactive auth for project permissions, follow these steps:
 
 ### Step 1: Create Project via Web UI
-1. Go to: https://github.com/lwyBZss8924d/ACPLazyBridge/projects
+1. Go to: https://github.com/users/lwyBZss8924d/projects
 2. Click "New project" → "Board"
 3. Name: "Milestone 0.1.0 - Core Runtime & Codex MVP"
 4. Description: "Tracking completion of first release: Codex CLI ACP adapter with MCP bridge and full protocol alignment"
