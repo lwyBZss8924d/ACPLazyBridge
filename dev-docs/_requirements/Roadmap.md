@@ -13,20 +13,20 @@ This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves in
 
 | Quarter | Release | Focus |
 | --- | --- | --- |
-| Q3-1 2025 | 0.1.0 | Core runtime migration to official ACP libraries + Zed ↔ Codex MVP |
+| Q3-1 2025 | 0.1.0 | 🚧 (ACPLazyBridge) First Release `acp-lazybridge/codex-cli-acp` Core runtime migration to official ACP libraries + Zed ↔ Codex-CLI MVP |
 | Q3-2 2025 | 0.2.0 | Claude & Gemini agent servers on shared runtime + composer plugin foundation |
 | Q4-1 2025 | 0.3.0 | Cross-editor ACP clients (VS Code, Obsidian, tldraw) + advanced composer workflows |
 | Q4-2 2025 | 0.4.0 | Runtime hardening, multi-agent orchestration, and ecosystem SDK polish |
 
 > Dates are directional; release readiness is gated by SDD acceptance criteria and CI evidence rather than calendar targets.
 
-## Milestone 0.1.0 – Core Runtime & Zed ↔ Codex MVP
+## Milestone 0.1.0 – Core Runtime & Zed ↔ Codex-CLI MVP `acp-lazybridge/codex-cli-acp`
 
 **Scope**
 
 - ✅ **Completed**: Replace handcrafted JSON-RPC loop with `agent_client_protocol::AgentSideConnection` and Tokio `LocalSet` execution (SDD Task 038, PR #47).
-- 🔄 **Deferred**: Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types (Issue #45, Phase 4).
-- 🔄 **Deferred**: Remove `acp-lazy-core::protocol` module and reuse upstream error/response models everywhere (Issue #46, Phase 5).
+- ✅ **Completed**: Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types (Issue #45, Phase 4).
+- 🔄 **In Progress**: Complete Codex protocol alignment for the MVP, Enhanced Implementation Plan for ACPLazyBridge `acp-lazybridge/codex-cli-acp`, covering submission metadata, tool lifecycle, approvals, and slash commands with official ACP models (Issue #50, supersedes Issue #46).
 - ✅ **Completed**: Validate end-to-end with Zed's Custom Agent client connected to the Codex CLI adapter.
 
 **Acceptance**

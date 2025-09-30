@@ -21,7 +21,7 @@ Related:
 
 | Milestone | Target | Primary Outcomes | Status | Key References |
 | --- | --- | --- | --- | --- |
-| 0.1.0 – Core Runtime & Zed ↔ Codex MVP | Q3-1 2025 | Adopt `agent-client-protocol` runtime, replace handcrafted streaming, deprecate internal protocol models | ✅ **Completed** | FR-0101…FR-0105 in `acp-lazybridge-requirements.md`; `specs/038-adopt-acp-runtime/` (PR #47) |
+| 0.1.0 – Core Runtime & Zed ↔ Codex MVP | Q3-1 2025 | Adopt `agent-client-protocol` runtime, replace handcrafted streaming, deprecate internal protocol models | 🚧 **In Progress** | FR-0101…FR-0105 in `acp-lazybridge-requirements.md`; `specs/038-adopt-acp-runtime/` (PR #47); follow-ups: `_issues_drafts/open/#45-streaming-alignment-session-notifications.md`, `_issues_drafts/open/#50-codex-protocol-alignment-mvp.md` |
 | 0.2.0 – Multi-Agent Runtime & Composer Foundations | Q3-2 2025 | Claude & Gemini adapters on shared runtime; composer pipeline (`subagents`, `commands`, `hooks`) | 🔄 Planned | FR-0201…FR-0204; Issue drafts pending |
 | 0.3.0 – Cross-Editor Clients & Advanced Workflows | Q4-1 2025 | VS Code / Obsidian / tldraw integrations; multi-session orchestration; workflow telemetry | 🔄 Planned | FR-0301…FR-0303; Issue drafts pending |
 | 0.4.0 – Ecosystem Hardening & SDK Polish | Q4-2 2025 | Rust & TypeScript SDKs, runtime hardening, resilience testing | 🔄 Planned | FR-0401…FR-0402; Issue drafts pending |
@@ -32,14 +32,14 @@ Related:
    - Owner: Runtime WG
    - Deliverables: Shared runtime crate, LocalSet orchestration, Codex adapter migration, regression evidence.
    - Issue Drafts: `specs/038-adopt-acp-runtime/` (Issue #44 completed via PR #47).
-2. **Streaming Alignment** (Milestone 0.1.0, Phase 4)
+2. **Streaming Alignment** (Milestone 0.1.0, Phase 4) **✅ **Completed**
    - Owner: Runtime WG
    - Deliverables: Official ACP streaming models, deduplication safeguards, notify/timeout parity.
    - Issue Drafts: `_issues_drafts/open/#45-streaming-alignment-session-notifications.md`.
-3. **Protocol Cleanup** (Milestone 0.1.0, Phase 5)
+3. **Codex Protocol Alignment** (Milestone 0.1.0, Phase 5)
    - Owner: Runtime WG
-   - Deliverables: Legacy protocol module removal, upstream type adoption.
-   - Issue Drafts: `_issues_drafts/open/#46-protocol-cleanup-official-models.md`.
+   - Deliverables: Legacy protocol module removal, complete ACP submission/event coverage, documentation updates.
+   - Issue Drafts: `_issues_drafts/open/#50-codex-protocol-alignment-mvp.md` (supersedes `_issues_drafts/open/#46-protocol-cleanup-official-models.md`).
 4. **Composer Pipeline** (Milestones 0.2.0–0.3.0)
    - Owner: Composer WG
    - Deliverables: Plugin traits, translator subagent, configuration schema, orchestration telemetry.
@@ -90,5 +90,6 @@ Related:
 ## 9. Follow-up Actions
 
 - Complete conversion of remaining legacy documents (`m1-technical-implementation-plan.md`, `m1-issue-list.md`) into English SDD format.
+- Publish GitHub Issue #50 referencing `_issues_drafts/open/#50-codex-protocol-alignment-mvp.md` and mark Issue #46 as superseded.
 - Open GitHub Project cards aligned with this plan for each active issue draft.
 - Schedule architecture review ahead of Milestone 0.2.0 to validate composer design extensions.

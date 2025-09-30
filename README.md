@@ -1,29 +1,51 @@
 # ACPLazyBridge
 
-ACP bridge for agents / agent-tools plugin Hub connects IDEs, other types of editors, etc.
+ACP-LazyBridge Bridge for Agents / Agent-Tools and Extensions, Hub connects IDEs, other types of Editors Workspaces UI, etc.
 
-## ACP (Agent Client Protocol) Protocol
+## About ACP (Agent Client Protocol)
 
-- Agent Client Protocol: <https://github.com/zed-industries/agent-client-protocol>
+- Agent Client Protocol: [ACP](https://agentclientprotocol.com/overview/introduction)
 - ACP JSON Schema: <https://github.com/zed-industries/agent-client-protocol/blob/main/schema/schema.json>
 
 > The Agent Client Protocol (ACP) standardizes communication between code editors (interactive programs for viewing and editing source code) and coding agents (programs that use generative AI to autonomously modify code).
 
-## Dev Purpose
+## What is ACP-LazyBridge? (IMAGINE)
 
-Governance: .specify/memory/constitution.md (normative; English-only)
+```txt
 
-Provide a reusable, IDE-agnostic ACP bridge that:
+┌──────────────────────┐                                        ┌───────────────────────────┐
+│       Clients        │ ◀─────────────── ACP ────────────────▶ │       ACPLB‑Hub           │
+│  Agent Panel (Zed/   │              (JSON‑RPC)                │                           │
+│  VS Code/Obsidian/   │                                        │ ┌───────────────────────┐ │
+│  tldraw/ …)          │                                        │ │ Runtime (ACP v1)      │ │
+└──────────────────────┘                                        │ │ - agent_client_       │ │
+                                                                │ │   protocol types      │ │
+┌──────────────────────┐                                        │ │ - transport: stdio    │ │
+│   Multi‑Base Agents  │ ◀────── Main-Agent & Sub-Agents ─────▶ │ │ - session/update      │ │
+│  (planner/executor/  │             (Turns / Steps)            │ └───────────────────────┘ │
+│   reviewer …)        │                                        │ ┌───────────────────────┐ │
+└──────────────────────┘                                        │ │ Adapters & Sandbox    │ │
+                                                                │ │ - codex-cli-acp       │ │
+┌──────────────────────┐                                        │ │ - claude-code-acp*    │ │
+│   Augmented Tooling  │ ◀──────────── Tool Calls ────────────▶ │ │ - gemini-cli-acp*     │ │
+│ (search/edit/exec/   │ (FC / Bash / PyScript / MCP-Proxy ...) │ └───────────────────────┘ │
+│  fetch/other …)      │                                        │ ┌───────────────────────┐ │
+└──────────────────────┘                                        │ │ Extensions            │ │
+                                                                │ │ (commands/workflows/  │ │
+                                                                │ │  hooks/pipelines)     │ │
+                                                                │ └───────────────────────┘ │
+                                                                └───────────────────────────┘
 
-- Adopts Zed’s official ACP integration patterns (agent_servers/agent_ui) as best practice.
-- Hosts external CLI agent adapters (Claude, Gemini, Codex, …) with a consistent capability surface.
-- Ensures non-interactive approvals by default for IDEs without a UI approval flow.
+Notes: any Workspaces AI Pilot powered by any Coding Base Agent.
 
-## Planned adapters
+                    Figure 1: ACP‑LazyBridge IMAGINE Architecture
+```
 
-- @zed-industries/claude-code-acp (use Zed’s official adapter directly)
-- @google/gemini-cli (use Zed’s official adapter directly via --experimental-acp)
-- @zed-industries/codex-cli-acp (new adapter implemented here; aligns ACP stream, tool_calls, and non-interactive approvals)
+## Planned Agents Adapters
+
+- **Codex CLI** @lwyBZss8924d/ACPLazyBridge `acp-lazybridge/codex-cli-acp` Agents Adapter 🚧
+- **Gemini CLI** Integration: @google-gemini/gemini-cli/tree/main/packages/cli/src/zed-integration (Integration: Zed’s official adapter directly via 'experimental-acp') Agents Adapter
+- **Claude Code** Integration: @zed-industries/claude-code-acp ACP adapter Agents Adapter
 
 ## Planned Agent Clients
 
@@ -32,18 +54,7 @@ Provide a reusable, IDE-agnostic ACP bridge that:
 - Obsidian
 - Tldraw
 
-## Non‑interactive approvals (recommended defaults)
-
-To avoid stalling tool_calls in IDEs with no approval UI, map permission modes to:
-
-- default:  approval_policy=never, sandbox_mode=read-only,      network_access=false
-- plan:     approval_policy=never, sandbox_mode=read-only,      network_access=false
-- acceptEdits:       approval_policy=never, sandbox_mode=workspace-write, network_access=false
-- bypassPermissions: approval_policy=never, sandbox_mode=workspace-write, network_access=true
-
-You can expose a YOLO profile (danger-full-access) as an explicit opt-in only.
-
-## Roadmap (2025 focus)
+## Roadmap
 
 For the canonical plan and acceptance criteria, see `dev-docs/_requirements/Roadmap.md`. The highlights below track the active SDD scope.
 
@@ -54,34 +65,23 @@ For the canonical plan and acceptance criteria, see `dev-docs/_requirements/Road
 - Grow composer capabilities (subagents, commands, hooks) so IDEs can orchestrate specialised workflows.
 - Ship editor integrations (Zed, VS Code, Obsidian, tldraw) that expose a consistent ACP experience.
 
-### Timeline Targets (directional)
+### Milestone
 
 | Quarter | Release | Focus |
 | --- | --- | --- |
-| Q3-1 2025 | 0.1.0 | Core runtime migration to official ACP libraries + Zed ↔ Codex MVP |
-| Q3-2 2025 | 0.2.0 | Claude & Gemini adapters on shared runtime + composer plugin foundation |
+| Q3-1 2025 | 0.1.0 | 🚧 (ACPLazyBridge) First Release `acp-lazybridge/codex-cli-acp` Core runtime migration to official ACP libraries + Zed ↔ Codex-CLI MVP |
+| Q3-2 2025 | 0.2.0 | Claude & Gemini agent servers on shared runtime + composer plugin foundation |
 | Q4-1 2025 | 0.3.0 | Cross-editor ACP clients (VS Code, Obsidian, tldraw) + advanced composer workflows |
-| Q4-2 2025 | 0.4.0 | Runtime hardening, multi-agent orchestration, and SDK polish |
+| Q4-2 2025 | 0.4.0 | Runtime hardening, multi-agent orchestration, and ecosystem SDK polish |
 
-> Release readiness is gated by SDD evidence, not calendar dates.
+## Milestone 0.1.0 – Core Runtime & Zed ↔ Codex-CLI MVP `acp-lazybridge/codex-cli-acp`
 
-### Milestone Snapshots
+**Scope**
 
-- **0.1.0 – Core Runtime & Zed ↔ Codex MVP (current)**
-    - ✅ Migrated runtime to `agent_client_protocol::AgentSideConnection` (SDD Task 038 / PR #47).
-    - ✅ E2E validated with Zed Custom Agent + Codex adapter; CI + JSONL baselines are green.
-    - 🔄 Remaining follow-up: port streaming notifications to upstream types and deprecate local protocol models.
-- **0.2.0 – Multi-Agent Runtime & Composer Foundations**
-    - Ship Claude and Gemini binaries on the shared runtime.
-    - Introduce `acplb-subagents`, `acplb-commands`, and composer configuration contracts.
-    - Extend harnesses for parallel sessions and plugin pipelines.
-- **0.3.0 – Cross-Editor Clients & Advanced Composer Workflows**
-    - Build ACP clients for VS Code, Obsidian, and tldraw.
-    - Deliver reusable workflow templates (planner → executor → reviewer) with telemetry.
-    - Add multi-session orchestration with evidence captured via JSONL playbacks.
-- **0.4.0 – Ecosystem Hardening & SDK Polish**
-    - Publish Rust/TypeScript SDKs for bridge plugins and third-party agent servers.
-    - Harden runtime (quotas, tracing correlation, structured errors) and document load-testing artefacts.
+- ✅ **Completed**: Replace handcrafted JSON-RPC loop with `agent_client_protocol::AgentSideConnection` and Tokio `LocalSet` execution (SDD Task 038, PR #47).
+- ✅ **Completed**: Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types (Issue #45, Phase 4).
+- 🔄 **In Progress**: Complete Codex protocol alignment for the MVP, Enhanced Implementation Plan for ACPLazyBridge `acp-lazybridge/codex-cli-acp`, covering submission metadata, tool lifecycle, approvals, and slash commands with official ACP models (Issue #50, supersedes Issue #46).
+- ✅ **Completed**: Validate end-to-end with Zed's Custom Agent client connected to the Codex CLI adapter.
 
 ---
 

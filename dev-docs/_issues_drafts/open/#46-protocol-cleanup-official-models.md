@@ -1,6 +1,9 @@
 # Remove Legacy Protocol Mirror and Adopt Official Models
 
+> **Superseded**: This draft is retained for historical context. Active planning continues in `_issues_drafts/open/#50-codex-protocol-alignment-mvp.md` (Issue #50).
+
 _issues for SDD Task (pending)_
+`[TODO]: ("to be updated")` Research in progress 🔄 (_To be supplemented and updated before releasing new ISSUES# details and comments to replace GitHub ISSUES-46, and use the new ISSUES #50 draft to replace ISSUES-46_)
 
 **GitHub Issue**: [#46](dev-docs/_issues_drafts/open/#46-protocol-cleanup-official-models.md) | <https://github.com/lwyBZss8924d/ACPLazyBridge/issues/46>
 **Status**: issue is open (Milestone 0.1.0)

@@ -3,7 +3,8 @@
 ```yaml
 Milestone: 0.1.0 (Core Runtime & Zed ↔ Codex MVP)
 Spec-URIs: `specs/038-adopt-acp-runtime/` (Issue #44 completed via PR #47, commit 7ae2628)
-Deferred-URIs: `_issues_drafts/open/#45-streaming-alignment-session-notifications.md`, `_issues_drafts/open/#46-protocol-cleanup-official-models.md`
+Deferred-URIs: `_issues_drafts/open/#45-streaming-alignment-session-notifications.md`, `_issues_drafts/open/#50-codex-protocol-alignment-mvp.md`
+Superseded-URIs: `_issues_drafts/open/#46-protocol-cleanup-official-models.md` (replaced by Issue #50)
 Plan-URI: dev-docs/_requirements/m1-technical-implementation-plan.md
 Tasks-URI: specs/038-adopt-acp-runtime/tasks.md
 Evidence-URIs: _artifacts/038-adopt-acp-runtime/{tests,logs,jq,reports}/
@@ -22,8 +23,8 @@ Deliver the first production-ready ACPLazyBridge runtime by:
 | Workstream | Issue Draft | Status | Key Deliverables |
 | --- | --- | --- | --- |
 | Runtime adoption | `specs/038-adopt-acp-runtime/` | ✅ **Completed** | Shared runtime crate, LocalSet orchestration, Codex adapter migration (PR #47) |
-| Streaming alignment | `_issues_drafts/open/#45-streaming-alignment-session-notifications.md` | 🔄 Deferred to Phase 4 | Official ACP notification models, dedupe safeguards, notify/timeout parity |
-| Protocol cleanup | `_issues_drafts/open/#46-protocol-cleanup-official-models.md` | 🔄 Deferred to Phase 5 | Removal of `acp-lazy-core::protocol`, upstream error/response usage |
+| Streaming alignment | `_issues_drafts/open/#45-streaming-alignment-session-notifications.md` | ✅ **Completed** to Phase 4 | Official ACP notification models, dedupe safeguards, notify/timeout parity |
+| Codex protocol alignment | `_issues_drafts/open/#50-codex-protocol-alignment-mvp.md` | 🔄 Planned | Complete ACP submission/event coverage, retire `acp-lazy-core::protocol`; Issue #50 supersedes Issue #46 |
 
 ## 3. Implementation Breakdown
 
@@ -46,15 +47,15 @@ Deliver the first production-ready ACPLazyBridge runtime by:
 
 ### Phase 3.4-3.5: Deferred to Follow-up Issues
 
-(4) **Adopt official streaming models** 🔄
+(4) **Adopt official streaming models** ✅
 
 - Map Codex events → `SessionNotification`, `ContentBlock`, `ToolCall`, `ToolCallUpdate`.
 - Retain dedupe/idle timeout semantics and notify-forwarder support (Issue #45).
 
 (5) **Deprecate internal protocol mirror** 🔄
 
-- Swap all references to `acp-lazy-core::protocol` with upstream types.
-- Remove legacy module and adjust tests/docs accordingly (Issue #46).
+- Swap all references to `acp-lazy-core::protocol` with upstream types and surface complete ACP metadata.
+- Remove legacy module and adjust tests/docs accordingly (Issue #50 – supersedes Issue #46).
 
 ## 4. Test Matrix
 
@@ -100,13 +101,15 @@ Deliver the first production-ready ACPLazyBridge runtime by:
 
 ### Deferred to Follow-up Issues
 
-- [ ] Streaming notifications validated via snapshot tests (Issue #45)
-- [ ] Legacy protocol module removed; docs updated (`architecture/`, `requirements/`) (Issue #46)
+- [x] Streaming notifications validated via snapshot tests (Issue #45)
+- [ ] Legacy protocol module removed; docs updated (`architecture/`, `requirements/`) (Issue #50)
 
 ## 9. Follow-Up (Post 0.1.0)
 
-- **Issue #45**: Complete streaming alignment with official ACP models (Phase 4)
-- **Issue #46**: Protocol cleanup and legacy module removal (Phase 5)
+- **Issue #45**: (specs/039-streaming-alignment-session-notifications) Phase 3.6 (T041-T064) transferred to new issues pending release [## Phase 3.6: Gap Remediation (Future Work)](specs/039-streaming-alignment-session-notifications/tasks.md) (Milestone 0.1.0 - Phase 4)
+- **Issue #50**: Codex protocol alignment MVP — complete ACP mappings and retire the legacy protocol module (Milestone 0.1.0 - Phase 5)
+- **Legacy notice**: `_issues_drafts/open/#46-protocol-cleanup-official-models.md` remains for audit history but should not receive further updates.
+- Planing for (Milestone 0.1.0 First Release) other MVP features (Phase 6) `[TODO]: ("to be updated")`
 - Prepare composer runtime extensions (Milestone 0.2.0)
 - Draft Claude/Gemini adapter issue briefs building on shared runtime
 - Schedule architecture review for plugin pipeline

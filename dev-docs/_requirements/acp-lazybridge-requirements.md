@@ -36,7 +36,7 @@ This document consolidates the product requirements that guide ACPLazyBridge as 
 
 | Release | Target | Primary Themes | Status | Linked Artefacts |
 | --- | --- | --- | --- | --- |
-| 0.1.0 | Q3-1 2025 | Core runtime migration, Codex MVP, typed notifications | ✅ **Completed** | `specs/038-adopt-acp-runtime/` (Issue #44/PR #47); Deferred: `streaming-alignment-session-notifications.md`, `protocol-cleanup-official-models.md` |
+| 0.1.0 | Q3-1 2025 | Core runtime migration, Codex MVP, typed notifications | 🚧 **In Progress** | `specs/038-adopt-acp-runtime/` (Issue #44/PR #47); Follow-ups: `#45-streaming-alignment-session-notifications.md`, `#50-codex-protocol-alignment-mvp.md` (supersedes `#46-protocol-cleanup-official-models.md`) |
 | 0.2.0 | Q3-2 2025 | Claude/Gemini adapters, composer foundations | 🔄 Planned | _TBD: composer plugin briefs_ |
 | 0.3.0 | Q4-1 2025 | Cross-editor clients, advanced workflows | 🔄 Planned | _TBD: client integration briefs_ |
 | 0.4.0 | Q4-2 2025 | Ecosystem SDKs, runtime hardening | 🔄 Planned | _TBD: sdk/hardening briefs_ |
@@ -46,8 +46,8 @@ This document consolidates the product requirements that guide ACPLazyBridge as 
 ### Milestone 0.1.0 – Core Runtime & Zed ↔ Codex MVP
 
 - ✅ **FR-0101**: ACPLazyBridge MUST host ACP traffic via `agent_client_protocol::AgentSideConnection` executed inside a Tokio `LocalSet`, wrapping existing session state and permission mapping. (_Completed:_ `specs/038-adopt-acp-runtime/`, PR #47)
-- 🔄 **FR-0102**: Codex streaming MUST emit ACP-native `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` structures with chunk de-duplication preserved. (_Deferred:_ Issue #45, Phase 4)
-- 🔄 **FR-0103**: Workspace crates MUST remove the bespoke `acp_lazy_core::protocol` module and rely exclusively on official ACP error/response types. (_Deferred:_ Issue #46, Phase 5)
+- ✅ **FR-0102**: Codex streaming MUST emit ACP-native `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` structures with chunk de-duplication preserved. (_Completed:_ Issue #45, Phase 4)
+- 🔄 **FR-0103**: Workspace crates MUST remove the bespoke `acp_lazy_core::protocol` module and rely exclusively on official ACP error/response types while exposing complete ACP metadata. (_Tracked:_ Issue #50, supersedes Issue #46)
 - ✅ **FR-0104**: JSONL playback fixtures MUST reside under `_artifacts/tests/protocol-baseline/` and remain compatible with automated playback tests and Zed's custom agent client. (_Completed:_ Evidence in `_artifacts/038-adopt-acp-runtime/`)
 - ✅ **FR-0105**: Idle timeout, notify-forwarder, and permission-mode behaviour MUST match the legacy implementation with telemetry evidence stored under `_artifacts/logs/runtime-adoption/`. (_Completed:_ Evidence in `_artifacts/038-adopt-acp-runtime/`)
 
@@ -95,6 +95,6 @@ This document consolidates the product requirements that guide ACPLazyBridge as 
 - `dev-docs/_requirements/Roadmap.md`
 - `dev-docs/_issues_drafts/runtime-adoption-core-loop.md`
 - `dev-docs/_issues_drafts/streaming-alignment-session-notifications.md`
-- `dev-docs/_issues_drafts/protocol-cleanup-official-models.md`
+- `dev-docs/_issues_drafts/open/#50-codex-protocol-alignment-mvp.md` (supersedes `dev-docs/_issues_drafts/open/#46-protocol-cleanup-official-models.md`)
 - `dev-docs/architecture/acplb-architecture.md`
 - `dev-docs/core_servers/acplb-core-runtime.md`
