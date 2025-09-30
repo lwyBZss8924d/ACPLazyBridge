@@ -26,7 +26,7 @@ This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves in
 
 - ✅ **Completed**: Replace handcrafted JSON-RPC loop with `agent_client_protocol::AgentSideConnection` and Tokio `LocalSet` execution (SDD Task 038, PR #47).
 - ✅ **Completed**: Port streaming notifications to official `SessionNotification`, `ContentBlock`, `ToolCall`, and `ToolCallUpdate` types (Issue #45, Phase 4).
-- 🔄 **In Progress**: Complete Codex protocol alignment for the MVP, Enhanced Implementation Plan for ACPLazyBridge `acp-lazybridge/codex-cli-acp`, covering submission metadata, tool lifecycle, approvals, and slash commands with official ACP models (Issue #50, supersedes Issue #46).
+- 🔄 **In Progress**: Complete Codex protocol alignment for the MVP, Enhanced Implementation Plan for ACPLazyBridge `acp-lazybridge/codex-cli-acp`, covering submission metadata, tool lifecycle, approvals, and slash commands with official ACP models ([Issue #52](https://github.com/lwyBZss8924d/ACPLazyBridge/issues/52), supersedes Issue #46).
 - ✅ **Completed**: Validate end-to-end with Zed's Custom Agent client connected to the Codex CLI adapter.
 
 **Acceptance**
@@ -107,5 +107,8 @@ This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves in
 ## Tracking & Governance
 
 - Roadmap evolution is governed by the SDD Constitution; updates require spec/plan/task artefacts and adherence to the Constitution Update Checklist when touching normative documents.
-- Each milestone is managed through GitHub Projects (see `dev-docs/_project_management/`) with links to specs, plans, tasks, and evidence folders.
+- Each milestone is managed through GitHub Projects with links to specs, plans, tasks, and evidence folders:
+    - **Project #7**: [Milestone 0.1.0 - Core Runtime & Codex MVP](https://github.com/lwyBZss8924d/ACPLazyBridge/projects/7)
+    - **Setup Guide**: [github-projects-setup.md](./github-projects-setup.md) (detailed configuration)
+    - **Quick Start**: [PROJECT-QUICKSTART.md](./PROJECT-QUICKSTART.md) (5-minute guide)
 - Deviations from scope require explicit approval recorded in `sdd-rules` change logs.
