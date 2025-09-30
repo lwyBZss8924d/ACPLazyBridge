@@ -1,7 +1,0 @@
-{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"agentCapabilities":{"loadSession":false,"promptCapabilities":{"image":false,"audio":false,"embeddedContext":false},"mcpCapabilities":{"http":false,"sse":false}},"authMethods":[]}}
-{"jsonrpc":"2.0","id":2,"result":{"sessionId":"session-26f330db-7c6b-4620-ba31-d0b4b814bc51"}}
-{"sessionId":"session-26f330db-7c6b-4620-ba31-d0b4b814bc51","update":{"sessionUpdate":"current_mode_update","currentModeId":"gpt-5-codex"}}
-{"sessionId":"session-26f330db-7c6b-4620-ba31-d0b4b814bc51","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":"Hello"}}}
-{"sessionId":"session-26f330db-7c6b-4620-ba31-d0b4b814bc51","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":"!"}}}
-{"sessionId":"session-26f330db-7c6b-4620-ba31-d0b4b814bc51","update":{"sessionUpdate":"agent_message_chunk","content":{"type":"text","text":"Hello!"}}}
-{"jsonrpc":"2.0","id":3,"result":{"stopReason":"end_turn"}}
