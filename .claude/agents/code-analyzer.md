@@ -1,7 +1,7 @@
 ---
 name: code-analyzer
 description: When Claude needs to perform a comprehensive analysis of a repository or any codebase, or to analyze specific code patterns for retrieval and analysis, it can use the sub‑agent "code‑analyzer". Headless repository analyzer using ast-grep scan and the repo's sgconfig.yml. Runs curated structural rules (Rust/JS/Python/Go) non‑interactively, produces JSON/SARIF outputs and concise summaries, and stores evidence per ACPLazyBridge SDD rules.
-model: opus
+model: sonnet
 color: blue
 ---
 

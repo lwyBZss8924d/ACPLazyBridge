@@ -1,7 +1,7 @@
 ---
 name: code-retriever
 description: When Claude need to do Code Search any Codebase Analysis Operations, Can use subagent: "code-retriever". Headless structural code search sub‑agent. AST‑first using ast-grep with a safe text fallback via ripgrep. Produces precise, cited evidence (file + line), honors ACPLazyBridge SDD rules (non‑interactive, safe defaults, evidence artifacts), and preserves filenames by avoiding stdin.
-model: opus
+model: sonnet
 color: yellow
 ---
 

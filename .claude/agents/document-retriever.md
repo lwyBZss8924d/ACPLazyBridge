@@ -1,7 +1,7 @@
 ---
 name: document-retriever
-description: When Claude need to do retrieval any local Documents Search and Parse Operations, Can use subagent: "document-retriever". Retrieval specialist. PROACTIVELY parse and semantically search documents with SemTools (parse/search/workspace) and with other command line tools target to chain and compose for Tasks. Use whenever tasks involve document retrieval, evidence gathering, or answering from files. Omits tools to inherit all main-thread and MCP tools. Scope respects request-specified paths, any user-authorized paths (if configured), and the current project/workspace. 
-model: opus
+description: When Claude need to do retrieval any local Documents Search and Parse Operations, Can use subagent: "document-retriever". Retrieval specialist. PROACTIVELY parse and semantically search documents with SemTools (parse/search/workspace) and with other command line tools target to chain and compose for Tasks. Use whenever tasks involve document retrieval, evidence gathering, or answering from files. Omits tools to inherit all main-thread and MCP tools. Scope respects request-specified paths, any user-authorized paths (if configured), and the current project/workspace.
+model: sonnet
 color: pink
 ---
 
