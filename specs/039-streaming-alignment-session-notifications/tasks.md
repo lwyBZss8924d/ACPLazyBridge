@@ -302,7 +302,9 @@ Codex-CLI (acp-lazy-core --> codex-cli-acp --> non-interactive (Codex CLI) with 
 - [x] T046 Update CHANGELOG.md with type migration notes (COMPLETE)
     - ✓ Migration guide for v0.4.3 documented
     - ✓ Breaking changes noted
-- [ ] T047 Create PR with links to spec/plan/tasks and evidence (PENDING)
+- [x] T047 Create PR with links to spec/plan/tasks and evidence (COMPLETE)
+    - ✓ PR created: [#48](https://github.com/lwyBZss8924d/ACPLazyBridge/pull/48)
+    - ✓ PR created: [#50](https://github.com/lwyBZss8924d/ACPLazyBridge/pull/50)
 
 ## Phase 3.6: Gap Remediation (Future Work)
 
