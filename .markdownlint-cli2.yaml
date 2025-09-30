@@ -8,31 +8,51 @@ config: .markdownlint.json
 globs:
   - "**/*.md"
 
-# Globs to ignore
+# Globs to ignore (must align with .markdownlintignore)
 ignores:
+  # Build and dependency directories
   - node_modules/**
   - target/**
   - dist/**
   - build/**
   - .venv/**
   - venv/**
+  
+  # Git and development directories
   - .git/**
   - .worktrees/**
   - .codeql-db/**
+  
+  # Generated documentation
   - docs/api/**
   - coverage/**
+  
+  # Temporary and cache directories
   - tmp/**
   - temp/**
   - .cache/**
   - "**/*.tmp"
+  
+  # IDE directories
   - .vscode/**
   - .idea/**
+  
+  # Archive directories
   - archive/**
   - deprecated/**
+  - "**/legacy/**"
+  
   # External/canonical specifications (preserve original formatting)
   - sdd-rules/rules/changelog/semver.md
   - sdd-rules/rules/documentation-style/google-markdown-style-guide.md
   - sdd-rules/rules/documentation-style/Google-developer-documentation-style-guide.md
+  - "**/google-markdown-style-guide.md"
+  
+  # Agent guide files (skip line-length checks and others)
+  - "**/CLAUDE.md"
+  - "CLAUDE.md"
+  - "**/AGENTS.md"
+  - "AGENTS.md"
 
 # Don't show progress
 showFound: false

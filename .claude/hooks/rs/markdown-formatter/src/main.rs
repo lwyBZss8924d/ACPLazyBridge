@@ -70,7 +70,6 @@ fn format_markdown(content: &str) -> String {
     let lines: Vec<&str> = content.lines().collect();
     let had_trailing_newline = content.ends_with('\n');
     let mut i = 0;
-    let mut blank_run = 0;
 
     while i < lines.len() {
         let line = lines[i];
@@ -87,24 +86,15 @@ fn format_markdown(content: &str) -> String {
                 result.push_str(&info_owned);
                 result.push('\n');
                 in_code_block = true;
-                blank_run = 0;
                 i += 1;
                 continue;
             }
 
-            if line.trim().is_empty() {
-                blank_run += 1;
-                if blank_run > 1 {
-                    i += 1;
-                    continue;
-                }
-            } else {
-                blank_run = 0;
-            }
+            // Removed: Multiple blank line removal logic
+            // Let markdownlint-cli2 handle blank line formatting according to MD012 config
         } else {
             if is_fence(line) {
                 in_code_block = false;
-                blank_run = 0;
             }
         }
 

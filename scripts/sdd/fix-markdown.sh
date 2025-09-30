@@ -99,9 +99,28 @@ if [ "$NO_BACKUP" = false ] && [ "$DRY_RUN" = false ]; then
   info "creating backup in $BACKUP_DIR"
   mkdir -p "$BACKUP_DIR"
   
-  # Find and backup markdown files
-  find . -name "*.md" -type f ! -path "./.git/*" ! -path "./.worktrees/*" ! -path "./node_modules/*" \
-    ! -path "./.markdown-backup/*" -exec cp --parents {} "$BACKUP_DIR" \; 2>/dev/null || true
+  # Find and backup markdown files (align with .markdownlintignore)
+  find . -name "*.md" -type f \
+    ! -path "./.git/*" \
+    ! -path "./.worktrees/*" \
+    ! -path "./node_modules/*" \
+    ! -path "./target/*" \
+    ! -path "./dist/*" \
+    ! -path "./build/*" \
+    ! -path "./.venv/*" \
+    ! -path "./venv/*" \
+    ! -path "./.codeql-db/*" \
+    ! -path "./docs/api/*" \
+    ! -path "./coverage/*" \
+    ! -path "./tmp/*" \
+    ! -path "./temp/*" \
+    ! -path "./.cache/*" \
+    ! -path "./.vscode/*" \
+    ! -path "./.idea/*" \
+    ! -path "./archive/*" \
+    ! -path "./deprecated/*" \
+    ! -path "./.markdown-backup/*" \
+    -exec cp --parents {} "$BACKUP_DIR" \; 2>/dev/null || true
   
   info "backup created (restore with: cp -r $BACKUP_DIR/* .)"
 fi

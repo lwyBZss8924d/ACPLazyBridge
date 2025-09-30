@@ -101,6 +101,14 @@ Heading 1
   for long, complex lists that may change often. Our configuration prefers
   sequential numbering for source readability.
 
+#### MD030 - Spaces after list markers
+
+- **Configuration**: `false`
+- **Description**: Does not enforce specific spacing after list markers,
+  allowing flexibility in list formatting.
+- **Rationale**: Disabled to accommodate various list formatting styles without
+  strict spacing requirements.
+
 ### Code Block Rules
 
 #### MD040 - Fenced code blocks should have a language specified
@@ -163,12 +171,12 @@ Heading 1
 
 #### MD013 - Line length
 
-- **Configuration**:
-    `{ "line_length": 120, "code_blocks": false, "tables": false }`
-- **Description**: Enforces a 120-character line length for prose.
-- **Rationale**: While the Google guide references an 80-character limit,
-  this repository standardizes on 120 characters for practicality in
-  code-centric tools. Code blocks and tables are excluded from this limit.
+- **Configuration**: `false`
+- **Description**: Line length checking is disabled.
+- **Rationale**: This repository does not enforce a specific line length limit
+  to accommodate long URLs, code examples, technical documentation, and
+  AI-generated content in files like CLAUDE.md and AGENTS.md. Code review
+  handles readability concerns on a case-by-case basis.
 
 #### MD035 - Horizontal rule style
 
@@ -230,21 +238,6 @@ Use sequential numbers unless intentionally different:
 <!-- markdownlint-enable MD029 -->
 ```
 
-## MD013: Line length exceeded
-
-Wrap prose at 120 characters. Code blocks and tables are automatically excluded:
-
-```markdown
-# Prose should wrap at 120 characters
-This is a long line that should be wrapped to stay within the 120 character
-limit for better readability.
-
-# Tables are excluded from line length limits
-| This can be a very long header | Another long header | And another one |
-| ------------------------------- | ------------------- | --------------- |
-| Long content is allowed here   | More long content   | Even more       |
-```
-
 ## MD007: Incorrect list indentation
 
 Use 4 spaces for nested lists:
@@ -276,17 +269,17 @@ For large-scale markdown fixes or comprehensive validation, delegate to the sdd-
 ```yaml
 constitution:
     version: "1.0.1"
-    last_checked: "2025-09-22T15:20:00Z"
+    last_checked: "2025-09-29T22:47:00Z"
 rules:
     name: "markdownlint"
     category: "documentation-style"
-    version: "1.0.3"
+    version: "1.0.4"
 document:
     type: "sdd-rule"
     path: "sdd-rules/rules/documentation-style/sdd-rules-documentation-markdownlint.md"
-    version: "1.0.3"
-    last_updated: "2025-09-22T15:20:00Z"
-    changelog: "Refreshed metadata after running constitution checklist"
+    version: "1.0.4"
+    last_updated: "2025-09-29T22:47:00Z"
+    changelog: "Aligned documentation with actual .markdownlint.json configuration: MD013 disabled, MD030 documented"
     related:
         - "sdd-rules/rules/documentation-style/sdd-rules-documentation-style.md"
         - "sdd-rules/rules/documentation-style/google-markdown-style-guide.md"

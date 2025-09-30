@@ -108,7 +108,9 @@ info "checking markdown files..."
 LINT_OUTPUT=$("${RUNNER[@]}" "$TARGET_PATH" --config .markdownlint.json 2>&1 || true)
 
 # Count issues by type
-TOTAL_ISSUES=$(echo "$LINT_OUTPUT" | grep -c "^[^:]*\.md:" || echo "0")
+TOTAL_ISSUES=$(echo "$LINT_OUTPUT" | grep -c "^[^:]*\.md:" 2>/dev/null || echo "0")
+# Ensure it's a single number
+TOTAL_ISSUES=$(echo "$TOTAL_ISSUES" | head -1 | tr -d '[:space:]')
 
 if [ "$TOTAL_ISSUES" -eq 0 ]; then
   echo -e "${GREEN}✓ All markdown files are clean!${NC}"

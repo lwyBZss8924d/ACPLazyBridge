@@ -36,7 +36,10 @@ temp/
 # Archive directories
 archive/
 deprecated/
+**/legacy/
 
-# CLAUDE agent guide files (skip line-length checks and others)
+# agent guide files (skip line-length checks and others)
 **/CLAUDE.md
 CLAUDE.md
+**/AGENTS.md
+AGENTS.md

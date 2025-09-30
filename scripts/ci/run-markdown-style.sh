@@ -44,11 +44,12 @@ if [ "$USE_CLI2" = true ]; then
   info "running markdownlint-cli2 with glob patterns"
   "${RUNNER[@]}" "**/*.md" --config .markdownlint.json
 else
-  # cli v1 needs explicit file list
+  # cli v1 needs explicit file list (must align with .markdownlintignore)
   info "collecting markdown files for markdownlint-cli v1"
   mapfile -t FILES < <(git ls-files '*.md' \
-    | grep -Ev '^(node_modules/|.git/|target/|dist/|build/|.venv/|venv/|.worktrees/|.codeql-db/)' \
-    | grep -v 'sdd-rules/rules/changelog/semver.md' || true)
+    | grep -Ev '^(node_modules/|.git/|target/|dist/|build/|.venv/|venv/|.worktrees/|.codeql-db/|docs/api/|coverage/|tmp/|temp/|.cache/|.vscode/|.idea/|archive/|deprecated/)' \
+    | grep -Ev '/legacy/' \
+    | grep -Ev '(semver\.md|google-markdown-style-guide\.md|Google-developer-documentation-style-guide\.md|CLAUDE\.md|AGENTS\.md)$' || true)
   
   if [ ${#FILES[@]} -eq 0 ]; then
     info "no markdown files found; nothing to lint"
