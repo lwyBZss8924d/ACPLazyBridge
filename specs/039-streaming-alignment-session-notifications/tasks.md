@@ -158,7 +158,7 @@ Codex-CLI (acp-lazy-core --> codex-cli-acp --> non-interactive (Codex CLI) with 
       "args": ["--acp"],
       "env": {
         "RUST_LOG": "codex_cli_acp=debug,acp_lazy_core=debug",
-        "CODEX_CMD": "${WORKTREE}/scripts/codex-docker-wrapper.sh",
+        "CODEX_RUN": "${WORKTREE}/scripts/codex-docker-wrapper.sh",
         "ACPLB_IDLE_TIMEOUT_MS": "60000",
         "ACPLB_NOTIFY_INJECT": "auto"
       }

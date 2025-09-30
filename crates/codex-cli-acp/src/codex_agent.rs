@@ -302,7 +302,9 @@ impl CodexProviderAdapter {
             }
         }
 
-        let codex_cmd = std::env::var("CODEX_CMD").unwrap_or_else(|_| "codex".into());
+        let codex_cmd = std::env::var("CODEX_RUN")
+            .or_else(|_| std::env::var("CODEX_CMD"))
+            .unwrap_or_else(|_| "codex".into());
 
         let mut process =
             match ProcessTransport::spawn(&codex_cmd, &args, None, session.working_dir.to_str())

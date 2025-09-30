@@ -31,7 +31,7 @@ Add the following to your Zed settings.json under `agent_servers`:
       "args": ["--acp"],
       "env": {
         "RUST_LOG": "codex_cli_acp=debug,acp_lazy_core=debug",
-        "CODEX_CMD": "${WORKTREE}/scripts/codex-docker-wrapper.sh",
+        "CODEX_RUN": "${WORKTREE}/scripts/codex-docker-wrapper.sh",
         "ACPLB_IDLE_TIMEOUT_MS": "60000",
         "ACPLB_NOTIFY_INJECT": "auto"
       }
@@ -168,7 +168,7 @@ Run the complete end-to-end test suite:
 
 ```bash
 cd ${ACPLB_WORKTREE}
-./scripts/run-e2e-test.sh
+./scripts/run-t033-smoke.sh
 ```
 
 This will:

@@ -60,8 +60,9 @@ fn codex_cli_exec_smoke() {
 #[ignore] // Run with: cargo test --ignored t033c_streaming_notifications
 fn t033c_streaming_notifications() {
     // Check if we have the necessary environment for the test
-    let codex_cmd =
-        env::var("CODEX_CMD").unwrap_or_else(|_| "./scripts/codex-docker-wrapper.sh".to_string());
+    let codex_cmd = env::var("CODEX_RUN")
+        .or_else(|_| env::var("CODEX_CMD"))
+        .unwrap_or_else(|_| "./scripts/codex-docker-wrapper.sh".to_string());
 
     // Skip if running in CI without Docker setup
     // The Docker container now has embedded API key, so we only check for CI
