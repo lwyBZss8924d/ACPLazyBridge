@@ -1,5 +1,7 @@
 # ACPLazyBridge Roadmap
 
+> **Note**: This file is also available in the repository root as [ROADMAP.md](../../ROADMAP.md) for visibility. Please keep both files in sync.
+
 This roadmap defines the staged delivery plan for ACPLazyBridge as it evolves into a protocol-compliant bridge, composer, and multi-agent hub built on the official `agent-client-protocol` Rust libraries. Each milestone lists the feature scope, acceptance gates, dependencies, and risks that must be addressed before promotion to the next release track.
 
 ## Strategic Goals

@@ -93,3 +93,7 @@ coverage/
 
 # Claude hooks local build artifacts
 .claude/hooks/target/
+
+# Project management internal docs (keep local, not in public repo)
+dev-docs/_requirements/github-projects-setup.md
+dev-docs/_requirements/PROJECT-QUICKSTART.md
