@@ -1,0 +1,297 @@
+ISSUES(#XXX)-SDD-TASKS(#XXX) WORK PHASE AND STEPS STATUS
+(AIENGINEER_WORK_LOGS_2025093001_2025100101)
+
+date: `{{YYYY-MM-DD}}T{{HH:MM:SS}}Z` (date -u '+%Y-%m-%dT%H:%M:%SZ')
+[xxxx_xxxx.xxxx]
+owner = [ai_engineer.claude]
+...
+
+date: `{{YYYY-MM-DD}}T{{HH:MM:SS}}Z` (date -u '+%Y-%m-%dT%H:%M:%SZ')
+[xxxx_xxxx.xxxx]
+owner = [ai_engineer.codex]
+...
+
+---
+
+[github_new_issues]
+owner = [human.lwyBZss8924d]
+op = "add_new_issue"
+created: 2025-09-30
+status = "completed"
+in = [dev-docs/_issues_drafts/closed/#52-codex-protocol-alignment-mvp.md, dev-docs/_requirements/040-codex-protocol-alignment-mvp/]
+out = "https://github.com/lwyBZss8924d/ACPLazyBridge/issues/52"
+artifacts = "specs/040-codex-protocol-alignment-mvp/github-Issue-#52-raw"
+
+---
+
+[initial_tasks.create_worktree]
+owner = [ai_engineer.claude]
+op = "create_worktree"
+created: 2025-09-30
+status = "completed"
+in = "https://github.com/lwyBZss8924d/ACPLazyBridge/issues/52"
+out = "/Users/arthur/dev-space/ACPLazyBridge/.worktrees/040-codex-protocol-alignment-mvp" && "/Users/arthur/dev-space/acplb-worktrees/040-codex-protocol-alignment-mvp"
+sddtaskd_num = 040
+artifacts = git worktree `040-codex-protocol-alignment-mvp feature/040-codex-protocol-alignment-mvp*​` git_log = [...]
+
+---
+
+[initial_tasks.initial_specs_documentation]
+owner = [ai_engineer.claude]
+op = "run_slashcommands_jobs"
+last_updated: 2025-09-30T15:35:21Z
+status = "completed"
+in = [
+  main​ = "/Users/arthur/dev-space/ACPLazyBridge/"
+  issue = "specs/040-codex-protocol-alignment-mvp/github-Issue-#52-raw"
+  requirements =  "dev-docs/_requirements/040-codex-protocol-alignment-mvp/"
+  references = [
+    "/Users/arthur/dev-space/agent-client-protocol/",
+    "/Users/arthur/dev-space/codex/",
+    "/Users/arthur/dev-space/claude-code-acp/",
+    "/Users/arthur/dev-space/codex-acp/"
+  ]
+out = "specification_and_contracts"
+artifacts = specs/040-codex-protocol-alignment-mvp = [
+  "specs/040-codex-protocol-alignment-mvp/spec.md",
+  "specs/040-codex-protocol-alignment-mvp/research.md",
+  "specs/040-codex-protocol-alignment-mvp/data-model.md",
+  "specs/040-codex-protocol-alignment-mvp/contracts/read_text_file.md",
+  "specs/040-codex-protocol-alignment-mvp/contracts/write_text_file.md",
+  "specs/040-codex-protocol-alignment-mvp/contracts/edit_text_file.md",
+  "specs/040-codex-protocol-alignment-mvp/contracts/multi_edit_text_file.md",
+  "specs/040-codex-protocol-alignment-mvp/quickstart.md",
+  "specs/040-codex-protocol-alignment-mvp/plan.md",
+  "specs/040-codex-protocol-alignment-mvp/tasks.md"
+]
+
+```bash
+040-codex-protocol-alignment-mvp/specs/040-codex-protocol-alignment-mvp feature/040-codex-protocol-alignment-mvp*​
+❯ tree
+.
+├── contracts
+│   ├── edit_text_file.md
+│   ├── multi_edit_text_file.md
+│   ├── read_text_file.md
+│   └── write_text_file.md
+├── data-model.md
+├── github-Issue-#52-raw
+├── plan.md
+├── quickstart.md
+├── research.md
+├── spec.md
+└── tasks.md
+
+2 directories, 11 files
+```
+
+```bash
+040-codex-protocol-alignment-mvp feature/040-codex-protocol-alignment-mvp*​
+
+dev-docs/_requirements/040-codex-protocol-alignment-mvp feature/040-codex-protocol-alignment-mvp*​
+❯ cd /Users/arthur/dev-space/acplb-worktrees/040-codex-protocol-alignment-mvp | tree
+.
+├── README.md
+├── acp-protocol-complete-mapping.md
+├── codex-protocol-analysis
+│   ├── README.md
+│   ├── codex-complete-protocol-mapping.md
+│   └── codex-to-acp-mapping-recommendations.md
+├── issue-50-gap-analysis.md
+└── issue-50-research-report.md
+
+2 directories, 7 files
+```
+
+```bash
+040-codex-protocol-alignment-mvp feature/040-codex-protocol-alignment-mvp*​
+❯ git status
+On branch feature/040-codex-protocol-alignment-mvp
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   _artifacts/040-codex-protocol-alignment-mvp/reports/sdd_artifacts_validation_20250930_235433.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/edit_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/multi_edit_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/read_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/write_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/data-model.md
+        new file:   specs/040-codex-protocol-alignment-mvp/github-Issue-#52-raw
+        new file:   specs/040-codex-protocol-alignment-mvp/plan.md
+        new file:   specs/040-codex-protocol-alignment-mvp/quickstart.md
+        new file:   specs/040-codex-protocol-alignment-mvp/research.md
+        new file:   specs/040-codex-protocol-alignment-mvp/spec.md
+        new file:   specs/040-codex-protocol-alignment-mvp/tasks.md
+```
+
+---
+
+[initial_tasks.review_specs_documentation]
+owner = [ai_engineer.codex]
+op = "qa_review"
+last_updated: 2025-10-01T03:45:00Z
+status = "findings_recorded"
+summary = [
+  "Missing spec/plan/tasks cross-link metadata in spec.md (spec_uri, plan_uri, tasks_uri, evidence_uris).",
+  "tasks.md omits commits metadata block and mislabels parallel tasks touching same file.",
+  "Evidence paths inconsistent with constitution: fix _artifacts/040-codex-protocol-alignment-mvp/... usage.",
+  "Spec includes implementation-level directives that belong in plan; needs WHAT/WHY rewrite."
+]
+correction_tasks = [
+  "ai_engineer.claude: Refresh specs/040-codex-protocol-alignment-mvp/spec.md header with full metadata block and refocus requirements on outcomes (no module names).",
+  "ai_engineer.claude: Update specs/040-codex-protocol-alignment-mvp/tasks.md metadata (add commits block) and adjust [P] flags + evidence paths to align with SDD rules.",
+  "ai_engineer.claude: Ensure quickstart/contracts references stay in sync after spec rewrite; rerun SDD validation scripts.",
+  "ai_engineer.claude: Revise prompts in specs/040-codex-protocol-alignment-mvp/AIENGINEER_WORK_LOGS_2025093001_2025100101 if automation reruns require updated context."
+]
+notes = "Please acknowledge once revisions are in place so codex can re-run validation."
+
+---
+
+[initial_tasks.correction_specs_documentation.fix_spec_plan_tasks_metadata]
+owner = [ai_engineer.claude]
+op = "sdd_metadata_correction"
+last_updated: 2025-10-01T03:57:01Z
+status = "completed"
+summary = [
+  "Added spec_uri/plan_uri/tasks_uri/evidence_uris to spec.md YAML frontmatter",
+  "Rewrote FR-006 through FR-038 to focus on WHAT/WHY outcomes, removed implementation details",
+  "Rewrote Key Entities section to remove module names and implementation specifics",
+  "Added commits metadata block to tasks.md YAML frontmatter",
+  "Fixed T081 [P] flag (5 command handlers in same file cannot be parallel)",
+  "Verified evidence paths align with constitution (_artifacts/040-codex-protocol-alignment-mvp/)",
+  "Verified quickstart.md and contracts/ references remain consistent"
+]
+artifacts = [
+  "specs/040-codex-protocol-alignment-mvp/spec.md (updated)",
+  "specs/040-codex-protocol-alignment-mvp/tasks.md (updated)",
+  "specs/040-codex-protocol-alignment-mvp/AIENGINEER_WORK_LOGS_2025093001_2025100101 (updated)"
+]
+notes = "All 4 correction tasks completed per codex findings. SDD validation scripts to be run next."
+
+---
+
+[initial_tasks.correction_specs_documentation.handover_to_codex]
+from = [ai_engineer.claude]
+to = [ai_engineer.codex]
+timestamp: 2025-10-01T03:57:01Z
+request = "re_run_validation"
+context = "All 4 correction tasks completed per your findings. Please re-validate specs documentation and confirm SDD compliance."
+
+[initial_tasks.review_specs_documentation]
+owner = [ai_engineer.codex]
+op = "handover_update"
+last_updated: 2025-10-01T04:06:44Z
+status = "waiting_for_revision"
+summary = [
+  "Recorded review findings and assigned corrective actions to ai_engineer.claude.",
+  "Awaiting refreshed spec/tasks/evidence alignment before rerunning validation."
+]
+next_steps = [
+  "Re-run validation scripts once Claude updates spec.md, tasks.md, and related artifacts.",
+  "Verify evidence directories and metadata blocks comply with SDD constitution after revisions.",
+  "if all checks are passing, git add all changes and commit with initial_tasks message"
+]
+handover_requests = [
+  "ai_engineer.claude: Confirm when spec/tasks updates are complete and provide validation outputs."
+]
+
+---
+
+[initial_tasks.correction_specs_documentation.validation_complete]
+owner = [ai_engineer.claude]
+op = "validation_confirmation"
+last_updated: 2025-10-01T04:10:02Z
+status = "completed"
+summary = [
+  "All 4 correction tasks completed successfully",
+  "Ran validate-sdd-docs.sh, validate-metadata.sh, check-sdd-consistency.sh",
+  "040-codex-protocol-alignment-mvp validation results: PASS on critical checks"
+]
+validation_results = [
+  "✓ spec.md: YAML metadata valid",
+  "✓ spec.md: Document structure matches template",
+  "✓ plan.md: YAML metadata valid",
+  "✓ plan.md: Document structure matches template",
+  "✓ tasks.md: YAML metadata valid",
+  "✓ tasks.md: Found 88 parallel tasks marked with [P]",
+  "✓ Evidence paths verified: _artifacts/040-codex-protocol-alignment-mvp/",
+  "⚠ tasks.md: Minor template section differences (acceptable customization)",
+  "⚠ spec.md: Template example [NEEDS CLARIFICATION] markers (not actual issues)"
+]
+artifacts = [
+  "specs/040-codex-protocol-alignment-mvp/spec.md (validated)",
+  "specs/040-codex-protocol-alignment-mvp/plan.md (validated)",
+  "specs/040-codex-protocol-alignment-mvp/tasks.md (validated)"
+]
+changes_summary = [
+  "spec.md: Added 4 metadata URIs + rewrote 33 requirements + rewrote 7 entities",
+  "tasks.md: Added commits metadata block + fixed T081 [P] flag",
+  "AIENGINEER_WORK_LOGS: Added completion entries + validation results"
+]
+notes = "SDD compliance verified. Ready for git commit per codex's next_steps."
+
+---
+
+[initial_tasks.metadata_updates_complete]
+owner = [ai_engineer.claude]
+op = "metadata_final_update"
+last_updated: 2025-10-01T04:22:17Z
+status = "completed"
+summary = [
+  "Updated all SDD documentation metadata timestamps to 2025-10-01T04:22:17Z",
+  "Updated all document status fields to 'validated'",
+  "Staged all modified files for commit"
+]
+files_updated = [
+  "spec.md (last_updated: 2025-10-01T04:22:17Z, status: validated)",
+  "tasks.md (last_updated: 2025-10-01T04:22:17Z, status: validated)",
+  "plan.md (last_updated: 2025-10-01T04:22:17Z, status: validated)",
+  "data-model.md (last_updated: 2025-10-01T04:22:17Z, status: validated)",
+  "quickstart.md (last_updated: 2025-10-01T04:22:17Z, status: validated)",
+  "research.md (last_updated: 2025-10-01T04:22:17Z, status: validated)",
+  "AIENGINEER_WORK_LOGS_2025093001_2025100101 (final update)"
+]
+
+---
+
+[handover_to_codex.final_commit_ready]
+from = [ai_engineer.claude]
+to = [ai_engineer.codex]
+timestamp: 2025-10-01T04:22:17Z
+request = "review_and_commit"
+context = "All corrections completed and validated. All SDD documentation metadata synchronized to 2025-10-01T04:22:17Z with status 'validated'. All files staged."
+git_status = "17 files staged for commit - ready for initial_tasks commit"
+staged_files_summary = [
+  "4 agent context files (AGENTS.md, CLAUDE.md, GEMINI.md, WARP.md)",
+  "1 validation report (_artifacts/040-codex-protocol-alignment-mvp/reports/sdd_artifacts_validation_20250930_235433.md)",
+  "12 SDD documentation files (spec, tasks, plan, data-model, quickstart, research, 4 contracts, github-Issue-#52-raw, AIENGINEER_WORK_LOGS)"
+]
+next_action = "Execute git commit with initial_tasks message per codex next_steps"
+
+```bash
+040-codex-protocol-alignment-mvp feature/040-codex-protocol-alignment-mvp*
+❯ git status
+On branch feature/040-codex-protocol-alignment-mvp
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   AGENTS.md
+        modified:   CLAUDE.md
+        modified:   GEMINI.md
+        modified:   WARP.md
+        new file:   _artifacts/040-codex-protocol-alignment-mvp/reports/sdd_artifacts_validation_20250930_235433.md
+        new file:   specs/040-codex-protocol-alignment-mvp/AIENGINEER_WORK_LOGS_2025093001_2025100101
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/edit_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/multi_edit_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/read_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/contracts/write_text_file.md
+        new file:   specs/040-codex-protocol-alignment-mvp/data-model.md
+        new file:   specs/040-codex-protocol-alignment-mvp/github-Issue-#52-raw
+        new file:   specs/040-codex-protocol-alignment-mvp/plan.md
+        new file:   specs/040-codex-protocol-alignment-mvp/quickstart.md
+        new file:   specs/040-codex-protocol-alignment-mvp/research.md
+        new file:   specs/040-codex-protocol-alignment-mvp/spec.md
+        new file:   specs/040-codex-protocol-alignment-mvp/tasks.md
+```

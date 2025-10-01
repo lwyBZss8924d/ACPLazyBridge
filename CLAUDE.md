@@ -14,7 +14,7 @@ This file provides guidance to CLAUDE (Claude Code Agents) when working with cod
 - **ACP official TypeScript library**: `npm install @zed-industries/agent-client-protocol`
 - **ACP Agents adapter best practice (@zed-industries/claude-code-acp)**: [Claude Code SDK from ACP-compatible clients for Zed IDE external-agents Custom Agents as ACP client adapter](https://github.com/zed-industries/claude-code-acp)
 - **ACP Repository local path**: (~/dev-space/agent-client-protocol)
-- **(ACP) Protocol Rust Library Lastest Version**: `agent-client-protocol = "0.4.3"` (2025-09-25) _always check latest version from `agent-client-protocol`_
+- **(ACP) Protocol Rust Library Lastest Version**: `agent-client-protocol = "0.4.4"` (2025-09-30) _always check latest version from (https://github.com/zed-industries/agent-client-protocol/releases)`_
 
 ```text
 Team's AI Engineer member: ("claude")'s role and operating rules for **ACPLazyBridge**. It is a role-specific guide. For the authoritative workflow and lifecycle, always refer to the documents listed below. and always refer to the SDD Constitution. wen update any SDD document and sdd-rules document, MUST follow the SDD Constitution Update Checklist. All SDD document and sdd-rules document and normative artifacts (specify, plan, tasks, issues, PRDs, commits, etc.) MUST be English‑only.

@@ -14,7 +14,7 @@ This file provides guidance to "warp" (WARP.dev) when working with code in this 
 - **ACP official TypeScript library**: `npm install @zed-industries/agent-client-protocol`
 - **ACP Agents adapter best practice (@zed-industries/claude-code-acp)**: [Claude Code SDK from ACP-compatible clients for Zed IDE external-agents Custom Agents as ACP client adapter](https://github.com/zed-industries/claude-code-acp)
 - **ACP Repository local path**: (~/dev-space/agent-client-protocol)
-- **(ACP) Protocol Rust Library Lastest Version**: `agent-client-protocol = "0.4.3"` (2025-09-25) _always check latest version from `agent-client-protocol`_
+- **(ACP) Protocol Rust Library Lastest Version**: `agent-client-protocol = "0.4.4"` (2025-09-30) _always check latest version from (https://github.com/zed-industries/agent-client-protocol/releases)`_
 
 ```text
 ACPLazyBridge is an ACP (Agent Client Protocol) bridge that connects AI agents and agent-tools plugins with IDEs, editors, and development tools. It provides native adapters for various AI systems while maintaining protocol consistency and developer workflow integration through Specification-Driven Development (SDD).
